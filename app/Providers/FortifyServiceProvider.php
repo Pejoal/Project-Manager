@@ -43,6 +43,11 @@ class FortifyServiceProvider extends ServiceProvider {
     });
 
     Fortify::authenticateUsing(function (Request $request) {
+      $request->validate([
+        'login' => ['required', 'string'], // Use 'login' instead of 'email'
+        'password' => ['required', 'string'],
+      ]);
+
       $credentials = $request->only('login', 'password');
 
       // Determine if the input is an email or username
@@ -54,7 +59,7 @@ class FortifyServiceProvider extends ServiceProvider {
         return Auth::user();
       }
 
-      return null;
+      return;
     });
 
   }
