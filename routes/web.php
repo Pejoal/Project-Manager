@@ -15,6 +15,14 @@ Route::get('/', function () {
   ]);
 });
 
+Route::get('/test', function (Request $request) {
+  $request->session()->flash('flash.banner', 'Yay it works!');
+  $request->session()->flash('flash.bannerStyle', 'success');
+
+  return Inertia::render('Test', [
+  ]);
+});
+
 // Email Verification Notice
 Route::get('/email/verify', function () {
   return Inertia::render('Auth/VerifyEmail');
