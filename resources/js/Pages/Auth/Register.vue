@@ -11,6 +11,7 @@ import TextInput from "@/Components/TextInput.vue";
 const form = useForm({
   name: "",
   email: "",
+  username: "",
   password: "",
   password_confirmation: "",
   terms: false,
