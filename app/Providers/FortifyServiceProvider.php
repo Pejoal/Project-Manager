@@ -62,5 +62,11 @@ class FortifyServiceProvider extends ServiceProvider {
       return;
     });
 
+    Fortify::confirmPasswordsUsing(function ($user, $password) {
+      return Auth::validate([
+        'email' => $user->email,
+        'password' => $password,
+      ]);
+    });
   }
 }
