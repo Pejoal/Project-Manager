@@ -9,7 +9,7 @@ use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -43,18 +43,19 @@ class FortifyServiceProvider extends ServiceProvider {
     });
 
     Fortify::authenticateUsing(function (Request $request) {
-      $request->validate([
-        'login' => 'required|string',
-        'password' => 'required|string',
-      ]);
+      $credentials = $request->only('login', 'password');
 
-      $user = User::where('username', $request->login)
-        ->orWhere('email', $request->login)
-        ->first();
+      // Determine if the input is an email or username
+      $field = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+      $credentials[$field] = $credentials['login'];
+      unset($credentials['login']);
 
-      if ($user && Hash::check($request->password, $user->password)) {
-        return $user;
+      if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        return Auth::user();
       }
+
+      return null;
     });
+
   }
 }
