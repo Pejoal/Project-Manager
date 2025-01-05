@@ -14,8 +14,7 @@ Route::get('/', function () {
   ]);
 });
 
-// Route::middleware(['verified', config('jetstream.two-factor')])->group(function () {
-Route::middleware(['verified'])->group(function () {
+Route::middleware(['verified', config('jetstream.two-factor')])->group(function () {
   Route::get('/test', function () {
     return Inertia::render('Test');
   })->name("test");
