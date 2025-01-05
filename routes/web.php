@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController;
 
 Route::get('/', function () {
   return Inertia::render('Welcome', [
@@ -13,7 +14,8 @@ Route::get('/', function () {
   ]);
 });
 
-Route::middleware(['auth'])->group(function () {
+// Route::middleware(['verified', config('jetstream.two-factor')])->group(function () {
+Route::middleware(['verified'])->group(function () {
   Route::get('/test', function () {
     return Inertia::render('Test');
   })->name("test");
@@ -28,3 +30,10 @@ Route::middleware([
     return Inertia::render('Dashboard');
   })->name('dashboard');
 });
+
+Route::get('/two-factor-challenge', function () {
+  return Inertia::render('Auth/TwoFactorChallenge');
+})->middleware(['auth'])->name('two-factor.challenge');
+
+Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
+->name('two-factor.login');
