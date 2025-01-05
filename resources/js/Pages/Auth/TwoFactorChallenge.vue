@@ -110,10 +110,9 @@ const submit = () => {
     
     <div class="mt-4">
       <NavLink
-        :href="route('dashboard')"
-        :active="route().current('dashboard')"
+        :href="route('profile.show')"
       >
-        Dashboard
+        Profile
       </NavLink>
     </div>
   </AuthenticationCard>
