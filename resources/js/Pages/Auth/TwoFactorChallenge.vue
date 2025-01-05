@@ -7,6 +7,7 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import NavLink from "@/Components/NavLink.vue";
 
 const recovery = ref(false);
 
@@ -106,5 +107,14 @@ const submit = () => {
         </PrimaryButton>
       </div>
     </form>
+    
+    <div class="mt-4">
+      <NavLink
+        :href="route('dashboard')"
+        :active="route().current('dashboard')"
+      >
+        Dashboard
+      </NavLink>
+    </div>
   </AuthenticationCard>
 </template>

@@ -17,7 +17,7 @@ class EnsureTwoFactorEnabled {
     // Check if the user is authenticated
     if (Auth::check()) {
       // Check if the user has enabled and confirmed two-factor authentication
-      if (!Auth::user()->two_factor_confirmed) {
+      if (Auth::user()->two_factor_confirmed_at) {
         // Redirect to the 2FA setup page or show an error
         return redirect()->route('two-factor.login');
       }
