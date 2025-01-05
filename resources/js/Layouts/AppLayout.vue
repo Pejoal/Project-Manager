@@ -235,6 +235,20 @@ const logout = () => {
                       API Tokens
                     </DropdownLink>
 
+                    <DropdownLink
+                      :href="route('terms.show')"
+                      :active="route().current('terms.show')"
+                    >
+                      Terms of Service
+                    </DropdownLink>
+
+                    <DropdownLink
+                      :href="route('policy.show')"
+                      :active="route().current('policy.show')"
+                    >
+                      Privacy Policy
+                    </DropdownLink>
+
                     <div
                       class="border-t border-gray-200 dark:border-gray-600"
                     />
@@ -343,6 +357,20 @@ const logout = () => {
                 :active="route().current('api-tokens.index')"
               >
                 API Tokens
+              </ResponsiveNavLink>
+
+              <ResponsiveNavLink
+                :href="route('terms.show')"
+                :active="route().current('terms.show')"
+              >
+                Terms of Service
+              </ResponsiveNavLink>
+
+              <ResponsiveNavLink
+                :href="route('policy.show')"
+                :active="route().current('policy.show')"
+              >
+                Privacy Policy
               </ResponsiveNavLink>
 
               <!-- Authentication -->
