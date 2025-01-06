@@ -27,9 +27,3 @@ Route::middleware([
     return Inertia::render('Test');
   })->name("test");
 });
-
-Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
-  ->name('two-factor.login');
-
-Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
-  ->name('two-factor.login');
