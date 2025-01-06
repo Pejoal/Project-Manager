@@ -1,19 +1,19 @@
 <script setup>
-import { nextTick, ref } from "vue";
-import { Head, useForm } from "@inertiajs/vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
-import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
-import NavLink from "@/Components/NavLink.vue";
+import { nextTick, ref } from 'vue';
+import { Head, useForm } from '@inertiajs/vue3';
+import AuthenticationCard from '@/Components/AuthenticationCard.vue';
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import NavLink from '@/Components/NavLink.vue';
 
 const recovery = ref(false);
 
 const form = useForm({
-  code: "",
-  recovery_code: "",
+  code: '',
+  recovery_code: '',
 });
 
 const recoveryCodeInput = ref(null);
@@ -26,15 +26,15 @@ const toggleRecovery = async () => {
 
   if (recovery.value) {
     recoveryCodeInput.value.focus();
-    form.code = "";
+    form.code = '';
   } else {
     codeInput.value.focus();
-    form.recovery_code = "";
+    form.recovery_code = '';
   }
 };
 
 const submit = () => {
-  form.post(route("two-factor.login"));
+  form.post(route('two-factor.login'));
 };
 </script>
 
@@ -107,13 +107,9 @@ const submit = () => {
         </PrimaryButton>
       </div>
     </form>
-    
+
     <div class="mt-4">
-      <NavLink
-        :href="route('profile.show')"
-      >
-        Profile
-      </NavLink>
+      <NavLink :href="route('profile.show')"> Profile </NavLink>
     </div>
   </AuthenticationCard>
 </template>

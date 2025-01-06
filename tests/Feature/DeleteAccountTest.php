@@ -9,35 +9,35 @@ use Tests\TestCase;
 
 class DeleteAccountTest extends TestCase
 {
-    use RefreshDatabase;
+  use RefreshDatabase;
 
-    public function test_user_accounts_can_be_deleted(): void
-    {
-        if (! Features::hasAccountDeletionFeatures()) {
-            $this->markTestSkipped('Account deletion is not enabled.');
-        }
-
-        $this->actingAs($user = User::factory()->create());
-
-        $this->delete('/user', [
-            'password' => 'password',
-        ]);
-
-        $this->assertNull($user->fresh());
+  public function test_user_accounts_can_be_deleted(): void
+  {
+    if (!Features::hasAccountDeletionFeatures()) {
+      $this->markTestSkipped('Account deletion is not enabled.');
     }
 
-    public function test_correct_password_must_be_provided_before_account_can_be_deleted(): void
-    {
-        if (! Features::hasAccountDeletionFeatures()) {
-            $this->markTestSkipped('Account deletion is not enabled.');
-        }
+    $this->actingAs($user = User::factory()->create());
 
-        $this->actingAs($user = User::factory()->create());
+    $this->delete('/user', [
+      'password' => 'password',
+    ]);
 
-        $this->delete('/user', [
-            'password' => 'wrong-password',
-        ]);
+    $this->assertNull($user->fresh());
+  }
 
-        $this->assertNotNull($user->fresh());
+  public function test_correct_password_must_be_provided_before_account_can_be_deleted(): void
+  {
+    if (!Features::hasAccountDeletionFeatures()) {
+      $this->markTestSkipped('Account deletion is not enabled.');
     }
+
+    $this->actingAs($user = User::factory()->create());
+
+    $this->delete('/user', [
+      'password' => 'wrong-password',
+    ]);
+
+    $this->assertNotNull($user->fresh());
+  }
 }
