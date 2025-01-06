@@ -25,5 +25,5 @@ Route::middleware([
 
   Route::get('/test', function () {
     return Inertia::render('Test');
-  })->name("test");
+  })->name('test');
 });

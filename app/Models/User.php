@@ -12,7 +12,8 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail {
+class User extends Authenticatable implements MustVerifyEmail
+{
   use HasApiTokens;
 
   /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -27,12 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail {
    *
    * @var array<int, string>
    */
-  protected $fillable = [
-    'name',
-    'email',
-    'username',
-    'password',
-  ];
+  protected $fillable = ['name', 'email', 'username', 'password'];
 
   /**
    * The attributes that should be hidden for serialization.
@@ -51,16 +47,15 @@ class User extends Authenticatable implements MustVerifyEmail {
    *
    * @var array<int, string>
    */
-  protected $appends = [
-    'profile_photo_url',
-  ];
+  protected $appends = ['profile_photo_url'];
 
   /**
    * Get the attributes that should be cast.
    *
    * @return array<string, string>
    */
-  protected function casts(): array {
+  protected function casts(): array
+  {
     return [
       'email_verified_at' => 'datetime',
       'password' => 'hashed',

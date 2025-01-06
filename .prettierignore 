@@ -1,0 +1,6 @@
+# Ignore all files in the node_modules directory
+node_modules/
+
+# Ignore all files in the public directory
+public/
+vendor/
