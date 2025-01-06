@@ -32,7 +32,6 @@ return [
   'middleware' => ['web'],
 
   'auth_session' => AuthenticateSession::class,
-  'two-factor' => \App\Http\Middleware\EnsureTwoFactorEnabled::class,
 
   /*
   |--------------------------------------------------------------------------

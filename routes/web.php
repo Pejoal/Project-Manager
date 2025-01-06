@@ -18,7 +18,6 @@ Route::middleware([
   'auth:sanctum',
   config('jetstream.auth_session'),
   'verified',
-  config('jetstream.two-factor'),
 ])->group(function () {
   Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -29,9 +28,8 @@ Route::middleware([
   })->name("test");
 });
 
-Route::get('/two-factor-challenge', function () {
-  return Inertia::render('Auth/TwoFactorChallenge');
-})->middleware(['auth', 'verified'])->name('two-factor.challenge');
+Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
+  ->name('two-factor.login');
 
 Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
   ->name('two-factor.login');
