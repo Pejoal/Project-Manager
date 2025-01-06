@@ -59,7 +59,7 @@ return [
   'doesnt_start_with' =>
     'The :attribute field must not start with one of the following: :values.',
   'email' => 'The :attribute field must be a valid email address.',
-  'login' => 'The provided email or username is incorrect.',
+  'username' => 'The provided email or username is incorrect.',
   'ends_with' =>
     'The :attribute field must end with one of the following: :values.',
   'enum' => 'The selected :attribute is invalid.',

@@ -18,7 +18,15 @@ class DatabaseSeeder extends Seeder
     User::factory()
       ->withPersonalTeam()
       ->create([
+        'name' => 'Pejoal Hanna',
+        'username' => 'pejoal',
+        'email' => 'pejoal.official@gmail.com',
+      ]);
+
+    User::factory()
+      ->create([
         'name' => 'Test User',
+        'username' => 'test',
         'email' => 'test@example.com',
       ]);
   }
