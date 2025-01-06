@@ -8,7 +8,6 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -21,6 +20,7 @@ class FortifyServiceProvider extends ServiceProvider
    */
   public function register(): void
   {
+    //
   }
 
   /**
@@ -45,35 +45,6 @@ class FortifyServiceProvider extends ServiceProvider
 
     RateLimiter::for('two-factor', function (Request $request) {
       return Limit::perMinute(5)->by($request->session()->get('login.id'));
-    });
-
-    Fortify::authenticateUsing(function (Request $request) {
-      $request->validate([
-        'login' => ['required', 'string'], // Use 'login' instead of 'email'
-        'password' => ['required', 'string'],
-      ]);
-
-      $credentials = $request->only('login', 'password');
-
-      // Determine if the input is an email or username
-      $field = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL)
-        ? 'email'
-        : 'username';
-      $credentials[$field] = $credentials['login'];
-      unset($credentials['login']);
-
-      if (Auth::attempt($credentials, $request->boolean('remember'))) {
-        return Auth::user();
-      }
-
-      return;
-    });
-
-    Fortify::confirmPasswordsUsing(function ($user, $password) {
-      return Auth::validate([
-        'email' => $user->email,
-        'password' => $password,
-      ]);
     });
   }
 }

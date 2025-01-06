@@ -3,7 +3,6 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController;
 
 Route::get('/', function () {
   return Inertia::render('Welcome', [
@@ -22,8 +21,4 @@ Route::middleware([
   Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
   })->name('dashboard');
-
-  Route::get('/test', function () {
-    return Inertia::render('Test');
-  })->name('test');
 });

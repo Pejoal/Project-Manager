@@ -11,7 +11,6 @@ import TextInput from '@/Components/TextInput.vue';
 const form = useForm({
   name: '',
   email: '',
-  username: '',
   password: '',
   password_confirmation: '',
   terms: false,
@@ -55,22 +54,9 @@ const submit = () => {
           type="email"
           class="mt-1 block w-full"
           required
-          autocomplete="email"
-        />
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="username" value="User Name" />
-        <TextInput
-          id="username"
-          v-model="form.username"
-          type="username"
-          class="mt-1 block w-full"
-          required
           autocomplete="username"
         />
-        <InputError class="mt-2" :message="form.errors.username" />
+        <InputError class="mt-2" :message="form.errors.email" />
       </div>
 
       <div class="mt-4">
@@ -117,14 +103,14 @@ const submit = () => {
               <a
                 target="_blank"
                 :href="route('terms.show')"
-                class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >Terms of Service</a
               >
               and
               <a
                 target="_blank"
                 :href="route('policy.show')"
-                class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >Privacy Policy</a
               >
             </div>
@@ -136,7 +122,7 @@ const submit = () => {
       <div class="flex items-center justify-end mt-4">
         <Link
           :href="route('login')"
-          class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+          class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Already registered?
         </Link>

@@ -37,10 +37,8 @@ const logout = () => {
 
     <Banner />
 
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <nav
-        class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
-      >
+    <div class="min-h-screen bg-gray-100">
+      <nav class="bg-white border-b border-gray-100">
         <!-- Primary Navigation Menu -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
@@ -60,12 +58,6 @@ const logout = () => {
                 >
                   Dashboard
                 </NavLink>
-                <NavLink
-                  :href="route('test')"
-                  :active="route().current('test')"
-                >
-                  Test
-                </NavLink>
               </div>
             </div>
 
@@ -81,7 +73,7 @@ const logout = () => {
                     <span class="inline-flex rounded-md">
                       <button
                         type="button"
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150"
                       >
                         {{ $page.props.auth.user.current_team.name }}
 
@@ -133,9 +125,7 @@ const logout = () => {
                       <template
                         v-if="$page.props.auth.user.all_teams.length > 1"
                       >
-                        <div
-                          class="border-t border-gray-200 dark:border-gray-600"
-                        />
+                        <div class="border-t border-gray-200" />
 
                         <div class="block px-4 py-2 text-xs text-gray-400">
                           Switch Teams
@@ -196,7 +186,7 @@ const logout = () => {
                     <span v-else class="inline-flex rounded-md">
                       <button
                         type="button"
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150"
                       >
                         {{ $page.props.auth.user.name }}
 
@@ -235,23 +225,7 @@ const logout = () => {
                       API Tokens
                     </DropdownLink>
 
-                    <DropdownLink
-                      :href="route('terms.show')"
-                      :active="route().current('terms.show')"
-                    >
-                      Terms of Service
-                    </DropdownLink>
-
-                    <DropdownLink
-                      :href="route('policy.show')"
-                      :active="route().current('policy.show')"
-                    >
-                      Privacy Policy
-                    </DropdownLink>
-
-                    <div
-                      class="border-t border-gray-200 dark:border-gray-600"
-                    />
+                    <div class="border-t border-gray-200" />
 
                     <!-- Authentication -->
                     <form @submit.prevent="logout">
@@ -265,7 +239,7 @@ const logout = () => {
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
               <button
-                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
+                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
                 @click="showingNavigationDropdown = !showingNavigationDropdown"
               >
                 <svg
@@ -318,7 +292,7 @@ const logout = () => {
           </div>
 
           <!-- Responsive Settings Options -->
-          <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+          <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">
               <div
                 v-if="$page.props.jetstream.managesProfilePhotos"
@@ -332,9 +306,7 @@ const logout = () => {
               </div>
 
               <div>
-                <div
-                  class="font-medium text-base text-gray-800 dark:text-gray-200"
-                >
+                <div class="font-medium text-base text-gray-800">
                   {{ $page.props.auth.user.name }}
                 </div>
                 <div class="font-medium text-sm text-gray-500">
@@ -359,20 +331,6 @@ const logout = () => {
                 API Tokens
               </ResponsiveNavLink>
 
-              <ResponsiveNavLink
-                :href="route('terms.show')"
-                :active="route().current('terms.show')"
-              >
-                Terms of Service
-              </ResponsiveNavLink>
-
-              <ResponsiveNavLink
-                :href="route('policy.show')"
-                :active="route().current('policy.show')"
-              >
-                Privacy Policy
-              </ResponsiveNavLink>
-
               <!-- Authentication -->
               <form method="POST" @submit.prevent="logout">
                 <ResponsiveNavLink as="button"> Log Out </ResponsiveNavLink>
@@ -380,7 +338,7 @@ const logout = () => {
 
               <!-- Team Management -->
               <template v-if="$page.props.jetstream.hasTeamFeatures">
-                <div class="border-t border-gray-200 dark:border-gray-600" />
+                <div class="border-t border-gray-200" />
 
                 <div class="block px-4 py-2 text-xs text-gray-400">
                   Manage Team
@@ -406,7 +364,7 @@ const logout = () => {
 
                 <!-- Team Switcher -->
                 <template v-if="$page.props.auth.user.all_teams.length > 1">
-                  <div class="border-t border-gray-200 dark:border-gray-600" />
+                  <div class="border-t border-gray-200" />
 
                   <div class="block px-4 py-2 text-xs text-gray-400">
                     Switch Teams
@@ -449,7 +407,7 @@ const logout = () => {
       </nav>
 
       <!-- Page Heading -->
-      <header v-if="$slots.header" class="bg-white dark:bg-gray-800 shadow">
+      <header v-if="$slots.header" class="bg-white shadow">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <slot name="header" />
         </div>

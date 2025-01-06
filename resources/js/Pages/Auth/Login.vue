@@ -14,7 +14,7 @@ defineProps({
 });
 
 const form = useForm({
-  login: '',
+  email: '',
   password: '',
   remember: false,
 });
@@ -39,26 +39,23 @@ const submit = () => {
       <AuthenticationCardLogo />
     </template>
 
-    <div
-      v-if="status"
-      class="mb-4 font-medium text-sm text-green-600 dark:text-green-400"
-    >
+    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
       {{ status }}
     </div>
 
     <form @submit.prevent="submit">
       <div>
-        <InputLabel for="login" value="Email / User Name" />
+        <InputLabel for="email" value="Email" />
         <TextInput
-          id="login"
-          v-model="form.login"
-          type="text"
+          id="email"
+          v-model="form.email"
+          type="email"
           class="mt-1 block w-full"
           required
           autofocus
           autocomplete="username"
         />
-        <InputError class="mt-2" :message="form.errors.login" />
+        <InputError class="mt-2" :message="form.errors.email" />
       </div>
 
       <div class="mt-4">
@@ -77,9 +74,7 @@ const submit = () => {
       <div class="block mt-4">
         <label class="flex items-center">
           <Checkbox v-model:checked="form.remember" name="remember" />
-          <span class="ms-2 text-sm text-gray-600 dark:text-gray-400"
-            >Remember me</span
-          >
+          <span class="ms-2 text-sm text-gray-600">Remember me</span>
         </label>
       </div>
 
@@ -87,7 +82,7 @@ const submit = () => {
         <Link
           v-if="canResetPassword"
           :href="route('password.request')"
-          class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+          class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Forgot your password?
         </Link>

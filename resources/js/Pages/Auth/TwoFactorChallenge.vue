@@ -7,7 +7,6 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import NavLink from '@/Components/NavLink.vue';
 
 const recovery = ref(false);
 
@@ -46,7 +45,7 @@ const submit = () => {
       <AuthenticationCardLogo />
     </template>
 
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+    <div class="mb-4 text-sm text-gray-600">
       <template v-if="!recovery">
         Please confirm access to your account by entering the authentication
         code provided by your authenticator application.
@@ -90,7 +89,7 @@ const submit = () => {
       <div class="flex items-center justify-end mt-4">
         <button
           type="button"
-          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 underline cursor-pointer"
+          class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
           @click.prevent="toggleRecovery"
         >
           <template v-if="!recovery"> Use a recovery code </template>
@@ -107,9 +106,5 @@ const submit = () => {
         </PrimaryButton>
       </div>
     </form>
-
-    <div class="mt-4">
-      <NavLink :href="route('profile.show')"> Profile </NavLink>
-    </div>
   </AuthenticationCard>
 </template>
