@@ -4,8 +4,7 @@ use Laravel\Jetstream\Features;
 use Laravel\Jetstream\Http\Middleware\AuthenticateSession;
 
 return [
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Jetstream Stack
     |--------------------------------------------------------------------------
@@ -16,9 +15,9 @@ return [
     |
     */
 
-    'stack' => 'inertia',
+  'stack' => 'inertia',
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Jetstream Route Middleware
     |--------------------------------------------------------------------------
@@ -29,11 +28,11 @@ return [
     |
     */
 
-    'middleware' => ['web'],
+  'middleware' => ['web'],
 
-    'auth_session' => AuthenticateSession::class,
+  'auth_session' => AuthenticateSession::class,
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Jetstream Guard
     |--------------------------------------------------------------------------
@@ -44,9 +43,9 @@ return [
     |
     */
 
-    'guard' => 'sanctum',
+  'guard' => 'sanctum',
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Features
     |--------------------------------------------------------------------------
@@ -57,15 +56,15 @@ return [
     |
     */
 
-    'features' => [
-        // Features::termsAndPrivacyPolicy(),
-        // Features::profilePhotos(),
-        Features::api(),
-        Features::teams(['invitations' => true]),
-        Features::accountDeletion(),
-    ],
+  'features' => [
+    // Features::termsAndPrivacyPolicy(),
+    // Features::profilePhotos(),
+    Features::api(),
+    Features::teams(['invitations' => true]),
+    Features::accountDeletion(),
+  ],
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Profile Photo Disk
     |--------------------------------------------------------------------------
@@ -76,6 +75,5 @@ return [
     |
     */
 
-    'profile_photo_disk' => 'public',
-
+  'profile_photo_disk' => 'public',
 ];
