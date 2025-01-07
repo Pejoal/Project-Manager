@@ -12,6 +12,9 @@
           {{ task.description }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Project Name: {{ project.name }}
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
           Assigned to: {{ task.assigned_to }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
@@ -19,6 +22,9 @@
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Task ID: {{ task.id }}
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Project ID: {{ project.id }}
         </p>
       </div>
       <Link
