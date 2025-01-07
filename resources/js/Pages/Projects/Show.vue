@@ -16,6 +16,12 @@
       >
         Edit
       </Link>
+      <Link
+        :href="route('tasks.index', { project: project.id })"
+        class="text-blue-500 dark:text-blue-400 hover:underline"
+      >
+        View Tasks
+      </Link>
       <button
         @click="destroy"
         class="ml-4 text-red-500 dark:text-red-400 hover:underline"
