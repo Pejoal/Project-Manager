@@ -7,6 +7,11 @@ use Inertia\Inertia;
 
 class TaskController extends Controller
 {
+  public function all()
+  {
+    return Inertia::render('Tasks/All', compact('tasks'));
+  }
+
   public function index(Project $project)
   {
     $tasks = $project->tasks;
