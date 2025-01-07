@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
+import Locales from '@/Components/Locales.vue';
 
 defineProps({
   translations: Object,
@@ -16,22 +17,8 @@ defineProps({
         Dashboard
         {{ translations.welcome }}
       </h2>
+      <Locales />
 
-      <div class="flex justify-center space-x-4 mt-4">
-        <div>
-          <ul>
-            <li v-for="locale in $page.props.locales" :key="locale.code">
-              <a
-                :href="locale.url"
-                :hreflang="locale.code"
-                :class="{ 'font-bold': locale.code === activeLocaleCode }"
-              >
-                {{ locale.native }}
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
     </template>
 
     <div class="py-12">
