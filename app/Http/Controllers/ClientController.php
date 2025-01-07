@@ -12,11 +12,6 @@ class ClientController extends Controller
     return Inertia::render('Clients/Index', compact('clients'));
   }
 
-  public function create()
-  {
-    return Inertia::render('Clients/Create');
-  }
-
   public function store(Request $request)
   {
     $request->validate([

@@ -29,19 +29,32 @@
           </div>
         </li>
       </ul>
-      <Link
-        :href="route('clients.create')"
+      <button
+        @click="openModal"
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
         Add New Client
-      </Link>
+      </button>
     </section>
+    <CreateClientModal :show="showModal" @close="closeModal" />
   </AppLayout>
 </template>
 
 <script setup>
 import { Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import CreateClientModal from './CreateClientModal.vue';
+import { ref } from 'vue';
+
+const showModal = ref(false);
+
+const openModal = () => {
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
 
 defineProps({
   clients: Array,

@@ -1,12 +1,32 @@
+<script setup>
+import { useForm } from '@inertiajs/vue3';
+import DialogModal from '@/Components/DialogModal.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import InputError from '@/Components/InputError.vue';
+import TextInput from '@/Components/TextInput.vue';
+
+const emit = defineEmits(['close']);
+const props = defineProps({
+  show: Boolean,
+});
+
+const form = useForm({
+  name: '',
+  email: '',
+  phone: '',
+});
+
+const submit = () => {
+  form.post(route('clients.store'), {
+    onSuccess: () => emit('close'),
+  });
+};
+</script>
+
 <template>
-  <Head title="Create Client" />
-  <AppLayout>
-    <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Create Client
-      </h1>
-    </template>
-    <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+  <DialogModal :show="props.show" @close="emit('close')">
+    <template #title>Create Client</template>
+    <template #content>
       <form @submit.prevent="submit">
         <div class="mb-4">
           <InputLabel for="name" value="Name" />
@@ -40,31 +60,21 @@
           />
           <InputError class="mt-2" :message="form.errors.phone" />
         </div>
-        <button
-          type="submit"
-          class="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
-        >
-          Create
-        </button>
       </form>
-    </div>
-  </AppLayout>
+    </template>
+    <template #footer>
+      <button
+        @click="emit('close')"
+        class="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-md hover:bg-gray-600 dark:hover:bg-gray-700"
+      >
+        Cancel
+      </button>
+      <button
+        @click="submit"
+        class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
+      >
+        Create
+      </button>
+    </template>
+  </DialogModal>
 </template>
-
-<script setup>
-import { useForm, Head } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import InputError from '@/Components/InputError.vue';
-import TextInput from '@/Components/TextInput.vue';
-
-const form = useForm({
-  name: '',
-  email: '',
-  phone: '',
-});
-
-const submit = () => {
-  form.post(route('clients.store'));
-};
-</script>
