@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -73,6 +75,28 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
       Route::delete('/{client}', [ClientController::class, 'destroy'])->name(
         'clients.destroy'
       );
+    });
+
+    // Project Management Routes
+    Route::prefix('projects')->group(function () {
+      Route::get('/', [ProjectController::class, 'index'])->name('projects.index');
+      Route::get('/create', [ProjectController::class, 'create'])->name('projects.create');
+      Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
+      Route::get('/{project}', [ProjectController::class, 'show'])->name('projects.show');
+      Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+      Route::put('/{project}', [ProjectController::class, 'update'])->name('projects.update');
+      Route::delete('/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
+      // Task Management Routes
+      Route::prefix('{project}/tasks')->group(function () {
+        Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
+        Route::get('/create', [TaskController::class, 'create'])->name('tasks.create');
+        Route::post('/', [TaskController::class, 'store'])->name('tasks.store');
+        Route::get('/{task}', [TaskController::class, 'show'])->name('tasks.show');
+        Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+        Route::put('/{task}', [TaskController::class, 'update'])->name('tasks.update');
+        Route::delete('/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+      });
     });
   });
 });
