@@ -101,9 +101,7 @@ const closeModal = () => {
 
           <div class="ms-3">
             <div class="text-sm text-gray-600 dark:text-gray-400">
-              {{
-                session.agent.platform ? session.agent.platform : 'Unknown'
-              }}
+              {{ session.agent.platform ? session.agent.platform : 'Unknown' }}
               - {{ session.agent.browser ? session.agent.browser : 'Unknown' }}
             </div>
 

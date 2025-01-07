@@ -51,7 +51,9 @@ const toggleDropdown = () => {
               :hreflang="locale.code"
               :class="[
                 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900',
-                locale.code === $page.props.active_locale_code ? 'font-bold' : '',
+                locale.code === $page.props.active_locale_code
+                  ? 'font-bold'
+                  : '',
               ]"
               role="menuitem"
             >

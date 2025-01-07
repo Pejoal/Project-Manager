@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,5 +49,16 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         'translations' => __('messages'),
       ]);
     })->name('dashboard');
+
+    // Client Management Routes
+    Route::prefix('clients')->group(function () {
+      Route::get('/', [ClientController::class, 'index'])->name('clients.index');
+      Route::get('/create', [ClientController::class, 'create'])->name('clients.create');
+      Route::post('/', [ClientController::class, 'store'])->name('clients.store');
+      Route::get('/{client}', [ClientController::class, 'show'])->name('clients.show');
+      Route::get('/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
+      Route::put('/{client}', [ClientController::class, 'update'])->name('clients.update');
+      Route::delete('/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
+    });
   });
 });
