@@ -1,7 +1,9 @@
 <template>
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Edit Client</h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+        Edit Client
+      </h1>
     </template>
     <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form @submit.prevent="submit">
@@ -9,6 +11,7 @@
           <InputLabel for="name" value="Name" />
           <TextInput
             id="name"
+            required
             v-model="form.name"
             type="text"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
@@ -19,6 +22,7 @@
           <InputLabel for="email" value="Email" />
           <TextInput
             id="email"
+            required
             v-model="form.email"
             type="email"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"

@@ -1,7 +1,9 @@
 <template>
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Clients</h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+        Clients
+      </h1>
     </template>
     <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <ul class="mb-4">
