@@ -6,7 +6,7 @@
         Tasks for {{ project.name }}
       </h1>
     </template>
-    <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <ul class="mb-4 space-y-4">
         <li
           v-for="task in tasks"
@@ -15,7 +15,9 @@
         >
           <div>
             <Link
-              :href="route('tasks.show', { project: project.id, task: task.id })"
+              :href="
+                route('tasks.show', { project: project.id, task: task.id })
+              "
               class="text-blue-500 dark:text-blue-400 hover:underline"
             >
               {{ task.name }}

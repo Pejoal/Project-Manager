@@ -6,7 +6,7 @@
         Clients
       </h1>
     </template>
-    <section class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <section class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <ul class="mb-4 space-y-4">
         <li
           v-for="client in clients"

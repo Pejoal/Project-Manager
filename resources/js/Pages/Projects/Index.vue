@@ -6,7 +6,7 @@
         Projects
       </h1>
     </template>
-    <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <ul class="mb-4 space-y-4">
         <li
           v-for="project in projects"
