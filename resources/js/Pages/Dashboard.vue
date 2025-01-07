@@ -18,18 +18,19 @@ defineProps({
       </h2>
 
       <div class="flex justify-center space-x-4 mt-4">
-        <a
-          :href="route('localized', { locale: 'en' })"
-          class="px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 transition duration-300"
-        >
-          English
-        </a>
-        <a
-          :href="route('localized', { locale: 'de' })"
-          class="px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-600 transition duration-300"
-        >
-          Deutsch
-        </a>
+        <div>
+          <ul>
+            <li v-for="locale in $page.props.locales" :key="locale.code">
+              <a
+                :href="locale.url"
+                :hreflang="locale.code"
+                :class="{ 'font-bold': locale.code === activeLocaleCode }"
+              >
+                {{ locale.native }}
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </template>
 

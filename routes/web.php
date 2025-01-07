@@ -14,11 +14,6 @@ Route::get('/', function () {
   ]);
 });
 
-Route::get('/{locale}', function ($locale) {
-  LaravelLocalization::setLocale($locale);
-  return redirect()->back();
-})->name('localized');
-
 Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
   Route::middleware([
     'auth:sanctum',
