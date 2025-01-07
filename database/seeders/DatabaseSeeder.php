@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
       ]);
 
     User::factory()
+      ->withPersonalTeam()
       ->create([
         'name' => 'Test User',
         'username' => 'test',
