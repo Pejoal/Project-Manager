@@ -7,24 +7,26 @@
       </h1>
     </template>
     <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <ul class="mb-4">
+      <ul class="mb-4 space-y-4">
         <li
           v-for="project in projects"
           :key="project.id"
-          class="mb-2 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg"
+          class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
-          <Link
-            :href="route('projects.show', project.id)"
-            class="text-blue-500 dark:text-blue-400 hover:underline"
-          >
-            {{ project.name }}
-          </Link>
-          <span class="text-gray-500 dark:text-gray-400">
-            - Created at: {{ new Date(project.created_at).toLocaleString() }}
-          </span>
-          <span class="text-gray-500 dark:text-gray-400">
-            - Project ID: {{ project.id }}
-          </span>
+          <div>
+            <Link
+              :href="route('projects.show', project.id)"
+              class="text-blue-500 dark:text-blue-400 hover:underline"
+            >
+              {{ project.name }}
+            </Link>
+            <div class="text-gray-500 dark:text-gray-400 text-sm">
+              Created at: {{ new Date(project.created_at).toLocaleString() }}
+            </div>
+          </div>
+          <div class="text-gray-500 dark:text-gray-400 text-sm">
+            Project ID: {{ project.id }}
+          </div>
         </li>
       </ul>
       <Link

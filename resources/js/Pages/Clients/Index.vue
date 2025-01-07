@@ -6,24 +6,26 @@
         Clients
       </h1>
     </template>
-    <section class="p-2">
-      <ul class="mb-4">
+    <section class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <ul class="mb-4 space-y-4">
         <li
           v-for="client in clients"
           :key="client.id"
-          class="mb-2 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md"
+          class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
-          <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+          <div>
             <Link
               :href="route('clients.show', client.id)"
               class="text-blue-500 dark:text-blue-400 hover:underline"
             >
               {{ client.name }}
             </Link>
-            <p class="text-gray-600 dark:text-gray-400">ID: {{ client.id }}</p>
-            <p class="text-gray-600 dark:text-gray-400">
+            <div class="text-gray-500 dark:text-gray-400 text-sm">
               Created At: {{ new Date(client.created_at).toLocaleString() }}
-            </p>
+            </div>
+          </div>
+          <div class="text-gray-500 dark:text-gray-400 text-sm">
+            ID: {{ client.id }}
           </div>
         </li>
       </ul>
