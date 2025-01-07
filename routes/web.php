@@ -14,6 +14,11 @@ Route::get('/', function () {
   ]);
 });
 
+Route::get('/{locale}', function ($locale) {
+  LaravelLocalization::setLocale($locale);
+  return redirect()->back();
+})->name('localized');
+
 Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
   Route::middleware([
     'auth:sanctum',
@@ -44,7 +49,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     ]);
 
     Route::get('/dashboard', function () {
-      return Inertia::render('Dashboard');
+      return Inertia::render('Dashboard', [
+        'translations' => __('messages'),
+      ]);
     })->name('dashboard');
   });
 });
