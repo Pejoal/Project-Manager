@@ -23,6 +23,26 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     'localizationRedirect',
     'localeViewPath',
   ])->group(function () {
+    $locales = collect(LaravelLocalization::getSupportedLocales())->map(
+      function ($properties, $localeCode) {
+        return [
+          'code' => $localeCode,
+          'native' => $properties['native'],
+          'url' => LaravelLocalization::getLocalizedURL(
+            $localeCode,
+            null,
+            [],
+            true
+          ),
+          'emoji' => $properties['emoji'],
+        ];
+      }
+    );
+    Inertia::share([
+      'locales' => $locales,
+      'active_locale_code' => LaravelLocalization::getCurrentLocale(),
+    ]);
+
     Route::get('/dashboard', function () {
       return Inertia::render('Dashboard');
     })->name('dashboard');
