@@ -8,7 +8,7 @@
     </template>
     <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <ul class="mb-4">
-        <li v-for="client in clients" :key="client.id" class="mb-2">
+        <li v-for="client in clients" :key="client.id" class="mb-2 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
           <Link
             :href="route('clients.show', client.id)"
             class="text-blue-500 dark:text-blue-400 hover:underline"

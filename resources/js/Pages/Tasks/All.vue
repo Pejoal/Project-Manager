@@ -8,7 +8,7 @@
     </template>
     <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <ul class="mb-4">
-        <li v-for="task in tasks" :key="task.id" class="mb-2">
+        <li v-for="task in tasks" :key="task.id" class="mb-2 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
           <Link
             :href="
               route('tasks.show', { project: task.project_id, task: task.id })
@@ -17,6 +17,9 @@
           >
             {{ task.name }} - {{ task.project.name }}
           </Link>
+          <span class="text-gray-500 dark:text-gray-400">
+            - Created at: {{ new Date(task.created_at).toLocaleString() }}
+          </span>
         </li>
       </ul>
     </div>

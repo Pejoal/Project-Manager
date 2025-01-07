@@ -7,12 +7,17 @@
       </h1>
     </template>
     <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <p class="mb-2 text-gray-700 dark:text-gray-300">
-        {{ task.description }}
-      </p>
-      <p class="mb-4 text-gray-700 dark:text-gray-300">
-        Assigned to: {{ task.assigned_to }}
-      </p>
+      <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          {{ task.description }}
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Assigned to: {{ task.assigned_to }}
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Created at: {{ new Date(task.created_at).toLocaleString() }}
+        </p>
+      </div>
       <Link
         :href="route('tasks.edit', { project: project.id, task: task.id })"
         class="text-blue-500 dark:text-blue-400 hover:underline"
