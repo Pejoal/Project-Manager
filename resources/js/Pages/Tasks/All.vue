@@ -15,7 +15,7 @@
             "
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
-            {{ task.name }}
+            {{ task.name }} - {{ task.project.name }}
           </Link>
         </li>
       </ul>
