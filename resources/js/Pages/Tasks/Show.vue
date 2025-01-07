@@ -1,0 +1,53 @@
+<template>
+  <Head :title="`Task - ${task.name}`" />
+  <AppLayout>
+    <template #header>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+        {{ task.name }}
+      </h1>
+    </template>
+    <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <p class="mb-2 text-gray-700 dark:text-gray-300">
+        {{ task.description }}
+      </p>
+      <p class="mb-4 text-gray-700 dark:text-gray-300">
+        Assigned to: {{ task.assigned_to }}
+      </p>
+      <Link
+        :href="route('tasks.edit', { project: project.id, task: task.id })"
+        class="text-blue-500 dark:text-blue-400 hover:underline"
+      >
+        Edit
+      </Link>
+      <button
+        @click="destroy"
+        class="ml-4 text-red-500 dark:text-red-400 hover:underline"
+      >
+        Delete
+      </button>
+    </div>
+  </AppLayout>
+</template>
+
+<script setup>
+import { defineProps } from 'vue';
+import { useForm, Link, Head } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+
+const props = defineProps({
+  task: Object,
+  project: Object,
+});
+
+const form = useForm({
+  task: props.task,
+});
+
+const destroy = () => {
+  if (confirm('Are you sure?')) {
+    form.delete(
+      route('tasks.destroy', { project: props.project.id, task: props.task.id })
+    );
+  }
+};
+</script>
