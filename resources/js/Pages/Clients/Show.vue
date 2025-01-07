@@ -1,4 +1,5 @@
 <template>
+  <Head :title="`Client - ${client.name}`" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -30,7 +31,7 @@
 
 <script setup>
 import { defineProps } from 'vue';
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({

@@ -1,4 +1,5 @@
 <template>
+  <Head :title="`Edit Client - ${client.name}`" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -53,6 +54,7 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
+import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
