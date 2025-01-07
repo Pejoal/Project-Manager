@@ -10,7 +10,9 @@
       <ul class="mb-4">
         <li v-for="task in tasks" :key="task.id" class="mb-2">
           <Link
-            :href="route('tasks.show', { task: task.id })"
+            :href="
+              route('tasks.show', { project: task.project_id, task: task.id })
+            "
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
             {{ task.name }}
