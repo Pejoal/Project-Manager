@@ -1,7 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
-import Locales from '@/Components/Locales.vue';
 
 defineProps({
   translations: Object,
@@ -17,8 +16,6 @@ defineProps({
         Dashboard
         {{ translations.welcome }}
       </h2>
-      <Locales />
-
     </template>
 
     <div class="py-12">
