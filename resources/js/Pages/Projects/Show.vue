@@ -14,6 +14,9 @@
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Created at: {{ new Date(project.created_at).toLocaleString() }}
         </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Project ID: {{ project.id }}
+        </p>
       </div>
       <Link
         :href="route('projects.edit', { project: project.id })"
