@@ -13,7 +13,6 @@ defineProps({
       <h2
         class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
       >
-        Dashboard
         {{ translations.welcome }}
       </h2>
     </template>

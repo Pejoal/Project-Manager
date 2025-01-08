@@ -49,7 +49,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
 
     Route::get('/dashboard', function () {
       return Inertia::render('Dashboard', [
-        'translations' => __('messages'),
+        'translations' => [
+          'welcome' => __('messages.welcome'),
+        ],
       ]);
     })->name('dashboard');
 
