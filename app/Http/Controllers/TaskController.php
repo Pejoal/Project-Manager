@@ -47,6 +47,7 @@ class TaskController extends Controller
   public function edit(Project $project, Task $task)
   {
     $users = User::all();
+    $task->load('assignedTo');
     return Inertia::render('Tasks/Edit', compact('task', 'project', 'users'));
   }
 

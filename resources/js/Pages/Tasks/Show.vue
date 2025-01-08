@@ -22,8 +22,9 @@
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Assigned to:
-          <span v-for="user in task.assigned_to" :key="user.id">
-            {{ user.name }}
+          <span v-for="(user, index) in task.assigned_to" :key="user.id">
+            {{ user.name
+            }}<span v-if="index < task.assigned_to.length - 1">, </span>
           </span>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">

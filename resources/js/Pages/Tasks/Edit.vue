@@ -74,6 +74,7 @@ import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
   task: Object,
+  assigned_to: Object,
   project: Object,
   users: Array,
 });
