@@ -28,7 +28,10 @@
           <div>
             <Link
               :href="
-                route('tasks.show', { project: task.project.slug, task: task.id })
+                route('tasks.show', {
+                  project: task.project.slug,
+                  task: task.id,
+                })
               "
               class="text-blue-500 dark:text-blue-400 hover:underline"
             >

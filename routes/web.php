@@ -4,7 +4,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,7 +48,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
       'active_locale_code' => LaravelLocalization::getCurrentLocale(),
     ]);
 
-    Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
+    Route::put('/api/settings', [SettingsController::class, 'updateSettings']);
+    Route::get('/dashboard', [DashboardController::class, 'show'])->name(
+      'dashboard'
+    );
 
     // Client Management Routes
     Route::prefix('clients')->group(function () {

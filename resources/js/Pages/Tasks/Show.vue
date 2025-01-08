@@ -64,7 +64,10 @@ const form = useForm({
 const destroy = () => {
   if (confirm('Are you sure?')) {
     form.delete(
-      route('tasks.destroy', { project: props.project.slug, task: props.task.id })
+      route('tasks.destroy', {
+        project: props.project.slug,
+        task: props.task.id,
+      })
     );
   }
 };

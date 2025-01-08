@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\Project;
 use App\Models\Task;
 use Inertia\Inertia;
+use App\Models\Settings;
 
 class DashboardController extends Controller
 {
@@ -14,6 +15,7 @@ class DashboardController extends Controller
     $clientsCount = Client::count();
     $projectsCount = Project::count();
     $tasksCount = Task::count();
+    $settings = Settings::first();
 
     return Inertia::render('Dashboard', [
       'translations' => [
@@ -24,10 +26,15 @@ class DashboardController extends Controller
         'datasets' => [
           [
             'data' => [$clientsCount, $projectsCount, $tasksCount],
-            'backgroundColor' => ['#F70E1F', '#00F95F', '#123EFB'],
+            'backgroundColor' => [
+              $settings->clients_color,
+              $settings->projects_color,
+              $settings->tasks_color,
+            ],
           ],
         ],
       ],
+      'settings' => $settings,
     ]);
   }
 }
