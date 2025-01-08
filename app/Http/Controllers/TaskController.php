@@ -9,8 +9,9 @@ class TaskController extends Controller
 {
   public function all()
   {
+    $projects = Project::get();
     $tasks = Task::with('project')->get();
-    return Inertia::render('Tasks/All', compact('tasks'));
+    return Inertia::render('Tasks/All', compact('tasks', 'projects'));
   }
 
   public function index(Project $project)

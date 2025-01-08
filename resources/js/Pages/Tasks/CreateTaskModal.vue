@@ -9,6 +9,10 @@ const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
   project: Object,
+  projects: {
+    type: Array,
+    default: [],
+  },
 });
 
 const form = useForm({
@@ -29,6 +33,28 @@ const submit = () => {
     <template #title>Create Task</template>
     <template #content>
       <form id="form" @submit.prevent="submit">
+        <!-- Project Selection -->
+        <div class="mb-4">
+          <InputLabel for="project" value="Project" />
+          <select
+            v-if="props.projects.length > 0"
+            id="project"
+            v-model="form.project_id"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          >
+            <option v-for="project in props.projects" :key="project.id" :value="project.id">
+              {{ project.name }}
+            </option>
+          </select>
+          <TextInput
+            v-else
+            id="project"
+            :value="props.project.name"
+            readonly
+            type="text"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
+          />
+        </div>
         <div class="mb-4">
           <InputLabel for="name" value="Name" />
           <TextInput
