@@ -133,7 +133,7 @@ const submit = () => {
 #project .vs__selected {
   color: white;
 }
-#project .vs__actions {
+.vs__actions {
   background: white;
 }
 </style>
