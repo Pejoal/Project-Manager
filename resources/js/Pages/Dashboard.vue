@@ -1,8 +1,23 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { DoughnutChart } from 'vue-chart-3';
+import { Chart, registerables } from 'chart.js';
+import { ref } from 'vue';
 
 defineProps({
   translations: Object,
+});
+
+Chart.register(...registerables);
+
+const testData = ref({
+  labels: ['Clients', 'Projects', 'Tasks'],
+  datasets: [
+    {
+      data: [30, 40, 20],
+      backgroundColor: ['#77CEFF', '#0079AF', '#123E6B'],
+    },
+  ],
 });
 </script>
 
@@ -20,8 +35,12 @@ defineProps({
       <div
         class="p-2 my-1 bg-white dark:text-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg"
       >
-        content
+        <DoughnutChart :chart-data="testData" />
       </div>
     </div>
   </AppLayout>
 </template>
+
+<style scoped>
+/* Add any additional styling here */
+</style>
