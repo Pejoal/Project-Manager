@@ -11,6 +11,5 @@ class SettingsController extends Controller
   {
     $settings = Settings::first();
     $settings->update($request->all());
-    return response()->json($settings);
   }
 }
