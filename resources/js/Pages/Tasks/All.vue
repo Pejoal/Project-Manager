@@ -7,6 +7,18 @@
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <CreateTaskModal
+        :show="showModal"
+        :projects="projects"
+        :users="users"
+        @close="closeModal"
+      />
+      <button
+        @click="openModal"
+        class="text-blue-500 dark:text-blue-400 hover:underline"
+      >
+        Create Task
+      </button>
       <ul class="mb-4 space-y-4">
         <li
           v-for="task in tasks"
@@ -31,18 +43,6 @@
           </div>
         </li>
       </ul>
-      <CreateTaskModal
-        :show="showModal"
-        :projects="projects"
-        :users="users"
-        @close="closeModal"
-      />
-      <button
-        @click="openModal"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
-        Create Task
-      </button>
     </div>
   </AppLayout>
 </template>
