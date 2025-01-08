@@ -6,7 +6,7 @@
         Create Project
       </h1>
     </template>
-    <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form @submit.prevent="submit">
         <div class="mb-4">
           <InputLabel for="name" value="Name" />
