@@ -13,20 +13,10 @@ import { ref } from 'vue';
 
 defineProps({
   translations: Object,
+  doughnutData: Object,
 });
 
 Chart.register(...registerables);
-
-// Doughnut Chart Data
-const doughnutData = ref({
-  labels: ['Clients', 'Projects', 'Tasks'],
-  datasets: [
-    {
-      data: [30, 40, 20],
-      backgroundColor: ['#77CEFF', '#0079AF', '#123E6B'],
-    },
-  ],
-});
 
 // Bar Chart Data
 const barChartData = ref({
@@ -109,17 +99,6 @@ const polarAreaChartData = ref({
   ],
 });
 
-// Pie Chart Data
-const pieChartData = ref({
-  labels: ['Red', 'Blue', 'Yellow'],
-  datasets: [
-    {
-      data: [300, 50, 100],
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-    },
-  ],
-});
-
 const chartOptions = ref({
   responsive: true,
   maintainAspectRatio: false,
@@ -148,6 +127,12 @@ const chartOptions = ref({
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+            Pie Chart Example
+          </h3>
+          <PieChart :chart-data="doughnutData" :options="chartOptions" />
+        </div>
+        <div class="mb-8">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
             Revenue vs Expenses
           </h3>
           <BarChart :chart-data="barChartData" :options="chartOptions" />
@@ -172,13 +157,6 @@ const chartOptions = ref({
             :chart-data="polarAreaChartData"
             :options="chartOptions"
           />
-        </div>
-
-        <div class="mb-8">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-            Pie Chart Example
-          </h3>
-          <PieChart :chart-data="pieChartData" :options="chartOptions" />
         </div>
       </div>
     </div>

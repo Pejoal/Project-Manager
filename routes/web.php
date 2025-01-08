@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -47,13 +48,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
       'active_locale_code' => LaravelLocalization::getCurrentLocale(),
     ]);
 
-    Route::get('/dashboard', function () {
-      return Inertia::render('Dashboard', [
-        'translations' => [
-          'welcome' => __('messages.welcome'),
-        ],
-      ]);
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
 
     // Client Management Routes
     Route::prefix('clients')->group(function () {
