@@ -61,7 +61,7 @@ const submit = () => {
             :options="props.projects"
             :reduce="(project) => project.slug"
             label="name"
-            class="text-black mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
             placeholder="Select an option"
           >
           </vSelect>
@@ -132,5 +132,8 @@ const submit = () => {
 <style>
 #project .vs__selected {
   color: white;
+}
+#project .vs__actions {
+  background: white;
 }
 </style>
