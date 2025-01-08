@@ -41,17 +41,18 @@
         </div>
         <div class="mb-4">
           <InputLabel for="assigned_to" value="Assigned To" />
-          <select
+          <vSelect
             id="assigned_to"
             v-model="form.assigned_to"
+            :options="props.users"
+            :reduce="(user) => user.id"
+            users
+            label="name"
             multiple
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
           >
-            <option :value="null">Select users</option>
-            <option v-for="user in users" :key="user.id" :value="user.id">
-              {{ user.name }}
-            </option>
-          </select>
+          </vSelect>
           <InputError class="mt-2" :message="form.errors.assigned_to" />
         </div>
         <button
@@ -72,6 +73,8 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
 
 const props = defineProps({
   task: Object,

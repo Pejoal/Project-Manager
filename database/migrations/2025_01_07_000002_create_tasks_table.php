@@ -12,7 +12,6 @@ class CreateTasksTable extends Migration
       $table->foreignId('project_id')->constrained()->onDelete('cascade');
       $table->string('name');
       $table->text('description')->nullable();
-      $table->string('assigned_to')->nullable();
       $table->timestamps();
     });
 
