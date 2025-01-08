@@ -477,3 +477,8 @@ const logout = () => {
     </div>
   </div>
 </template>
+<style>
+.vs__actions {
+  background: white;
+}
+</style>
