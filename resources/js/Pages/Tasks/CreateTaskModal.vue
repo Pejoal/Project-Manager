@@ -8,7 +8,10 @@ import TextInput from '@/Components/TextInput.vue';
 const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
-  project: Object,
+  project: {
+    type: Object,
+    default: {},
+  },
   projects: {
     type: Array,
     default: [],
@@ -17,14 +20,20 @@ const props = defineProps({
 
 const form = useForm({
   name: '',
+  project_id: null,
   description: '',
   assigned_to: '',
 });
 
 const submit = () => {
-  form.post(route('tasks.store', { project: props.project.id }), {
-    onSuccess: () => emit('close'),
-  });
+  form.post(
+    route('tasks.store', {
+      project: props.project.id ? props.project.id : form.project_id,
+    }),
+    {
+      onSuccess: () => emit('close'),
+    }
+  );
 };
 </script>
 
@@ -32,17 +41,21 @@ const submit = () => {
   <DialogModal :show="props.show" @close="emit('close')">
     <template #title>Create Task</template>
     <template #content>
-      <form id="form" @submit.prevent="submit">
+      <form id="form" @submit.prevent="submit" class="space-y-4">
         <!-- Project Selection -->
-        <div class="mb-4">
+        <div>
           <InputLabel for="project" value="Project" />
           <select
             v-if="props.projects.length > 0"
             id="project"
             v-model="form.project_id"
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           >
-            <option v-for="project in props.projects" :key="project.id" :value="project.id">
+            <option
+              v-for="project in props.projects"
+              :key="project.id"
+              :value="project.id"
+            >
               {{ project.name }}
             </option>
           </select>
