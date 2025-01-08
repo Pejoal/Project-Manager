@@ -19,11 +19,6 @@ class TaskController extends Controller
     return Inertia::render('Tasks/Index', compact('tasks', 'project'));
   }
 
-  public function create(Project $project)
-  {
-    return Inertia::render('Tasks/Create', compact('project'));
-  }
-
   public function store(Request $request, Project $project)
   {
     $request->validate([

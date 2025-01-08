@@ -102,9 +102,6 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
       // Task Management Routes
       Route::prefix('{project}/tasks')->group(function () {
         Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
-        Route::get('/create', [TaskController::class, 'create'])->name(
-          'tasks.create'
-        );
         Route::post('/', [TaskController::class, 'store'])->name('tasks.store');
         Route::get('/{task}', [TaskController::class, 'show'])->name(
           'tasks.show'

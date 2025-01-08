@@ -8,16 +8,17 @@ import TextInput from '@/Components/TextInput.vue';
 const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
+  project: Object,
 });
 
 const form = useForm({
   name: '',
-  email: '',
-  phone: '',
+  description: '',
+  assigned_to: '',
 });
 
 const submit = () => {
-  form.post(route('clients.store'), {
+  form.post(route('tasks.store', { project: props.project.id }), {
     onSuccess: () => emit('close'),
   });
 };
@@ -25,7 +26,7 @@ const submit = () => {
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title>Create Client</template>
+    <template #title>Create Task</template>
     <template #content>
       <form id="form" @submit.prevent="submit">
         <div class="mb-4">
@@ -40,25 +41,24 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
         <div class="mb-4">
-          <InputLabel for="email" value="Email" />
+          <InputLabel for="description" value="Description" />
           <TextInput
-            id="email"
-            required
-            v-model="form.email"
-            type="email"
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-          />
-          <InputError class="mt-2" :message="form.errors.email" />
-        </div>
-        <div class="mb-4">
-          <InputLabel for="phone" value="Phone" />
-          <TextInput
-            id="phone"
-            v-model="form.phone"
+            id="description"
+            v-model="form.description"
             type="text"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
-          <InputError class="mt-2" :message="form.errors.phone" />
+          <InputError class="mt-2" :message="form.errors.description" />
+        </div>
+        <div class="mb-4">
+          <InputLabel for="assigned_to" value="Assigned To" />
+          <TextInput
+            id="assigned_to"
+            v-model="form.assigned_to"
+            type="text"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.assigned_to" />
         </div>
       </form>
     </template>
@@ -71,6 +71,7 @@ const submit = () => {
       </button>
       <button
         form="form"
+        type="submit"
         class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
       >
         Create

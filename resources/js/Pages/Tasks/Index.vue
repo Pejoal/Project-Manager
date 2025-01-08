@@ -31,23 +31,39 @@
           </div>
         </li>
       </ul>
-      <Link
-        :href="route('tasks.create', { project: project.id })"
+      <CreateTaskModal
+        :show="showModal"
+        :project="project"
+        @close="closeModal"
+      />
+      <button
+        @click="openModal"
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
         Create Task
-      </Link>
+      </button>
     </div>
   </AppLayout>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 import { Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import CreateTaskModal from './CreateTaskModal.vue';
 
 const props = defineProps({
   tasks: Array,
   project: Object,
 });
+
+const showModal = ref(false);
+
+const openModal = () => {
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
 </script>
