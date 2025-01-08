@@ -12,7 +12,7 @@
           <InputLabel for="id" value="ID" />
           <TextInput
             id="id"
-            v-model="client.id"
+            :value="client.id"
             readonly
             type="text"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
