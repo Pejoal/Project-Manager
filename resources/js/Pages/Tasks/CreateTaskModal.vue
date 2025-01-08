@@ -104,7 +104,7 @@ const submit = () => {
             id="assigned_to"
             v-model="form.assigned_to"
             :options="props.users"
-            :reduce="user => user.id"
+            :reduce="(user) => user.id"
             users
             label="name"
             multiple
