@@ -19,7 +19,7 @@
       >
         Create Task
       </button>
-      <ul class="mb-4 space-y-4">
+      <ul class="my-2 space-y-4">
         <li
           v-for="task in tasks"
           :key="task.id"

@@ -7,7 +7,14 @@
       </h1>
     </template>
     <section class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <ul class="mb-4 space-y-4">
+      <button
+        @click="openModal"
+        class="text-blue-500 dark:text-blue-400 hover:underline"
+      >
+        Add New Client
+      </button>
+      <CreateClientModal :show="showModal" @close="closeModal" />
+      <ul class="my-2 space-y-4">
         <li
           v-for="client in clients"
           :key="client.id"
@@ -29,14 +36,7 @@
           </div>
         </li>
       </ul>
-      <button
-        @click="openModal"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
-        Add New Client
-      </button>
     </section>
-    <CreateClientModal :show="showModal" @close="closeModal" />
   </AppLayout>
 </template>
 

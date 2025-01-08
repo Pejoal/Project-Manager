@@ -7,7 +7,13 @@
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <ul class="mb-4 space-y-4">
+      <Link
+        :href="route('projects.create')"
+        class="text-blue-500 dark:text-blue-400 hover:underline"
+      >
+        Create Project
+      </Link>
+      <ul class="my-2 space-y-4">
         <li
           v-for="project in projects"
           :key="project.id"
@@ -29,12 +35,6 @@
           </div>
         </li>
       </ul>
-      <Link
-        :href="route('projects.create')"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
-        Create Project
-      </Link>
     </div>
   </AppLayout>
 </template>
