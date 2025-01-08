@@ -104,6 +104,7 @@ const submit = () => {
             multiple
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           >
+            <option :value="null">Select users</option>
             <option v-for="user in props.users" :key="user.id" :value="user.id">
               {{ user.name }}
             </option>
