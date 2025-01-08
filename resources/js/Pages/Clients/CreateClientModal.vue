@@ -27,7 +27,7 @@ const submit = () => {
   <DialogModal :show="props.show" @close="emit('close')">
     <template #title>Create Client</template>
     <template #content>
-      <form @submit.prevent="submit">
+      <form id="form" @submit.prevent="submit">
         <div class="mb-4">
           <InputLabel for="name" value="Name" />
           <TextInput
@@ -70,6 +70,7 @@ const submit = () => {
         Cancel
       </button>
       <button
+        form="form"
         @click="submit"
         class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
       >
