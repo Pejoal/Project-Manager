@@ -134,5 +134,11 @@ const submit = () => {
   #project .vs__selected {
     color: white;
   }
+  .vs__search {
+    color: white;
+  }
+  #vs2__listbox {
+    color: black;
+  }
 }
 </style>

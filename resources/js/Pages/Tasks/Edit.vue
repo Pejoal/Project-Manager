@@ -66,7 +66,6 @@
 </template>
 
 <style>
-
 @media (prefers-color-scheme: dark) {
   #assigned_to .vs__search {
     color: white;
