@@ -15,6 +15,7 @@ import { useForm } from '@inertiajs/vue3';
 const props = defineProps({
   translations: Object,
   doughnutData: Object,
+  lineChartData: Object,
   settings: {
     type: Object,
     default: {},
@@ -22,24 +23,6 @@ const props = defineProps({
 });
 
 Chart.register(...registerables);
-
-const lineChartData = ref({
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'Project Progress',
-      borderColor: '#42A5F5',
-      data: [20, 40, 60, 80, 100],
-      fill: false,
-    },
-    {
-      label: 'Milestones Achieved',
-      borderColor: '#FF6384',
-      data: [5, 10, 15, 20, 35, 50, 105],
-      fill: false,
-    },
-  ],
-});
 
 const barChartData = ref({
   labels: ['January', 'February', 'March', 'April', 'May'],

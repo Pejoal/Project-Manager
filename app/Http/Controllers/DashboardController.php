@@ -17,6 +17,45 @@ class DashboardController extends Controller
     $tasksCount = Task::count();
     $settings = Settings::first();
 
+    $lineChartData = [
+      'labels' => ['September', 'October', 'November', 'December', 'January'],
+      'datasets' => [
+        [
+          'label' => 'Clients',
+          'borderColor' => $settings->clients_color,
+          'data' => Client::selectRaw(
+            'count(*) as count, MONTH(created_at) as month'
+          )
+            ->groupBy('month')
+            ->pluck('count')
+            ->toArray(),
+          'fill' => false,
+        ],
+        [
+          'label' => 'Projects',
+          'borderColor' => $settings->projects_color,
+          'data' => Project::selectRaw(
+            'count(*) as count, MONTH(created_at) as month'
+          )
+            ->groupBy('month')
+            ->pluck('count')
+            ->toArray(),
+          'fill' => false,
+        ],
+        [
+          'label' => 'Tasks',
+          'borderColor' => $settings->tasks_color,
+          'data' => Task::selectRaw(
+            'count(*) as count, MONTH(created_at) as month'
+          )
+            ->groupBy('month')
+            ->pluck('count')
+            ->toArray(),
+          'fill' => false,
+        ],
+      ],
+    ];
+
     return Inertia::render('Dashboard', [
       'translations' => [
         'welcome' => __('messages.welcome'),
@@ -35,6 +74,7 @@ class DashboardController extends Controller
         ],
       ],
       'settings' => $settings,
+      'lineChartData' => $lineChartData,
     ]);
   }
 }

@@ -34,19 +34,28 @@ class DatabaseSeeder extends Seeder
         'email' => 'test@example.com',
       ]);
 
-    Client::factory(3)->create();
+    for ($i = 0; $i < 10; $i++) {
+      Client::factory()->create([
+        'created_at' => now()->subMonths(rand(1, 12)),
+      ]);
 
-    $projects = Project::factory(3)->create();
+      Project::factory()->create([
+        'created_at' => now()->subMonths(rand(1, 12)),
+      ]);
+    }
 
+    $projects = Project::get();
     $projects->each(function ($project) {
-      Task::factory(2)->create(['project_id' => $project->id]);
+      Task::factory(3)->create([
+        'project_id' => $project->id,
+        'created_at' => now()->subMonths(rand(1, 4)),
+      ]);
     });
 
     Settings::create([
-      "clients_color" => "#4040f0",
-      "projects_color" => "#40f040",
-      "tasks_color" => "#f04040",
+      'clients_color' => '#4040f0',
+      'projects_color' => '#40f040',
+      'tasks_color' => '#f04040',
     ]);
-
   }
 }
