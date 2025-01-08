@@ -6,8 +6,18 @@
         Edit Project
       </h1>
     </template>
-    <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form @submit.prevent="submit">
+        <div class="mb-4">
+          <InputLabel for="id" value="ID" />
+          <TextInput
+            id="id"
+            v-model="project.id"
+            readonly
+            type="text"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+        </div>
         <div class="mb-4">
           <InputLabel for="name" value="Name" />
           <TextInput
