@@ -11,6 +11,7 @@ class ProjectFactory extends Factory
     return [
       'name' => $this->faker->company,
       'description' => $this->faker->catchPhrase,
+      'slug' => $this->faker->slug,
     ];
   }
 }

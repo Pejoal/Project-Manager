@@ -21,7 +21,7 @@
         >
           <div>
             <Link
-              :href="route('projects.show', project.id)"
+              :href="route('projects.show', project.slug)"
               class="text-blue-500 dark:text-blue-400 hover:underline"
             >
               {{ project.name }}

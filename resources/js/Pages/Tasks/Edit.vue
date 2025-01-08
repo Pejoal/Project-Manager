@@ -92,7 +92,7 @@ const form = useForm({
 
 const submit = () => {
   form.put(
-    route('tasks.update', { project: props.project.id, task: props.task.id })
+    route('tasks.update', { project: props.project.slug, task: props.task.id })
   );
 };
 </script>

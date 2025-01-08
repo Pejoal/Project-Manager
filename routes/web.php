@@ -87,21 +87,23 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         'projects.store'
       );
       Route::get('/tasks', [TaskController::class, 'all'])->name('tasks.all');
-      Route::get('/{project}', [ProjectController::class, 'show'])->name(
+      Route::get('/{project:slug}', [ProjectController::class, 'show'])->name(
         'projects.show'
       );
-      Route::get('/{project}/edit', [ProjectController::class, 'edit'])->name(
-        'projects.edit'
-      );
-      Route::put('/{project}', [ProjectController::class, 'update'])->name(
+      Route::get('/{project:slug}/edit', [
+        ProjectController::class,
+        'edit',
+      ])->name('projects.edit');
+      Route::put('/{project:slug}', [ProjectController::class, 'update'])->name(
         'projects.update'
       );
-      Route::delete('/{project}', [ProjectController::class, 'destroy'])->name(
-        'projects.destroy'
-      );
+      Route::delete('/{project:slug}', [
+        ProjectController::class,
+        'destroy',
+      ])->name('projects.destroy');
 
       // Task Management Routes
-      Route::prefix('{project}/tasks')->group(function () {
+      Route::prefix('{project:slug}/tasks')->group(function () {
         Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
         Route::post('/', [TaskController::class, 'store'])->name('tasks.store');
         Route::get('/{task}', [TaskController::class, 'show'])->name(

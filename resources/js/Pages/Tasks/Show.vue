@@ -32,7 +32,7 @@
         </p>
       </div>
       <Link
-        :href="route('tasks.edit', { project: project.id, task: task.id })"
+        :href="route('tasks.edit', { project: project.slug, task: task.id })"
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
         Edit
@@ -64,7 +64,7 @@ const form = useForm({
 const destroy = () => {
   if (confirm('Are you sure?')) {
     form.delete(
-      route('tasks.destroy', { project: props.project.id, task: props.task.id })
+      route('tasks.destroy', { project: props.project.slug, task: props.task.id })
     );
   }
 };

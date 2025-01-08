@@ -19,13 +19,13 @@
         </p>
       </div>
       <Link
-        :href="route('projects.edit', { project: project.id })"
+        :href="route('projects.edit', { project: project.slug })"
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
         Edit
       </Link>
       <Link
-        :href="route('tasks.index', { project: project.id })"
+        :href="route('tasks.index', { project: project.slug })"
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
         View Tasks
@@ -55,7 +55,7 @@ const form = useForm({
 
 const destroy = () => {
   if (confirm('Are you sure?')) {
-    form.delete(route('projects.destroy', { project: props.project.id }));
+    form.delete(route('projects.destroy', { project: props.project.slug }));
   }
 };
 </script>

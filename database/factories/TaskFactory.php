@@ -9,7 +9,6 @@ class TaskFactory extends Factory
     return [
       'name' => $this->faker->sentence,
       'description' => $this->faker->paragraph,
-      'assigned_to' => $this->faker->name,
       'project_id' => \App\Models\Project::factory(),
     ];
   }

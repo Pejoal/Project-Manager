@@ -2,6 +2,7 @@
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -20,11 +21,14 @@ class ProjectController extends Controller
   public function store(Request $request)
   {
     $request->validate([
-      'name' => 'required|string|max:255',
+      'name' => 'required|string|max:255|unique:projects,name',
       'description' => 'nullable|string',
     ]);
 
-    Project::create($request->all());
+    $data = $request->all();
+    $data['slug'] = Str::slug($request->name);
+
+    Project::create($data);
 
     return redirect()->route('projects.index');
   }
@@ -42,11 +46,14 @@ class ProjectController extends Controller
   public function update(Request $request, Project $project)
   {
     $request->validate([
-      'name' => 'required|string|max:255',
+      'name' => 'required|string|max:255|unique:projects,name,' . $project->id,
       'description' => 'nullable|string',
     ]);
 
-    $project->update($request->all());
+    $data = $request->all();
+    $data['slug'] = Str::slug($request->name);
+
+    $project->update($data);
 
     return redirect()->route('projects.index');
   }

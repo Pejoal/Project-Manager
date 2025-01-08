@@ -26,7 +26,7 @@ const props = defineProps({
 
 const form = useForm({
   name: '',
-  project_id: null,
+  project_slug: null,
   description: '',
   assigned_to: [],
 });
@@ -34,7 +34,7 @@ const form = useForm({
 const submit = () => {
   form.post(
     route('tasks.store', {
-      project: props.project.id ? props.project.id : form.project_id,
+      project: props.project.slug ? props.project.slug : form.project_slug,
     }),
     {
       onSuccess: () => {
@@ -57,7 +57,7 @@ const submit = () => {
           <vSelect
             v-if="props.projects.length > 0"
             id="project"
-            v-model="form.project_id"
+            v-model="form.project_slug"
             :options="props.projects"
             :reduce="(project) => project.id"
             label="name"

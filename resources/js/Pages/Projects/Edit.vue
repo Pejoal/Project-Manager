@@ -68,6 +68,6 @@ const form = useForm({
 });
 
 const submit = () => {
-  form.put(route('projects.update', { project: props.project.id }));
+  form.put(route('projects.update', { project: props.project.slug }));
 };
 </script>
