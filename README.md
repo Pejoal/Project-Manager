@@ -73,7 +73,7 @@ git clone git@github.com:Pejoal/manager.git
 ```
 
 ```shell
-cd ecommerce
+cd manager
 ```
 
 ```shell
