@@ -34,6 +34,7 @@
       <CreateTaskModal
         :show="showModal"
         :project="project"
+        :users="users"
         @close="closeModal"
       />
       <button
@@ -53,6 +54,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateTaskModal from './CreateTaskModal.vue';
 
 const props = defineProps({
+  users: Array,
   tasks: Array,
   project: Object,
 });

@@ -18,7 +18,10 @@ const form = useForm({
 
 const submit = () => {
   form.post(route('clients.store'), {
-    onSuccess: () => emit('close'),
+    onSuccess: () => {
+      emit('close');
+      form.reset();
+    },
   });
 };
 </script>

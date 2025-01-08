@@ -41,12 +41,16 @@
         </div>
         <div class="mb-4">
           <InputLabel for="assigned_to" value="Assigned To" />
-          <TextInput
+          <select
             id="assigned_to"
             v-model="form.assigned_to"
-            type="text"
+            multiple
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-          />
+          >
+            <option v-for="user in users" :key="user.id" :value="user.id">
+              {{ user.name }}
+            </option>
+          </select>
           <InputError class="mt-2" :message="form.errors.assigned_to" />
         </div>
         <button
@@ -71,12 +75,15 @@ import TextInput from '@/Components/TextInput.vue';
 const props = defineProps({
   task: Object,
   project: Object,
+  users: Array,
 });
 
 const form = useForm({
   name: props.task.name,
   description: props.task.description,
-  assigned_to: props.task.assigned_to,
+  assigned_to: props.task.assigned_to
+    ? props.task.assigned_to.map((user) => user.id)
+    : [],
 });
 
 const submit = () => {

@@ -21,7 +21,10 @@
           Project Name: {{ project.name }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Assigned to: {{ task.assigned_to }}
+          Assigned to:
+          <span v-for="user in task.assigned_to" :key="user.id">
+            {{ user.name }}
+          </span>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Created at: {{ new Date(task.created_at).toLocaleString() }}

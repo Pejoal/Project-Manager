@@ -16,13 +16,17 @@ const props = defineProps({
     type: Array,
     default: [],
   },
+  users: {
+    type: Array,
+    default: [],
+  },
 });
 
 const form = useForm({
   name: '',
   project_id: null,
   description: '',
-  assigned_to: '',
+  assigned_to: [],
 });
 
 const submit = () => {
@@ -31,7 +35,10 @@ const submit = () => {
       project: props.project.id ? props.project.id : form.project_id,
     }),
     {
-      onSuccess: () => emit('close'),
+      onSuccess: () => {
+        form.reset();
+        emit('close');
+      },
     }
   );
 };
@@ -91,12 +98,16 @@ const submit = () => {
         </div>
         <div class="mb-4">
           <InputLabel for="assigned_to" value="Assigned To" />
-          <TextInput
+          <select
             id="assigned_to"
             v-model="form.assigned_to"
-            type="text"
+            multiple
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-          />
+          >
+            <option v-for="user in props.users" :key="user.id" :value="user.id">
+              {{ user.name }}
+            </option>
+          </select>
           <InputError class="mt-2" :message="form.errors.assigned_to" />
         </div>
       </form>

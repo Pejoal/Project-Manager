@@ -2,6 +2,7 @@
 
 use App\Models\Task;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -9,15 +10,17 @@ class TaskController extends Controller
 {
   public function all()
   {
+    $users = User::get();
     $projects = Project::get();
     $tasks = Task::with('project')->get();
-    return Inertia::render('Tasks/All', compact('tasks', 'projects'));
+    return Inertia::render('Tasks/All', compact('tasks', 'projects', 'users'));
   }
 
   public function index(Project $project)
   {
+    $users = User::get();
     $tasks = $project->tasks;
-    return Inertia::render('Tasks/Index', compact('tasks', 'project'));
+    return Inertia::render('Tasks/Index', compact('tasks', 'project', 'users'));
   }
 
   public function store(Request $request, Project $project)
@@ -25,22 +28,26 @@ class TaskController extends Controller
     $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',
-      'assigned_to' => 'nullable|string|max:255',
+      'assigned_to' => 'nullable|array',
+      'assigned_to.*' => 'exists:users,id',
     ]);
 
-    $project->tasks()->create($request->all());
+    $task = $project->tasks()->create($request->except('assigned_to'));
+    $task->assignedTo()->sync($request->assigned_to);
 
     return redirect()->route('tasks.index', $project);
   }
 
   public function show(Project $project, Task $task)
   {
+    $task->load('assignedTo');
     return Inertia::render('Tasks/Show', compact('task', 'project'));
   }
 
   public function edit(Project $project, Task $task)
   {
-    return Inertia::render('Tasks/Edit', compact('task', 'project'));
+    $users = User::all();
+    return Inertia::render('Tasks/Edit', compact('task', 'project', 'users'));
   }
 
   public function update(Request $request, Project $project, Task $task)
@@ -48,10 +55,12 @@ class TaskController extends Controller
     $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',
-      'assigned_to' => 'nullable|string|max:255',
+      'assigned_to' => 'nullable|array',
+      'assigned_to.*' => 'exists:users,id',
     ]);
 
-    $task->update($request->all());
+    $task->update($request->except('assigned_to'));
+    $task->assignedTo()->sync($request->assigned_to);
 
     return redirect()->route('tasks.index', $project);
   }
