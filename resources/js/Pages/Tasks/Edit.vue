@@ -65,6 +65,15 @@
   </AppLayout>
 </template>
 
+<style>
+
+@media (prefers-color-scheme: dark) {
+  #assigned_to .vs__search {
+    color: white;
+  }
+}
+</style>
+
 <script setup>
 import { useForm, Head } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
