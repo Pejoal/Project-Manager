@@ -23,24 +23,6 @@ const props = defineProps({
 
 Chart.register(...registerables);
 
-// Bar Chart Data
-const barChartData = ref({
-  labels: ['January', 'February', 'March', 'April', 'May'],
-  datasets: [
-    {
-      label: 'Revenue',
-      backgroundColor: '#42A5F5',
-      data: [10000, 12000, 15000, 17000, 20000],
-    },
-    {
-      label: 'Expenses',
-      backgroundColor: '#FF6384',
-      data: [5000, 6000, 7000, 8000, 9000],
-    },
-  ],
-});
-
-// Line Chart Data
 const lineChartData = ref({
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: [
@@ -59,7 +41,22 @@ const lineChartData = ref({
   ],
 });
 
-// Radar Chart Data
+const barChartData = ref({
+  labels: ['January', 'February', 'March', 'April', 'May'],
+  datasets: [
+    {
+      label: 'Revenue',
+      backgroundColor: '#42A5F5',
+      data: [10000, 12000, 15000, 17000, 20000],
+    },
+    {
+      label: 'Expenses',
+      backgroundColor: '#FF6384',
+      data: [5000, 6000, 7000, 8000, 9000],
+    },
+  ],
+});
+
 const radarChartData = ref({
   labels: [
     'Communication',
@@ -92,7 +89,6 @@ const radarChartData = ref({
   ],
 });
 
-// Polar Area Chart Data
 const polarAreaChartData = ref({
   labels: ['Red', 'Green', 'Yellow', 'Grey', 'Blue'],
   datasets: [
@@ -116,7 +112,9 @@ const form = useForm({
 });
 
 const updateSettings = () => {
-  form.put('/api/settings');
+  form.put('/api/settings', {
+    preserveScroll: true,
+  });
 };
 </script>
 
@@ -200,15 +198,15 @@ const updateSettings = () => {
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-            Revenue vs Expenses
-          </h3>
-          <BarChart :chart-data="barChartData" :options="chartOptions" />
-        </div>
-        <div class="mb-8">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
             Project Progress
           </h3>
           <LineChart :chart-data="lineChartData" :options="chartOptions" />
+        </div>
+        <div class="mb-8">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+            Revenue vs Expenses
+          </h3>
+          <BarChart :chart-data="barChartData" :options="chartOptions" />
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
