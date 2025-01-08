@@ -59,7 +59,7 @@ const submit = () => {
             id="project"
             v-model="form.project_slug"
             :options="props.projects"
-            :reduce="(project) => project.id"
+            :reduce="(project) => project.slug"
             label="name"
             class="text-black mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
             placeholder="Select an option"
