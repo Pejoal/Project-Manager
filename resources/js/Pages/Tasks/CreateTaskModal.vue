@@ -130,7 +130,7 @@ const submit = () => {
   </DialogModal>
 </template>
 <style>
-#project .vs__selected {
+.dark #project .vs__selected {
   color: white;
 }
 .vs__actions {
