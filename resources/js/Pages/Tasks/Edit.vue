@@ -46,7 +46,6 @@
             v-model="form.assigned_to"
             :options="props.users"
             :reduce="(user) => user.id"
-            users
             label="name"
             multiple
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"

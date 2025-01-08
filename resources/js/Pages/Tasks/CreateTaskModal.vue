@@ -54,20 +54,17 @@ const submit = () => {
         <!-- Project Selection -->
         <div>
           <InputLabel for="project" value="Project" />
-          <select
+          <vSelect
             v-if="props.projects.length > 0"
             id="project"
             v-model="form.project_id"
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            :options="props.projects"
+            :reduce="(project) => project.id"
+            label="name"
+            class="text-black mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
           >
-            <option
-              v-for="project in props.projects"
-              :key="project.id"
-              :value="project.id"
-            >
-              {{ project.name }}
-            </option>
-          </select>
+          </vSelect>
           <TextInput
             v-else
             id="project"
@@ -105,7 +102,6 @@ const submit = () => {
             v-model="form.assigned_to"
             :options="props.users"
             :reduce="(user) => user.id"
-            users
             label="name"
             multiple
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
@@ -133,3 +129,8 @@ const submit = () => {
     </template>
   </DialogModal>
 </template>
+<style>
+#project .vs__selected {
+  color: white;
+}
+</style>

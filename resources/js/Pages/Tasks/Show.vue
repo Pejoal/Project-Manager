@@ -15,7 +15,7 @@
           Project ID: {{ project.id }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          {{ task.description }}
+          Description: {{ task.description }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Project Name: {{ project.name }}
