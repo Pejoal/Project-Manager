@@ -72,4 +72,18 @@ class TaskController extends Controller
 
     return redirect()->route('tasks.index', $project);
   }
+
+  public function updateStatus(Request $request, Task $task)
+  {
+    $request->validate(['status' => 'required|string']);
+    $task->update(['status' => $request->status]);
+    return redirect()->back();
+  }
+
+  public function updatePriority(Request $request, Task $task)
+  {
+    $request->validate(['priority' => 'required|string']);
+    $task->update(['priority' => $request->priority]);
+    return redirect()->back();
+  }
 }

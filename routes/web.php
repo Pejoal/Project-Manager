@@ -118,6 +118,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         Route::delete('/{task}', [TaskController::class, 'destroy'])->name(
           'tasks.destroy'
         );
+        Route::put('/tasks/{task}/status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
+        Route::put('/tasks/{task}/priority', [TaskController::class, 'updatePriority'])->name('tasks.updatePriority');
       });
     });
   });

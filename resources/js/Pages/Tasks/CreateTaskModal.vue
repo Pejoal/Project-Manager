@@ -79,7 +79,7 @@ const submit = () => {
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
           />
         </div>
-        <div class="mb-4">
+        <div>
           <InputLabel for="name" value="Name" />
           <TextInput
             id="name"
@@ -90,7 +90,7 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
-        <div class="mb-4">
+        <div>
           <InputLabel for="description" value="Description" />
           <TextInput
             id="description"
@@ -100,7 +100,35 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.description" />
         </div>
-        <div class="mb-4">
+        <div>
+          <InputLabel for="status" value="status" />
+          <vSelect
+            v-if="props.statuses.length > 0"
+            id="status"
+            v-model="form.status"
+            :options="props.statuses"
+            :reduce="(status) => status.id"
+            label="name"
+            class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+        </div>
+        <div>
+          <InputLabel for="priority" value="priority" />
+          <vSelect
+            v-if="props.priorities.length > 0"
+            id="priority"
+            v-model="form.priority"
+            :options="props.priorityes"
+            :reduce="(priority) => priority.id"
+            label="name"
+            class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+        </div>
+        <div>
           <InputLabel for="assigned_to" value="Assigned To" />
           <vSelect
             id="assigned_to"

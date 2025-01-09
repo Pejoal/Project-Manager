@@ -36,6 +36,12 @@
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Created at: {{ new Date(task.created_at).toLocaleString() }}
         </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Status: {{ task.status }}
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Priority: {{ task.priority }}
+        </p>
       </div>
       <Link
         :href="route('tasks.edit', { project: project.slug, task: task.id })"
@@ -76,5 +82,13 @@ const destroy = () => {
       })
     );
   }
+};
+
+const updateStatus = () => {
+  form.put(route('tasks.updateStatus', { task: props.task.id }));
+};
+
+const updatePriority = () => {
+  form.put(route('tasks.updatePriority', { task: props.task.id }));
 };
 </script>

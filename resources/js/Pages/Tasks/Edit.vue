@@ -54,6 +54,24 @@
           </vSelect>
           <InputError class="mt-2" :message="form.errors.assigned_to" />
         </div>
+        <div class="mb-4">
+          <InputLabel for="status" value="Status" />
+          <select id="status" v-model="form.status" class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm">
+            <option value="To Do">To Do</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <InputError class="mt-2" :message="form.errors.status" />
+        </div>
+        <div class="mb-4">
+          <InputLabel for="priority" value="Priority" />
+          <select id="priority" v-model="form.priority" class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm">
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+          <InputError class="mt-2" :message="form.errors.priority" />
+        </div>
         <button
           type="submit"
           :disabled="form.processing"
@@ -97,6 +115,8 @@ const form = useForm({
   assigned_to: props.task.assigned_to
     ? props.task.assigned_to.map((user) => user.id)
     : [],
+  status: props.task.status,
+  priority: props.task.priority,
 });
 
 const submit = () => {
