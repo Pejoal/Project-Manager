@@ -21,6 +21,10 @@
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
           <div>{{ priority.name }}</div>
+          <div>
+            <inertia-link :href="`/task-priorities/${priority.id}/edit`" class="text-blue-500 dark:text-blue-400 hover:underline">Edit</inertia-link>
+            <button @click="deletePriority(priority)" class="text-red-500 dark:text-red-400 hover:underline ml-2">Delete</button>
+          </div>
         </li>
       </ul>
     </div>
@@ -45,10 +49,6 @@ const openModal = () => {
 
 const closeModal = () => {
   showModal.value = false;
-};
-
-const editPriority = (priority) => {
-  // logic to open edit modal
 };
 
 const deletePriority = (priority) => {

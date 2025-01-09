@@ -68,7 +68,7 @@ const props = defineProps({
 
 const showModal = ref(false);
 
-const openModal = (project) => {
+const openModal = () => {
   showModal.value = true;
 };
 
