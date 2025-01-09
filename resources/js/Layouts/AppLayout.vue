@@ -79,6 +79,18 @@ const logout = () => {
                 >
                   Tasks
                 </NavLink>
+                <NavLink
+                  :href="route('task-statuses.index')"
+                  :active="route().current('task-statuses.*')"
+                >
+                  Task Statuses
+                </NavLink>
+                <NavLink
+                  :href="route('task-priorities.index')"
+                  :active="route().current('task-priorities.*')"
+                >
+                  Task Priorities
+                </NavLink>
               </div>
             </div>
 

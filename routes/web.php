@@ -130,5 +130,49 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         ])->name('tasks.updatePriority');
       });
     });
+
+    // Task Status Management Routes
+    Route::prefix('task-statuses')->group(function () {
+      Route::get('/', [TaskStatusController::class, 'index'])->name(
+        'task-statuses.index'
+      );
+      Route::post('/', [TaskStatusController::class, 'store'])->name(
+        'task-statuses.store'
+      );
+      Route::put('/{taskStatus}', [
+        TaskStatusController::class,
+        'update',
+      ])->name('task-statuses.update');
+      Route::delete('/{taskStatus}', [
+        TaskStatusController::class,
+        'destroy',
+      ])->name('task-statuses.destroy');
+      Route::get('/{taskStatus}/edit', [
+        TaskStatusController::class,
+        'edit',
+      ])->name('task-statuses.edit');
+    });
+
+    // Task Priority Management Routes
+    Route::prefix('task-priorities')->group(function () {
+      Route::get('/', [TaskPriorityController::class, 'index'])->name(
+        'task-priorities.index'
+      );
+      Route::post('/', [TaskPriorityController::class, 'store'])->name(
+        'task-priorities.store'
+      );
+      Route::put('/{taskPriority}', [
+        TaskPriorityController::class,
+        'update',
+      ])->name('task-priorities.update');
+      Route::delete('/{taskPriority}', [
+        TaskPriorityController::class,
+        'destroy',
+      ])->name('task-priorities.destroy');
+      Route::get('/{taskPriority}/edit', [
+        TaskPriorityController::class,
+        'edit',
+      ])->name('task-priorities.edit');
+    });
   });
 });
