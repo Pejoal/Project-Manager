@@ -46,7 +46,9 @@ class TaskController extends Controller
       'priority_id' => 'required|exists:task_priorities,id',
     ]);
 
-    $task = $project->tasks()->create($request->except('assigned_to'));
+    $task = $project
+      ->tasks()
+      ->create($request->except(['assigned_to', 'project_slug']));
     $task->assignedTo()->sync($request->assigned_to);
 
     return redirect()->route('tasks.index', $project);
@@ -54,7 +56,7 @@ class TaskController extends Controller
 
   public function show(Project $project, Task $task)
   {
-    $task->load(['assignedTo','status','priority']);
+    $task->load(['assignedTo', 'status', 'priority']);
     return Inertia::render('Tasks/Show', compact('task', 'project'));
   }
 
