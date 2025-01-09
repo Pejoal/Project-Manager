@@ -161,6 +161,7 @@ const updateSettings = () => {
             </div>
             <button
               type="submit"
+              :disabled="form.processing"
               class="px-4 py-2 bg-blue-500 text-white rounded"
             >
               Save

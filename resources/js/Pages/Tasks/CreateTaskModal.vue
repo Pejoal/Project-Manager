@@ -126,6 +126,7 @@ const submit = () => {
       </button>
       <button
         form="form"
+        :disabled="form.processing"
         type="submit"
         class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
       >
