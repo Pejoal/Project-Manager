@@ -112,14 +112,14 @@ sail artisan key:generate
 sail artisan migrate:fresh --seed
 ```
 
-```shell
-sail npm run dev
-```
-
 ### Front-End
 
 ```shell
 sail npm install
+```
+
+```shell
+sail npm run dev
 ```
 
 ### Database
@@ -136,7 +136,7 @@ sail npm install
 ### Stack
 
 - PHP ( 8.2 )
-- Laravel 10 ( Sail )
+- Laravel 11 ( Sail )
 - MySQL ( MariaDB )
 - Inertia js
 - Vue 3 ( Composition API )
