@@ -37,10 +37,10 @@
           Created at: {{ new Date(task.created_at).toLocaleString() }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Status: {{ task.status.name }}
+          Status: {{ task.status?.name }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Priority: {{ task.priority.name }}
+          Priority: {{ task.priority?.name }}
         </p>
       </div>
       <Link
