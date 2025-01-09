@@ -32,9 +32,14 @@ const form = useForm({
 });
 
 const submit = () => {
+  const slug = props.project.slug ? props.project.slug : form.project_slug;
+  if (!slug) {
+    alert('Project is required');
+    return;
+  }
   form.post(
     route('tasks.store', {
-      project: props.project.slug ? props.project.slug : form.project_slug,
+      project: slug,
     }),
     {
       onSuccess: () => {
