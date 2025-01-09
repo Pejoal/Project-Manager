@@ -98,15 +98,15 @@ class TaskController extends Controller
 
   public function updateStatus(Request $request, Task $task)
   {
-    $request->validate(['status' => 'required|string']);
-    $task->update(['status' => $request->status]);
+    $request->validate(['status_id' => 'required|exists:task_statuses,id']);
+    $task->update(['status_id' => $request->status_id]);
     return redirect()->back();
   }
 
   public function updatePriority(Request $request, Task $task)
   {
-    $request->validate(['priority' => 'required|string']);
-    $task->update(['priority' => $request->priority]);
+    $request->validate(['priority_id' => 'required|exists:task_priorities,id']);
+    $task->update(['priority_id' => $request->priority_id]);
     return redirect()->back();
   }
 }

@@ -54,31 +54,33 @@
           </vSelect>
           <InputError class="mt-2" :message="form.errors.assigned_to" />
         </div>
-        <div class="mb-4">
+        <div>
           <InputLabel for="status" value="Status" />
-          <select
+          <vSelect
+            v-if="props.statuses.length > 0"
             id="status"
             v-model="form.status_id"
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            :options="props.statuses"
+            :reduce="(status) => status.id"
+            label="name"
+            class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
           >
-            <option value="To Do">To Do</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-          </select>
-          <InputError class="mt-2" :message="form.errors.status" />
+          </vSelect>
         </div>
-        <div class="mb-4">
+        <div>
           <InputLabel for="priority" value="Priority" />
-          <select
+          <vSelect
+            v-if="props.priorities.length > 0"
             id="priority"
             v-model="form.priority_id"
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            :options="props.priorities"
+            :reduce="(priority) => priority.id"
+            label="name"
+            class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
           >
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
-          <InputError class="mt-2" :message="form.errors.priority" />
+          </vSelect>
         </div>
         <button
           type="submit"
@@ -115,6 +117,8 @@ const props = defineProps({
   assigned_to: Object,
   project: Object,
   users: Array,
+  statuses: Array,
+  priorities: Array,
 });
 
 const form = useForm({

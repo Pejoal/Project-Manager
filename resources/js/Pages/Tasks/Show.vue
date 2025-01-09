@@ -83,12 +83,4 @@ const destroy = () => {
     );
   }
 };
-
-const updateStatus = () => {
-  form.put(route('tasks.updateStatus', { task: props.task.id }));
-};
-
-const updatePriority = () => {
-  form.put(route('tasks.updatePriority', { task: props.task.id }));
-};
 </script>

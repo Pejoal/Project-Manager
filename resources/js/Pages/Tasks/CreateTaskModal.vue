@@ -76,7 +76,7 @@ const submit = () => {
             :options="props.projects"
             :reduce="(project) => project.slug"
             label="name"
-            class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
             placeholder="Select an option"
           >
           </vSelect>
@@ -119,7 +119,7 @@ const submit = () => {
             :options="props.statuses"
             :reduce="(status) => status.id"
             label="name"
-            class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
             placeholder="Select an option"
           >
           </vSelect>
@@ -133,7 +133,7 @@ const submit = () => {
             :options="props.priorities"
             :reduce="(priority) => priority.id"
             label="name"
-            class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
             placeholder="Select an option"
           >
           </vSelect>
@@ -173,16 +173,3 @@ const submit = () => {
     </template>
   </DialogModal>
 </template>
-<style>
-@media (prefers-color-scheme: dark) {
-  .single-select .vs__selected {
-    color: white;
-  }
-  .vs__search {
-    color: white;
-  }
-  #vs2__listbox {
-    color: black;
-  }
-}
-</style>

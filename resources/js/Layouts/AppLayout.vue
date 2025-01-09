@@ -478,7 +478,18 @@ const logout = () => {
   </div>
 </template>
 <style>
-.vs__actions {
-  background: white;
+@media (prefers-color-scheme: dark) {
+  .vs__actions {
+    background: white;
+  }
+  .vs__dropdown-toggle,
+  .vs__search {
+    color: white;
+  }
+  #vs2__listbox,
+  #vs1__listbox,
+  #vs4__listbox {
+    color: black;
+  }
 }
 </style>
