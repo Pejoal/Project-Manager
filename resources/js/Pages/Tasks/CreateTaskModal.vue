@@ -123,6 +123,7 @@ const submit = () => {
             placeholder="Select an option"
           >
           </vSelect>
+          <InputError class="mt-2" :message="form.errors.status_id" />
         </div>
         <div>
           <InputLabel for="priority" value="Priority" />
@@ -137,6 +138,7 @@ const submit = () => {
             placeholder="Select an option"
           >
           </vSelect>
+          <InputError class="mt-2" :message="form.errors.priority_id" />
         </div>
         <div>
           <InputLabel for="assigned_to" value="Assigned To" />
