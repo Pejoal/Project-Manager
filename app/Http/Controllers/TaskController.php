@@ -12,14 +12,14 @@ class TaskController extends Controller
   {
     $users = User::get();
     $projects = Project::get();
-    $tasks = Task::with('project')->get();
+    $tasks = Task::with('project')->orderBy('id', 'desc')->get();
     return Inertia::render('Tasks/All', compact('tasks', 'projects', 'users'));
   }
 
   public function index(Project $project)
   {
     $users = User::get();
-    $tasks = $project->tasks;
+    $tasks = $project->tasks()->orderBy('id', 'desc')->get();
     return Inertia::render('Tasks/Index', compact('tasks', 'project', 'users'));
   }
 
