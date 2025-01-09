@@ -12,7 +12,7 @@
           Project ID: {{ project.id }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          {{ project.description }}
+          Description: {{ project.description }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Created at: {{ new Date(project.created_at).toLocaleString() }}
