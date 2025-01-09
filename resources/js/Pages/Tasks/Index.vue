@@ -3,7 +3,13 @@
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Tasks for {{ project.name }}
+        Tasks for
+        <Link
+          :href="route('projects.show', { project: project.slug })"
+          class="text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          {{ project.name }}
+        </Link>
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
