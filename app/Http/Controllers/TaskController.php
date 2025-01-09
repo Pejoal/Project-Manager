@@ -15,8 +15,8 @@ class TaskController extends Controller
     $users = User::orderBy('id', 'desc')->get();
     $projects = Project::orderBy('id', 'desc')->get();
     $tasks = Task::with('project')->orderBy('id', 'desc')->get();
-    $statuses = TaskStatus::all();
-    $priorities = TaskPriority::all();
+    $statuses = TaskStatus::orderBy('id', 'desc')->get();
+    $priorities = TaskPriority::orderBy('id', 'desc')->get();
     return Inertia::render(
       'Tasks/All',
       compact('tasks', 'projects', 'users', 'statuses', 'priorities')
@@ -27,8 +27,8 @@ class TaskController extends Controller
   {
     $users = User::orderBy('id', 'desc')->get();
     $tasks = $project->tasks()->orderBy('id', 'desc')->get();
-    $statuses = TaskStatus::all();
-    $priorities = TaskPriority::all();
+    $statuses = TaskStatus::orderBy('id', 'desc')->get();
+    $priorities = TaskPriority::orderBy('id', 'desc')->get();
     return Inertia::render(
       'Tasks/Index',
       compact('tasks', 'project', 'users', 'statuses', 'priorities')

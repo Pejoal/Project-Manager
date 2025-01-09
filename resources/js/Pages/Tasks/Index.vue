@@ -15,8 +15,10 @@
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <CreateTaskModal
         :show="showModal"
-        :project="project"
         :users="users"
+        :project="project"
+        :statuses="statuses"
+        :priorities="priorities"
         @close="closeModal"
       />
       <button
@@ -63,6 +65,8 @@ const props = defineProps({
   users: Array,
   tasks: Array,
   project: Object,
+  statuses: Array,
+  priorities: Array,
 });
 
 const showModal = ref(false);
