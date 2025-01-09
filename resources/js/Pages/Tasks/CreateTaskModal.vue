@@ -122,6 +122,14 @@ const submit = () => {
             class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
             placeholder="Select an option"
           >
+            <template #search="{ attributes, events }">
+              <input
+                class="vs__search"
+                :required="!form.status_id"
+                v-bind="attributes"
+                v-on="events"
+              />
+            </template>
           </vSelect>
           <InputError class="mt-2" :message="form.errors.status_id" />
         </div>
@@ -137,6 +145,14 @@ const submit = () => {
             class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
             placeholder="Select an option"
           >
+            <template #search="{ attributes, events }">
+              <input
+                class="vs__search"
+                :required="!form.priority_id"
+                v-bind="attributes"
+                v-on="events"
+              />
+            </template>
           </vSelect>
           <InputError class="mt-2" :message="form.errors.priority_id" />
         </div>
