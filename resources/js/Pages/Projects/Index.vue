@@ -27,6 +27,9 @@
               {{ project.name }}
             </Link>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
+              Number of Tasks: {{ project.tasks_count }}
+            </div>
+            <div class="text-gray-500 dark:text-gray-400 text-sm">
               Created at: {{ new Date(project.created_at).toLocaleString() }}
             </div>
           </div>

@@ -9,7 +9,7 @@ class ProjectController extends Controller
 {
   public function index()
   {
-    $projects = Project::all();
+    $projects = Project::withCount('tasks')->get();
     return Inertia::render('Projects/Index', compact('projects'));
   }
 
