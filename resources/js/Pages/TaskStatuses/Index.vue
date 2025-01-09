@@ -23,6 +23,12 @@
           <p class="text-white">{{ status.name }}</p>
           <div>
             <button
+              @click="() => updateStatus(status.id)"
+              class="ml-4 text-green-500 dark:text-green-400 hover:underline"
+            >
+              Update
+            </button>
+            <button
               @click="() => destroy(status.id)"
               class="ml-4 text-red-500 dark:text-red-400 hover:underline"
             >
@@ -55,11 +61,26 @@ const closeModal = () => {
   showModal.value = false;
 };
 
-const form = useForm({});
+const form = useForm({
+  name: null,
+});
 
 const destroy = (id) => {
   if (confirm('Are you sure?')) {
     form.delete(route('task-statuses.destroy', id));
+  }
+};
+
+const updateStatus = (id) => {
+  const newStatus = prompt('Enter new status:');
+  if (newStatus) {
+    form.name = newStatus;
+    form.put(route('task-statuses.update', id), {
+      preserveScroll: true,
+      onSuccess: () => {
+        form.reset();
+      },
+    });
   }
 };
 </script>

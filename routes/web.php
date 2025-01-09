@@ -147,10 +147,6 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         TaskStatusController::class,
         'destroy',
       ])->name('task-statuses.destroy');
-      Route::get('/{taskStatus}/edit', [
-        TaskStatusController::class,
-        'edit',
-      ])->name('task-statuses.edit');
     });
 
     // Task Priority Management Routes
@@ -169,10 +165,6 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         TaskPriorityController::class,
         'destroy',
       ])->name('task-priorities.destroy');
-      Route::get('/{taskPriority}/edit', [
-        TaskPriorityController::class,
-        'edit',
-      ])->name('task-priorities.edit');
     });
   });
 });
