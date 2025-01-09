@@ -42,8 +42,8 @@ class TaskController extends Controller
       'description' => 'nullable|string',
       'assigned_to' => 'nullable|array',
       'assigned_to.*' => 'exists:users,id',
-      'status' => 'required|exists:task_statuses,id',
-      'priority' => 'required|exists:task_priorities,id',
+      'status_id' => 'required|exists:task_statuses,id',
+      'priority_id' => 'required|exists:task_priorities,id',
     ]);
 
     $task = $project->tasks()->create($request->except('assigned_to'));
@@ -77,8 +77,8 @@ class TaskController extends Controller
       'description' => 'nullable|string',
       'assigned_to' => 'nullable|array',
       'assigned_to.*' => 'exists:users,id',
-      'status' => 'required|exists:task_statuses,id',
-      'priority' => 'required|exists:task_priorities,id',
+      'status_id' => 'required|exists:task_statuses,id',
+      'priority_id' => 'required|exists:task_priorities,id',
     ]);
 
     $task->update($request->except('assigned_to'));
