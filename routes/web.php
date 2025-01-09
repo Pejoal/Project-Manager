@@ -5,6 +5,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TaskStatusController;
+use App\Http\Controllers\TaskPriorityController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -118,8 +120,14 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         Route::delete('/{task}', [TaskController::class, 'destroy'])->name(
           'tasks.destroy'
         );
-        Route::put('/tasks/{task}/status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
-        Route::put('/tasks/{task}/priority', [TaskController::class, 'updatePriority'])->name('tasks.updatePriority');
+        Route::put('/tasks/{task}/status', [
+          TaskController::class,
+          'updateStatus',
+        ])->name('tasks.updateStatus');
+        Route::put('/tasks/{task}/priority', [
+          TaskController::class,
+          'updatePriority',
+        ])->name('tasks.updatePriority');
       });
     });
   });

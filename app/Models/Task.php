@@ -8,7 +8,13 @@ class Task extends Model
 {
   use HasFactory;
 
-  protected $fillable = ['name', 'description', 'project_id', 'status', 'priority'];
+  protected $fillable = [
+    'name',
+    'description',
+    'project_id',
+    'status',
+    'priority',
+  ];
 
   public function project()
   {
@@ -18,5 +24,15 @@ class Task extends Model
   public function assignedTo()
   {
     return $this->belongsToMany(User::class, 'task_user');
+  }
+
+  public function status()
+  {
+    return $this->belongsTo(TaskStatus::class);
+  }
+
+  public function priority()
+  {
+    return $this->belongsTo(TaskPriority::class);
   }
 }

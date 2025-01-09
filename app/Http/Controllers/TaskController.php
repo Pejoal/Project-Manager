@@ -3,6 +3,8 @@
 use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\TaskStatus;
+use App\Models\TaskPriority;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,14 +15,24 @@ class TaskController extends Controller
     $users = User::orderBy('id', 'desc')->get();
     $projects = Project::orderBy('id', 'desc')->get();
     $tasks = Task::with('project')->orderBy('id', 'desc')->get();
-    return Inertia::render('Tasks/All', compact('tasks', 'projects', 'users'));
+    $statuses = TaskStatus::all();
+    $priorities = TaskPriority::all();
+    return Inertia::render(
+      'Tasks/All',
+      compact('tasks', 'projects', 'users', 'statuses', 'priorities')
+    );
   }
 
   public function index(Project $project)
   {
     $users = User::orderBy('id', 'desc')->get();
     $tasks = $project->tasks()->orderBy('id', 'desc')->get();
-    return Inertia::render('Tasks/Index', compact('tasks', 'project', 'users'));
+    $statuses = TaskStatus::all();
+    $priorities = TaskPriority::all();
+    return Inertia::render(
+      'Tasks/Index',
+      compact('tasks', 'project', 'users', 'statuses', 'priorities')
+    );
   }
 
   public function store(Request $request, Project $project)
@@ -30,6 +42,8 @@ class TaskController extends Controller
       'description' => 'nullable|string',
       'assigned_to' => 'nullable|array',
       'assigned_to.*' => 'exists:users,id',
+      'status' => 'required|exists:task_statuses,id',
+      'priority' => 'required|exists:task_priorities,id',
     ]);
 
     $task = $project->tasks()->create($request->except('assigned_to'));
@@ -48,7 +62,12 @@ class TaskController extends Controller
   {
     $users = User::orderBy('id', 'desc')->get();
     $task->load('assignedTo');
-    return Inertia::render('Tasks/Edit', compact('task', 'project', 'users'));
+    $statuses = TaskStatus::all();
+    $priorities = TaskPriority::all();
+    return Inertia::render(
+      'Tasks/Edit',
+      compact('task', 'project', 'users', 'statuses', 'priorities')
+    );
   }
 
   public function update(Request $request, Project $project, Task $task)
@@ -58,6 +77,8 @@ class TaskController extends Controller
       'description' => 'nullable|string',
       'assigned_to' => 'nullable|array',
       'assigned_to.*' => 'exists:users,id',
+      'status' => 'required|exists:task_statuses,id',
+      'priority' => 'required|exists:task_priorities,id',
     ]);
 
     $task->update($request->except('assigned_to'));

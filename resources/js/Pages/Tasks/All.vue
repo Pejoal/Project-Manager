@@ -11,6 +11,8 @@
         :show="showModal"
         :projects="projects"
         :users="users"
+        :statuses="statuses"
+        :priorities="priorities"
         @close="closeModal"
       />
       <button
@@ -60,6 +62,8 @@ const props = defineProps({
   users: Array,
   tasks: Array,
   projects: Array,
+  statuses: Array,
+  priorities: Array,
 });
 
 const showModal = ref(false);

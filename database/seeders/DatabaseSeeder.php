@@ -7,6 +7,8 @@ use App\Models\Project;
 use App\Models\Settings;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\TaskStatus;
+use App\Models\TaskPriority;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -44,10 +46,27 @@ class DatabaseSeeder extends Seeder
       ]);
     }
 
+    TaskStatus::insert([
+      ['name' => 'Pending'],
+      ['name' => 'In Progress'],
+      ['name' => 'Completed'],
+    ]);
+
+    TaskPriority::insert([
+      ['name' => 'Low'],
+      ['name' => 'Medium'],
+      ['name' => 'High'],
+    ]);
+
+    $taskStatuses = TaskStatus::pluck('id')->toArray();
+    $taskPriorities = TaskPriority::pluck('id')->toArray();
+
     $projects = Project::get();
-    $projects->each(function ($project) {
+    $projects->each(function ($project) use ($taskStatuses, $taskPriorities) {
       Task::factory(3)->create([
         'project_id' => $project->id,
+        'status_id' => $taskStatuses[array_rand($taskStatuses)],
+        'priority_id' => $taskPriorities[array_rand($taskPriorities)],
         'created_at' => now()->subMonths(rand(1, 4)),
       ]);
     });

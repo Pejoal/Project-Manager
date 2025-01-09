@@ -22,6 +22,14 @@ const props = defineProps({
     type: Array,
     default: [],
   },
+  statuses: {
+    type: Array,
+    default: [],
+  },
+  priorities: {
+    type: Array,
+    default: [],
+  },
 });
 
 const form = useForm({
@@ -29,6 +37,8 @@ const form = useForm({
   project_slug: null,
   description: '',
   assigned_to: [],
+  status_id: null,
+  priority_id: null,
 });
 
 const submit = () => {
@@ -101,11 +111,11 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.description" />
         </div>
         <div>
-          <InputLabel for="status" value="status" />
+          <InputLabel for="status" value="Status" />
           <vSelect
             v-if="props.statuses.length > 0"
             id="status"
-            v-model="form.status"
+            v-model="form.status_id"
             :options="props.statuses"
             :reduce="(status) => status.id"
             label="name"
@@ -115,12 +125,12 @@ const submit = () => {
           </vSelect>
         </div>
         <div>
-          <InputLabel for="priority" value="priority" />
+          <InputLabel for="priority" value="Priority" />
           <vSelect
             v-if="props.priorities.length > 0"
             id="priority"
-            v-model="form.priority"
-            :options="props.priorityes"
+            v-model="form.priority_id"
+            :options="props.priorities"
             :reduce="(priority) => priority.id"
             label="name"
             class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
