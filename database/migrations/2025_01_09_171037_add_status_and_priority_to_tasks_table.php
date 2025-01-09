@@ -13,12 +13,14 @@ return new class extends Migration {
     Schema::table('tasks', function (Blueprint $table) {
       $table
         ->foreignId('status_id')
+        ->nullable()
         ->constrained('task_statuses')
-        ->onDelete('cascade');
+        ->nullOnDelete();
       $table
         ->foreignId('priority_id')
+        ->nullable()
         ->constrained('task_priorities')
-        ->onDelete('cascade');
+        ->nullOnDelete();
     });
   }
 
