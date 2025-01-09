@@ -12,13 +12,19 @@
           Task ID: {{ task.id }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Project ID: {{ project.id }}
-        </p>
-        <p class="mb-2 text-gray-700 dark:text-gray-300">
           Description: {{ task.description }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Project Name: {{ project.name }}
+          Project ID: {{ project.id }}
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Project:
+          <Link
+            :href="route('projects.show', { project: project.slug })"
+            class="text-blue-500 dark:text-blue-400 hover:underline"
+          >
+            {{ project.name }}
+          </Link>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Assigned to:
