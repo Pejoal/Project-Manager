@@ -79,18 +79,6 @@ const logout = () => {
                 >
                   Tasks
                 </NavLink>
-                <NavLink
-                  :href="route('task-statuses.index')"
-                  :active="route().current('task-statuses.*')"
-                >
-                  Task Statuses
-                </NavLink>
-                <NavLink
-                  :href="route('task-priorities.index')"
-                  :active="route().current('task-priorities.*')"
-                >
-                  Task Priorities
-                </NavLink>
               </div>
             </div>
 
@@ -255,6 +243,13 @@ const logout = () => {
                       Profile
                     </DropdownLink>
 
+                    <DropdownLink :href="route('task-statuses.index')">
+                      Task Statuses
+                    </DropdownLink>
+                    <DropdownLink :href="route('task-priorities.index')">
+                      Task Priorities
+                    </DropdownLink>
+
                     <DropdownLink
                       v-if="$page.props.jetstream.hasApiFeatures"
                       :href="route('api-tokens.index')"
@@ -376,6 +371,19 @@ const logout = () => {
                 :active="route().current('profile.show')"
               >
                 Profile
+              </ResponsiveNavLink>
+
+              <ResponsiveNavLink
+                :href="route('task-statuses.index')"
+                :active="route().current('profile.show')"
+              >
+                Task Statuses
+              </ResponsiveNavLink>
+              <ResponsiveNavLink
+                :href="route('task-priorities.index')"
+                :active="route().current('profile.show')"
+              >
+                Task Priorities
               </ResponsiveNavLink>
 
               <ResponsiveNavLink
