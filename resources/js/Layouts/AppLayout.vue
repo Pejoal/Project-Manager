@@ -495,8 +495,9 @@ const logout = () => {
     background: white;
   }
   .vs__dropdown-toggle,
-  .vs__search {
-    color: white;
+  .vs__search,
+  .vs__selected {
+    color: white !important;
   }
   #vs2__listbox,
   #vs1__listbox,

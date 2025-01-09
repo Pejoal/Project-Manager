@@ -20,10 +20,14 @@
           :key="priority.id"
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
-          <div>{{ priority.name }}</div>
+          <p class="text-white">{{ priority.name }}</p>
           <div>
-            <inertia-link :href="`/task-priorities/${priority.id}/edit`" class="text-blue-500 dark:text-blue-400 hover:underline">Edit</inertia-link>
-            <button @click="deletePriority(priority)" class="text-red-500 dark:text-red-400 hover:underline ml-2">Delete</button>
+            <button
+              @click="() => destroy(priority.id)"
+              class="ml-4 text-red-500 dark:text-red-400 hover:underline"
+            >
+              Delete
+            </button>
           </div>
         </li>
       </ul>
@@ -33,7 +37,7 @@
 
 <script setup>
 import { defineProps, ref } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateTaskPriorityModal from './CreateTaskPriorityModal.vue';
 
@@ -51,9 +55,11 @@ const closeModal = () => {
   showModal.value = false;
 };
 
-const deletePriority = (priority) => {
-  if (confirm('Are you sure you want to delete this priority?')) {
-    // logic to delete priority
+const form = useForm({});
+
+const destroy = () => {
+  if (confirm('Are you sure?')) {
+    form.delete(route('task-priorities.destroy', id));
   }
 };
 </script>

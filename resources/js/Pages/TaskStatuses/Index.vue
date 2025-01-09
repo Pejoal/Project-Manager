@@ -20,10 +20,14 @@
           :key="status.id"
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
-          <div>{{ status.name }}</div>
+          <p class="text-white">{{ status.name }}</p>
           <div>
-            <inertia-link :href="`/task-statuses/${status.id}/edit`" class="text-blue-500 dark:text-blue-400 hover:underline">Edit</inertia-link>
-            <button @click="deleteStatus(status)" class="text-red-500 dark:text-red-400 hover:underline ml-2">Delete</button>
+            <button
+              @click="() => destroy(status.id)"
+              class="ml-4 text-red-500 dark:text-red-400 hover:underline"
+            >
+              Delete
+            </button>
           </div>
         </li>
       </ul>
@@ -33,7 +37,7 @@
 
 <script setup>
 import { defineProps, ref } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateTaskStatusModal from './CreateTaskStatusModal.vue';
 
@@ -51,10 +55,11 @@ const closeModal = () => {
   showModal.value = false;
 };
 
-const deleteStatus = (status) => {
-  if (confirm('Are you sure you want to delete this status?')) {
-    // logic to delete status
+const form = useForm({});
+
+const destroy = (id) => {
+  if (confirm('Are you sure?')) {
+    form.delete(route('task-statuses.destroy', id));
   }
 };
-
 </script>
