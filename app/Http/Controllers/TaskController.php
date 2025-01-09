@@ -54,7 +54,7 @@ class TaskController extends Controller
 
   public function show(Project $project, Task $task)
   {
-    $task->load('assignedTo');
+    $task->load(['assignedTo','status','priority']);
     return Inertia::render('Tasks/Show', compact('task', 'project'));
   }
 
