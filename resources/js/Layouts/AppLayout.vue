@@ -375,13 +375,13 @@ const logout = () => {
 
               <ResponsiveNavLink
                 :href="route('task-statuses.index')"
-                :active="route().current('profile.show')"
+                :active="route().current('task-statuses.index')"
               >
                 Task Statuses
               </ResponsiveNavLink>
               <ResponsiveNavLink
                 :href="route('task-priorities.index')"
-                :active="route().current('profile.show')"
+                :active="route().current('task-priorities.index')"
               >
                 Task Priorities
               </ResponsiveNavLink>
