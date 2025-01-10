@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
 
     $projects = Project::get();
     $projects->each(function ($project) use ($taskStatuses, $taskPriorities) {
-      Task::factory(2)->create([
+      Task::factory(10)->create([
         'project_id' => $project->id,
         'status_id' => $taskStatuses[array_rand($taskStatuses)],
         'priority_id' => $taskPriorities[array_rand($taskPriorities)],

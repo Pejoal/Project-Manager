@@ -136,6 +136,46 @@ const applyFilters = () => {
           </div>
         </li>
       </ul>
+      <!-- Pagination Controls -->
+      <section class="flex items-center justify-between my-2">
+        <button
+          v-if="props.tasks.prev_page_url"
+          @click="fetchPage(props.tasks.prev_page_url)"
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg"
+        >
+          Previous
+        </button>
+        <span class="mx-2"
+          >{{ props.tasks.current_page }} / {{ props.tasks.last_page }}</span
+        >
+        <span class="mx-2">Total: {{ props.tasks.total }}</span>
+        <button
+          v-if="props.tasks.next_page_url"
+          @click="fetchPage(props.tasks.next_page_url)"
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg"
+        >
+          Next
+        </button>
+      </section>
     </div>
   </AppLayout>
 </template>
+
+<style scoped>
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: max-height 0.3s ease-in-out;
+}
+
+.slide-down-enter-from,
+.slide-down-leave-to {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.slide-down-enter-to,
+.slide-down-leave-from {
+  max-height: 50rem;
+  overflow: auto;
+}
+</style>
