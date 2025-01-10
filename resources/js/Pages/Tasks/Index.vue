@@ -35,7 +35,7 @@ const toggleFilters = () => {
 
 const form = useForm({
   search: '',
-  perPage: 5,
+  perPage: 3,
 });
 
 const applyFilters = () => {
@@ -51,6 +51,15 @@ const applyFilters = () => {
     });
   }
 };
+
+
+const fetchPage = (url) => {
+  form.get(url, {
+    preserveState: true,
+    preserveScroll: true,
+  });
+};
+
 </script>
 
 <template>
