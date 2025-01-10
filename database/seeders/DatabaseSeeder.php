@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
     }
 
     TaskStatus::insert([
-      ['name' => 'Pending', 'color' => '#E7E9ED'],
+      ['name' => 'Pending', 'color' => '#E70A1D'],
       ['name' => 'In Progress', 'color' => '#36A2EB'],
       ['name' => 'Completed', 'color' => '#4BC0C0'],
     ]);

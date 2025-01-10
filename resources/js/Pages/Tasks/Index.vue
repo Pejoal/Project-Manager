@@ -52,14 +52,12 @@ const applyFilters = () => {
   }
 };
 
-
 const fetchPage = (url) => {
   form.get(url, {
     preserveState: true,
     preserveScroll: true,
   });
 };
-
 </script>
 
 <template>
@@ -135,7 +133,24 @@ const fetchPage = (url) => {
             >
               {{ task.name }} - {{ project ? project.name : task.project.name }}
             </Link>
-            <p>Status: {{ task.status.name }}</p>
+            <div class="space-y-1">
+              <p>
+                Status:
+                <span
+                  class="p-1"
+                  :style="{ color: task.status.color }"
+                  >{{ task.status.name }}</span
+                >
+              </p>
+              <p>
+                Priority:
+                <span
+                  class="p-1"
+                  :style="{ color: task.priority.color }"
+                  >{{ task.priority.name }}</span
+                >
+              </p>
+            </div>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
               Created at: {{ new Date(task.created_at).toLocaleString() }}
             </div>
