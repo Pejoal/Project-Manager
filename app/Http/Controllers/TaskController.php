@@ -17,9 +17,6 @@ class TaskController extends Controller
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
 
-    // $tasks = Task::with(['project', 'status'])
-    //   ->orderBy('id', 'desc')
-    //   ->get();
     $query = Task::with('project', 'status', 'priority');
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
@@ -38,16 +35,24 @@ class TaskController extends Controller
     );
   }
 
-  public function index(Project $project)
+  public function index(Project $project, Request $request)
   {
     $users = User::orderBy('id', 'desc')->get();
-    $tasks = $project
-      ->tasks()
-      ->with(['status'])
-      ->orderBy('id', 'desc')
-      ->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
+    $query = $project->tasks()->with('status', 'priority');
+    if ($request->has('search') && !empty($request->search)) {
+      $search = $request->search;
+      $query->where('name', 'like', "%{$search}%");
+    }
+
+    if ($request->has('status') && !empty($request->status)) {
+      $query->whereIn('status_id', $request->status);
+    }
+
+    $perPage = $request->input('perPage', 5); // Default to 5 items per page if not provided
+    $tasks = $query->latest('id')->paginate($perPage);
+
     return Inertia::render(
       'Tasks/Index',
       compact('tasks', 'project', 'users', 'statuses', 'priorities')

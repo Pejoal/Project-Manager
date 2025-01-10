@@ -27,7 +27,7 @@ const title = computed(() =>
   props.project ? `Tasks for ${props.project.name}` : 'All Tasks'
 );
 
-const filtersVisible = ref(false);
+const filtersVisible = ref(true);
 
 const toggleFilters = () => {
   filtersVisible.value = !filtersVisible.value;
@@ -40,7 +40,7 @@ const form = useForm({
 
 const applyFilters = () => {
   if (props.project) {
-    form.get(route('tasks.index'), {
+    form.get(route('tasks.index', props.project.slug), {
       preserveState: true,
       preserveScroll: true,
     });
