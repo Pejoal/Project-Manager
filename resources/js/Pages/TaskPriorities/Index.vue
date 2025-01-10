@@ -7,7 +7,7 @@
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <CreateTaskPriorityModal :show="showModal" @close="closeModal" />
+      <CreateTaskPriorityModal :show="showModal" @close="closeModal" :priority="selectedPriority" />
       <button
         @click="openModal"
         class="text-blue-500 dark:text-blue-400 hover:underline"
@@ -23,7 +23,7 @@
           <p class="text-white">{{ priority.name }}</p>
           <div>
             <button
-              @click="() => updatePriority(priority.id)"
+              @click="() => updatePriority(priority)"
               class="ml-4 text-green-500 dark:text-green-400 hover:underline"
             >
               Update
@@ -52,6 +52,7 @@ const props = defineProps({
 });
 
 const showModal = ref(false);
+const selectedPriority = ref(null);
 
 const openModal = () => {
   showModal.value = true;
@@ -71,16 +72,8 @@ const destroy = (id) => {
   }
 };
 
-const updatePriority = (id) => {
-  const newPriority = prompt('Enter new priority:');
-  if (newPriority) {
-    form.name = newPriority;
-    form.put(route('task-priorities.update', id), {
-      preserveScroll: true,
-      onSuccess: () => {
-        form.reset();
-      },
-    });
-  }
+const updatePriority = (priority = null) => {
+  selectedPriority.value = priority;
+  openModal();
 };
 </script>

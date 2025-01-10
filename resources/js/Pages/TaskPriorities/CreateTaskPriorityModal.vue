@@ -4,29 +4,56 @@ import DialogModal from '@/Components/DialogModal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { ref, watch } from 'vue';
 
 const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
+  priority: {
+    type: Object,
+    default: null,
+  },
 });
+
+const priority = ref(props.priority);
 
 const form = useForm({
-  name: '',
+  name: priority ? priority.name : '',
 });
 
+watch(
+  () => props.priority,
+  (newPriority) => {
+    if (newPriority) {
+      priority.value = newPriority;
+      form.name = newPriority.name;
+    }
+  }
+);
+
 const submit = () => {
-  form.post(route('task-priorities.store'), {
-    onSuccess: () => {
-      form.reset();
-      emit('close');
-    },
-  });
+  if (priority.value) {
+    form.put(route('task-priorities.update', props.priority.id), {
+      onSuccess: () => {
+        form.reset();
+        priority.value = null;
+        emit('close');
+      },
+    });
+  } else {
+    form.post(route('task-priorities.store'), {
+      onSuccess: () => {
+        form.reset();
+        emit('close');
+      },
+    });
+  }
 };
 </script>
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title>Create Task Priority</template>
+    <template #title>{{ priority ? 'Edit' : 'Create' }} Task Priority</template>
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
         <div>
@@ -55,7 +82,7 @@ const submit = () => {
         type="submit"
         class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
       >
-        Create
+        {{ priority ? 'Edit' : 'Create' }}
       </button>
     </template>
   </DialogModal>
