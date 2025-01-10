@@ -507,10 +507,9 @@ const logout = () => {
   .vs__selected {
     color: white !important;
   }
-  #vs2__listbox,
-  #vs1__listbox,
-  #vs4__listbox {
-    color: black;
+
+  .vs__dropdown-menu {
+    color: black !important;
   }
 }
 </style>
