@@ -26,22 +26,6 @@ const props = defineProps({
 
 Chart.register(...registerables);
 
-const barChartData = ref({
-  labels: ['January', 'February', 'March', 'April', 'May'],
-  datasets: [
-    {
-      label: 'Revenue',
-      backgroundColor: '#42A5F5',
-      data: [10000, 12000, 15000, 17000, 20000],
-    },
-    {
-      label: 'Expenses',
-      backgroundColor: '#FF6384',
-      data: [5000, 6000, 7000, 8000, 9000],
-    },
-  ],
-});
-
 const radarChartData = ref({
   labels: [
     'Communication',
@@ -174,13 +158,16 @@ const updateSettings = () => {
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
             Tasks Statuses
           </h3>
-          <LineChart :chart-data="tasksStatusesData" :options="chartOptions" />
+          <BarChart :chart-data="tasksStatusesData" :options="chartOptions" />
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
             Tasks Priorities
           </h3>
-          <LineChart :chart-data="tasksPrioritiesData" :options="chartOptions" />
+          <LineChart
+            :chart-data="tasksPrioritiesData"
+            :options="chartOptions"
+          />
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
@@ -199,12 +186,6 @@ const updateSettings = () => {
             Overview
           </h3>
           <LineChart :chart-data="lineChartData" :options="chartOptions" />
-        </div>
-        <div class="mb-8">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-            Revenue vs Expenses
-          </h3>
-          <BarChart :chart-data="tasksStatusesData" :options="chartOptions" />
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
