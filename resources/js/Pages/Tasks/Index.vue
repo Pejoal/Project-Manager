@@ -39,10 +39,17 @@ const form = useForm({
 });
 
 const applyFilters = () => {
-  // form.get(route('admin.dashboard'), {
-  //   preserveState: true,
-  //   preserveScroll: true,
-  // });
+  if (props.project) {
+    form.get(route('tasks.index'), {
+      preserveState: true,
+      preserveScroll: true,
+    });
+  } else {
+    form.get(route('tasks.all'), {
+      preserveState: true,
+      preserveScroll: true,
+    });
+  }
 };
 </script>
 
