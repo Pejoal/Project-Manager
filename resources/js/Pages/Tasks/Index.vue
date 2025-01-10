@@ -35,7 +35,7 @@ const toggleFilters = () => {
 
 const form = useForm({
   search: '',
-  perPage: 3,
+  perPage: 5,
 });
 
 const applyFilters = () => {

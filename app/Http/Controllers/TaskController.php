@@ -27,7 +27,7 @@ class TaskController extends Controller
       $query->whereIn('status_id', $request->status);
     }
 
-    $perPage = $request->input('perPage', 3);
+    $perPage = $request->input('perPage', 5);
     $tasks = $query->latest('id')->paginate($perPage);
     return Inertia::render(
       'Tasks/Index',
