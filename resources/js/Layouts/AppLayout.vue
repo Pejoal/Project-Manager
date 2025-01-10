@@ -349,6 +349,25 @@ const logout = () => {
             >
               Dashboard
             </ResponsiveNavLink>
+
+            <ResponsiveNavLink
+              :href="route('clients.index')"
+              :active="route().current('clients.*')"
+            >
+              Clients
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              :href="route('projects.index')"
+              :active="route().current('projects.*')"
+            >
+              Projects
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              :href="route('tasks.all')"
+              :active="route().current('tasks.*')"
+            >
+              Tasks
+            </ResponsiveNavLink>
           </div>
 
           <!-- Responsive Settings Options -->
