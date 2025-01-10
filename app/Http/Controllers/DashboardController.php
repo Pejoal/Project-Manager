@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\TaskPriority;
 use App\Models\TaskStatus;
 use Inertia\Inertia;
 use App\Models\Settings;
@@ -129,12 +130,50 @@ class DashboardController extends Controller
 
       return [
         'label' => $status->name,
-        'borderColor' => $status->color ?? '#f43295',
+        'borderColor' => $status->color,
         'data' => $data,
       ];
     });
 
-    $tasksChartData = [
+    $tasksStatusesData = [
+      'labels' => $months,
+      'datasets' => $datasets,
+    ];
+
+    $tasksData = Task::selectRaw(
+      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year, priority_id'
+    )
+      ->whereBetween('created_at', [
+        $today->copy()->subMonths(11)->startOfMonth(),
+        $today->copy()->endOfMonth(),
+      ])
+      ->groupBy('year', 'month', 'priority_id')
+      ->get()
+      ->groupBy(function ($item) {
+        return Carbon::create($item->year, $item->month)->format('F Y');
+      });
+
+    $taskPriorities = TaskPriority::all();
+    $datasets = $taskPriorities->map(function ($priority) use (
+      $months,
+      $tasksData
+    ) {
+      $data = $months->map(function ($month) use ($tasksData, $priority) {
+        return $tasksData->has($month) &&
+          $tasksData[$month]->where('priority_id', $priority->id)->first()
+          ? $tasksData[$month]->where('priority_id', $priority->id)->first()
+            ->count
+          : 0;
+      });
+
+      return [
+        'label' => $priority->name,
+        'borderColor' => $priority->color,
+        'data' => $data,
+      ];
+    });
+
+    $tasksPrioritiesData = [
       'labels' => $months,
       'datasets' => $datasets,
     ];
@@ -143,7 +182,8 @@ class DashboardController extends Controller
       'translations' => [
         'welcome' => __('messages.welcome'),
       ],
-      'tasksChartData' => $tasksChartData,
+      'tasksStatusesData' => $tasksStatusesData,
+      'tasksPrioritiesData' => $tasksPrioritiesData,
       'doughnutData' => [
         'labels' => ['Clients', 'Projects', 'Tasks'],
         'datasets' => [
