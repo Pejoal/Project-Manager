@@ -508,7 +508,8 @@ const logout = () => {
     color: white !important;
   }
 
-  .vs__dropdown-menu {
+  .vs__dropdown-menu,
+  .vs--multiple .vs__selected {
     color: black !important;
   }
 }
