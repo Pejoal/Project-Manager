@@ -47,15 +47,15 @@ class DatabaseSeeder extends Seeder
     }
 
     TaskStatus::insert([
-      ['name' => 'Pending'],
-      ['name' => 'In Progress'],
-      ['name' => 'Completed'],
+      ['name' => 'Pending', 'color' => '#32f924'],
+      ['name' => 'In Progress', 'color' => '#f24924'],
+      ['name' => 'Completed', 'color' => '#62f3f4'],
     ]);
 
     TaskPriority::insert([
-      ['name' => 'Low'],
-      ['name' => 'Medium'],
-      ['name' => 'High'],
+      ['name' => 'Low', 'color' => '#424524'],
+      ['name' => 'Medium', 'color' => '#f24ff4'],
+      ['name' => 'High', 'color' => '#924924'],
     ]);
 
     $taskStatuses = TaskStatus::pluck('id')->toArray();

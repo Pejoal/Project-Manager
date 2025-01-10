@@ -19,6 +19,7 @@ const priority = ref(props.priority);
 
 const form = useForm({
   name: priority.value ? priority.value.name : '',
+  color: priority.value ? priority.value.color : '',
 });
 
 watch(
@@ -27,6 +28,7 @@ watch(
     if (newPriority) {
       priority.value = newPriority;
       form.name = newPriority.name;
+      form.color = newPriority.color;
     }
   }
 );
@@ -66,6 +68,17 @@ const submit = () => {
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
           <InputError class="mt-2" :message="form.errors.name" />
+        </div>
+        <div>
+          <InputLabel for="color" value="Color" />
+          <TextInput
+            id="color"
+            required
+            v-model="form.color"
+            type="color"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.color" />
         </div>
       </form>
     </template>

@@ -19,6 +19,7 @@ const status = ref(props.status);
 
 const form = useForm({
   name: status.value ? status.value.name : '',
+  color: status.value ? status.value.color : '',
 });
 
 watch(
@@ -27,6 +28,7 @@ watch(
     if (newStatus) {
       status.value = newStatus;
       form.name = newStatus.name;
+      form.color = newStatus.color;
     }
   }
 );
@@ -68,6 +70,17 @@ const submit = () => {
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
           <InputError class="mt-2" :message="form.errors.name" />
+        </div>
+        <div>
+          <InputLabel for="color" value="Color" />
+          <TextInput
+            id="color"
+            required
+            v-model="form.color"
+            type="color"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.color" />
         </div>
       </form>
     </template>

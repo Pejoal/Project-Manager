@@ -7,7 +7,11 @@
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <CreateTaskPriorityModal :show="showModal" @close="closeModal" :priority="selectedPriority" />
+      <CreateTaskPriorityModal
+        :show="showModal"
+        @close="closeModal"
+        :priority="selectedPriority"
+      />
       <button
         @click="openModal"
         class="text-blue-500 dark:text-blue-400 hover:underline"
@@ -20,7 +24,14 @@
           :key="priority.id"
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
-          <p class="text-white">{{ priority.name }}</p>
+          <div class="flex items-center gap-2">
+            <p class="text-white">{{ priority.name }}</p>
+            <div
+              class="w-16 h-6"
+              :style="{ backgroundColor: priority.color }"
+            ></div>
+          </div>
+
           <div>
             <button
               @click="() => updatePriority(priority)"

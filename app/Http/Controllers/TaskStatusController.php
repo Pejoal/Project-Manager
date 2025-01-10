@@ -14,14 +14,20 @@ class TaskStatusController extends Controller
 
   public function store(Request $request)
   {
-    $request->validate(['name' => 'required|string|max:255']);
+    $request->validate([
+      'name' => 'required|string|max:255',
+      'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+    ]);
     TaskStatus::create($request->all());
     return redirect()->route('task-statuses.index');
   }
 
   public function update(Request $request, TaskStatus $taskStatus)
   {
-    $request->validate(['name' => 'required|string|max:255']);
+    $request->validate([
+      'name' => 'required|string|max:255',
+      'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+    ]);
     $taskStatus->update($request->all());
     return redirect()->route('task-statuses.index');
   }

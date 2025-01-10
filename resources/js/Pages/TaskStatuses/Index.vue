@@ -24,7 +24,13 @@
           :key="status.id"
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
-          <p class="text-white">{{ status.name }}</p>
+          <div class="flex items-center gap-2">
+            <p class="text-white">{{ status.name }}</p>
+            <div
+              class="w-16 h-6"
+              :style="{ backgroundColor: status.color }"
+            ></div>
+          </div>
           <div>
             <button
               @click="() => updateStatus(status)"
@@ -68,6 +74,7 @@ const closeModal = () => {
 
 const form = useForm({
   name: null,
+  color: null,
 });
 
 const destroy = (id) => {
