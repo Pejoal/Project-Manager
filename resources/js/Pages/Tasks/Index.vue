@@ -1,15 +1,17 @@
 <template>
-  <Head :title="`Tasks for ${project.name}`" />
+  <Head :title="title" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Tasks for
-        <Link
-          :href="route('projects.show', { project: project.slug })"
-          class="text-blue-500 dark:text-blue-400 hover:underline"
-        >
-          {{ project.name }}
-        </Link>
+        {{ title }}
+        <template v-if="project">
+          <Link
+            :href="route('projects.show', { project: project.slug })"
+            class="text-blue-500 dark:text-blue-400 hover:underline"
+          >
+            {{ project.name }}
+          </Link>
+        </template>
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -17,6 +19,7 @@
         :show="showModal"
         :users="users"
         :project="project"
+        :projects="projects"
         :statuses="statuses"
         :priorities="priorities"
         @close="closeModal"
@@ -36,11 +39,14 @@
           <div>
             <Link
               :href="
-                route('tasks.show', { project: project.slug, task: task.id })
+                route('tasks.show', {
+                  project: project ? project.slug : task.project.slug,
+                  task: task.id,
+                })
               "
               class="text-blue-500 dark:text-blue-400 hover:underline"
             >
-              {{ task.name }}
+              {{ task.name }} - {{ project ? project.name : task.project.name }}
             </Link>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
               Created at: {{ new Date(task.created_at).toLocaleString() }}
@@ -56,7 +62,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, computed } from 'vue';
 import { Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateTaskModal from './CreateTaskModal.vue';
@@ -65,6 +71,7 @@ const props = defineProps({
   users: Array,
   tasks: Array,
   project: Object,
+  projects: Array,
   statuses: Array,
   priorities: Array,
 });
@@ -78,4 +85,8 @@ const openModal = () => {
 const closeModal = () => {
   showModal.value = false;
 };
+
+const title = computed(() =>
+  props.project ? `Tasks for ${props.project.name}` : 'All Tasks'
+);
 </script>

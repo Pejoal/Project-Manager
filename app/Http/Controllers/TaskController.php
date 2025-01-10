@@ -18,7 +18,7 @@ class TaskController extends Controller
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
     return Inertia::render(
-      'Tasks/All',
+      'Tasks/Index',
       compact('tasks', 'projects', 'users', 'statuses', 'priorities')
     );
   }
