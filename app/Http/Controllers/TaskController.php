@@ -27,6 +27,10 @@ class TaskController extends Controller
       $query->whereIn('status_id', $request->status);
     }
 
+    if ($request->has('priority') && !empty($request->priority)) {
+      $query->whereIn('priority_id', $request->priority);
+    }
+
     $perPage = $request->input('perPage', 5);
     $tasks = $query->latest('id')->paginate($perPage);
     return Inertia::render(
@@ -48,6 +52,10 @@ class TaskController extends Controller
 
     if ($request->has('status') && !empty($request->status)) {
       $query->whereIn('status_id', $request->status);
+    }
+
+    if ($request->has('priority') && !empty($request->priority)) {
+      $query->whereIn('priority_id', $request->priority);
     }
 
     $perPage = $request->input('perPage', 3);

@@ -1,8 +1,10 @@
 <script setup>
-import { defineProps, ref, computed } from 'vue';
+import { defineProps, ref, computed, watch } from 'vue';
 import { Link, Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateTaskModal from './CreateTaskModal.vue';
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
 
 const props = defineProps({
   users: Array,
@@ -36,6 +38,8 @@ const toggleFilters = () => {
 const form = useForm({
   search: '',
   perPage: 5,
+  status: [],
+  priority: [],
 });
 
 const applyFilters = () => {
@@ -58,6 +62,14 @@ const fetchPage = (url) => {
     preserveScroll: true,
   });
 };
+
+watch(
+  () => [form.status, form.priority],
+  () => {
+    applyFilters();
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -95,13 +107,13 @@ const fetchPage = (url) => {
         Create Task
       </button>
 
-      <section class="px-2 pt-1">
+      <section class="bg-gray-900 p-2 rounded">
         <button @click="toggleFilters" class="btn btn-primary">
           Toggle Filters
         </button>
 
         <transition name="slide-down">
-          <main v-if="filtersVisible" class="p-2 m-1 bg-zinc-700 rounded-lg">
+          <main v-if="filtersVisible" class="p-2 m-1 bg-gray-700 rounded-lg">
             <!-- Search Filter -->
             <section class="mb-4">
               <input
@@ -109,6 +121,30 @@ const fetchPage = (url) => {
                 @input="applyFilters"
                 type="text"
                 placeholder="Search by name..."
+                class="w-full text-zinc-900 border rounded-lg p-2"
+              />
+            </section>
+            <!-- Status Filter -->
+            <section class="mb-4">
+              <vSelect
+                v-model="form.status"
+                :options="props.statuses"
+                :reduce="(status) => status.id"
+                label="name"
+                multiple
+                placeholder="Select status"
+                class="w-full text-zinc-900 border rounded-lg p-2"
+              />
+            </section>
+            <!-- Priority Filter -->
+            <section class="mb-4">
+              <vSelect
+                v-model="form.priority"
+                :options="props.priorities"
+                :reduce="(priority) => priority.id"
+                label="name"
+                multiple
+                placeholder="Select priority"
                 class="w-full text-zinc-900 border rounded-lg p-2"
               />
             </section>
@@ -136,19 +172,15 @@ const fetchPage = (url) => {
             <div class="space-y-1">
               <p>
                 Status:
-                <span
-                  class="p-1"
-                  :style="{ color: task.status.color }"
-                  >{{ task.status.name }}</span
-                >
+                <span class="p-1" :style="{ color: task.status.color }">{{
+                  task.status.name
+                }}</span>
               </p>
               <p>
                 Priority:
-                <span
-                  class="p-1"
-                  :style="{ color: task.priority.color }"
-                  >{{ task.priority.name }}</span
-                >
+                <span class="p-1" :style="{ color: task.priority.color }">{{
+                  task.priority.name
+                }}</span>
               </p>
             </div>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
