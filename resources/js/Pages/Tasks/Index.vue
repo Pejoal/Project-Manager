@@ -6,7 +6,7 @@ import CreateTaskModal from './CreateTaskModal.vue';
 
 const props = defineProps({
   users: Array,
-  tasks: Array,
+  tasks: Object,
   project: Object,
   projects: Array,
   statuses: Array,
@@ -94,23 +94,23 @@ const applyFilters = () => {
         </button>
 
         <transition name="slide-down">
-          <section v-if="filtersVisible" class="p-2 m-1 bg-zinc-700 rounded-lg">
+          <main v-if="filtersVisible" class="p-2 m-1 bg-zinc-700 rounded-lg">
             <!-- Search Filter -->
-            <div class="mb-4">
+            <section class="mb-4">
               <input
                 v-model="form.search"
                 @input="applyFilters"
                 type="text"
                 placeholder="Search by name..."
-                class="w-full border rounded-lg p-2"
+                class="w-full text-zinc-900 border rounded-lg p-2"
               />
-            </div>
-          </section>
+            </section>
+          </main>
         </transition>
       </section>
       <ul class="my-2 space-y-4">
         <li
-          v-for="task in tasks"
+          v-for="task in tasks.data"
           :key="task.id"
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >

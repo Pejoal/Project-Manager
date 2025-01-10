@@ -10,15 +10,28 @@ use Inertia\Inertia;
 
 class TaskController extends Controller
 {
-  public function all()
+  public function all(Request $request)
   {
     $users = User::orderBy('id', 'desc')->get();
     $projects = Project::orderBy('id', 'desc')->get();
-    $tasks = Task::with(['project', 'status'])
-      ->orderBy('id', 'desc')
-      ->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
+
+    // $tasks = Task::with(['project', 'status'])
+    //   ->orderBy('id', 'desc')
+    //   ->get();
+    $query = Task::with('project', 'status', 'priority');
+    if ($request->has('search') && !empty($request->search)) {
+      $search = $request->search;
+      $query->where('name', 'like', "%{$search}%");
+    }
+
+    if ($request->has('status') && !empty($request->status)) {
+      $query->whereIn('status_id', $request->status);
+    }
+
+    $perPage = $request->input('perPage', 5); // Default to 5 items per page if not provided
+    $tasks = $query->latest('id')->paginate($perPage);
     return Inertia::render(
       'Tasks/Index',
       compact('tasks', 'projects', 'users', 'statuses', 'priorities')
