@@ -5,6 +5,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateTaskModal from './CreateTaskModal.vue';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps({
   users: Array,
@@ -107,13 +108,11 @@ watch(
         Create Task
       </button>
 
-      <section class="bg-gray-900 p-2 rounded">
-        <button @click="toggleFilters" class="btn btn-primary">
-          Toggle Filters
-        </button>
+      <section class="dark:bg-gray-900 bg-slate-200 p-2 rounded">
+        <PrimaryButton @click="toggleFilters"> Toggle Filters </PrimaryButton>
 
         <transition name="slide-down">
-          <main v-if="filtersVisible" class="p-2 m-1 bg-gray-700 rounded-lg">
+          <main v-if="filtersVisible" class="p-2 m-1 dark:bg-gray-700 bg-slate-100 rounded-lg">
             <!-- Search Filter -->
             <section class="mb-4">
               <input
