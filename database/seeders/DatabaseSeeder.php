@@ -47,15 +47,15 @@ class DatabaseSeeder extends Seeder
     }
 
     TaskStatus::insert([
-      ['name' => 'Pending', 'color' => '#32f924'],
-      ['name' => 'In Progress', 'color' => '#f24924'],
-      ['name' => 'Completed', 'color' => '#62f3f4'],
+      ['name' => 'Pending', 'color' => '#E7E9ED'],
+      ['name' => 'In Progress', 'color' => '#36A2EB'],
+      ['name' => 'Completed', 'color' => '#4BC0C0'],
     ]);
 
     TaskPriority::insert([
-      ['name' => 'Low', 'color' => '#424524'],
-      ['name' => 'Medium', 'color' => '#f24ff4'],
-      ['name' => 'High', 'color' => '#924924'],
+      ['name' => 'Low', 'color' => '#FFCE56'],
+      ['name' => 'Medium', 'color' => '#60F070'],
+      ['name' => 'High', 'color' => '#FF6384'],
     ]);
 
     $taskStatuses = TaskStatus::pluck('id')->toArray();
@@ -72,9 +72,9 @@ class DatabaseSeeder extends Seeder
     });
 
     Settings::create([
-      'clients_color' => '#4040f0',
-      'projects_color' => '#40f040',
-      'tasks_color' => '#f04040',
+      'clients_color' => '#FFF080',
+      'projects_color' => '#40F0F0',
+      'tasks_color' => '#F04090',
     ]);
   }
 }

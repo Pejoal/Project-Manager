@@ -4,7 +4,6 @@ import {
   DoughnutChart,
   BarChart,
   LineChart,
-  RadarChart,
   PolarAreaChart,
   PieChart,
 } from 'vue-chart-3';
@@ -25,38 +24,6 @@ const props = defineProps({
 });
 
 Chart.register(...registerables);
-
-const radarChartData = ref({
-  labels: [
-    'Communication',
-    'Technical Skills',
-    'Teamwork',
-    'Problem Solving',
-    'Leadership',
-  ],
-  datasets: [
-    {
-      label: 'Employee A',
-      backgroundColor: 'rgba(179,181,198,0.2)',
-      borderColor: 'rgba(179,181,198,1)',
-      pointBackgroundColor: 'rgba(179,181,198,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(179,181,198,1)',
-      data: [65, 59, 90, 81, 56],
-    },
-    {
-      label: 'Employee B',
-      backgroundColor: 'rgba(255,99,132,0.2)',
-      borderColor: 'rgba(255,99,132,1)',
-      pointBackgroundColor: 'rgba(255,99,132,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(255,99,132,1)',
-      data: [28, 48, 40, 19, 96],
-    },
-  ],
-});
 
 const polarAreaChartData = ref({
   labels: ['Red', 'Green', 'Yellow', 'Grey', 'Blue'],
@@ -156,6 +123,12 @@ const updateSettings = () => {
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+            Overview
+          </h3>
+          <LineChart :chart-data="lineChartData" :options="chartOptions" />
+        </div>
+        <div class="mb-8">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
             Tasks Statuses
           </h3>
           <BarChart :chart-data="tasksStatusesData" :options="chartOptions" />
@@ -180,18 +153,6 @@ const updateSettings = () => {
             Pie Chart Example
           </h3>
           <PieChart :chart-data="doughnutData" :options="chartOptions" />
-        </div>
-        <div class="mb-8">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-            Overview
-          </h3>
-          <LineChart :chart-data="lineChartData" :options="chartOptions" />
-        </div>
-        <div class="mb-8">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-            Employee Skills Comparison
-          </h3>
-          <RadarChart :chart-data="radarChartData" :options="chartOptions" />
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
