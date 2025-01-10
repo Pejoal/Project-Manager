@@ -19,7 +19,7 @@ const status = ref(props.status);
 
 const form = useForm({
   name: status.value ? status.value.name : '',
-  color: status.value ? status.value.color : '',
+  color: status.value ? status.value.color : null,
 });
 
 watch(
