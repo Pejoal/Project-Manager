@@ -44,7 +44,7 @@ const form = useForm({
 const submit = () => {
   const slug = props.project.slug ? props.project.slug : form.project_slug;
   if (!slug) {
-    alert('Project is required');
+    form.setError('project', 'Project is required.');
     return;
   }
   form.post(
@@ -88,6 +88,7 @@ const submit = () => {
             type="text"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
           />
+          <InputError class="mt-2" :message="form.errors.project" />
         </div>
         <div>
           <InputLabel for="name" value="Name" />
