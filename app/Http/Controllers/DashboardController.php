@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\TaskStatus;
 use Inertia\Inertia;
 use App\Models\Settings;
 use Carbon\Carbon;
@@ -101,10 +102,48 @@ class DashboardController extends Controller
       ],
     ];
 
+    $tasksData = Task::selectRaw(
+      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year, status_id'
+    )
+      ->whereBetween('created_at', [
+        $today->copy()->subMonths(11)->startOfMonth(),
+        $today->copy()->endOfMonth(),
+      ])
+      ->groupBy('year', 'month', 'status_id')
+      ->get()
+      ->groupBy(function ($item) {
+        return Carbon::create($item->year, $item->month)->format('F Y');
+      });
+
+    $taskStatuses = TaskStatus::all();
+    $datasets = $taskStatuses->map(function ($status) use (
+      $months,
+      $tasksData
+    ) {
+      $data = $months->map(function ($month) use ($tasksData, $status) {
+        return $tasksData->has($month) &&
+          $tasksData[$month]->where('status_id', $status->id)->first()
+          ? $tasksData[$month]->where('status_id', $status->id)->first()->count
+          : 0;
+      });
+
+      return [
+        'label' => $status->name,
+        'borderColor' => $status->color ?? '#f43295',
+        'data' => $data,
+      ];
+    });
+
+    $tasksChartData = [
+      'labels' => $months,
+      'datasets' => $datasets,
+    ];
+
     return Inertia::render('Dashboard', [
       'translations' => [
         'welcome' => __('messages.welcome'),
       ],
+      'tasksChartData' => $tasksChartData,
       'doughnutData' => [
         'labels' => ['Clients', 'Projects', 'Tasks'],
         'datasets' => [

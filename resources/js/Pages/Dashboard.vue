@@ -14,6 +14,7 @@ import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   translations: Object,
+  tasksChartData: Object,
   doughnutData: Object,
   lineChartData: Object,
   settings: {
@@ -170,6 +171,12 @@ const updateSettings = () => {
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+            Tasks Statuses
+          </h3>
+          <LineChart :chart-data="tasksChartData" :options="chartOptions" />
+        </div>
+        <div class="mb-8">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
             Clients, Projects, and Tasks
           </h3>
           <DoughnutChart :chart-data="doughnutData" :options="chartOptions" />
@@ -182,7 +189,7 @@ const updateSettings = () => {
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-            Project Progress
+            Overview
           </h3>
           <LineChart :chart-data="lineChartData" :options="chartOptions" />
         </div>
