@@ -31,6 +31,12 @@ class TaskController extends Controller
       $query->whereIn('priority_id', $request->priority);
     }
 
+    if ($request->has('assigned_to') && !empty($request->assigned_to)) {
+      $query->whereHas('assignedTo', function ($q) use ($request) {
+        $q->whereIn('user_id', $request->assigned_to);
+      });
+    }
+
     $perPage = $request->input('perPage', 5);
     $tasks = $query->latest('id')->paginate($perPage);
     return Inertia::render(
@@ -56,6 +62,12 @@ class TaskController extends Controller
 
     if ($request->has('priority') && !empty($request->priority)) {
       $query->whereIn('priority_id', $request->priority);
+    }
+
+    if ($request->has('assigned_to') && !empty($request->assigned_to)) {
+      $query->whereHas('assignedTo', function ($q) use ($request) {
+        $q->whereIn('user_id', $request->assigned_to);
+      });
     }
 
     $perPage = $request->input('perPage', 3);

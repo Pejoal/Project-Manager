@@ -41,7 +41,16 @@ const form = useForm({
   perPage: 5,
   status: [],
   priority: [],
+  assigned_to: [],
 });
+
+watch(
+  () => [form.status, form.priority, form.assigned_to],
+  () => {
+    applyFilters();
+  },
+  { deep: true }
+);
 
 const applyFilters = () => {
   if (props.project) {
@@ -63,14 +72,6 @@ const fetchPage = (url) => {
     preserveScroll: true,
   });
 };
-
-watch(
-  () => [form.status, form.priority],
-  () => {
-    applyFilters();
-  },
-  { deep: true }
-);
 </script>
 
 <template>
@@ -112,7 +113,10 @@ watch(
         <PrimaryButton @click="toggleFilters"> Toggle Filters </PrimaryButton>
 
         <transition name="slide-down">
-          <main v-if="filtersVisible" class="p-2 m-1 dark:bg-gray-700 bg-slate-100 rounded-lg">
+          <main
+            v-if="filtersVisible"
+            class="p-2 m-1 dark:bg-gray-700 bg-slate-100 rounded-lg"
+          >
             <!-- Search Filter -->
             <section class="mb-4">
               <input
@@ -144,6 +148,19 @@ watch(
                 label="name"
                 multiple
                 placeholder="Select priority"
+                class="w-full text-zinc-900 border rounded-lg p-2"
+              />
+            </section>
+
+            <!-- Assigned to Filter -->
+            <section class="mb-4">
+              <vSelect
+                v-model="form.assigned_to"
+                :options="props.users"
+                :reduce="(user) => user.id"
+                label="name"
+                multiple
+                placeholder="Select Assigned to"
                 class="w-full text-zinc-900 border rounded-lg p-2"
               />
             </section>
