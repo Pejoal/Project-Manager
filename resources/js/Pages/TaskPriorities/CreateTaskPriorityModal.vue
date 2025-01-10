@@ -18,7 +18,7 @@ const props = defineProps({
 const priority = ref(props.priority);
 
 const form = useForm({
-  name: priority ? priority.name : '',
+  name: priority.value ? priority.value.name : '',
 });
 
 watch(
@@ -33,7 +33,7 @@ watch(
 
 const submit = () => {
   if (priority.value) {
-    form.put(route('task-priorities.update', props.priority.id), {
+    form.put(route('task-priorities.update', priority.value.id), {
       onSuccess: () => {
         form.reset();
         priority.value = null;
