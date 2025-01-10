@@ -204,7 +204,7 @@ const updateSettings = () => {
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
             Revenue vs Expenses
           </h3>
-          <BarChart :chart-data="barChartData" :options="chartOptions" />
+          <BarChart :chart-data="tasksStatusesData" :options="chartOptions" />
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">

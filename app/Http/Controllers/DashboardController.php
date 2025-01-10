@@ -131,6 +131,7 @@ class DashboardController extends Controller
       return [
         'label' => $status->name,
         'borderColor' => $status->color,
+        'backgroundColor' => $status->color,
         'data' => $data,
       ];
     });
