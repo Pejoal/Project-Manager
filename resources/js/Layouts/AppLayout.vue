@@ -243,6 +243,10 @@ const logout = () => {
                       Profile
                     </DropdownLink>
 
+                    <div
+                      class="border-t border-gray-200 dark:border-gray-600"
+                    />
+
                     <DropdownLink :href="route('task-statuses.index')">
                       Task Statuses
                     </DropdownLink>
@@ -250,12 +254,20 @@ const logout = () => {
                       Task Priorities
                     </DropdownLink>
 
+                    <div
+                      class="border-t border-gray-200 dark:border-gray-600"
+                    />
+
                     <DropdownLink
                       v-if="$page.props.jetstream.hasApiFeatures"
                       :href="route('api-tokens.index')"
                     >
                       API Tokens
                     </DropdownLink>
+
+                    <div
+                      class="border-t border-gray-200 dark:border-gray-600"
+                    />
 
                     <DropdownLink
                       :href="route('terms.show')"
@@ -373,6 +385,8 @@ const logout = () => {
                 Profile
               </ResponsiveNavLink>
 
+              <div class="border-t border-gray-200 dark:border-gray-600" />
+
               <ResponsiveNavLink
                 :href="route('task-statuses.index')"
                 :active="route().current('task-statuses.index')"
@@ -386,6 +400,8 @@ const logout = () => {
                 Task Priorities
               </ResponsiveNavLink>
 
+              <div class="border-t border-gray-200 dark:border-gray-600" />
+
               <ResponsiveNavLink
                 v-if="$page.props.jetstream.hasApiFeatures"
                 :href="route('api-tokens.index')"
@@ -393,6 +409,8 @@ const logout = () => {
               >
                 API Tokens
               </ResponsiveNavLink>
+
+              <div class="border-t border-gray-200 dark:border-gray-600" />
 
               <ResponsiveNavLink
                 :href="route('terms.show')"
