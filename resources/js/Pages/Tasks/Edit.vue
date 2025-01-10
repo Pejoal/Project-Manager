@@ -1,3 +1,39 @@
+<script setup>
+import { useForm, Head, Link } from '@inertiajs/vue3';
+import { defineProps } from 'vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import InputError from '@/Components/InputError.vue';
+import TextInput from '@/Components/TextInput.vue';
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
+
+const props = defineProps({
+  task: Object,
+  assigned_to: Object,
+  project: Object,
+  users: Array,
+  statuses: Array,
+  priorities: Array,
+});
+
+const form = useForm({
+  name: props.task.name,
+  description: props.task.description,
+  assigned_to: props.task.assigned_to
+    ? props.task.assigned_to.map((user) => user.id)
+    : [],
+  status_id: props.task.status_id,
+  priority_id: props.task.priority_id,
+});
+
+const submit = () => {
+  form.put(
+    route('tasks.update', { project: props.project.slug, task: props.task.id })
+  );
+};
+</script>
+
 <template>
   <Head :title="`Edit Task - ${task.name}`" />
   <AppLayout>
@@ -85,55 +121,17 @@
         <button
           type="submit"
           :disabled="form.processing"
-          class="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
+          class="px-4 py-2 mt-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
         >
           Update
         </button>
+        <Link
+          :href="route('tasks.show', { project: project.slug, task: task.id })"
+          class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          Show Task
+        </Link>
       </form>
     </div>
   </AppLayout>
 </template>
-
-<style>
-@media (prefers-color-scheme: dark) {
-  #assigned_to .vs__search {
-    color: white;
-  }
-}
-</style>
-
-<script setup>
-import { useForm, Head } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import InputError from '@/Components/InputError.vue';
-import TextInput from '@/Components/TextInput.vue';
-import vSelect from 'vue-select';
-import 'vue-select/dist/vue-select.css';
-
-const props = defineProps({
-  task: Object,
-  assigned_to: Object,
-  project: Object,
-  users: Array,
-  statuses: Array,
-  priorities: Array,
-});
-
-const form = useForm({
-  name: props.task.name,
-  description: props.task.description,
-  assigned_to: props.task.assigned_to
-    ? props.task.assigned_to.map((user) => user.id)
-    : [],
-  status_id: props.task.status_id,
-  priority_id: props.task.priority_id,
-});
-
-const submit = () => {
-  form.put(
-    route('tasks.update', { project: props.project.slug, task: props.task.id })
-  );
-};
-</script>

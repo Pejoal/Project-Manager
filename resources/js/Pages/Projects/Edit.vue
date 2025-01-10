@@ -42,17 +42,23 @@
         <button
           type="submit"
           :disabled="form.processing"
-          class="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
+          class="px-4 py-2 mt-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
         >
           Update
         </button>
+        <Link
+          :href="route('projects.show', { project: project.slug })"
+          class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          Show Project
+        </Link>
       </form>
     </div>
   </AppLayout>
 </template>
 
 <script setup>
-import { useForm, Head } from '@inertiajs/vue3';
+import { useForm, Head, Link } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';

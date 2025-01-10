@@ -53,17 +53,23 @@
         <button
           type="submit"
           :disabled="form.processing"
-          class="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
+          class="px-4 py-2 mt-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
         >
           Update
         </button>
+        <Link
+          :href="route('clients.show', { client: client.id })"
+          class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          Show Client
+        </Link>
       </form>
     </div>
   </AppLayout>
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
