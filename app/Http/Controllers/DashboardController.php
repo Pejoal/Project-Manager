@@ -26,6 +26,40 @@ class DashboardController extends Controller
       ->reverse()
       ->values(); // Reverse to get chronological order
 
+    $clientsData = Client::selectRaw(
+      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year'
+    )
+      ->whereBetween('created_at', [
+        $today->copy()->subMonths(11)->startOfMonth(),
+        $today->copy()->endOfMonth(),
+      ])
+      ->groupBy('year', 'month')
+      ->get()
+      ->keyBy(function ($item) {
+        return Carbon::create($item->year, $item->month)->format('F Y');
+      });
+
+    $clients = $months->map(function ($month) use ($clientsData) {
+      return $clientsData->has($month) ? $clientsData->get($month)->count : 0;
+    });
+
+    $projectsData = Project::selectRaw(
+      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year'
+    )
+      ->whereBetween('created_at', [
+        $today->copy()->subMonths(11)->startOfMonth(),
+        $today->copy()->endOfMonth(),
+      ])
+      ->groupBy('year', 'month')
+      ->get()
+      ->keyBy(function ($item) {
+        return Carbon::create($item->year, $item->month)->format('F Y');
+      });
+
+    $projects = $months->map(function ($month) use ($projectsData) {
+      return $projectsData->has($month) ? $projectsData->get($month)->count : 0;
+    });
+
     $tasksData = Task::selectRaw(
       'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year'
     )
@@ -46,6 +80,18 @@ class DashboardController extends Controller
     $lineChartData = [
       'labels' => $months,
       'datasets' => [
+        [
+          'label' => 'Clients',
+          'borderColor' => $settings->clients_color,
+          'data' => $clients->toArray(),
+          'fill' => false,
+        ],
+        [
+          'label' => 'Projects',
+          'borderColor' => $settings->projects_color,
+          'data' => $projects->toArray(),
+          'fill' => false,
+        ],
         [
           'label' => 'Tasks',
           'borderColor' => $settings->tasks_color,

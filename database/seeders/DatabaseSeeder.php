@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         'email' => 'test@example.com',
       ]);
 
-    for ($i = 0; $i < 10; $i++) {
+    for ($i = 0; $i < 12; $i++) {
       Client::factory()->create([
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
@@ -63,7 +63,7 @@ class DatabaseSeeder extends Seeder
 
     $projects = Project::get();
     $projects->each(function ($project) use ($taskStatuses, $taskPriorities) {
-      Task::factory(3)->create([
+      Task::factory(2)->create([
         'project_id' => $project->id,
         'status_id' => $taskStatuses[array_rand($taskStatuses)],
         'priority_id' => $taskPriorities[array_rand($taskPriorities)],
