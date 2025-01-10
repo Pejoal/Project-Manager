@@ -34,7 +34,7 @@
         <li
           v-for="task in tasks"
           :key="task.id"
-          class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
+          class="p-4 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
           <div>
             <Link
@@ -48,6 +48,7 @@
             >
               {{ task.name }} - {{ project ? project.name : task.project.name }}
             </Link>
+            <p>Status: {{ task.status.name }}</p>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
               Created at: {{ new Date(task.created_at).toLocaleString() }}
             </div>
