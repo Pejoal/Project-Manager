@@ -7,7 +7,11 @@
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <CreateTaskStatusModal :show="showModal" @close="closeModal" />
+      <CreateTaskStatusModal
+        :show="showModal"
+        @close="closeModal"
+        :status="selectedStatus"
+      />
       <button
         @click="openModal"
         class="text-blue-500 dark:text-blue-400 hover:underline"
@@ -23,7 +27,7 @@
           <p class="text-white">{{ status.name }}</p>
           <div>
             <button
-              @click="() => updateStatus(status.id)"
+              @click="() => updateStatus(status)"
               class="ml-4 text-green-500 dark:text-green-400 hover:underline"
             >
               Update
@@ -52,6 +56,7 @@ const props = defineProps({
 });
 
 const showModal = ref(false);
+const selectedStatus = ref(null);
 
 const openModal = () => {
   showModal.value = true;
@@ -71,16 +76,8 @@ const destroy = (id) => {
   }
 };
 
-const updateStatus = (id) => {
-  const newStatus = prompt('Enter new status:');
-  if (newStatus) {
-    form.name = newStatus;
-    form.put(route('task-statuses.update', id), {
-      preserveScroll: true,
-      onSuccess: () => {
-        form.reset();
-      },
-    });
-  }
+const updateStatus = (status = null) => {
+  selectedStatus.value = status;
+  openModal();
 };
 </script>

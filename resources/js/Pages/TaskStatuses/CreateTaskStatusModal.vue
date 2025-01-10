@@ -4,29 +4,50 @@ import DialogModal from '@/Components/DialogModal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { watch } from 'vue';
 
 const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
+  status: {
+    type: Object,
+    default: null,
+  },
 });
 
 const form = useForm({
-  name: '',
+  name: props.status ? props.status.name : '',
 });
 
+watch(
+  () => props.status,
+  (newStatus) => {
+    form.name = newStatus ? newStatus.name : '';
+  }
+);
+
 const submit = () => {
-  form.post(route('task-statuses.store'), {
-    onSuccess: () => {
-      form.reset();
-      emit('close');
-    },
-  });
+  if (props.status) {
+    form.put(route('task-statuses.update', props.status.id), {
+      onSuccess: () => {
+        form.reset();
+        emit('close');
+      },
+    });
+  } else {
+    form.post(route('task-statuses.store'), {
+      onSuccess: () => {
+        form.reset();
+        emit('close');
+      },
+    });
+  }
 };
 </script>
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title>Create Task Status</template>
+    <template #title>{{ status ? 'Edit' : 'Create' }} Task Status</template>
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
         <div>
@@ -55,7 +76,7 @@ const submit = () => {
         type="submit"
         class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
       >
-        Create
+        {{ status ? 'Edit' : 'Create' }}
       </button>
     </template>
   </DialogModal>
