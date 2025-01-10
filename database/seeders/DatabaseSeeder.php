@@ -38,11 +38,11 @@ class DatabaseSeeder extends Seeder
 
     for ($i = 0; $i < 10; $i++) {
       Client::factory()->create([
-        'created_at' => now()->subMonths(rand(1, 12)),
+        'created_at' => now()->subMonths(rand(0, 11)),
       ]);
 
       Project::factory()->create([
-        'created_at' => now()->subMonths(rand(1, 12)),
+        'created_at' => now()->subMonths(rand(0, 11)),
       ]);
     }
 
@@ -63,11 +63,11 @@ class DatabaseSeeder extends Seeder
 
     $projects = Project::get();
     $projects->each(function ($project) use ($taskStatuses, $taskPriorities) {
-      Task::factory(15)->create([
+      Task::factory(3)->create([
         'project_id' => $project->id,
         'status_id' => $taskStatuses[array_rand($taskStatuses)],
         'priority_id' => $taskPriorities[array_rand($taskPriorities)],
-        'created_at' => now()->subMonths(rand(1, 4)),
+        'created_at' => now()->subMonths(rand(0, 11)),
       ]);
     });
 
