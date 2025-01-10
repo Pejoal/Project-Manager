@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\Settings;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -17,40 +18,38 @@ class DashboardController extends Controller
     $tasksCount = Task::count();
     $settings = Settings::first();
 
+    $today = Carbon::now(); // Current date
+    $months = collect(range(0, 11))
+      ->map(function ($offset) use ($today) {
+        return $today->copy()->subMonths($offset)->format('F Y'); // Format as "Month Year"
+      })
+      ->reverse()
+      ->values(); // Reverse to get chronological order
+
+    $tasksData = Task::selectRaw(
+      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year'
+    )
+      ->whereBetween('created_at', [
+        $today->copy()->subMonths(11)->startOfMonth(),
+        $today->copy()->endOfMonth(),
+      ])
+      ->groupBy('year', 'month')
+      ->get()
+      ->keyBy(function ($item) {
+        return Carbon::create($item->year, $item->month)->format('F Y');
+      });
+
+    $tasks = $months->map(function ($month) use ($tasksData) {
+      return $tasksData->has($month) ? $tasksData->get($month)->count : 0;
+    });
+
     $lineChartData = [
-      'labels' => ['September', 'October', 'November', 'December', 'January'],
+      'labels' => $months,
       'datasets' => [
-        [
-          'label' => 'Clients',
-          'borderColor' => $settings->clients_color,
-          'data' => Client::selectRaw(
-            'count(*) as count, MONTH(created_at) as month'
-          )
-            ->groupBy('month')
-            ->pluck('count')
-            ->toArray(),
-          'fill' => false,
-        ],
-        [
-          'label' => 'Projects',
-          'borderColor' => $settings->projects_color,
-          'data' => Project::selectRaw(
-            'count(*) as count, MONTH(created_at) as month'
-          )
-            ->groupBy('month')
-            ->pluck('count')
-            ->toArray(),
-          'fill' => false,
-        ],
         [
           'label' => 'Tasks',
           'borderColor' => $settings->tasks_color,
-          'data' => Task::selectRaw(
-            'count(*) as count, MONTH(created_at) as month'
-          )
-            ->groupBy('month')
-            ->pluck('count')
-            ->toArray(),
+          'data' => $tasks->toArray(),
           'fill' => false,
         ],
       ],
