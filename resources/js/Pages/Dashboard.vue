@@ -11,6 +11,10 @@ import { Chart, registerables } from 'chart.js';
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 
+window.Echo.channel('chat').listen('message.sent', (data) => {
+  console.log('Message received:', data.message);
+});
+
 const props = defineProps({
   translations: Object,
   tasksStatusesData: Object,
