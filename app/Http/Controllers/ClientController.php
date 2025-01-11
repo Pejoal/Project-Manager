@@ -11,7 +11,7 @@ class ClientController extends Controller
   {
     $clients = Client::orderBy('id', 'desc')->get();
     $projects = Project::orderBy('id', 'desc')->get();
-    return Inertia::render('Clients/Index', compact(['clients','projects']));
+    return Inertia::render('Clients/Index', compact(['clients', 'projects']));
   }
 
   public function store(Request $request)
@@ -38,7 +38,9 @@ class ClientController extends Controller
 
   public function edit(Client $client)
   {
-    return Inertia::render('Clients/Edit', compact('client'));
+    $projects = Project::orderBy('id', 'desc')->get();
+    $client->load('projects');
+    return Inertia::render('Clients/Edit', compact(['client', 'projects']));
   }
 
   public function update(Request $request, Client $client)

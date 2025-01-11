@@ -1,3 +1,33 @@
+<script setup>
+import { Link, useForm } from '@inertiajs/vue3';
+import { defineProps } from 'vue';
+import { Head } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import InputError from '@/Components/InputError.vue';
+import TextInput from '@/Components/TextInput.vue';
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
+
+const props = defineProps({
+  client: Object,
+  projects: Object,
+});
+
+const form = useForm({
+  name: props.client.name,
+  email: props.client.email,
+  phone: props.client.phone,
+  projects: props.client.projects
+    ? props.client.projects.map((project) => project.id)
+    : [],
+});
+
+const submit = () => {
+  form.put(route('clients.update', props.client.id));
+};
+</script>
+
 <template>
   <Head :title="`Edit Client - ${client.name}`" />
   <AppLayout>
@@ -50,6 +80,21 @@
           />
           <InputError class="mt-2" :message="form.errors.phone" />
         </div>
+        <div class="mb-4">
+          <InputLabel for="projects" value="Projects" />
+          <vSelect
+            id="projects"
+            v-model="form.projects"
+            :options="props.projects"
+            :reduce="(project) => project.id"
+            label="name"
+            multiple
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+          <InputError class="mt-2" :message="form.errors.projects" />
+        </div>
         <button
           type="submit"
           :disabled="form.processing"
@@ -67,27 +112,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { Link, useForm } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
-import { Head } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import InputError from '@/Components/InputError.vue';
-import TextInput from '@/Components/TextInput.vue';
-
-const props = defineProps({
-  client: Object,
-});
-
-const form = useForm({
-  name: props.client.name,
-  email: props.client.email,
-  phone: props.client.phone,
-});
-
-const submit = () => {
-  form.put(route('clients.update', props.client.id));
-};
-</script>
