@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>New Task Assigned</title>
+    <title>{{ $isNew ? 'New Task Assigned' : 'Task Updated' }}</title>
 </head>
 <body>
-    <h1>New Task Assigned</h1>
+    <h1>{{ $isNew ? 'New Task Assigned' : 'Task Updated' }}</h1>
     <p>Hello {{ $user->name }},</p>
-    <p>You have been assigned a new task: <strong>{{ $task->name }}</strong></p>
+    <p>
+    @if($isNew)
+      You have been assigned a new task: <strong>{{ $task->name }}</strong>
+      @else
+      Task: <strong>{{ $task->name }}</strong> has been updated
+    @endif
+    </p>
     <p>Description: {{ $task->description }}</p>
     <p>Thank you!</p>
 </body>

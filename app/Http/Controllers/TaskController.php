@@ -98,7 +98,7 @@ class TaskController extends Controller
     if ($request->has('assigned_to')) {
       $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
       foreach ($assignedUsers as $user) {
-        Mail::to($user->email)->send(new TaskAssigned($task, $user));
+        Mail::to($user->email)->send(new TaskAssigned($task, $user, true));
       }
     }
 
@@ -141,7 +141,7 @@ class TaskController extends Controller
     if ($request->has('assigned_to')) {
       $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
       foreach ($assignedUsers as $user) {
-        Mail::to($user->email)->send(new TaskAssigned($task, $user));
+        Mail::to($user->email)->send(new TaskAssigned($task, $user, false));
       }
     }
 
