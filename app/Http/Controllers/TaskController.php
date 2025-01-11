@@ -67,7 +67,7 @@ class TaskController extends Controller
     $query = $project->tasks()->with('status', 'priority', 'assignedTo');
     $this->applyFilters($query, $request);
 
-    $perPage = $request->input('perPage', 3);
+    $perPage = $request->input('perPage', 5);
     $tasks = $query->latest('id')->paginate($perPage);
 
     return Inertia::render(
