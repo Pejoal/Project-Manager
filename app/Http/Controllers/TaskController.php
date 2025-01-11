@@ -10,14 +10,8 @@ use Inertia\Inertia;
 
 class TaskController extends Controller
 {
-  public function all(Request $request)
+  private function applyFilters($query, Request $request)
   {
-    $users = User::orderBy('id', 'desc')->get();
-    $projects = Project::orderBy('id', 'desc')->get();
-    $statuses = TaskStatus::orderBy('id', 'desc')->get();
-    $priorities = TaskPriority::orderBy('id', 'desc')->get();
-
-    $query = Task::with('project', 'status', 'priority', 'assignedTo');
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
       $query->where('name', 'like', "%{$search}%");
@@ -45,6 +39,17 @@ class TaskController extends Controller
         $q->where('user_id', auth()->user()->id);
       });
     }
+  }
+
+  public function all(Request $request)
+  {
+    $users = User::orderBy('id', 'desc')->get();
+    $projects = Project::orderBy('id', 'desc')->get();
+    $statuses = TaskStatus::orderBy('id', 'desc')->get();
+    $priorities = TaskPriority::orderBy('id', 'desc')->get();
+
+    $query = Task::with('project', 'status', 'priority', 'assignedTo');
+    $this->applyFilters($query, $request);
 
     $perPage = $request->input('perPage', 5);
     $tasks = $query->latest('id')->paginate($perPage);
@@ -59,25 +64,8 @@ class TaskController extends Controller
     $users = User::orderBy('id', 'desc')->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
-    $query = $project->tasks()->with('status', 'priority', 'assignedTo2');
-    if ($request->has('search') && !empty($request->search)) {
-      $search = $request->search;
-      $query->where('name', 'like', "%{$search}%");
-    }
-
-    if ($request->has('status') && !empty($request->status)) {
-      $query->whereIn('status_id', $request->status);
-    }
-
-    if ($request->has('priority') && !empty($request->priority)) {
-      $query->whereIn('priority_id', $request->priority);
-    }
-
-    if ($request->has('assigned_to') && !empty($request->assigned_to)) {
-      $query->whereHas('assignedTo', function ($q) use ($request) {
-        $q->whereIn('user_id', $request->assigned_to);
-      });
-    }
+    $query = $project->tasks()->with('status', 'priority', 'assignedTo');
+    $this->applyFilters($query, $request);
 
     $perPage = $request->input('perPage', 3);
     $tasks = $query->latest('id')->paginate($perPage);
