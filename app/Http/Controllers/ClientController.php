@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -9,7 +10,8 @@ class ClientController extends Controller
   public function index()
   {
     $clients = Client::orderBy('id', 'desc')->get();
-    return Inertia::render('Clients/Index', compact('clients'));
+    $projects = Project::orderBy('id', 'desc')->get();
+    return Inertia::render('Clients/Index', compact(['clients','projects']));
   }
 
   public function store(Request $request)
@@ -18,9 +20,12 @@ class ClientController extends Controller
       'name' => 'required|string|max:255',
       'email' => 'required|email|unique:clients,email',
       'phone' => 'nullable|string|max:20',
+      'projects' => 'nullable|array',
+      'projects.*' => 'exists:projects,id',
     ]);
 
-    Client::create($request->all());
+    $client = Client::create($request->except(['projects']));
+    $client->projects()->sync($request->projects);
 
     return redirect()->route('clients.index');
   }
@@ -42,9 +47,12 @@ class ClientController extends Controller
       'name' => 'required|string|max:255',
       'email' => 'required|email|unique:clients,email,' . $client->id,
       'phone' => 'nullable|string|max:20',
+      'projects' => 'nullable|array',
+      'projects.*' => 'exists:projects,id',
     ]);
 
-    $client->update($request->all());
+    $client->update($request->except(['projects']));
+    $client->projects()->sync($request->projects);
 
     return redirect()->route('clients.index');
   }

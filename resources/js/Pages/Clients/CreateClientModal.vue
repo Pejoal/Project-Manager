@@ -4,16 +4,23 @@ import DialogModal from '@/Components/DialogModal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
 
 const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
+  projects: {
+    type: Array,
+    default: [],
+  },
 });
 
 const form = useForm({
   name: '',
   email: '',
   phone: '',
+  projects: [],
 });
 
 const submit = () => {
@@ -62,6 +69,21 @@ const submit = () => {
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
           <InputError class="mt-2" :message="form.errors.phone" />
+        </div>
+        <div>
+          <InputLabel for="projects" value="Projects" />
+          <vSelect
+            id="projects"
+            v-model="form.projects"
+            :options="props.projects"
+            :reduce="(project) => project.id"
+            label="name"
+            multiple
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+          <InputError class="mt-2" :message="form.errors.projects" />
         </div>
       </form>
     </template>

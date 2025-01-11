@@ -1,3 +1,25 @@
+<script setup>
+import { Link, Head } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import CreateClientModal from './CreateClientModal.vue';
+import { ref } from 'vue';
+
+const showModal = ref(false);
+
+const openModal = () => {
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
+defineProps({
+  clients: Array,
+  projects: Array,
+});
+</script>
+
 <template>
   <Head title="Clients" />
   <AppLayout>
@@ -13,7 +35,11 @@
       >
         Add New Client
       </button>
-      <CreateClientModal :show="showModal" @close="closeModal" />
+      <CreateClientModal
+        :show="showModal"
+        @close="closeModal"
+        :projects="projects"
+      />
       <ul class="my-2 space-y-4">
         <li
           v-for="client in clients"
@@ -39,24 +65,3 @@
     </section>
   </AppLayout>
 </template>
-
-<script setup>
-import { Link, Head } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import CreateClientModal from './CreateClientModal.vue';
-import { ref } from 'vue';
-
-const showModal = ref(false);
-
-const openModal = () => {
-  showModal.value = true;
-};
-
-const closeModal = () => {
-  showModal.value = false;
-};
-
-defineProps({
-  clients: Array,
-});
-</script>
