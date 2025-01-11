@@ -6,6 +6,8 @@ import CreateTaskModal from './CreateTaskModal.vue';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
   users: Array,
@@ -37,6 +39,7 @@ const toggleFilters = () => {
 };
 
 const form = useForm({
+  assigned_to_me: false,
   search: '',
   perPage: 5,
   status: [],
@@ -115,10 +118,10 @@ const fetchPage = (url) => {
         <transition name="slide-down">
           <main
             v-if="filtersVisible"
-            class="p-2 m-1 dark:bg-gray-700 bg-slate-100 rounded-lg"
+            class="p-2 m-1 dark:bg-gray-700 bg-slate-100 rounded-lg space-y-2"
           >
             <!-- Search Filter -->
-            <section class="mb-4">
+            <section>
               <input
                 v-model="form.search"
                 @input="applyFilters"
@@ -128,7 +131,7 @@ const fetchPage = (url) => {
               />
             </section>
             <!-- Status Filter -->
-            <section class="mb-4">
+            <section>
               <vSelect
                 v-model="form.status"
                 :options="props.statuses"
@@ -140,7 +143,7 @@ const fetchPage = (url) => {
               />
             </section>
             <!-- Priority Filter -->
-            <section class="mb-4">
+            <section>
               <vSelect
                 v-model="form.priority"
                 :options="props.priorities"
@@ -153,7 +156,7 @@ const fetchPage = (url) => {
             </section>
 
             <!-- Assigned to Filter -->
-            <section class="mb-4">
+            <section>
               <vSelect
                 v-model="form.assigned_to"
                 :options="props.users"
@@ -162,6 +165,19 @@ const fetchPage = (url) => {
                 multiple
                 placeholder="Select Assigned to"
                 class="w-full text-zinc-900 border rounded-lg p-2"
+              />
+            </section>
+
+            <section class="flex items-center">
+              <InputLabel for="assigned_to_me" value="Assigned to me" />
+
+              <input
+                id="assigned_to_me"
+                v-model="form.assigned_to_me"
+                type="checkbox"
+                class="ml-4 block w-6 h-6 rounded-lg transition duration-150 ease-in-out"
+                @change="applyFilters"
+                autofocus
               />
             </section>
           </main>
@@ -197,6 +213,16 @@ const fetchPage = (url) => {
                 <span :style="{ color: task.priority.color }">{{
                   task.priority.name
                 }}</span>
+              </p>
+              <p class="mb-2 text-gray-700 dark:text-gray-300">
+                assigned to:
+                <span
+                  v-for="(assigned_to_user, index) in task.assigned_to"
+                  :key="assigned_to_user.id"
+                >
+                  {{ assigned_to_user.name
+                  }}<span v-if="index < task.assigned_to.length - 1">, </span>
+                </span>
               </p>
             </div>
             <div class="text-gray-500 dark:text-gray-400 text-sm">

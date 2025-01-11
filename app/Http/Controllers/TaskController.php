@@ -17,7 +17,7 @@ class TaskController extends Controller
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
 
-    $query = Task::with('project', 'status', 'priority');
+    $query = Task::with('project', 'status', 'priority', 'assignedTo');
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
       $query->where('name', 'like', "%{$search}%");
@@ -37,6 +37,15 @@ class TaskController extends Controller
       });
     }
 
+    if (
+      $request->has('assigned_to_me') &&
+      $request->assigned_to_me === 'true'
+    ) {
+      $query->whereHas('assignedTo', function ($q) use ($request) {
+        $q->where('user_id', auth()->user()->id);
+      });
+    }
+
     $perPage = $request->input('perPage', 5);
     $tasks = $query->latest('id')->paginate($perPage);
     return Inertia::render(
@@ -50,7 +59,7 @@ class TaskController extends Controller
     $users = User::orderBy('id', 'desc')->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
-    $query = $project->tasks()->with('status', 'priority');
+    $query = $project->tasks()->with('status', 'priority', 'assignedTo2');
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
       $query->where('name', 'like', "%{$search}%");
