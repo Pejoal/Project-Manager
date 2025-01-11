@@ -17,30 +17,6 @@ onMounted(() => {
   });
 });
 
-// Request permission for notifications
-if (Notification.permission !== 'granted') {
-  Notification.requestPermission().then((permission) => {
-    if (permission === 'granted') {
-      console.log('Notification permission granted.');
-    }
-  });
-}
-
-// Send a native notification
-function sendNotification(title, options) {
-  if (Notification.permission === 'granted') {
-    new Notification(title, options);
-  } else {
-    console.log('Notification permission not granted.');
-  }
-}
-
-// Example: Send a notification
-sendNotification('New Message', {
-  body: 'You have a new message!',
-  icon: '/path/to/icon.png', // Optional: Add an icon
-});
-
 const props = defineProps({
   translations: Object,
   tasksStatusesData: Object,
