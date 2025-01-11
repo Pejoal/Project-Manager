@@ -9,37 +9,23 @@ The Company Management System App is a comprehensive solution designed to stream
 ## Features
 
 - **Client Management**
-
-  - View all clients
-  - Add new clients
+  - View, add, edit, and delete clients
   - View client details
-  - Edit client information
-  - Delete clients
 
 - **Project Management**
-
-  - View all projects
-  - Create new projects
+  - View, create, edit, and delete projects
   - View project details
-  - Edit project information
-  - Delete projects
 
 - **Task Management**
-
-  - View all tasks within a project
-  - Add new tasks to a project
+  - View, add, edit, and delete tasks within a project
   - View task details
-  - Edit task information
-  - Delete tasks
 
 - **Localization**
-
   - Multi-language support
   - Locale-based URL generation
   - Session-based locale management
 
 - **User Authentication**
-
   - Secure login and registration
   - Email verification
   - Session management
@@ -48,15 +34,6 @@ The Company Management System App is a comprehensive solution designed to stream
 - **Dashboard**
   - Overview of key metrics and information
   - Access to translations and localized content
-
----
-
-## Technologies Used
-
-- **Backend**: Laravel
-- **Frontend**: Inertia.js, Vue.js
-- **Localization**: Mcamara Laravel Localization
-- **Authentication**: Laravel Sanctum, Jetstream
 
 ---
 
@@ -69,16 +46,19 @@ The Company Management System App is a comprehensive solution designed to stream
 ## Installation
 
 Clone the repository:
+
 ```shell
 git clone git@github.com:Pejoal/manager.git
 ```
 
 Navigate to the project directory:
+
 ```shell
 cd manager
 ```
 
 Copy the example environment file and configure the environment variables:
+
 ```shell
 cp .env.example .env
 ```
@@ -88,36 +68,43 @@ cp .env.example .env
 ### Back-End
 
 Install Laravel Sail as a development dependency:
+
 ```shell
 composer require laravel/sail --dev --ignore-platform-reqs
 ```
 
 Create a Sail alias:
+
 ```shell
 alias sail="./vendor/bin/sail"
 ```
 
 Start the Sail environment:
+
 ```shell
 sail up -d
 ```
 
 Install PHP dependencies:
+
 ```shell
 sail composer install --ignore-platform-reqs
 ```
 
 Create a symbolic link for storage:
+
 ```shell
 sail artisan storage:link
 ```
 
 Generate the application key:
+
 ```shell
 sail artisan key:generate
 ```
 
 Run database migrations and seed the database:
+
 ```shell
 sail artisan migrate:fresh --seed
 ```
@@ -125,13 +112,19 @@ sail artisan migrate:fresh --seed
 ### Front-End
 
 Install Node.js dependencies:
+
 ```shell
 sail npm install
 ```
 
 Compile the front-end assets:
+
 ```shell
 sail npm run dev
+```
+
+```shell
+sail npm run build
 ```
 
 ### Database
@@ -145,14 +138,14 @@ sail npm run dev
 - Node js ( V 19.1.0 )
 - Docker ( Compose )
 
-### Stack
+---
 
-- PHP ( 8.2 )
-- Laravel 11 ( Sail )
-- MySQL ( MariaDB )
-- Inertia js
-- Vue 3 ( Composition API )
-- Tailwind CSS
+### Technologies Used
+
+- **Backend**: Laravel
+- **Frontend**: Inertia.js, Vue.js
+- **Localization**: Mcamara Laravel Localization
+- **Authentication**: Laravel Sanctum, Jetstream
 
 ---
 
