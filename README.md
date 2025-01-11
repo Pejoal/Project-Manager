@@ -9,31 +9,82 @@ The Company Management System App is a comprehensive solution designed to stream
 ## Features
 
 - **Client Management**
+
   - View, add, edit, and delete clients
   - View client details
 
 - **Project Management**
+
   - View, create, edit, and delete projects
   - View project details
 
 - **Task Management**
+
   - View, add, edit, and delete tasks within a project
   - View task details
+  - Update task status
+  - Update task priority
 
 - **Localization**
+
   - Multi-language support
   - Locale-based URL generation
   - Session-based locale management
 
 - **User Authentication**
+
   - Secure login and registration
   - Email verification
   - Session management
   - Two-Factor Authentication
 
 - **Dashboard**
+
   - Overview of key metrics and information
   - Access to translations and localized content
+  - Analytics and Reports: Display key metrics and reports such as employee performance, project progress, and financial summaries
+  - Customizable Widgets: Allow users to customize their dashboard with widgets that display relevant information
+
+- **Settings Management**
+
+  - Update application settings
+  - Manage user preferences
+
+- **Notifications**
+
+  - Real-time notifications
+  - Email notifications
+
+- **Role-Based Access Control**
+
+  - Define roles and permissions
+  - Restrict access to certain features based on user roles
+
+- **API Integration**
+
+  - RESTful API endpoints
+  - API authentication and authorization
+
+- **Responsive Design**
+
+  - Mobile-friendly interface
+  - Adaptive layout for different screen sizes
+
+- **Team Management**
+
+  - Create and manage teams
+  - Invite users to teams
+  - Assign roles within teams
+
+- **Profile Management**
+
+  - Update profile information
+  - Upload profile photos
+
+- **Security Features**
+  - Password reset functionality
+  - Password confirmation for sensitive actions
+  - CSRF protection
 
 ---
 
