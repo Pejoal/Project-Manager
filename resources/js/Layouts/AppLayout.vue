@@ -83,8 +83,6 @@ const logout = () => {
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-              <Locales />
-
               <div class="ms-3 relative">
                 <!-- Teams Dropdown -->
                 <Dropdown
@@ -291,6 +289,8 @@ const logout = () => {
                     <form @submit.prevent="logout">
                       <DropdownLink as="button"> Log Out </DropdownLink>
                     </form>
+
+                    <Locales />
                   </template>
                 </Dropdown>
               </div>
@@ -449,6 +449,8 @@ const logout = () => {
               <form method="POST" @submit.prevent="logout">
                 <ResponsiveNavLink as="button"> Log Out </ResponsiveNavLink>
               </form>
+
+              <Locales />
 
               <!-- Team Management -->
               <template v-if="$page.props.jetstream.hasTeamFeatures">

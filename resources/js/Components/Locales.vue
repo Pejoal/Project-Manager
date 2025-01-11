@@ -9,7 +9,7 @@ const toggleDropdown = () => {
 </script>
 
 <template>
-  <div class="relative inline-block text-left">
+  <div class="relative block text-left">
     <div>
       <button
         @click="toggleDropdown"
