@@ -7,6 +7,8 @@ use App\Models\TaskStatus;
 use App\Models\TaskPriority;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TaskAssigned;
 
 class TaskController extends Controller
 {
@@ -92,6 +94,14 @@ class TaskController extends Controller
       ->create($request->except(['assigned_to', 'project_slug']));
     $task->assignedTo()->sync($request->assigned_to);
 
+    // Send email notifications
+    if ($request->has('assigned_to')) {
+      $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
+      foreach ($assignedUsers as $user) {
+        Mail::to($user->email)->send(new TaskAssigned($task, $user));
+      }
+    }
+
     return redirect()->route('tasks.index', $project);
   }
 
@@ -126,6 +136,14 @@ class TaskController extends Controller
 
     $task->update($request->except('assigned_to'));
     $task->assignedTo()->sync($request->assigned_to);
+
+    // Send email notifications
+    if ($request->has('assigned_to')) {
+      $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
+      foreach ($assignedUsers as $user) {
+        Mail::to($user->email)->send(new TaskAssigned($task, $user));
+      }
+    }
 
     return redirect()->route('tasks.index', $project);
   }
