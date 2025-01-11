@@ -15,6 +15,13 @@
           Description: {{ project.description }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Clients:
+          <span v-for="(client, index) in project.clients" :key="client.id">
+            {{ client.name
+            }}<span v-if="index < project.clients.length - 1">, </span>
+          </span>
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
           Created at: {{ new Date(project.created_at).toLocaleString() }}
         </p>
       </div>
