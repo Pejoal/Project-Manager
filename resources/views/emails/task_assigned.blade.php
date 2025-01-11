@@ -14,6 +14,8 @@
     @endif
     </p>
     <p>Description: {{ $task->description }}</p>
+    <p>Status: <span style="color: {{ $task->status->color }}">{{ $task->status->name }}</span></p>
+    <p>Priority: <span style="color: {{ $task->priority->color }}">{{ $task->priority->name }}</span></p>
     <p>Thank you!</p>
 </body>
 </html>
