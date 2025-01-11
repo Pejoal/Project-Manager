@@ -9,7 +9,7 @@ class ClientController extends Controller
 {
   public function index()
   {
-    $clients = Client::orderBy('id', 'desc')->get();
+    $clients = Client::with('projects')->orderBy('id', 'desc')->get();
     $projects = Project::orderBy('id', 'desc')->get();
     return Inertia::render('Clients/Index', compact(['clients', 'projects']));
   }

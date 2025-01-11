@@ -53,6 +53,16 @@ defineProps({
             >
               {{ client.name }}
             </Link>
+            <p class="mb-2 text-gray-700 dark:text-gray-300">
+              Projects:
+              <span
+                v-for="(project, index) in client.projects"
+                :key="project.id"
+              >
+                {{ project.name
+                }}<span v-if="index < client.projects.length - 1">, </span>
+              </span>
+            </p>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
               Created At: {{ new Date(client.created_at).toLocaleString() }}
             </div>

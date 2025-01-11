@@ -1,3 +1,13 @@
+<script setup>
+import { defineProps } from 'vue';
+import { Link, Head } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+
+const props = defineProps({
+  projects: Array,
+});
+</script>
+
 <template>
   <Head title="Projects" />
   <AppLayout>
@@ -26,6 +36,13 @@
             >
               {{ project.name }}
             </Link>
+            <p class="mb-2 text-gray-700 dark:text-gray-300">
+              Clients:
+              <span v-for="(client, index) in project.clients" :key="client.id">
+                {{ client.name
+                }}<span v-if="index < project.clients.length - 1">, </span>
+              </span>
+            </p>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
               Number of Tasks: {{ project.tasks_count }}
             </div>
@@ -41,13 +58,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { defineProps } from 'vue';
-import { Link, Head } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-const props = defineProps({
-  projects: Array,
-});
-</script>
