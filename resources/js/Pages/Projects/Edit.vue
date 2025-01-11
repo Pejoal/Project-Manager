@@ -1,3 +1,31 @@
+<script setup>
+import { useForm, Head, Link } from '@inertiajs/vue3';
+import { defineProps } from 'vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import InputError from '@/Components/InputError.vue';
+import TextInput from '@/Components/TextInput.vue';
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
+
+const props = defineProps({
+  project: Object,
+  clients: Object,
+});
+
+const form = useForm({
+  name: props.project.name,
+  description: props.project.description,
+  clients: props.project.clients
+    ? props.project.clients.map((client) => client.id)
+    : [],
+});
+
+const submit = () => {
+  form.put(route('projects.update', { project: props.project.slug }));
+};
+</script>
+
 <template>
   <Head :title="`Edit Project - ${project.name}`" />
   <AppLayout>
@@ -39,6 +67,21 @@
           />
           <InputError class="mt-2" :message="form.errors.description" />
         </div>
+        <div class="mb-4">
+          <InputLabel for="clients" value="Clients" />
+          <vSelect
+            id="clients"
+            v-model="form.clients"
+            :options="props.clients"
+            :reduce="(client) => client.id"
+            label="name"
+            multiple
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+          <InputError class="mt-2" :message="form.errors.clients" />
+        </div>
         <button
           type="submit"
           :disabled="form.processing"
@@ -56,25 +99,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { useForm, Head, Link } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import InputError from '@/Components/InputError.vue';
-import TextInput from '@/Components/TextInput.vue';
-
-const props = defineProps({
-  project: Object,
-});
-
-const form = useForm({
-  name: props.project.name,
-  description: props.project.description,
-});
-
-const submit = () => {
-  form.put(route('projects.update', { project: props.project.slug }));
-};
-</script>
