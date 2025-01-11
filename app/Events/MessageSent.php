@@ -7,12 +7,13 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent implements ShouldBroadcast
+class MessageSent implements ShouldBroadcastNow
 {
-  use InteractsWithSockets, SerializesModels;
+  use Dispatchable, InteractsWithSockets, SerializesModels;
 
   public $message;
 
@@ -23,11 +24,11 @@ class MessageSent implements ShouldBroadcast
 
   public function broadcastOn()
   {
-    return new Channel('chat');
+    return [new Channel('chat')];
   }
 
-  public function broadcastAs()
-  {
-    return 'message.sent';
-  }
+  // public function broadcastAs()
+  // {
+  //   return 'message.sent';
+  // }
 }
