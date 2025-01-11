@@ -95,12 +95,12 @@ class TaskController extends Controller
     $task->assignedTo()->sync($request->assigned_to);
 
     // Send email notifications
-    if ($request->has('assigned_to')) {
-      $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
-      foreach ($assignedUsers as $user) {
-        Mail::to($user->email)->send(new TaskAssigned($task, $user, true));
-      }
-    }
+    // if ($request->has('assigned_to')) {
+    //   $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
+    //   foreach ($assignedUsers as $user) {
+    //     Mail::to($user->email)->send(new TaskAssigned($task, $user, true));
+    //   }
+    // }
 
     return redirect()->route('tasks.index', $project);
   }
@@ -138,12 +138,12 @@ class TaskController extends Controller
     $task->assignedTo()->sync($request->assigned_to);
 
     // Send email notifications
-    if ($request->has('assigned_to')) {
-      $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
-      foreach ($assignedUsers as $user) {
-        Mail::to($user->email)->send(new TaskAssigned($task, $user, false));
-      }
-    }
+    // if ($request->has('assigned_to')) {
+    //   $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
+    //   foreach ($assignedUsers as $user) {
+    //     Mail::to($user->email)->send(new TaskAssigned($task, $user, false));
+    //   }
+    // }
 
     return redirect()->route('tasks.index', $project);
   }
