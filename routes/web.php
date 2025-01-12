@@ -13,16 +13,6 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-
-// Test route to broadcast a message
-Route::get('/broadcast-test', function () {
-  // Broadcast a message
-  event(new MessageSent('Hello from Laravel Reverb!'));
-
-  return 'Message broadcasted!';
-});
-
-
 Route::group(
   [
     'prefix' => LaravelLocalization::setLocale(),

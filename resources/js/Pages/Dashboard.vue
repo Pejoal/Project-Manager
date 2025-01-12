@@ -8,14 +8,8 @@ import {
   PieChart,
 } from 'vue-chart-3';
 import { Chart, registerables } from 'chart.js';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-
-onMounted(() => {
-  window.Echo.channel('chat').listen('MessageSent', (data) => {
-    console.log('Message received:', data.message);
-  });
-});
 
 const props = defineProps({
   translations: Object,

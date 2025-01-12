@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
@@ -11,6 +11,41 @@ import Locales from '@/Components/Locales.vue';
 
 defineProps({
   title: String,
+});
+
+onMounted(() => {
+  const channel = window.Echo.channel('tasks');
+  // Request permission for notifications
+  if (Notification?.permission !== 'granted') {
+    Notification?.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+      }
+    });
+  }
+
+  // Send a native notification
+  function sendNotification(title, options) {
+    if (Notification?.permission === 'granted') {
+      new Notification(title, options);
+    } else {
+      console.log('Notification permission not granted.');
+    }
+  }
+
+  channel.listen('AssignedToTaskCreated', (data) => {
+    
+    // Example: Send a notification
+    sendNotification('New Task', {
+      body: `You have a new task to work on! Task ID: #${data.message}`,
+      icon: '/path/to/icon.png', // Optional: Add an icon
+    });
+  });
+
+  onUnmounted(() => {
+    channel.stopListening('MessageSent');
+    window.Echo.leaveChannel('chat');
+  });
 });
 
 const showingNavigationDropdown = ref(false);

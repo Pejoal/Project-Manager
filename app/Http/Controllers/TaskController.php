@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Events\AssignedToTaskCreated;
 use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
@@ -101,6 +102,15 @@ class TaskController extends Controller
     //     Mail::to($user->email)->send(new TaskAssigned($task, $user, true));
     //   }
     // }
+
+    if ($request->has('assigned_to')) {
+      $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
+      foreach ($assignedUsers as $user) {
+        if ($user->id === auth()->user()->id) {
+          event(new AssignedToTaskCreated($task->id));
+        }
+      }
+    }
 
     return redirect()->route('tasks.index', $project);
   }
