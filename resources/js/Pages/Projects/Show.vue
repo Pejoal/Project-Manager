@@ -22,6 +22,12 @@
           </span>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Status: {{ project.status?.name }}
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Priority: {{ project.priority?.name }}
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
           Created at: {{ new Date(project.created_at).toLocaleString() }}
         </p>
       </div>
