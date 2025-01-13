@@ -53,4 +53,13 @@ return [
   'done' => 'Fertig.',
   'save' => 'Speichern.',
   'saved' => 'Gespeichert.',
+  'photo' => 'Foto',
+  'select_new_photo' => 'Neues Foto auswählen',
+  'remove_photo' => 'Foto entfernen',
+  'name' => 'Name',
+  'username' => 'Benutzername',
+  'email' => 'E-Mail',
+  'email_unverified' => 'Ihre E-Mail-Adresse ist nicht verifiziert.',
+  'click_to_resend' => 'Klicken Sie hier, um die Bestätigungs-E-Mail erneut zu senden.',
+  'verification_link_sent' => 'Ein neuer Bestätigungslink wurde an Ihre E-Mail-Adresse gesendet.',
 ];
