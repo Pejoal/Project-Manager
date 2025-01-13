@@ -125,7 +125,7 @@ const closeModal = () => {
         </PrimaryButton>
 
         <ActionMessage :on="form.recentlySuccessful" class="ms-3">
-          Done.
+          {{ translations.done }}
         </ActionMessage>
       </div>
 

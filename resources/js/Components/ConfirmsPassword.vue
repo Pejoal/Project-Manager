@@ -8,20 +8,13 @@ import TextInput from './TextInput.vue';
 
 const emit = defineEmits(['confirmed']);
 
-defineProps({
-  title: {
-    type: String,
-    default: 'Confirm Password',
-  },
-  content: {
-    type: String,
-    default: 'For your security, please confirm your password to continue.',
-  },
-  button: {
-    type: String,
-    default: 'Confirm',
-  },
+const props = defineProps({
+  translations: Object,
 });
+
+const title = ref(props.translations.confirm_password);
+const content = ref(props.translations.please_confirm_your_password);
+const button = ref(props.translations.confirm);
 
 const confirmingPassword = ref(false);
 

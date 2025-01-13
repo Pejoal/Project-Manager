@@ -44,9 +44,13 @@ return [
   'current_password' => 'Current Password',
   'new_password' => 'New Password',
   'confirm_password' => 'Confirm Password',
+  'please_confirm_your_password' => 'For your security, please confirm your password to continue.',
   'log_out_other_browser_sessions' => 'Log Out Other Browser Sessions',
   'log_out_other_browser_sessions_description' =>
     'Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.',
   'delete_account_confirmation' =>
     'Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.',
+  'done' => 'Done.',
+  'save' => 'Save.',
+  'saved' => 'Saved.',
 ];

@@ -49,4 +49,8 @@ return [
     'Bitte geben Sie Ihr Passwort ein, um zu bestätigen, dass Sie sich von Ihren anderen Browsersitzungen auf allen Ihren Geräten abmelden möchten.',
   'delete_account_confirmation' =>
     'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Sobald Ihr Konto gelöscht ist, werden alle seine Ressourcen und Daten dauerhaft gelöscht. Bitte geben Sie Ihr Passwort ein, um zu bestätigen, dass Sie Ihr Konto dauerhaft löschen möchten.',
+  'please_confirm_your_password' => 'Zu Ihrer Sicherheit bestätigen Sie bitte Ihr Passwort, um fortzufahren.',
+  'done' => 'Fertig.',
+  'save' => 'Speichern.',
+  'saved' => 'Gespeichert.',
 ];

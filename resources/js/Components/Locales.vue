@@ -12,7 +12,7 @@ const toggleDropdown = () => {
   <div class="relative block text-left">
     <div>
       <button
-        @click="toggleDropdown"
+        @click="() => (isOpen = true)"
         type="button"
         class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         id="options-menu"
@@ -45,7 +45,11 @@ const toggleDropdown = () => {
     >
       <div class="py-1" role="none">
         <ul>
-          <li v-for="locale in $page.props.locales" :key="locale.code">
+          <li
+            v-for="locale in $page.props.locales"
+            :key="locale.code"
+            @click="() => (isOpen = false)"
+          >
             <a
               :href="locale.url"
               :hreflang="locale.code"

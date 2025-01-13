@@ -64,9 +64,13 @@ class UserProfileController extends Controller
         'current_password' => __('messages.current_password'),
         'new_password' => __('messages.new_password'),
         'confirm_password' => __('messages.confirm_password'),
+        'please_confirm_your_password' => __('messages.please_confirm_your_password'),
         'log_out_other_browser_sessions' => __('messages.log_out_other_browser_sessions'),
         'log_out_other_browser_sessions_description' => __('messages.log_out_other_browser_sessions_description'),
         'delete_account_confirmation' => __('messages.delete_account_confirmation'),
+        'done' => __('messages.done'),
+        'save' => __('messages.save'),
+        'saved' => __('messages.saved'),
       ],
     ]);
   }
