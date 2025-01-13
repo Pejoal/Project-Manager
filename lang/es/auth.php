@@ -1,3 +1,4 @@
+
 <?php
 
 return [
@@ -12,7 +13,7 @@ return [
     |
     */
 
-  'failed' => 'Diese Anmeldeinformationen stimmen nicht mit unseren Aufzeichnungen überein.',
-  'password' => 'Das angegebene Passwort ist falsch.',
-  'throttle' => 'Zu viele Anmeldeversuche. Bitte versuchen Sie es in :seconds Sekunden erneut.',
+  'failed' => 'Estas credenciales no coinciden con nuestros registros.',
+  'password' => 'La contraseña proporcionada es incorrecta.',
+  'throttle' => 'Demasiados intentos de inicio de sesión. Por favor intenta nuevamente en :seconds segundos.',
 ];
