@@ -60,31 +60,6 @@ Route::group(
         'updateSettings',
       ]);
 
-      Route::put('/user/profile-information', function (Request $request) {
-        $request->validate([
-          'name' => ['required', 'string', 'max:255'],
-          'username' => [
-            'required',
-            'string',
-            'max:255',
-            'unique:users,username,' . $request->user()->id,
-          ],
-          'email' => [
-            'required',
-            'string',
-            'email',
-            'max:255',
-            'unique:users,email,' . $request->user()->id,
-          ],
-        ]);
-
-        $request->user()->update([
-          'name' => $request->name,
-          'username' => $request->username,
-          'email' => $request->email,
-        ]);
-      })->name('user-profile-information.update');
-
       Route::get('/dashboard', [DashboardController::class, 'show'])->name(
         'dashboard'
       );
