@@ -12,6 +12,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Illuminate\Http\Request;
 
 Route::group(
   [
@@ -58,6 +59,32 @@ Route::group(
         SettingsController::class,
         'updateSettings',
       ]);
+
+      Route::put('/user/profile-information', function (Request $request) {
+        $request->validate([
+          'name' => ['required', 'string', 'max:255'],
+          'username' => [
+            'required',
+            'string',
+            'max:255',
+            'unique:users,username,' . $request->user()->id,
+          ],
+          'email' => [
+            'required',
+            'string',
+            'email',
+            'max:255',
+            'unique:users,email,' . $request->user()->id,
+          ],
+        ]);
+
+        $request->user()->update([
+          'name' => $request->name,
+          'username' => $request->username,
+          'email' => $request->email,
+        ]);
+      })->name('user-profile-information.update');
+
       Route::get('/dashboard', [DashboardController::class, 'show'])->name(
         'dashboard'
       );
