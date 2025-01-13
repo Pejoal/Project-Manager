@@ -7,8 +7,10 @@ return [
   'two_factor_authentication_description' =>
     'Fügen Sie zusätzliche Sicherheit zu Ihrem Konto mit der Zwei-Faktor-Authentifizierung hinzu.',
   'enabled' => 'Sie haben die Zwei-Faktor-Authentifizierung aktiviert.',
-  'not_enabled' => 'Sie haben die Zwei-Faktor-Authentifizierung nicht aktiviert.',
-  'finish_enabling' => 'Beenden Sie die Aktivierung der Zwei-Faktor-Authentifizierung.',
+  'not_enabled' =>
+    'Sie haben die Zwei-Faktor-Authentifizierung nicht aktiviert.',
+  'finish_enabling' =>
+    'Beenden Sie die Aktivierung der Zwei-Faktor-Authentifizierung.',
   'secure_random_token' =>
     'Wenn die Zwei-Faktor-Authentifizierung aktiviert ist, werden Sie während der Authentifizierung nach einem sicheren, zufälligen Token gefragt. Sie können dieses Token von der Google Authenticator-App auf Ihrem Telefon abrufen.',
   'qr_code_instructions' =>
@@ -49,7 +51,8 @@ return [
     'Bitte geben Sie Ihr Passwort ein, um zu bestätigen, dass Sie sich von Ihren anderen Browsersitzungen auf allen Ihren Geräten abmelden möchten.',
   'delete_account_confirmation' =>
     'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Sobald Ihr Konto gelöscht ist, werden alle seine Ressourcen und Daten dauerhaft gelöscht. Bitte geben Sie Ihr Passwort ein, um zu bestätigen, dass Sie Ihr Konto dauerhaft löschen möchten.',
-  'please_confirm_your_password' => 'Zu Ihrer Sicherheit bestätigen Sie bitte Ihr Passwort, um fortzufahren.',
+  'please_confirm_your_password' =>
+    'Zu Ihrer Sicherheit bestätigen Sie bitte Ihr Passwort, um fortzufahren.',
   'done' => 'Fertig.',
   'save' => 'Speichern.',
   'saved' => 'Gespeichert.',
@@ -60,6 +63,8 @@ return [
   'username' => 'Benutzername',
   'email' => 'E-Mail',
   'email_unverified' => 'Ihre E-Mail-Adresse ist nicht verifiziert.',
-  'click_to_resend' => 'Klicken Sie hier, um die Bestätigungs-E-Mail erneut zu senden.',
-  'verification_link_sent' => 'Ein neuer Bestätigungslink wurde an Ihre E-Mail-Adresse gesendet.',
+  'click_to_resend' =>
+    'Klicken Sie hier, um die Bestätigungs-E-Mail erneut zu senden.',
+  'verification_link_sent' =>
+    'Ein neuer Bestätigungslink wurde an Ihre E-Mail-Adresse gesendet.',
 ];

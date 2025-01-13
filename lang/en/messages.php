@@ -44,7 +44,8 @@ return [
   'current_password' => 'Current Password',
   'new_password' => 'New Password',
   'confirm_password' => 'Confirm Password',
-  'please_confirm_your_password' => 'For your security, please confirm your password to continue.',
+  'please_confirm_your_password' =>
+    'For your security, please confirm your password to continue.',
   'log_out_other_browser_sessions' => 'Log Out Other Browser Sessions',
   'log_out_other_browser_sessions_description' =>
     'Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.',
@@ -59,7 +60,8 @@ return [
   'email' => 'Email',
   'email_unverified' => 'Your email address is unverified.',
   'click_to_resend' => 'Click here to re-send the verification email.',
-  'verification_link_sent' => 'A new verification link has been sent to your email address.',
+  'verification_link_sent' =>
+    'A new verification link has been sent to your email address.',
   'save' => 'Save.',
   'saved' => 'Saved.',
 ];

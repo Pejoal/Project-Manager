@@ -34,15 +34,21 @@ class UserProfileController extends Controller
       'translations' => [
         'profile' => __('messages.profile'),
         'two_factor_authentication' => __('messages.two_factor_authentication'),
-        'two_factor_authentication_description' => __('messages.two_factor_authentication_description'),
+        'two_factor_authentication_description' => __(
+          'messages.two_factor_authentication_description'
+        ),
         'enabled' => __('messages.enabled'),
         'not_enabled' => __('messages.not_enabled'),
         'finish_enabling' => __('messages.finish_enabling'),
         'secure_random_token' => __('messages.secure_random_token'),
         'qr_code_instructions' => __('messages.qr_code_instructions'),
-        'enabled_qr_code_instructions' => __('messages.enabled_qr_code_instructions'),
+        'enabled_qr_code_instructions' => __(
+          'messages.enabled_qr_code_instructions'
+        ),
         'setup_key' => __('messages.setup_key'),
-        'recovery_codes_instructions' => __('messages.recovery_codes_instructions'),
+        'recovery_codes_instructions' => __(
+          'messages.recovery_codes_instructions'
+        ),
         'enable' => __('messages.enable'),
         'confirm' => __('messages.confirm'),
         'regenerate_recovery_codes' => __('messages.regenerate_recovery_codes'),
@@ -50,24 +56,44 @@ class UserProfileController extends Controller
         'cancel' => __('messages.cancel'),
         'disable' => __('messages.disable'),
         'profile_update' => __('messages.profile_update'),
-        'profile_update_description' => __('messages.profile_update_description'),
+        'profile_update_description' => __(
+          'messages.profile_update_description'
+        ),
         'password_update' => __('messages.password_update'),
-        'password_update_description' => __('messages.password_update_description'),
+        'password_update_description' => __(
+          'messages.password_update_description'
+        ),
         'profile_information' => __('messages.profile_information'),
-        'profile_information_description' => __('messages.profile_information_description'),
+        'profile_information_description' => __(
+          'messages.profile_information_description'
+        ),
         'update_password' => __('messages.update_password'),
-        'update_password_description' => __('messages.update_password_description'),
+        'update_password_description' => __(
+          'messages.update_password_description'
+        ),
         'browser_sessions' => __('messages.browser_sessions'),
-        'browser_sessions_description' => __('messages.browser_sessions_description'),
+        'browser_sessions_description' => __(
+          'messages.browser_sessions_description'
+        ),
         'delete_account' => __('messages.delete_account'),
-        'delete_account_description' => __('messages.delete_account_description'),
+        'delete_account_description' => __(
+          'messages.delete_account_description'
+        ),
         'current_password' => __('messages.current_password'),
         'new_password' => __('messages.new_password'),
         'confirm_password' => __('messages.confirm_password'),
-        'please_confirm_your_password' => __('messages.please_confirm_your_password'),
-        'log_out_other_browser_sessions' => __('messages.log_out_other_browser_sessions'),
-        'log_out_other_browser_sessions_description' => __('messages.log_out_other_browser_sessions_description'),
-        'delete_account_confirmation' => __('messages.delete_account_confirmation'),
+        'please_confirm_your_password' => __(
+          'messages.please_confirm_your_password'
+        ),
+        'log_out_other_browser_sessions' => __(
+          'messages.log_out_other_browser_sessions'
+        ),
+        'log_out_other_browser_sessions_description' => __(
+          'messages.log_out_other_browser_sessions_description'
+        ),
+        'delete_account_confirmation' => __(
+          'messages.delete_account_confirmation'
+        ),
         'done' => __('messages.done'),
         'save' => __('messages.save'),
         'saved' => __('messages.saved'),
@@ -79,7 +105,7 @@ class UserProfileController extends Controller
         'email' => __('messages.email'),
         'email_unverified' => __('messages.email_unverified'),
         'click_to_resend' => __('messages.click_to_resend'),
-        'verification_link_sent' => __('messages.verification_link_sent')
+        'verification_link_sent' => __('messages.verification_link_sent'),
       ],
     ]);
   }

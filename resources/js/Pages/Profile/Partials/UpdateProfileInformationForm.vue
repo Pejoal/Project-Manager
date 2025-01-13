@@ -182,7 +182,8 @@ const clearPhotoFileInput = () => {
 
         <div
           v-if="
-            $page.props.jetstream.hasEmailVerification && user.email_verified_at === null
+            $page.props.jetstream.hasEmailVerification &&
+            user.email_verified_at === null
           "
         >
           <p class="text-sm mt-2 dark:text-white">
