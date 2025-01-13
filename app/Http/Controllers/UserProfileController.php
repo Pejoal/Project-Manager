@@ -71,6 +71,15 @@ class UserProfileController extends Controller
         'done' => __('messages.done'),
         'save' => __('messages.save'),
         'saved' => __('messages.saved'),
+        'photo' => __('messages.photo'),
+        'select_new_photo' => __('messages.select_new_photo'),
+        'remove_photo' => __('messages.remove_photo'),
+        'name' => __('messages.name'),
+        'username' => __('messages.username'),
+        'email' => __('messages.email'),
+        'email_unverified' => __('messages.email_unverified'),
+        'click_to_resend' => __('messages.click_to_resend'),
+        'verification_link_sent' => __('messages.verification_link_sent')
       ],
     ]);
   }

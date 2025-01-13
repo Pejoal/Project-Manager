@@ -51,6 +51,15 @@ return [
   'delete_account_confirmation' =>
     'Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.',
   'done' => 'Done.',
+  'photo' => 'Photo',
+  'select_new_photo' => 'Select A New Photo',
+  'remove_photo' => 'Remove Photo',
+  'name' => 'Name',
+  'username' => 'User Name',
+  'email' => 'Email',
+  'email_unverified' => 'Your email address is unverified.',
+  'click_to_resend' => 'Click here to re-send the verification email.',
+  'verification_link_sent' => 'A new verification link has been sent to your email address.',
   'save' => 'Save.',
   'saved' => 'Saved.',
 ];
