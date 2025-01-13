@@ -2,6 +2,8 @@
 
 use App\Models\Client;
 use App\Models\Project;
+use App\Models\ProjectPriority;
+use App\Models\ProjectStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -10,11 +12,17 @@ class ProjectController extends Controller
 {
   public function index()
   {
-    $projects = Project::with(['clients'])
+    $projects = Project::with(['clients', 'status', 'priority'])
       ->withCount('tasks')
       ->orderBy('id', 'desc')
       ->get();
-    return Inertia::render('Projects/Index', compact('projects'));
+
+    $statuses = ProjectStatus::orderBy('id', 'desc')->get();
+    $priorities = ProjectPriority::orderBy('id', 'desc')->get();
+    return Inertia::render(
+      'Projects/Index',
+      compact('projects', 'statuses', 'priorities')
+    );
   }
 
   public function create()

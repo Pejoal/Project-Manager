@@ -1,11 +1,24 @@
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 import { Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import CreateProjectModal from './CreateProjectModal.vue';
 
 const props = defineProps({
   projects: Array,
+  statuses: Array,
+  priorities: Array,
 });
+
+const showModal = ref(false);
+
+const openModal = () => {
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
 </script>
 
 <template>
@@ -17,12 +30,19 @@ const props = defineProps({
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <Link
-        :href="route('projects.create')"
+      <CreateProjectModal
+        :show="showModal"
+        :statuses="statuses"
+        :priorities="priorities"
+        @close="closeModal"
+      />
+      <button
+        @click="openModal"
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
         Create Project
-      </Link>
+      </button>
+
       <ul class="my-2 space-y-4">
         <li
           v-for="project in projects"
