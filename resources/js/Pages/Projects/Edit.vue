@@ -11,6 +11,8 @@ import 'vue-select/dist/vue-select.css';
 const props = defineProps({
   project: Object,
   clients: Object,
+  statuses: Array,
+  priorities: Array,
 });
 
 const form = useForm({
@@ -19,6 +21,9 @@ const form = useForm({
   clients: props.project.clients
     ? props.project.clients.map((client) => client.id)
     : [],
+
+  status_id: props.project.status_id,
+  priority_id: props.project.priority_id,
 });
 
 const submit = () => {
@@ -81,6 +86,34 @@ const submit = () => {
           >
           </vSelect>
           <InputError class="mt-2" :message="form.errors.clients" />
+        </div>
+        <div>
+          <InputLabel for="status" value="Status" />
+          <vSelect
+            v-if="props.statuses.length > 0"
+            id="status"
+            v-model="form.status_id"
+            :options="props.statuses"
+            :reduce="(status) => status.id"
+            label="name"
+            class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+        </div>
+        <div>
+          <InputLabel for="priority" value="Priority" />
+          <vSelect
+            v-if="props.priorities.length > 0"
+            id="priority"
+            v-model="form.priority_id"
+            :options="props.priorities"
+            :reduce="(priority) => priority.id"
+            label="name"
+            class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
         </div>
         <button
           type="submit"
