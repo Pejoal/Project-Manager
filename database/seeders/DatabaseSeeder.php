@@ -38,16 +38,6 @@ class DatabaseSeeder extends Seeder
         'email' => 'test@example.com',
       ]);
 
-    for ($i = 0; $i < 12; $i++) {
-      Client::factory()->create([
-        'created_at' => now()->subMonths(rand(0, 11)),
-      ]);
-
-      Project::factory()->create([
-        'created_at' => now()->subMonths(rand(0, 11)),
-      ]);
-    }
-
     ProjectStatus::insert([
       ['name' => 'Planned', 'color' => '#E70A1D'],
       ['name' => 'In Progress', 'color' => '#36A2EB'],
@@ -59,6 +49,16 @@ class DatabaseSeeder extends Seeder
       ['name' => 'Medium', 'color' => '#60F070'],
       ['name' => 'High', 'color' => '#FF6384'],
     ]);
+
+    for ($i = 0; $i < 12; $i++) {
+      Client::factory()->create([
+        'created_at' => now()->subMonths(rand(0, 11)),
+      ]);
+
+      Project::factory()->create([
+        'created_at' => now()->subMonths(rand(0, 11)),
+      ]);
+    }
 
     TaskStatus::insert([
       ['name' => 'Pending', 'color' => '#E70A1D'],
@@ -72,15 +72,10 @@ class DatabaseSeeder extends Seeder
       ['name' => 'High', 'color' => '#FF6384'],
     ]);
 
-    $taskStatuses = TaskStatus::pluck('id')->toArray();
-    $taskPriorities = TaskPriority::pluck('id')->toArray();
-
     $projects = Project::get();
-    $projects->each(function ($project) use ($taskStatuses, $taskPriorities) {
+    $projects->each(function ($project) {
       Task::factory(5)->create([
         'project_id' => $project->id,
-        'status_id' => $taskStatuses[array_rand($taskStatuses)],
-        'priority_id' => $taskPriorities[array_rand($taskPriorities)],
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
     });

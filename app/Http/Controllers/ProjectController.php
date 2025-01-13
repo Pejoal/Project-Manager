@@ -29,6 +29,8 @@ class ProjectController extends Controller
       'description' => 'nullable|string',
       'clients' => 'nullable|array',
       'clients.*' => 'exists:clients,id',
+      'status_id' => 'required|exists:project_statuses,id',
+      'priority_id' => 'required|exists:project_priorities,id',
     ]);
 
     $data = $request->except(['clients']);
@@ -60,6 +62,8 @@ class ProjectController extends Controller
       'description' => 'nullable|string',
       'clients' => 'nullable|array',
       'clients.*' => 'exists:clients,id',
+      'status_id' => 'required|exists:project_statuses,id',
+      'priority_id' => 'required|exists:project_priorities,id',
     ]);
 
     $data = $request->except(['clients']);
