@@ -168,7 +168,7 @@ return [
     ':attribute alanı, :values mevcut olmadığında gereklidir.',
   'same' => ':attribute ve :other eşleşmelidir.',
   'size' => [
-    'array' => ':attribute, :size öğe i��ermelidir.',
+    'array' => ':attribute, :size öğe içermelidir.',
     'file' => ':attribute, :size kilobayt olmalıdır.',
     'numeric' => ':attribute, :size olmalıdır.',
     'string' => ':attribute, :size karakter olmalıdır.',
