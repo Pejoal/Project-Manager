@@ -18,4 +18,14 @@ class Project extends Model
   {
     return $this->belongsToMany(Client::class);
   }
+
+  public function status()
+  {
+    return $this->belongsTo(ProjectStatus::class);
+  }
+
+  public function priority()
+  {
+    return $this->belongsTo(ProjectPriority::class);
+  }
 }

@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Client;
 use App\Models\Project;
+use App\Models\ProjectPriority;
+use App\Models\ProjectStatus;
 use App\Models\Settings;
 use App\Models\Task;
 use App\Models\User;
@@ -45,6 +47,18 @@ class DatabaseSeeder extends Seeder
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
     }
+
+    ProjectStatus::insert([
+      ['name' => 'Planned', 'color' => '#E70A1D'],
+      ['name' => 'In Progress', 'color' => '#36A2EB'],
+      ['name' => 'Completed', 'color' => '#4BC0C0'],
+    ]);
+
+    ProjectPriority::insert([
+      ['name' => 'Low', 'color' => '#FFCE56'],
+      ['name' => 'Medium', 'color' => '#60F070'],
+      ['name' => 'High', 'color' => '#FF6384'],
+    ]);
 
     TaskStatus::insert([
       ['name' => 'Pending', 'color' => '#E70A1D'],

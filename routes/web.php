@@ -4,6 +4,8 @@ use App\Events\MessageSent;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectPriorityController;
+use App\Http\Controllers\ProjectStatusController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TaskStatusController;
@@ -139,15 +141,43 @@ Route::group(
           Route::delete('/{task}', [TaskController::class, 'destroy'])->name(
             'tasks.destroy'
           );
-          Route::put('/tasks/{task}/status', [
-            TaskController::class,
-            'updateStatus',
-          ])->name('tasks.updateStatus');
-          Route::put('/tasks/{task}/priority', [
-            TaskController::class,
-            'updatePriority',
-          ])->name('tasks.updatePriority');
         });
+      });
+
+      // Project Status Management Routes
+      Route::prefix('project-statuses')->group(function () {
+        Route::get('/', [ProjectStatusController::class, 'index'])->name(
+          'project-statuses.index'
+        );
+        Route::post('/', [ProjectStatusController::class, 'store'])->name(
+          'project-statuses.store'
+        );
+        Route::put('/{projectStatus}', [
+          ProjectStatusController::class,
+          'update',
+        ])->name('project-statuses.update');
+        Route::delete('/{projectStatus}', [
+          ProjectStatusController::class,
+          'destroy',
+        ])->name('project-statuses.destroy');
+      });
+
+      // Project Priority Management Routes
+      Route::prefix('project-priorities')->group(function () {
+        Route::get('/', [ProjectPriorityController::class, 'index'])->name(
+          'project-priorities.index'
+        );
+        Route::post('/', [ProjectPriorityController::class, 'store'])->name(
+          'project-priorities.store'
+        );
+        Route::put('/{projectPriority}', [
+          ProjectPriorityController::class,
+          'update',
+        ])->name('project-priorities.update');
+        Route::delete('/{projectPriority}', [
+          ProjectPriorityController::class,
+          'destroy',
+        ])->name('project-priorities.destroy');
       });
 
       // Task Status Management Routes
