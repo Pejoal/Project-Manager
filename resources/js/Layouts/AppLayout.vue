@@ -79,6 +79,8 @@ const logout = () => {
                 >
                   Tasks
                 </NavLink>
+
+                <Locales />
               </div>
             </div>
 
@@ -289,8 +291,6 @@ const logout = () => {
                     <form @submit.prevent="logout">
                       <DropdownLink as="button"> Log Out </DropdownLink>
                     </form>
-
-                    <Locales />
                   </template>
                 </Dropdown>
               </div>
@@ -368,6 +368,8 @@ const logout = () => {
             >
               Tasks
             </ResponsiveNavLink>
+
+            <Locales />
           </div>
 
           <!-- Responsive Settings Options -->
@@ -449,8 +451,6 @@ const logout = () => {
               <form method="POST" @submit.prevent="logout">
                 <ResponsiveNavLink as="button"> Log Out </ResponsiveNavLink>
               </form>
-
-              <Locales />
 
               <!-- Team Management -->
               <template v-if="$page.props.jetstream.hasTeamFeatures">
