@@ -8,6 +8,10 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 
+const props = defineProps({
+  translations: Object,
+});
+
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
 
@@ -39,15 +43,18 @@ const updatePassword = () => {
 
 <template>
   <FormSection @submitted="updatePassword">
-    <template #title> Update Password </template>
+    <template #title> {{ translations.update_password }} </template>
 
     <template #description>
-      Ensure your account is using a long, random password to stay secure.
+      {{ translations.update_password_description }}
     </template>
 
     <template #form>
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="current_password" value="Current Password" />
+        <InputLabel
+          for="current_password"
+          :value="translations.current_password"
+        />
         <TextInput
           id="current_password"
           ref="currentPasswordInput"
@@ -60,7 +67,7 @@ const updatePassword = () => {
       </div>
 
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="password" value="New Password" />
+        <InputLabel for="password" :value="translations.new_password" />
         <TextInput
           id="password"
           ref="passwordInput"
@@ -73,7 +80,10 @@ const updatePassword = () => {
       </div>
 
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="password_confirmation" value="Confirm Password" />
+        <InputLabel
+          for="password_confirmation"
+          :value="translations.confirm_password"
+        />
         <TextInput
           id="password_confirmation"
           v-model="form.password_confirmation"

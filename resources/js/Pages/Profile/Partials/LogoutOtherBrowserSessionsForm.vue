@@ -11,6 +11,7 @@ import TextInput from '@/Components/TextInput.vue';
 
 defineProps({
   sessions: Array,
+  translations: Object,
 });
 
 const confirmingLogout = ref(false);
@@ -44,18 +45,15 @@ const closeModal = () => {
 
 <template>
   <ActionSection>
-    <template #title> Browser Sessions </template>
+    <template #title> {{ translations.browser_sessions }} </template>
 
     <template #description>
-      Manage and log out your active sessions on other browsers and devices.
+      {{ translations.browser_sessions_description }}
     </template>
 
     <template #content>
       <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-        If necessary, you may log out of all of your other browser sessions
-        across all of your devices. Some of your recent sessions are listed
-        below; however, this list may not be exhaustive. If you feel your
-        account has been compromised, you should also update your password.
+        {{ translations.log_out_other_browser_sessions_description }}
       </div>
 
       <!-- Other Browser Sessions -->
@@ -123,7 +121,7 @@ const closeModal = () => {
 
       <div class="flex items-center mt-5">
         <PrimaryButton @click="confirmLogout">
-          Log Out Other Browser Sessions
+          {{ translations.log_out_other_browser_sessions }}
         </PrimaryButton>
 
         <ActionMessage :on="form.recentlySuccessful" class="ms-3">
@@ -133,11 +131,12 @@ const closeModal = () => {
 
       <!-- Log Out Other Devices Confirmation Modal -->
       <DialogModal :show="confirmingLogout" @close="closeModal">
-        <template #title> Log Out Other Browser Sessions </template>
+        <template #title>
+          {{ translations.log_out_other_browser_sessions }}
+        </template>
 
         <template #content>
-          Please enter your password to confirm you would like to log out of
-          your other browser sessions across all of your devices.
+          {{ translations.log_out_other_browser_sessions_description }}
 
           <div class="mt-4">
             <TextInput
@@ -155,7 +154,9 @@ const closeModal = () => {
         </template>
 
         <template #footer>
-          <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+          <SecondaryButton @click="closeModal">
+            {{ translations.cancel }}
+          </SecondaryButton>
 
           <PrimaryButton
             class="ms-3"
@@ -163,7 +164,7 @@ const closeModal = () => {
             :disabled="form.processing"
             @click="logoutOtherBrowserSessions"
           >
-            Log Out Other Browser Sessions
+            {{ translations.log_out_other_browser_sessions }}
           </PrimaryButton>
         </template>
       </DialogModal>

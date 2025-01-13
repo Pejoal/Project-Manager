@@ -11,6 +11,7 @@ import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
   user: Object,
+  translations: Object,
 });
 
 const form = useForm({
@@ -78,10 +79,10 @@ const clearPhotoFileInput = () => {
 
 <template>
   <FormSection @submitted="updateProfileInformation">
-    <template #title> Profile Information </template>
+    <template #title> {{ translations.profile_information }} </template>
 
     <template #description>
-      Update your account's profile information and email address.
+      {{ translations.profile_information_description }}
     </template>
 
     <template #form>
@@ -181,8 +182,7 @@ const clearPhotoFileInput = () => {
 
         <div
           v-if="
-            $page.props.jetstream.hasEmailVerification &&
-            user.email_verified_at === null
+            $page.props.jetstream.hasEmailVerification && user.email_verified_at === null
           "
         >
           <p class="text-sm mt-2 dark:text-white">

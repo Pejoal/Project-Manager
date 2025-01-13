@@ -8,6 +8,10 @@ import InputError from '@/Components/InputError.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 
+const props = defineProps({
+  translations: Object,
+});
+
 const confirmingUserDeletion = ref(false);
 const passwordInput = ref(null);
 
@@ -39,32 +43,29 @@ const closeModal = () => {
 
 <template>
   <ActionSection>
-    <template #title> Delete Account </template>
+    <template #title> {{ translations.delete_account }} </template>
 
-    <template #description> Permanently delete your account. </template>
+    <template #description>
+      {{ translations.delete_account_description }}
+    </template>
 
     <template #content>
       <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-        Once your account is deleted, all of its resources and data will be
-        permanently deleted. Before deleting your account, please download any
-        data or information that you wish to retain.
+        {{ translations.delete_account_confirmation }}
       </div>
 
       <div class="mt-5">
         <DangerButton @click="confirmUserDeletion">
-          Delete Account
+          {{ translations.delete_account }}
         </DangerButton>
       </div>
 
       <!-- Delete Account Confirmation Modal -->
       <DialogModal :show="confirmingUserDeletion" @close="closeModal">
-        <template #title> Delete Account </template>
+        <template #title> {{ translations.delete_account }} </template>
 
         <template #content>
-          Are you sure you want to delete your account? Once your account is
-          deleted, all of its resources and data will be permanently deleted.
-          Please enter your password to confirm you would like to permanently
-          delete your account.
+          {{ translations.delete_account_confirmation }}
 
           <div class="mt-4">
             <TextInput
@@ -82,7 +83,9 @@ const closeModal = () => {
         </template>
 
         <template #footer>
-          <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+          <SecondaryButton @click="closeModal">
+            {{ translations.cancel }}
+          </SecondaryButton>
 
           <DangerButton
             class="ms-3"
@@ -90,7 +93,7 @@ const closeModal = () => {
             :disabled="form.processing"
             @click="deleteUser"
           >
-            Delete Account
+            {{ translations.delete_account }}
           </DangerButton>
         </template>
       </DialogModal>
