@@ -247,6 +247,17 @@ const logout = () => {
                       class="border-t border-gray-200 dark:border-gray-600"
                     />
 
+                    <DropdownLink :href="route('project-statuses.index')">
+                      Project Statuses
+                    </DropdownLink>
+                    <DropdownLink :href="route('project-priorities.index')">
+                      Project Priorities
+                    </DropdownLink>
+
+                    <div
+                      class="border-t border-gray-200 dark:border-gray-600"
+                    />
+
                     <DropdownLink :href="route('task-statuses.index')">
                       Task Statuses
                     </DropdownLink>
@@ -404,6 +415,21 @@ const logout = () => {
                 :active="route().current('profile.show')"
               >
                 Profile
+              </ResponsiveNavLink>
+
+              <div class="border-t border-gray-200 dark:border-gray-600" />
+
+              <ResponsiveNavLink
+                :href="route('project-statuses.index')"
+                :active="route().current('project-statuses.index')"
+              >
+                Project Statuses
+              </ResponsiveNavLink>
+              <ResponsiveNavLink
+                :href="route('project-priorities.index')"
+                :active="route().current('project-priorities.index')"
+              >
+                Project Priorities
               </ResponsiveNavLink>
 
               <div class="border-t border-gray-200 dark:border-gray-600" />
