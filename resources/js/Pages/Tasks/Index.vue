@@ -145,9 +145,7 @@ const fetchPage = (url) => {
                 <option :value="100">100</option>
               </select>
 
-              <label for="perPage" class="font-bold">
-                Items Per Page
-              </label>
+              <label for="perPage" class="font-bold"> Items Per Page </label>
             </section>
 
             <!-- Status Filter -->

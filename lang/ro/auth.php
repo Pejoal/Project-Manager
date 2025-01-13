@@ -1,5 +1,6 @@
+<?php
 
-<?php return [
+return [
   /*
     |--------------------------------------------------------------------------
     | Authentication Language Lines
@@ -11,8 +12,9 @@
     |
     */
 
-  'failed' => 'Estas credenciales no coinciden con nuestros registros.',
-  'password' => 'La contraseña proporcionada es incorrecta.',
+  'failed' =>
+    'Aceste date de autentificare nu corespund înregistrărilor noastre.',
+  'password' => 'Parola furnizată este incorectă.',
   'throttle' =>
-    'Demasiados intentos de inicio de sesión. Por favor intenta nuevamente en :seconds segundos.',
+    'Prea multe încercări de autentificare. Vă rugăm să încercați din nou în :seconds secunde.',
 ];

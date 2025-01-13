@@ -12,10 +12,10 @@ return [
     |
     */
 
-  'reset' => 'Ihr Passwort wurde zurückgesetzt.',
+  'reset' => 'Votre mot de passe a été réinitialisé.',
   'sent' =>
-    'Wir haben Ihnen den Link zum Zurücksetzen Ihres Passworts per E-Mail gesendet.',
-  'throttled' => 'Bitte warten Sie, bevor Sie es erneut versuchen.',
-  'token' => 'Dieser Token zum Zurücksetzen des Passworts ist ungültig.',
-  'user' => 'Wir können keinen Benutzer mit dieser E-Mail-Adresse finden.',
+    'Nous avons envoyé votre lien de réinitialisation de mot de passe par e-mail.',
+  'throttled' => 'Veuillez patienter avant de réessayer.',
+  'token' => 'Ce jeton de réinitialisation de mot de passe est invalide.',
+  'user' => "Nous ne trouvons pas d'utilisateur avec cette adresse e-mail.",
 ];

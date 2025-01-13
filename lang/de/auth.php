@@ -12,7 +12,9 @@ return [
     |
     */
 
-  'failed' => 'Diese Anmeldeinformationen stimmen nicht mit unseren Aufzeichnungen überein.',
+  'failed' =>
+    'Diese Anmeldeinformationen stimmen nicht mit unseren Aufzeichnungen überein.',
   'password' => 'Das angegebene Passwort ist falsch.',
-  'throttle' => 'Zu viele Anmeldeversuche. Bitte versuchen Sie es in :seconds Sekunden erneut.',
+  'throttle' =>
+    'Zu viele Anmeldeversuche. Bitte versuchen Sie es in :seconds Sekunden erneut.',
 ];

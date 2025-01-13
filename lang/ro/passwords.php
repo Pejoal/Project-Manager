@@ -12,10 +12,9 @@ return [
     |
     */
 
-  'reset' => 'Ihr Passwort wurde zurückgesetzt.',
-  'sent' =>
-    'Wir haben Ihnen den Link zum Zurücksetzen Ihres Passworts per E-Mail gesendet.',
-  'throttled' => 'Bitte warten Sie, bevor Sie es erneut versuchen.',
-  'token' => 'Dieser Token zum Zurücksetzen des Passworts ist ungültig.',
-  'user' => 'Wir können keinen Benutzer mit dieser E-Mail-Adresse finden.',
+  'reset' => 'Parola dvs. a fost resetată.',
+  'sent' => 'Am trimis linkul de resetare a parolei prin e-mail.',
+  'throttled' => 'Vă rugăm să așteptați înainte de a încerca din nou.',
+  'token' => 'Acest token de resetare a parolei este invalid.',
+  'user' => 'Nu putem găsi un utilizator cu această adresă de e-mail.',
 ];
