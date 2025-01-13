@@ -7,7 +7,6 @@ import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
   users: Array,
@@ -41,7 +40,7 @@ const toggleFilters = () => {
 const form = useForm({
   assigned_to_me: false,
   search: '',
-  perPage: 5,
+  perPage: 10,
   status: [],
   priority: [],
   assigned_to: [],
@@ -130,6 +129,27 @@ const fetchPage = (url) => {
                 class="w-full text-zinc-900 border rounded-lg p-2"
               />
             </section>
+
+            <!-- Per Page Filter -->
+            <section class="flex items-center">
+              <select
+                v-model="form.perPage"
+                id="perPage"
+                @change="applyFilters"
+                class="rounded-lg text-black"
+              >
+                <option :value="5">5</option>
+                <option :value="10">10</option>
+                <option :value="20">20</option>
+                <option :value="50">50</option>
+                <option :value="100">100</option>
+              </select>
+
+              <label for="perPage" class="font-bold">
+                Items Per Page
+              </label>
+            </section>
+
             <!-- Status Filter -->
             <section>
               <vSelect

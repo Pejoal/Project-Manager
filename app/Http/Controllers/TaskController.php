@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use App\Events\AssignedToTaskCreated;
 use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
@@ -54,7 +53,7 @@ class TaskController extends Controller
     $query = Task::with('project', 'status', 'priority', 'assignedTo');
     $this->applyFilters($query, $request);
 
-    $perPage = $request->input('perPage', 5);
+    $perPage = $request->input('perPage', 10);
     $tasks = $query->latest('id')->paginate($perPage);
     return Inertia::render(
       'Tasks/Index',
@@ -70,7 +69,7 @@ class TaskController extends Controller
     $query = $project->tasks()->with('status', 'priority', 'assignedTo');
     $this->applyFilters($query, $request);
 
-    $perPage = $request->input('perPage', 5);
+    $perPage = $request->input('perPage', 10);
     $tasks = $query->latest('id')->paginate($perPage);
 
     return Inertia::render(
@@ -102,15 +101,6 @@ class TaskController extends Controller
     //     Mail::to($user->email)->send(new TaskAssigned($task, $user, true));
     //   }
     // }
-
-    if ($request->has('assigned_to')) {
-      $assignedUsers = User::whereIn('id', $request->assigned_to)->get();
-      foreach ($assignedUsers as $user) {
-        if ($user->id === auth()->user()->id) {
-          event(new AssignedToTaskCreated($task->id));
-        }
-      }
-    }
 
     return redirect()->route('tasks.index', $project);
   }
