@@ -62,22 +62,33 @@ class TaskController extends Controller
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
-      $query = Task::search($search)->query(
-        fn(Builder $query) => $query->with(
-          'project',
-          'status',
-          'priority',
-          'assignedTo'
-        )
-      );
+      $query = Task::search($search, function (
+        $meilisearch,
+        string $query,
+        array $options
+      ) {
+        $options['attributesToHighlight'] = ['name', 'description'];
+        return $meilisearch->search($query, $options);
+      })->query(function (Builder $query) use ($request) {
+        $query->with('project', 'status', 'priority', 'assignedTo');
+        $this->applyFilters($query, $request);
+      });
     } else {
       $query = Task::with('project', 'status', 'priority', 'assignedTo');
+      $this->applyFilters($query, $request);
     }
-
-    $this->applyFilters($query, $request);
 
     $perPage = $request->input('perPage', 10);
     $tasks = $query->latest('created_at')->paginate($perPage);
+    dd($tasks);
+
+    $tasks = $tasks->map(function ($task) {
+      $metadata = $task->scoutMetadata();
+      $task->_formatted = $metadata['_formatted'] ?? null;
+      return $task;
+    });
+    // dd($tasks);
+
     return Inertia::render(
       'Tasks/Index',
       compact('tasks', 'projects', 'users', 'statuses', 'priorities')
@@ -93,17 +104,18 @@ class TaskController extends Controller
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
       $query = Task::search($search)->query(function (Builder $query) use (
-        $project
+        $project,
+        $request
       ) {
         $query
           ->where('project_id', $project->id)
           ->with('project', 'status', 'priority', 'assignedTo');
+        $this->applyFilters($query, $request);
       });
     } else {
       $query = $project->tasks()->with('status', 'priority', 'assignedTo');
+      $this->applyFilters($query, $request);
     }
-
-    $this->applyFilters($query, $request);
 
     $perPage = $request->input('perPage', 10);
     $tasks = $query->latest('created_at')->paginate($perPage);

@@ -217,7 +217,7 @@ const fetchPage = (url) => {
               "
               class="text-blue-500 dark:text-blue-400 hover:underline"
             >
-              {{ task.name }} - {{ project ? project.name : task.project.name }}
+              {{ task._formatted?.name ? task._formatted?.name : task.name }} - {{ project ? project.name : task.project.name }}
             </Link>
             <div class="space-y-1">
               <p>
