@@ -3,10 +3,11 @@
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use Laravel\Scout\Searchable;
 
 class Task extends Model
 {
-  use HasFactory;
+  use HasFactory, Searchable;
 
   protected $guarded = [];
 
@@ -28,5 +29,14 @@ class Task extends Model
   public function priority()
   {
     return $this->belongsTo(TaskPriority::class);
+  }
+
+  public function toSearchableArray()
+  {
+    return [
+      'name' => $this->name,
+      'description' => $this->description,
+      'project_id' => $this->project_id,
+    ];
   }
 }

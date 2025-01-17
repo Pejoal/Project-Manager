@@ -1,3 +1,28 @@
+<script setup>
+import { defineProps } from 'vue';
+import { useForm, Link, Head } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+
+const props = defineProps({
+  task: Object,
+});
+
+const form = useForm({
+  task: props.task,
+});
+
+const destroy = () => {
+  if (confirm('Are you sure?')) {
+    form.delete(
+      route('tasks.destroy', {
+        project: props.project.slug,
+        task: props.task.id,
+      })
+    );
+  }
+};
+</script>
+
 <template>
   <Head :title="`Task - ${task.name}`" />
   <AppLayout>
@@ -15,15 +40,15 @@
           Description: {{ task.description }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Project ID: {{ project.id }}
+          Project ID: {{ task.project.id }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Project:
           <Link
-            :href="route('projects.show', { project: project.slug })"
+            :href="route('projects.show', { project: task.project.slug })"
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
-            {{ project.name }}
+            {{ task.project.name }}
           </Link>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
@@ -44,7 +69,7 @@
         </p>
       </div>
       <Link
-        :href="route('tasks.edit', { project: project.slug, task: task.id })"
+        :href="route('tasks.edit', { project: task.project.slug, task: task.id })"
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
         Edit
@@ -58,29 +83,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { defineProps } from 'vue';
-import { useForm, Link, Head } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-
-const props = defineProps({
-  task: Object,
-  project: Object,
-});
-
-const form = useForm({
-  task: props.task,
-});
-
-const destroy = () => {
-  if (confirm('Are you sure?')) {
-    form.delete(
-      route('tasks.destroy', {
-        project: props.project.slug,
-        task: props.task.id,
-      })
-    );
-  }
-};
-</script>

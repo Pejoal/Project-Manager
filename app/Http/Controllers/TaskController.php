@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TaskAssigned;
+use Illuminate\Database\Eloquent\Builder;
 
 class TaskController extends Controller
 {
@@ -27,11 +28,6 @@ class TaskController extends Controller
       'assigned_to_me' => 'nullable|string',
       'perPage' => 'nullable|integer|min:1|max:100',
     ]);
-
-    if ($request->has('search') && !empty($request->search)) {
-      $search = $request->search;
-      $query->where('name', 'like', "%{$search}%");
-    }
 
     if ($request->has('status') && !empty($request->status)) {
       $query->whereIn('status_id', $request->status);
@@ -64,11 +60,24 @@ class TaskController extends Controller
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
 
-    $query = Task::with('project', 'status', 'priority', 'assignedTo');
+    if ($request->has('search') && !empty($request->search)) {
+      $search = $request->search;
+      $query = Task::search($search)->query(
+        fn(Builder $query) => $query->with(
+          'project',
+          'status',
+          'priority',
+          'assignedTo'
+        )
+      );
+    } else {
+      $query = Task::with('project', 'status', 'priority', 'assignedTo');
+    }
+
     $this->applyFilters($query, $request);
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest('id')->paginate($perPage);
+    $tasks = $query->latest('created_at')->paginate($perPage);
     return Inertia::render(
       'Tasks/Index',
       compact('tasks', 'projects', 'users', 'statuses', 'priorities')
@@ -80,11 +89,26 @@ class TaskController extends Controller
     $users = User::orderBy('id', 'desc')->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
-    $query = $project->tasks()->with('status', 'priority', 'assignedTo');
+
+    if ($request->has('search') && !empty($request->search)) {
+      $search = $request->search;
+      $query = Task::search($search)->query(
+        fn(Builder $query) => $query->with(
+          'project',
+          'status',
+          'priority',
+          'assignedTo'
+        )
+      );
+      // ->where('project_id', $project->id)
+    } else {
+      $query = $project->tasks()->with('status', 'priority', 'assignedTo');
+    }
+
     $this->applyFilters($query, $request);
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest('id')->paginate($perPage);
+    $tasks = $query->latest('created_at')->paginate($perPage);
 
     return Inertia::render(
       'Tasks/Index',
@@ -121,8 +145,8 @@ class TaskController extends Controller
 
   public function show(Project $project, Task $task)
   {
-    $task->load(['assignedTo', 'status', 'priority']);
-    return Inertia::render('Tasks/Show', compact('task', 'project'));
+    $task->load(['assignedTo', 'status', 'priority', 'project']);
+    return Inertia::render('Tasks/Show', compact('task'));
   }
 
   public function edit(Project $project, Task $task)
