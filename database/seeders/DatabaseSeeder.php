@@ -51,13 +51,15 @@ class DatabaseSeeder extends Seeder
     ]);
 
     for ($i = 0; $i < 12; $i++) {
-      Client::factory()->create([
+      $client = Client::factory()->create([
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
 
-      Project::factory()->create([
+      $project = Project::factory()->create([
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
+
+      $project->clients()->attach($client->id);
     }
 
     TaskStatus::insert([
