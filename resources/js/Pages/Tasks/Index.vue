@@ -223,18 +223,33 @@ const fetchPage = (url) => {
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
           <div>
-            <Link
-              :href="
-                route('tasks.show', {
-                  project: project ? project.slug : task.project.slug,
-                  task: task.id,
-                })
-              "
-              class="text-blue-500 dark:text-blue-400 hover:underline"
-            >
-              <span v-html="task.name"></span>
-              - {{ project ? project.name : task.project.name }}
-            </Link>
+            <p>
+              Task:
+              <Link
+                :href="
+                  route('tasks.show', {
+                    project: project ? project.slug : task.project.slug,
+                    task: task.id,
+                  })
+                "
+                class="text-blue-500 dark:text-blue-400 hover:underline"
+              >
+                <span v-html="task.name"></span>
+              </Link>
+            </p>
+            <p>
+              Project:
+              <Link
+                :href="
+                  route('projects.show', {
+                    project: project ? project.slug : task.project.slug,
+                  })
+                "
+                class="text-blue-500 dark:text-blue-400 hover:underline"
+              >
+                {{ project ? project.name : task.project.name }}
+              </Link>
+            </p>
             <div class="space-y-1">
               <p>
                 Status:
