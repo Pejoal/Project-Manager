@@ -69,7 +69,9 @@ const destroy = () => {
         </p>
       </div>
       <Link
-        :href="route('tasks.edit', { project: task.project.slug, task: task.id })"
+        :href="
+          route('tasks.edit', { project: task.project.slug, task: task.id })
+        "
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
         Edit

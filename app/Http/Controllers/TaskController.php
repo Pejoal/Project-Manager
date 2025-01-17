@@ -68,6 +68,9 @@ class TaskController extends Controller
         array $options
       ) {
         $options['attributesToHighlight'] = ['name', 'description'];
+        $options['highlightPreTag'] = '<mark><strong>';
+        $options['highlightPostTag'] = '</strong></mark>';
+
         return $meilisearch->search($query, $options);
       })->query(function (Builder $query) use ($request) {
         $query->with('project', 'status', 'priority', 'assignedTo');
@@ -83,8 +86,9 @@ class TaskController extends Controller
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
-      $task->name = $metadata['_formatted']['name'] ?? null;
-      $task->description = $metadata['_formatted']['description'] ?? null;
+      $task->name = $metadata['_formatted']['name'] ?? $task->name;
+      $task->description =
+        $metadata['_formatted']['description'] ?? $task->description;
       return $task;
     });
 

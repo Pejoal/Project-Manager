@@ -62,7 +62,7 @@ class ProjectController extends Controller
     $clients = Client::orderBy('id', 'desc')->get();
     $statuses = ProjectStatus::all();
     $priorities = ProjectPriority::all();
-    
+
     return Inertia::render(
       'Projects/Edit',
       compact(['project', 'clients', 'statuses', 'priorities'])
