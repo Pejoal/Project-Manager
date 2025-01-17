@@ -80,14 +80,12 @@ class TaskController extends Controller
 
     $perPage = $request->input('perPage', 10);
     $tasks = $query->latest('created_at')->paginate($perPage);
-    dd($tasks);
 
-    $tasks = $tasks->map(function ($task) {
+    $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
       $task->_formatted = $metadata['_formatted'] ?? null;
       return $task;
     });
-    // dd($tasks);
 
     return Inertia::render(
       'Tasks/Index',
