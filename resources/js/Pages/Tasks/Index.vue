@@ -7,6 +7,7 @@ import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import Checkbox from '@/Components/Checkbox.vue';
 
 const props = defineProps({
   users: Array,
@@ -189,13 +190,12 @@ const fetchPage = (url) => {
             <section class="flex items-center">
               <InputLabel for="assigned_to_me" value="Assigned to me" />
 
-              <input
-                id="assigned_to_me"
-                v-model="form.assigned_to_me"
-                type="checkbox"
-                class="ml-4 block w-6 h-6 rounded-lg transition duration-150 ease-in-out"
+              <Checkbox
+                class="ml-4 w-6 h-6 rounded-lg transition duration-150 ease-in-out"
                 @change="applyFilters"
-                autofocus
+                id="assigned_to_me"
+                v-model:checked="form.assigned_to_me"
+                name="assigned_to_me"
               />
             </section>
           </main>

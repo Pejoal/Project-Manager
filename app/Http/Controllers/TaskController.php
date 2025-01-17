@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\Project;
@@ -14,6 +16,18 @@ class TaskController extends Controller
 {
   private function applyFilters($query, Request $request)
   {
+    $request->validate([
+      'search' => 'nullable|string|max:255',
+      'status' => 'nullable|array',
+      'status.*' => 'integer|exists:task_statuses,id',
+      'priority' => 'nullable|array',
+      'priority.*' => 'integer|exists:task_priorities,id',
+      'assigned_to' => 'nullable|array',
+      'assigned_to.*' => 'integer|exists:users,id',
+      'assigned_to_me' => 'nullable|string',
+      'perPage' => 'nullable|integer|min:1|max:100',
+    ]);
+
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
       $query->where('name', 'like', "%{$search}%");
