@@ -106,10 +106,17 @@ class TaskController extends Controller
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
-      $query = Task::search($search)->query(function (Builder $query) use (
-        $project,
-        $request
+      $query = Task::search($search, function (
+        $meilisearch,
+        string $query,
+        array $options
       ) {
+        $options['attributesToHighlight'] = ['name', 'description'];
+        $options['highlightPreTag'] = '<mark><strong>';
+        $options['highlightPostTag'] = '</strong></mark>';
+
+        return $meilisearch->search($query, $options);
+      })->query(function (Builder $query) use ($project, $request) {
         $query
           ->where('project_id', $project->id)
           ->with('project', 'status', 'priority', 'assignedTo');
@@ -123,6 +130,14 @@ class TaskController extends Controller
     $perPage = $request->input('perPage', 10);
     $tasks = $query->latest('created_at')->paginate($perPage);
 
+    $tasks->getCollection()->transform(function ($task) {
+      $metadata = $task->scoutMetadata();
+      $task->name = $metadata['_formatted']['name'] ?? $task->name;
+      $task->description =
+        $metadata['_formatted']['description'] ?? $task->description;
+      return $task;
+    });
+    
     return Inertia::render(
       'Tasks/Index',
       compact('tasks', 'project', 'users', 'statuses', 'priorities')
