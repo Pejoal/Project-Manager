@@ -93,16 +93,13 @@ class TaskController extends Controller
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
-      $query = Task::search($search)
-        ->where('project_id', $project->id)
-        ->query(
-          fn(Builder $query) => $query->with(
-            'project',
-            'status',
-            'priority',
-            'assignedTo'
-          )
-        );
+      $query = Task::search($search)->query(function (Builder $query) use (
+        $project
+      ) {
+        $query
+          ->where('project_id', $project->id)
+          ->with('project', 'status', 'priority', 'assignedTo');
+      });
     } else {
       $query = $project->tasks()->with('status', 'priority', 'assignedTo');
     }
