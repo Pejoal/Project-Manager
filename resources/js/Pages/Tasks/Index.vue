@@ -45,10 +45,11 @@ const form = useForm({
   status: [],
   priority: [],
   assigned_to: [],
+  projects: [],
 });
 
 watch(
-  () => [form.status, form.priority, form.assigned_to],
+  () => [form.status, form.priority, form.assigned_to, form.projects],
   () => {
     applyFilters();
   },
@@ -187,6 +188,20 @@ const fetchPage = (url) => {
               />
             </section>
 
+            <!-- Projects Filter -->
+            <section>
+              <vSelect
+                v-model="form.projects"
+                :options="props.projects"
+                :reduce="(project) => project.id"
+                label="name"
+                multiple
+                placeholder="Select Projects"
+                class="w-full text-zinc-900 border rounded-lg p-2"
+              />
+            </section>
+
+            <!-- Assigned to me Filter -->
             <section class="flex items-center">
               <InputLabel for="assigned_to_me" value="Assigned to me" />
 

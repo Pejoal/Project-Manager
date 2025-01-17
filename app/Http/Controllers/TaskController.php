@@ -25,6 +25,8 @@ class TaskController extends Controller
       'priority.*' => 'integer|exists:task_priorities,id',
       'assigned_to' => 'nullable|array',
       'assigned_to.*' => 'integer|exists:users,id',
+      'projects' => 'nullable|array',
+      'projects.*' => 'integer|exists:projects,id',
       'assigned_to_me' => 'nullable|string',
       'perPage' => 'nullable|integer|min:1|max:100',
     ]);
@@ -41,6 +43,10 @@ class TaskController extends Controller
       $query->whereHas('assignedTo', function ($q) use ($request) {
         $q->whereIn('user_id', $request->assigned_to);
       });
+    }
+
+    if ($request->has('projects') && !empty($request->projects)) {
+      $query->whereIn('project_id', $request->projects);
     }
 
     if (
@@ -137,7 +143,7 @@ class TaskController extends Controller
         $metadata['_formatted']['description'] ?? $task->description;
       return $task;
     });
-    
+
     return Inertia::render(
       'Tasks/Index',
       compact('tasks', 'project', 'users', 'statuses', 'priorities')
