@@ -89,18 +89,20 @@ class TaskController extends Controller
     $users = User::orderBy('id', 'desc')->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
+    // dd($project->id);
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
-      $query = Task::search($search)->query(
-        fn(Builder $query) => $query->with(
-          'project',
-          'status',
-          'priority',
-          'assignedTo'
-        )
-      );
-      // ->where('project_id', $project->id)
+      $query = Task::search($search)
+        ->where('project_id', $project->id)
+        ->query(
+          fn(Builder $query) => $query->with(
+            'project',
+            'status',
+            'priority',
+            'assignedTo'
+          )
+        );
     } else {
       $query = $project->tasks()->with('status', 'priority', 'assignedTo');
     }
