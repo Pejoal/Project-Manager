@@ -145,6 +145,10 @@ class TaskController extends Controller
 
   public function show(Project $project, Task $task)
   {
+    if ($task->project_id !== $project->id) {
+      abort(403, 'Task not found in this project');
+    }
+
     $task->load(['assignedTo', 'status', 'priority', 'project']);
     return Inertia::render('Tasks/Show', compact('task'));
   }
