@@ -83,7 +83,8 @@ class TaskController extends Controller
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
-      $task->_formatted = $metadata['_formatted'] ?? null;
+      $task->name = $metadata['_formatted']['name'] ?? null;
+      $task->description = $metadata['_formatted']['description'] ?? null;
       return $task;
     });
 

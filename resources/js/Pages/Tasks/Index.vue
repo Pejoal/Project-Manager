@@ -217,11 +217,7 @@ const fetchPage = (url) => {
               "
               class="text-blue-500 dark:text-blue-400 hover:underline"
             >
-              <span
-                v-html="
-                  task._formatted?.name ? task._formatted?.name : task.name
-                "
-              ></span>
+              <span v-html="task.name"></span>
               - {{ project ? project.name : task.project.name }}
             </Link>
             <div class="space-y-1">
