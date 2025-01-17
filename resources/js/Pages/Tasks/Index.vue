@@ -189,7 +189,7 @@ const fetchPage = (url) => {
             </section>
 
             <!-- Projects Filter -->
-            <section>
+            <section v-if="!props.project">
               <vSelect
                 v-model="form.projects"
                 :options="props.projects"
