@@ -36,7 +36,6 @@ class Task extends Model
     return [
       'name' => $this->name,
       'description' => $this->description,
-      'project_id' => $this->project_id,
     ];
   }
 }

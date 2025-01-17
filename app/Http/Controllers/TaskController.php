@@ -89,7 +89,6 @@ class TaskController extends Controller
     $users = User::orderBy('id', 'desc')->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
-    // dd($project->id);
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
