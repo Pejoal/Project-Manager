@@ -47,9 +47,9 @@ class PhaseController extends Controller
     return Inertia::render('Phases/Show', compact('phase'));
   }
 
-  public function edit(Project $project, Phase $task)
+  public function edit(Project $project, Phase $phase)
   {
-    return Inertia::render('Phases/Edit');
+    return Inertia::render('Phases/Edit', compact('phase', 'project'));
   }
 
   public function update(Request $request, Project $project, Phase $phase)
@@ -59,12 +59,13 @@ class PhaseController extends Controller
       'description' => 'nullable|string',
     ]);
 
+    $phase->update($request->all());
     return redirect()->route('phases.index', $project);
   }
 
-  public function destroy(Project $project, Phase $task)
+  public function destroy(Project $project, Phase $phase)
   {
-    $task->delete();
+    $phase->delete();
     return redirect()->route('phases.index', $project);
   }
 

@@ -227,7 +227,21 @@ class TaskController extends Controller
   public function destroy(Project $project, Task $task)
   {
     $task->delete();
-
     return redirect()->route('tasks.index', $project);
+  }
+
+  public function sync(Request $request) {
+    $request->validate([
+      'phases' => ['required', 'array'],
+    ]);
+
+    foreach ($request->phases as $phase) {
+      foreach ($phase['tasks'] as $i => $task) {
+        $order = $i + 1;
+        if ($task['phase_id'] !== $phase['id'] || $task['order'] !== $order) {
+          Task::find($task['id'])->update(['phase_id' => $phase['id'], 'order' => $order]);
+        }
+      }
+    }
   }
 }

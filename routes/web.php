@@ -142,8 +142,8 @@ Route::group(
           Route::delete('/{phase}', [PhaseController::class, 'destroy'])->name(
             'phases.destroy'
           );
-          Route::delete('/{phase}', [PhaseController::class, 'sync'])->name(
-            'phases.destroy'
+          Route::put('/sync', [PhaseController::class, 'sync'])->name(
+            'phases.sync'
           );
         });
 
@@ -166,6 +166,9 @@ Route::group(
           );
           Route::delete('/{task}', [TaskController::class, 'destroy'])->name(
             'tasks.destroy'
+          );
+          Route::put('/sync', [TaskController::class, 'sync'])->name(
+            'tasks.sync'
           );
         });
       });

@@ -9,37 +9,28 @@ import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 
 const props = defineProps({
-  task: Object,
-  assigned_to: Object,
   project: Object,
-  users: Array,
-  statuses: Array,
-  priorities: Array,
+  phase: Object,
 });
 
 const form = useForm({
-  name: props.task.name,
-  description: props.task.description,
-  assigned_to: props.task.assigned_to
-    ? props.task.assigned_to.map((user) => user.id)
-    : [],
-  status_id: props.task.status_id,
-  priority_id: props.task.priority_id,
+  name: props.phase.name,
+  description: props.phase.description,
 });
 
 const submit = () => {
   form.put(
-    route('tasks.update', { project: props.project.slug, task: props.task.id })
+    route('phases.update', { project: props.project.slug, phase: props.phase.id })
   );
 };
 </script>
 
 <template>
-  <Head :title="`Edit Task - ${task.name}`" />
+  <Head :title="`Edit phase - ${phase.name}`" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Edit Task
+        Edit phase
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -48,7 +39,7 @@ const submit = () => {
           <InputLabel for="id" value="ID" />
           <TextInput
             id="id"
-            :value="task.id"
+            :value="phase.id"
             readonly
             type="text"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
@@ -75,49 +66,7 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.description" />
         </div>
-        <div class="mb-4">
-          <InputLabel for="assigned_to" value="Assigned To" />
-          <vSelect
-            id="assigned_to"
-            v-model="form.assigned_to"
-            :options="props.users"
-            :reduce="(user) => user.id"
-            label="name"
-            multiple
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
-          >
-          </vSelect>
-          <InputError class="mt-2" :message="form.errors.assigned_to" />
-        </div>
-        <div>
-          <InputLabel for="status" value="Status" />
-          <vSelect
-            v-if="props.statuses.length > 0"
-            id="status"
-            v-model="form.status_id"
-            :options="props.statuses"
-            :reduce="(status) => status.id"
-            label="name"
-            class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
-          >
-          </vSelect>
-        </div>
-        <div>
-          <InputLabel for="priority" value="Priority" />
-          <vSelect
-            v-if="props.priorities.length > 0"
-            id="priority"
-            v-model="form.priority_id"
-            :options="props.priorities"
-            :reduce="(priority) => priority.id"
-            label="name"
-            class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
-          >
-          </vSelect>
-        </div>
+
         <button
           type="submit"
           :disabled="form.processing"
@@ -126,10 +75,10 @@ const submit = () => {
           Update
         </button>
         <Link
-          :href="route('tasks.show', { project: project.slug, task: task.id })"
+          :href="route('phases.show', { project: project.slug, phase: phase.id })"
           class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
         >
-          Show Task
+          Show phase
         </Link>
       </form>
     </div>
