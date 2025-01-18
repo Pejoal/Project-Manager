@@ -16,7 +16,7 @@ class PhaseController extends Controller
 {
   public function index(Project $project, Request $request)
   {
-    $phases = $project->phases()->latest('created_at')->get();
+    $phases = $project->phases()->with('tasks')->latest('created_at')->get();
     return Inertia::render('Phases/Index', compact('phases', 'project'));
   }
 
@@ -38,7 +38,7 @@ class PhaseController extends Controller
       abort(403, 'Phase not found in this project');
     }
 
-    $phase->load(['project', 'tasks']);
+    $phase->load(['project', 'tasks.status', 'tasks.priority','tasks.assignedTo']);
     return Inertia::render('Phases/Show', compact('phase'));
   }
 

@@ -54,6 +54,49 @@ const destroy = () => {
           Created at: {{ new Date(phase.created_at).toLocaleString() }}
         </p>
       </div>
+      <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+          Tasks
+        </h2>
+        <ul class="list-disc list-inside">
+          <li
+            v-for="task in phase.tasks"
+            :key="task.id"
+            class="mb-2 text-gray-700 dark:text-gray-300"
+          >
+            <Link
+              :href="
+                route('tasks.show', {
+                  project: phase.project.slug,
+                  task: task.id,
+                })
+              "
+              class="text-blue-500 dark:text-blue-400 hover:underline"
+            >
+              {{ task.name }}
+            </Link>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Assigned to:
+              <span class="text-gray-200" v-for="(user, index) in task.assigned_to" :key="user.id">
+                {{ user.name
+                }}<span v-if="index < task.assigned_to.length - 1">, </span>
+              </span>
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Status:
+              <span :style="{ color: task.status?.color }">{{
+                task.status?.name
+              }}</span>
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Priority:
+              <span :style="{ color: task.priority?.color }">
+                {{ task.priority?.name }}</span
+              >
+            </p>
+          </li>
+        </ul>
+      </div>
       <Link
         :href="
           route('phases.edit', { project: phase.project.slug, phase: phase.id })
