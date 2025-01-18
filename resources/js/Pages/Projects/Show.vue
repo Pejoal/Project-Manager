@@ -16,8 +16,6 @@ const destroy = () => {
   }
 };
 
-const drag = ref(false);
-
 const phaseMoved = (evt) => {
   // const { from, to, item } = evt;
   axios.put(route('phases.sync', props.project.slug), {
@@ -97,8 +95,6 @@ const taskMoved = (evt) => {
         <Draggable
           v-model="project.phases"
           group="phases"
-          @start="drag = true"
-          @end="drag = false"
           @move="phaseMoved"
           item-key="id"
           class="flex gap-4"
@@ -115,8 +111,6 @@ const taskMoved = (evt) => {
               <Draggable
                 v-model="element.tasks"
                 group="tasks"
-                @start="drag = true"
-                @end="drag = false"
                 @move="taskMoved"
                 item-key="id"
               >

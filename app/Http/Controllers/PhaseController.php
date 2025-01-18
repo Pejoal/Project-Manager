@@ -69,7 +69,7 @@ class PhaseController extends Controller
     return redirect()->route('phases.index', $project);
   }
 
-  public function sync(Request $request)
+  public function sync(Request $request, Project $project)
   {
     $request->validate([
       'phases' => ['required', 'array'],
