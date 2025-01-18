@@ -28,16 +28,6 @@ const title = computed(() =>
   props.project ? `Phases for ${props.project.name}` : 'All Phases'
 );
 
-const form = useForm({
-  assigned_to_me: false,
-  search: '',
-  perPage: 10,
-  status: [],
-  priority: [],
-  assigned_to: [],
-  projects: [],
-});
-
 const fetchPage = (url) => {
   form.get(url, {
     preserveState: true,
