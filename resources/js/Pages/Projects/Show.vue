@@ -31,24 +31,32 @@
           Created at: {{ new Date(project.created_at).toLocaleString() }}
         </p>
       </div>
-      <Link
-        :href="route('projects.edit', { project: project.slug })"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
-        Edit
-      </Link>
-      <Link
-        :href="route('tasks.index', { project: project.slug })"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
-        View Tasks
-      </Link>
-      <button
-        @click="destroy"
-        class="ml-4 text-red-500 dark:text-red-400 hover:underline"
-      >
-        Delete
-      </button>
+      <section class="space-x-2">
+        <Link
+          :href="route('projects.edit', { project: project.slug })"
+          class="text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          Edit
+        </Link>
+        <Link
+          :href="route('phases.index', { project: project.slug })"
+          class="text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          View Phases
+        </Link>
+        <Link
+          :href="route('tasks.index', { project: project.slug })"
+          class="text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          View Tasks
+        </Link>
+        <button
+          @click="destroy"
+          class="ml-4 text-red-500 dark:text-red-400 hover:underline"
+        >
+          Delete
+        </button>
+      </section>
     </div>
   </AppLayout>
 </template>

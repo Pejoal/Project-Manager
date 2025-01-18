@@ -3,6 +3,7 @@
 use App\Events\MessageSent;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectPriorityController;
 use App\Http\Controllers\ProjectStatusController;
@@ -120,6 +121,28 @@ Route::group(
           ProjectController::class,
           'destroy',
         ])->name('projects.destroy');
+
+        // Phase Management Routes
+        Route::prefix('{project:slug}/phases')->group(function () {
+          Route::get('/', [PhaseController::class, 'index'])->name(
+            'phases.index'
+          );
+          Route::post('/', [PhaseController::class, 'store'])->name(
+            'phases.store'
+          );
+          Route::get('/{task}', [PhaseController::class, 'show'])->name(
+            'phases.show'
+          );
+          Route::get('/{task}/edit', [PhaseController::class, 'edit'])->name(
+            'phases.edit'
+          );
+          Route::put('/{task}', [PhaseController::class, 'update'])->name(
+            'phases.update'
+          );
+          Route::delete('/{task}', [PhaseController::class, 'destroy'])->name(
+            'phases.destroy'
+          );
+        });
 
         // Task Management Routes
         Route::prefix('{project:slug}/tasks')->group(function () {
