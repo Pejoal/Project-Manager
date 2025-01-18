@@ -16,7 +16,7 @@ class PhaseController extends Controller
 {
   public function index(Project $project, Request $request)
   {
-    $phases = Phase::latest('created_at')->get();
+    $phases = $project->phases()->latest('created_at')->get();
     return Inertia::render('Phases/Index', compact('phases', 'project'));
   }
 

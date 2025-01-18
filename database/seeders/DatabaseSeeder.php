@@ -66,7 +66,6 @@ class DatabaseSeeder extends Seeder
 
       $project->clients()->attach($client->id);
     }
-    Phase::factory(15)->create();
 
     TaskStatus::insert([
       ['name' => 'Pending', 'color' => '#E70A1D'],
@@ -87,8 +86,21 @@ class DatabaseSeeder extends Seeder
 
     $projects = Project::get();
     $projects->each(function ($project) {
-      Task::factory(5)->create([
+      $phase1 = Phase::factory()->create([
         'project_id' => $project->id,
+      ]);
+      $phase2 = Phase::factory()->create([
+        'project_id' => $project->id,
+      ]);
+
+      Task::factory(2)->create([
+        'project_id' => $project->id,
+        'phase_id' => $phase1->id,
+        'created_at' => now()->subMonths(rand(0, 11)),
+      ]);
+      Task::factory(2)->create([
+        'project_id' => $project->id,
+        'phase_id' => $phase2->id,
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
     });
