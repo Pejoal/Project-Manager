@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Client;
+use App\Models\Phase;
 use App\Models\Project;
 use App\Models\ProjectPriority;
 use App\Models\ProjectStatus;
@@ -65,6 +66,7 @@ class DatabaseSeeder extends Seeder
 
       $project->clients()->attach($client->id);
     }
+    Phase::factory(15)->create();
 
     TaskStatus::insert([
       ['name' => 'Pending', 'color' => '#E70A1D'],
