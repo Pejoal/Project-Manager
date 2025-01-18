@@ -8,7 +8,7 @@ const props = defineProps({
   project: Object,
 });
 
-// const project = ref(props.project);
+const project = ref(props.project);
 
 const form = useForm({});
 
@@ -20,7 +20,7 @@ const destroy = () => {
 
 const phaseMoved = (evt) => {
   axios.put(route('phases.sync', props.project.slug), {
-    phases: props.project.phases,
+    phases: project.value.phases,
   });
 };
 

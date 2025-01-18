@@ -81,6 +81,15 @@ class PhaseController extends Controller
       if ($phase['order'] !== $order) {
         Phase::find($phase['id'])->update(['order' => $order]);
       }
+      foreach ($phase['tasks'] as $i => $task) {
+        $order = $i + 1;
+        if ($task['phase_id'] !== $phase['id'] || $task['order'] !== $order) {
+          Task::find($task['id'])->update([
+            'phase_id' => $phase['id'],
+            'order' => $order,
+          ]);
+        }
+      }
     }
   }
 }
