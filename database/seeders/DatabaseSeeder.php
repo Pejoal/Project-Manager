@@ -39,19 +39,19 @@ class DatabaseSeeder extends Seeder
       ]);
 
     ProjectStatus::insert([
-      ['name' => 'Planned', 'color' => '#E70A1D'],
+      ['name' => 'Planned', 'color' => '#FF5733'],
       ['name' => 'In Progress', 'color' => '#36A2EB'],
       ['name' => 'Completed', 'color' => '#4BC0C0'],
       ['name' => 'On Hold', 'color' => '#FFA500'],
       ['name' => 'Cancelled', 'color' => '#808080'],
+      ['name' => 'Deferred', 'color' => '#C70039'],
     ]);
 
     ProjectPriority::insert([
       ['name' => 'Low', 'color' => '#FFCE56'],
-      ['name' => 'Medium', 'color' => '#60F070'],
-      ['name' => 'High', 'color' => '#FF6384'],
-      ['name' => 'Critical', 'color' => '#FF0000'],
-      ['name' => 'Urgent', 'color' => '#FF4500'],
+      ['name' => 'Medium', 'color' => '#00FF00'],
+      ['name' => 'High', 'color' => '#FF1493'],
+      ['name' => 'Urgent', 'color' => '#FF1500'],
     ]);
 
     for ($i = 0; $i < 12; $i++) {
@@ -72,14 +72,15 @@ class DatabaseSeeder extends Seeder
       ['name' => 'Completed', 'color' => '#4BC0C0'],
       ['name' => 'On Hold', 'color' => '#FFA500'],
       ['name' => 'Cancelled', 'color' => '#808080'],
+      ['name' => 'Review', 'color' => '#FFD700'],
+      ['name' => 'Testing', 'color' => '#8A2BE2'],
     ]);
 
     TaskPriority::insert([
       ['name' => 'Low', 'color' => '#FFCE56'],
-      ['name' => 'Medium', 'color' => '#60F070'],
-      ['name' => 'High', 'color' => '#FF6384'],
-      ['name' => 'Critical', 'color' => '#FF0000'],
-      ['name' => 'Urgent', 'color' => '#FF4500'],
+      ['name' => 'Medium', 'color' => '#00FF00'],
+      ['name' => 'High', 'color' => '#FF1493'],
+      ['name' => 'Urgent', 'color' => '#FF1500'],
     ]);
 
     $projects = Project::get();
