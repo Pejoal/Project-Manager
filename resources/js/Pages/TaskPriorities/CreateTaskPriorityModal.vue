@@ -34,7 +34,7 @@ watch(
 );
 
 const submit = () => {
-  if (priority.value) {
+  if (priority.value?.name) {
     form.put(route('task-priorities.update', priority.value.id), {
       onSuccess: () => {
         form.reset();
@@ -55,7 +55,7 @@ const submit = () => {
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title>{{ priority ? 'Edit' : 'Create' }} Task Priority</template>
+    <template #title>{{ priority?.name ? 'Edit' : 'Create' }} Task Priority</template>
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
         <div>
@@ -95,7 +95,7 @@ const submit = () => {
         type="submit"
         class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
       >
-        {{ priority ? 'Edit' : 'Create' }}
+        {{ priority?.name ? 'Edit' : 'Create' }}
       </button>
     </template>
   </DialogModal>
