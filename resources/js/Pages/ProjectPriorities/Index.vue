@@ -34,7 +34,7 @@
 
           <div>
             <button
-              @click="() => updatePriority(priority)"
+              @click="() => openModal(priority)"
               class="ml-4 text-green-500 dark:text-green-400 hover:underline"
             >
               Update
@@ -65,7 +65,8 @@ const props = defineProps({
 const showModal = ref(false);
 const selectedPriority = ref(null);
 
-const openModal = () => {
+const openModal = (priority = null) => {
+  selectedPriority.value = priority;
   showModal.value = true;
 };
 
@@ -81,10 +82,5 @@ const destroy = (id) => {
   if (confirm('Are you sure?')) {
     form.delete(route('project-priorities.destroy', id));
   }
-};
-
-const updatePriority = (priority = null) => {
-  selectedPriority.value = priority;
-  openModal();
 };
 </script>
