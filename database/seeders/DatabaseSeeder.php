@@ -92,9 +92,9 @@ class DatabaseSeeder extends Seeder
     });
 
     Settings::create([
-      'clients_color' => '#FFF080',
-      'projects_color' => '#40F0F0',
-      'tasks_color' => '#F04090',
+      'clients_color' => '#0FA0FF',
+      'projects_color' => '#F02050',
+      'tasks_color' => '#30F030',
     ]);
   }
 }
