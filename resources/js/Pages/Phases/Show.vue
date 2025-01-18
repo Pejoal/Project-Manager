@@ -7,9 +7,7 @@ const props = defineProps({
   phase: Object,
 });
 
-const form = useForm({
-  phase: props.phase,
-});
+const form = useForm({});
 
 const destroy = () => {
   if (confirm('Are you sure?')) {

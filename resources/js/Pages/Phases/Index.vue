@@ -55,7 +55,11 @@ const fetchPage = (url) => {
     <div
       class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md"
     >
-      <CreatePhaseModal :show="showModal" :project="project" @close="closeModal" />
+      <CreatePhaseModal
+        :show="showModal"
+        :project="project"
+        @close="closeModal"
+      />
       <button
         @click="openModal"
         class="text-blue-500 dark:text-blue-400 hover:underline"

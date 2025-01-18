@@ -70,9 +70,7 @@ const props = defineProps({
   project: Object,
 });
 
-const form = useForm({
-  project: props.project,
-});
+const form = useForm({});
 
 const destroy = () => {
   if (confirm('Are you sure?')) {

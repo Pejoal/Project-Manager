@@ -38,7 +38,7 @@ class PhaseController extends Controller
       abort(403, 'Phase not found in this project');
     }
 
-    $phase->load(['project']);
+    $phase->load(['project', 'tasks']);
     return Inertia::render('Phases/Show', compact('phase'));
   }
 

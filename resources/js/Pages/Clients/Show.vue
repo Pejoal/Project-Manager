@@ -7,9 +7,7 @@ const props = defineProps({
   client: Object,
 });
 
-const form = useForm({
-  client: props.client,
-});
+const form = useForm({});
 
 const destroy = () => {
   if (confirm('Are you sure?')) {

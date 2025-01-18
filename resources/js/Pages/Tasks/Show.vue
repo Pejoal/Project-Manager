@@ -7,9 +7,7 @@ const props = defineProps({
   task: Object,
 });
 
-const form = useForm({
-  task: props.task,
-});
+const form = useForm({});
 
 const destroy = () => {
   if (confirm('Are you sure?')) {
