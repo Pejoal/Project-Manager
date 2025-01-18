@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Phase;
 use App\Models\Project;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\PhaseStatus;
 use App\Models\PhasePriority;
@@ -74,8 +75,6 @@ class PhaseController extends Controller
     $request->validate([
       'phases' => ['required', 'array'],
     ]);
-
-    dd($request->phases);
 
     foreach ($request->phases as $i => $phase) {
       $order = $i + 1;

@@ -19,17 +19,11 @@ const destroy = () => {
 };
 
 const phaseMoved = (evt) => {
-  // const { from, to, item } = evt;
   axios.put(route('phases.sync', props.project.slug), {
     phases: props.project.phases,
   });
 };
 
-const taskMoved = (evt) => {
-  axios.put(route('tasks.sync', props.project.slug), {
-    phases: props.project.phases,
-  });
-};
 </script>
 
 <template>
@@ -113,7 +107,6 @@ const taskMoved = (evt) => {
               <Draggable
                 v-model="element.tasks"
                 group="tasks"
-                @move="taskMoved"
                 item-key="id"
               >
                 <template #item="{ element: task }">

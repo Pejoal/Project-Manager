@@ -11,7 +11,7 @@ class Project extends Model
 
   public function phases()
   {
-    return $this->hasMany(Phase::class);
+    return $this->hasMany(Phase::class)->orderBy('order', 'ASC');
   }
 
   public function tasks()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Phase;
 use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
@@ -228,20 +229,5 @@ class TaskController extends Controller
   {
     $task->delete();
     return redirect()->route('tasks.index', $project);
-  }
-
-  public function sync(Request $request) {
-    $request->validate([
-      'phases' => ['required', 'array'],
-    ]);
-
-    foreach ($request->phases as $phase) {
-      foreach ($phase['tasks'] as $i => $task) {
-        $order = $i + 1;
-        if ($task['phase_id'] !== $phase['id'] || $task['order'] !== $order) {
-          Task::find($task['id'])->update(['phase_id' => $phase['id'], 'order' => $order]);
-        }
-      }
-    }
   }
 }

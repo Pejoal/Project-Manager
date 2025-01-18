@@ -97,9 +97,6 @@ Route::group(
       Route::put('phases/sync', [PhaseController::class, 'sync'])->name(
         'phases.sync'
       );
-      Route::put('tasks/sync', [TaskController::class, 'sync'])->name(
-        'tasks.sync'
-      );
 
       // Project Management Routes
       Route::prefix('projects')->group(function () {
