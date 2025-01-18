@@ -10,35 +10,20 @@ import 'vue-select/dist/vue-select.css';
 const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
-  project: {
-    type: Object,
-    default: {},
-  },
   projects: {
     type: Array,
     default: [],
   },
-  users: {
-    type: Array,
-    default: [],
-  },
-  statuses: {
-    type: Array,
-    default: [],
-  },
-  priorities: {
-    type: Array,
-    default: [],
+  project: {
+    type: Object,
+    default: {},
   },
 });
 
 const form = useForm({
   name: '',
-  project_slug: null,
   description: '',
-  assigned_to: [],
-  status_id: null,
-  priority_id: null,
+  project_slug: null,
 });
 
 const submit = () => {
@@ -48,7 +33,7 @@ const submit = () => {
     return;
   }
   form.post(
-    route('tasks.store', {
+    route('phases.store', {
       project: slug,
     }),
     {
@@ -63,7 +48,7 @@ const submit = () => {
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title>Create Task</template>
+    <template #title>Create Phase</template>
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
         <!-- Project Selection -->
@@ -110,67 +95,6 @@ const submit = () => {
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
           <InputError class="mt-2" :message="form.errors.description" />
-        </div>
-        <div>
-          <InputLabel for="status" value="Status" />
-          <vSelect
-            v-if="props.statuses.length > 0"
-            id="status"
-            v-model="form.status_id"
-            :options="props.statuses"
-            :reduce="(status) => status.id"
-            label="name"
-            class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
-          >
-            <template #search="{ attributes, events }">
-              <input
-                class="vs__search"
-                :required="!form.status_id"
-                v-bind="attributes"
-                v-on="events"
-              />
-            </template>
-          </vSelect>
-          <InputError class="mt-2" :message="form.errors.status_id" />
-        </div>
-        <div>
-          <InputLabel for="priority" value="Priority" />
-          <vSelect
-            v-if="props.priorities.length > 0"
-            id="priority"
-            v-model="form.priority_id"
-            :options="props.priorities"
-            :reduce="(priority) => priority.id"
-            label="name"
-            class="text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
-          >
-            <template #search="{ attributes, events }">
-              <input
-                class="vs__search"
-                :required="!form.priority_id"
-                v-bind="attributes"
-                v-on="events"
-              />
-            </template>
-          </vSelect>
-          <InputError class="mt-2" :message="form.errors.priority_id" />
-        </div>
-        <div>
-          <InputLabel for="assigned_to" value="Assigned To" />
-          <vSelect
-            id="assigned_to"
-            v-model="form.assigned_to"
-            :options="props.users"
-            :reduce="(user) => user.id"
-            label="name"
-            multiple
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
-          >
-          </vSelect>
-          <InputError class="mt-2" :message="form.errors.assigned_to" />
         </div>
       </form>
     </template>

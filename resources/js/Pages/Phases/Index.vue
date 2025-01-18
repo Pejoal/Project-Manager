@@ -55,7 +55,7 @@ const fetchPage = (url) => {
     <div
       class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md"
     >
-      <CreatePhaseModal :show="showModal" @close="closeModal" />
+      <CreatePhaseModal :show="showModal" :project="project" @close="closeModal" />
       <button
         @click="openModal"
         class="text-blue-500 dark:text-blue-400 hover:underline"
@@ -97,30 +97,6 @@ const fetchPage = (url) => {
                 {{ project ? project.name : phase.project.name }}
               </Link>
             </p>
-            <div class="space-y-1">
-              <p>
-                Status:
-                <span :style="{ color: phase.status.color }">{{
-                  phase.status.name
-                }}</span>
-              </p>
-              <p>
-                Priority:
-                <span :style="{ color: phase.priority.color }">{{
-                  phase.priority.name
-                }}</span>
-              </p>
-              <p class="mb-2 text-gray-700 dark:text-gray-300">
-                assigned to:
-                <span
-                  v-for="(assigned_to_user, index) in phase.assigned_to"
-                  :key="assigned_to_user.id"
-                >
-                  {{ assigned_to_user.name
-                  }}<span v-if="index < phase.assigned_to.length - 1">, </span>
-                </span>
-              </p>
-            </div>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
               Created at: {{ new Date(phase.created_at).toLocaleString() }}
             </div>
@@ -154,22 +130,3 @@ const fetchPage = (url) => {
     </div>
   </AppLayout>
 </template>
-
-<style scoped>
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: max-height 0.3s ease-in-out;
-}
-
-.slide-down-enter-from,
-.slide-down-leave-to {
-  max-height: 0;
-  overflow: hidden;
-}
-
-.slide-down-enter-to,
-.slide-down-leave-from {
-  max-height: 50rem;
-  overflow: auto;
-}
-</style>
