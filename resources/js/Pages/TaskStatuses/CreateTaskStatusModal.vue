@@ -34,7 +34,7 @@ watch(
 );
 
 const submit = () => {
-  if (status.value) {
+  if (status.value?.name) {
     form.put(route('task-statuses.update', status.value.id), {
       onSuccess: () => {
         form.reset();
