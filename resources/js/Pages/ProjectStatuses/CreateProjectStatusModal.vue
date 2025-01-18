@@ -55,7 +55,9 @@ const submit = () => {
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title>{{ status?.name ? 'Edit' : 'Create' }} Project Status</template>
+    <template #title
+      >{{ status?.name ? 'Edit' : 'Create' }} Project Status</template
+    >
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
         <div>

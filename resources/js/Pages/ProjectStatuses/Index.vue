@@ -83,5 +83,4 @@ const destroy = (id) => {
     form.delete(route('project-statuses.destroy', id));
   }
 };
-
 </script>

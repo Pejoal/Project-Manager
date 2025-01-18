@@ -51,9 +51,6 @@ const submit = () => {
     });
   }
 };
-
-console.log(status.value?.name);
-
 </script>
 
 <template>
