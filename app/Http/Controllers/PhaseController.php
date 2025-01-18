@@ -32,13 +32,14 @@ class PhaseController extends Controller
     return redirect()->route('phases.index', $project);
   }
 
-  public function show(Project $project, Phase $task)
+  public function show(Project $project, Phase $phase)
   {
-    if ($task->project_id !== $project->id) {
+    if ($phase->project_id !== $project->id) {
       abort(403, 'Phase not found in this project');
     }
 
-    return Inertia::render('Phases/Show', compact('task'));
+    $phase->load(['project']);
+    return Inertia::render('Phases/Show', compact('phase'));
   }
 
   public function edit(Project $project, Phase $task)

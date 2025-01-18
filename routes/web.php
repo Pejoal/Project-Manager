@@ -130,16 +130,16 @@ Route::group(
           Route::post('/', [PhaseController::class, 'store'])->name(
             'phases.store'
           );
-          Route::get('/{task}', [PhaseController::class, 'show'])->name(
+          Route::get('/{phase}', [PhaseController::class, 'show'])->name(
             'phases.show'
           );
-          Route::get('/{task}/edit', [PhaseController::class, 'edit'])->name(
+          Route::get('/{phase}/edit', [PhaseController::class, 'edit'])->name(
             'phases.edit'
           );
-          Route::put('/{task}', [PhaseController::class, 'update'])->name(
+          Route::put('/{phase}', [PhaseController::class, 'update'])->name(
             'phases.update'
           );
-          Route::delete('/{task}', [PhaseController::class, 'destroy'])->name(
+          Route::delete('/{phase}', [PhaseController::class, 'destroy'])->name(
             'phases.destroy'
           );
         });
