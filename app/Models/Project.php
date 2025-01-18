@@ -9,6 +9,11 @@ class Project extends Model
 
   protected $guarded = [];
 
+  public function phases()
+  {
+    return $this->hasMany(Phase::class);
+  }
+
   public function tasks()
   {
     return $this->hasMany(Task::class);
