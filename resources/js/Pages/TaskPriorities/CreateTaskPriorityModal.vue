@@ -19,7 +19,7 @@ const priority = ref(props.priority);
 
 const form = useForm({
   name: priority.value ? priority.value.name : '',
-  color: priority.value ? priority.value.color : null,
+  color: priority.value ? priority.value.color : '#000000',
 });
 
 watch(
