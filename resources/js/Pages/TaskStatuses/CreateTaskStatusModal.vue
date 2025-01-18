@@ -51,12 +51,15 @@ const submit = () => {
     });
   }
 };
+
+console.log(status.value?.name);
+
 </script>
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
     <template #title
-      >{{ status?.value ? 'Edit' : 'Create' }} Task Status</template
+      >{{ status?.name ? 'Edit' : 'Create' }} Task Status</template
     >
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
@@ -97,7 +100,7 @@ const submit = () => {
         type="submit"
         class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
       >
-        {{ status?.value ? 'Edit' : 'Create' }}
+        {{ status?.name ? 'Edit' : 'Create' }}
       </button>
     </template>
   </DialogModal>
