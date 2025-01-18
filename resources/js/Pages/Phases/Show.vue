@@ -13,7 +13,7 @@ const destroy = () => {
   if (confirm('Are you sure?')) {
     form.delete(
       route('phases.destroy', {
-        project: props.project.slug,
+        project: props.phase.project.slug,
         phase: props.phase.id,
       })
     );
