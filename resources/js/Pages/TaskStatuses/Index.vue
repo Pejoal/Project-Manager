@@ -33,7 +33,7 @@
           </div>
           <div>
             <button
-              @click="() => updateStatus(status)"
+              @click="() => openModal(status)"
               class="ml-4 text-green-500 dark:text-green-400 hover:underline"
             >
               Update
@@ -64,7 +64,8 @@ const props = defineProps({
 const showModal = ref(false);
 const selectedStatus = ref(null);
 
-const openModal = () => {
+const openModal = (status = null) => {
+  selectedStatus.value = status;
   showModal.value = true;
 };
 
@@ -81,10 +82,5 @@ const destroy = (id) => {
   if (confirm('Are you sure?')) {
     form.delete(route('task-statuses.destroy', id));
   }
-};
-
-const updateStatus = (status = null) => {
-  selectedStatus.value = status;
-  openModal();
 };
 </script>
