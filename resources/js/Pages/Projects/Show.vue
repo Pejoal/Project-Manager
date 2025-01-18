@@ -18,20 +18,18 @@ const destroy = () => {
 
 const drag = ref(false);
 
-
 const phaseMoved = (evt) => {
   // const { from, to, item } = evt;
-  axios.put(route("phases.sync"), {
-    statuses: props.statuses,
+  axios.put(route('phases.sync', props.project.slug), {
+    phases: props.project.phases,
   });
 };
 
 const taskMoved = (evt) => {
-  axios.put(route("tasks.sync"), {
-    statuses: props.statuses,
+  axios.put(route('tasks.sync', props.project.slug), {
+    phases: props.project.phases,
   });
 };
-
 </script>
 
 <template>
@@ -67,6 +65,33 @@ const taskMoved = (evt) => {
           Created at: {{ new Date(project.created_at).toLocaleString() }}
         </p>
       </div>
+
+      <section class="space-x-2 my-2">
+        <Link
+          :href="route('projects.edit', { project: project.slug })"
+          class="text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          Edit
+        </Link>
+        <Link
+          :href="route('phases.index', { project: project.slug })"
+          class="text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          View Phases
+        </Link>
+        <Link
+          :href="route('tasks.index', { project: project.slug })"
+          class="text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          View Tasks
+        </Link>
+        <button
+          @click="destroy"
+          class="ml-4 text-red-500 dark:text-red-400 hover:underline"
+        >
+          Delete
+        </button>
+      </section>
 
       <section class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
         <Draggable
@@ -106,33 +131,6 @@ const taskMoved = (evt) => {
             </div>
           </template>
         </Draggable>
-      </section>
-
-      <section class="space-x-2">
-        <Link
-          :href="route('projects.edit', { project: project.slug })"
-          class="text-blue-500 dark:text-blue-400 hover:underline"
-        >
-          Edit
-        </Link>
-        <Link
-          :href="route('phases.index', { project: project.slug })"
-          class="text-blue-500 dark:text-blue-400 hover:underline"
-        >
-          View Phases
-        </Link>
-        <Link
-          :href="route('tasks.index', { project: project.slug })"
-          class="text-blue-500 dark:text-blue-400 hover:underline"
-        >
-          View Tasks
-        </Link>
-        <button
-          @click="destroy"
-          class="ml-4 text-red-500 dark:text-red-400 hover:underline"
-        >
-          Delete
-        </button>
       </section>
     </div>
   </AppLayout>
