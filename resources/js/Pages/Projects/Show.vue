@@ -18,10 +18,20 @@ const destroy = () => {
 
 const drag = ref(false);
 
-const onMove = (evt) => {
-  const { from, to, item } = evt;
-  // Handle the move logic here, e.g., update the backend
+
+const phaseMoved = (evt) => {
+  // const { from, to, item } = evt;
+  axios.put(route("phases.sync"), {
+    statuses: props.statuses,
+  });
 };
+
+const taskMoved = (evt) => {
+  axios.put(route("tasks.sync"), {
+    statuses: props.statuses,
+  });
+};
+
 </script>
 
 <template>
@@ -64,7 +74,7 @@ const onMove = (evt) => {
           group="phases"
           @start="drag = true"
           @end="drag = false"
-          @move="onMove"
+          @move="phaseMoved"
           item-key="id"
           class="flex gap-4"
         >
@@ -82,7 +92,7 @@ const onMove = (evt) => {
                 group="tasks"
                 @start="drag = true"
                 @end="drag = false"
-                @move="onMove"
+                @move="taskMoved"
                 item-key="id"
               >
                 <template #item="{ element: task }">

@@ -142,6 +142,9 @@ Route::group(
           Route::delete('/{phase}', [PhaseController::class, 'destroy'])->name(
             'phases.destroy'
           );
+          Route::delete('/{phase}', [PhaseController::class, 'sync'])->name(
+            'phases.destroy'
+          );
         });
 
         // Task Management Routes

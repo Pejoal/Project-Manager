@@ -38,7 +38,12 @@ class PhaseController extends Controller
       abort(403, 'Phase not found in this project');
     }
 
-    $phase->load(['project', 'tasks.status', 'tasks.priority','tasks.assignedTo']);
+    $phase->load([
+      'project',
+      'tasks.status',
+      'tasks.priority',
+      'tasks.assignedTo',
+    ]);
     return Inertia::render('Phases/Show', compact('phase'));
   }
 
@@ -60,7 +65,20 @@ class PhaseController extends Controller
   public function destroy(Project $project, Phase $task)
   {
     $task->delete();
-
     return redirect()->route('phases.index', $project);
+  }
+
+  public function sync(Request $request)
+  {
+    $request->validate([
+      'phases' => ['required', 'array'],
+    ]);
+
+    foreach ($request->phases as $i => $phase) {
+      $order = $i + 10;
+      if ($phase['order'] !== $order) {
+        Phase::find($phase['id'])->update(['order' => $order]);
+      }
+    }
   }
 }
