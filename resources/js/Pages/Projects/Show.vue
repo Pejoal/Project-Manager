@@ -58,23 +58,7 @@ const onMove = (evt) => {
         </p>
       </div>
 
-      <section>
-        <Draggable
-          v-model="project.phases"
-          group="phases"
-          @start="drag = true"
-          @end="drag = false"
-          item-key="id"
-        >
-          <template #item="{ element }">
-            <div>{{ element.name }}</div>
-          </template>
-        </Draggable>
-      </section>
-
-      <section
-        class="flex gap-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg"
-      >
+      <section class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
         <Draggable
           v-model="project.phases"
           group="phases"
@@ -82,6 +66,7 @@ const onMove = (evt) => {
           @end="drag = false"
           @move="onMove"
           item-key="id"
+          class="flex gap-4"
         >
           <template #item="{ element }">
             <div
