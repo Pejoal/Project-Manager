@@ -8,6 +8,8 @@ const props = defineProps({
   project: Object,
 });
 
+// const project = ref(props.project);
+
 const form = useForm({});
 
 const destroy = () => {

@@ -87,9 +87,15 @@ class DatabaseSeeder extends Seeder
     $projects = Project::get();
     $projects->each(function ($project) {
       $phase1 = Phase::factory()->create([
+        'name' => "Phase 1",
         'project_id' => $project->id,
       ]);
       $phase2 = Phase::factory()->create([
+        'name' => "Phase 2",
+        'project_id' => $project->id,
+      ]);
+      $phase3 = Phase::factory()->create([
+        'name' => "Phase 3",
         'project_id' => $project->id,
       ]);
 
@@ -101,6 +107,11 @@ class DatabaseSeeder extends Seeder
       Task::factory(2)->create([
         'project_id' => $project->id,
         'phase_id' => $phase2->id,
+        'created_at' => now()->subMonths(rand(0, 11)),
+      ]);
+      Task::factory(2)->create([
+        'project_id' => $project->id,
+        'phase_id' => $phase3->id,
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
     });

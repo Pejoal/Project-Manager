@@ -94,6 +94,13 @@ Route::group(
         );
       });
 
+      Route::put('phases/sync', [PhaseController::class, 'sync'])->name(
+        'phases.sync'
+      );
+      Route::put('tasks/sync', [TaskController::class, 'sync'])->name(
+        'tasks.sync'
+      );
+
       // Project Management Routes
       Route::prefix('projects')->group(function () {
         Route::get('/', [ProjectController::class, 'index'])->name(
@@ -142,9 +149,6 @@ Route::group(
           Route::delete('/{phase}', [PhaseController::class, 'destroy'])->name(
             'phases.destroy'
           );
-          Route::put('/sync', [PhaseController::class, 'sync'])->name(
-            'phases.sync'
-          );
         });
 
         // Task Management Routes
@@ -166,9 +170,6 @@ Route::group(
           );
           Route::delete('/{task}', [TaskController::class, 'destroy'])->name(
             'tasks.destroy'
-          );
-          Route::put('/sync', [TaskController::class, 'sync'])->name(
-            'tasks.sync'
           );
         });
       });

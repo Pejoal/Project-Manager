@@ -69,14 +69,16 @@ class PhaseController extends Controller
     return redirect()->route('phases.index', $project);
   }
 
-  public function sync(Request $request, Project $project)
+  public function sync(Request $request)
   {
     $request->validate([
       'phases' => ['required', 'array'],
     ]);
 
+    dd($request->phases);
+
     foreach ($request->phases as $i => $phase) {
-      $order = $i + 10;
+      $order = $i + 1;
       if ($phase['order'] !== $order) {
         Phase::find($phase['id'])->update(['order' => $order]);
       }
