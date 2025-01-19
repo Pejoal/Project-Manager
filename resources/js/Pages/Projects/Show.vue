@@ -18,22 +18,16 @@ const destroy = () => {
   }
 };
 
-const drag = ref(false);
-
 watch(
-  () => drag.value,
-  (newDrag) => {
-    console.log(newDrag);
-  }
+  () => project.value.phases,
+  (newPhases) => {
+    console.log(newPhases);
+    axios.put(route('phases.sync', props.project.slug), {
+      phases: newPhases,
+    });
+  },
+  { deep: true }
 );
-
-const phaseMoved = (evt) => {
-  // console.log(evt);
-  // project.value.phases = evt.;
-  axios.put(route('phases.sync', props.project.slug), {
-    phases: project.value.phases,
-  });
-};
 </script>
 
 <template>
@@ -101,9 +95,6 @@ const phaseMoved = (evt) => {
         <Draggable
           v-model="project.phases"
           group="phases"
-          @move="phaseMoved"
-          @start="drag = true"
-          @end="drag = false"
           item-key="id"
           class="flex gap-4"
         >
