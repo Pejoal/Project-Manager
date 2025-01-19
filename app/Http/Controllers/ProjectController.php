@@ -56,10 +56,9 @@ class ProjectController extends Controller
       'clients',
       'status',
       'priority',
-      'phases.tasks',
-      'tasks.status',
-      'tasks.priority',
-      'tasks.assignedTo',
+      'phases.tasks.status',
+      'phases.tasks.priority',
+      'phases.tasks.assignedTo',
     ]);
     return Inertia::render('Projects/Show', compact('project'));
   }

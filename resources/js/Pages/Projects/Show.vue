@@ -8,8 +8,6 @@ const props = defineProps({
   project: Object,
 });
 
-const project = ref(props.project);
-
 const form = useForm({});
 
 const destroy = () => {
@@ -19,7 +17,7 @@ const destroy = () => {
 };
 
 watch(
-  () => project.value.phases,
+  () => props.project.phases,
   (newPhases) => {
     console.log(newPhases);
     axios.put(route('phases.sync', props.project.slug), {
@@ -110,10 +108,12 @@ watch(
               <Draggable v-model="element.tasks" group="tasks" item-key="id">
                 <template #item="{ element: task }">
                   <div
-                    class="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 mb-2 shadow-sm text-gray-800 dark:text-gray-200"
+                    class="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 mb-2 shadow-sm text-gray-800 dark:text-gray-100"
                   >
                     <h3>{{ task.name }}</h3>
-                    <p>Description: {{ task.description }}</p>
+                    <p class="dark:text-gray-400">
+                      Description: {{ task.description }}
+                    </p>
                     <p>
                       Status:
                       <span :style="{ color: task.status?.color }">{{
@@ -126,11 +126,16 @@ watch(
                         task.priority?.name
                       }}</span>
                     </p>
-                    <p>
+                    <p class="dark:text-gray-200">
                       Assigned to:
-                      <span v-for="user in task.assigned_to" :key="user.id">{{
-                        user.name
-                      }}</span>
+                      <span
+                        v-for="(user, index) in task.assigned_to"
+                        :key="user.id"
+                        >{{ user.name
+                        }}<span v-if="index < task.assigned_to.length - 1"
+                          >,
+                        </span>
+                      </span>
                     </p>
                   </div>
                 </template>
