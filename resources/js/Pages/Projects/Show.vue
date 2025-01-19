@@ -131,11 +131,17 @@ watch(
             <div
               class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md w-80"
             >
-              <h2
-                class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100"
+              <Link
+                :href="
+                  route('phases.show', {
+                    project: project.slug,
+                    phase: element.id,
+                  })
+                "
+                class="text-lg text-blue-500 dark:text-blue-400 hover:underline"
               >
                 {{ element.name }}
-              </h2>
+              </Link>
               <Draggable v-model="element.tasks" group="tasks" item-key="id">
                 <template #item="{ element: task }">
                   <div
