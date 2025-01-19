@@ -10,27 +10,27 @@ import 'vue-select/dist/vue-select.css';
 
 const props = defineProps({
   project: Object,
-  phase: Object,
+  milestone: Object,
 });
 
 const form = useForm({
-  name: props.phase.name,
-  description: props.phase.description,
+  name: props.milestone.name,
+  description: props.milestone.description,
 });
 
 const submit = () => {
   form.put(
-    route('phases.update', { project: props.project.slug, phase: props.phase.id })
+    route('milestones.update', { project: props.project.slug, milestone: props.milestone.id })
   );
 };
 </script>
 
 <template>
-  <Head :title="`Edit phase - ${phase.name}`" />
+  <Head :title="`Edit milestone - ${milestone.name}`" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Edit phase
+        Edit Milestone
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -39,7 +39,7 @@ const submit = () => {
           <InputLabel for="id" value="ID" />
           <TextInput
             id="id"
-            :value="phase.id"
+            :value="milestone.id"
             readonly
             type="text"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
@@ -75,10 +75,10 @@ const submit = () => {
           Update
         </button>
         <Link
-          :href="route('phases.show', { project: project.slug, phase: phase.id })"
+          :href="route('milestones.show', { project: project.slug, milestone: milestone.id })"
           class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
         >
-          Show phase
+          Show milestone
         </Link>
       </form>
     </div>

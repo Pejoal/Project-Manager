@@ -2,10 +2,10 @@
 import { defineProps, ref, computed } from 'vue';
 import { Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import CreatePhaseModal from './CreatePhaseModal.vue';
+import CreateMilestoneModal from './CreateMilestoneModal.vue';
 
 const props = defineProps({
-  phases: Array,
+  milestones: Array,
   project: Object,
 });
 
@@ -20,7 +20,7 @@ const closeModal = () => {
 };
 
 const title = computed(() =>
-  props.project ? `Phases for ${props.project.name}` : 'All Phases'
+  props.project ? `Milestones for ${props.project.name}` : 'All Milestones'
 );
 
 const fetchPage = (url) => {
@@ -50,7 +50,7 @@ const fetchPage = (url) => {
     <div
       class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md"
     >
-      <CreatePhaseModal
+      <CreateMilestoneModal
         :show="showModal"
         :project="project"
         @close="closeModal"
@@ -59,28 +59,28 @@ const fetchPage = (url) => {
         @click="openModal"
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
-        Create Phase
+        Create Milestone
       </button>
 
       <ul class="my-2 space-y-4">
         <li
-          v-for="phase in phases"
-          :key="phase.id"
+          v-for="milestone in milestones"
+          :key="milestone.id"
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
           <div>
             <p>
-              Phase:
+              Milestone:
               <Link
                 :href="
-                  route('phases.show', {
-                    project: project ? project.slug : phase.project.slug,
-                    phase: phase.id,
+                  route('milestones.show', {
+                    project: project ? project.slug : milestone.project.slug,
+                    milestone: milestone.id,
                   })
                 "
                 class="text-blue-500 dark:text-blue-400 hover:underline"
               >
-                <span v-html="phase.name"></span>
+                <span v-html="milestone.name"></span>
               </Link>
             </p>
             <p>
@@ -88,39 +88,39 @@ const fetchPage = (url) => {
               <Link
                 :href="
                   route('projects.show', {
-                    project: project ? project.slug : phase.project.slug,
+                    project: project ? project.slug : milestone.project.slug,
                   })
                 "
                 class="text-blue-500 dark:text-blue-400 hover:underline"
               >
-                {{ project ? project.name : phase.project.name }}
+                {{ project ? project.name : milestone.project.name }}
               </Link>
             </p>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
-              Created at: {{ new Date(phase.created_at).toLocaleString() }}
+              Created at: {{ new Date(milestone.created_at).toLocaleString() }}
             </div>
           </div>
           <div class="text-gray-500 dark:text-gray-400 text-sm">
-            Phase ID: {{ phase.id }}
+            Milestone ID: {{ milestone.id }}
           </div>
         </li>
       </ul>
       <!-- Pagination Controls -->
       <section class="flex items-center justify-between my-2">
         <button
-          v-if="props.phases.prev_page_url"
-          @click="fetchPage(props.phases.prev_page_url)"
+          v-if="props.milestones.prev_page_url"
+          @click="fetchPage(props.milestones.prev_page_url)"
           class="px-4 py-2 bg-blue-500 text-white rounded-lg"
         >
           Previous
         </button>
         <span class="mx-2"
-          >{{ props.phases.current_page }} / {{ props.phases.last_page }}</span
+          >{{ props.milestones.current_page }} / {{ props.milestones.last_page }}</span
         >
-        <span class="mx-2">Total: {{ props.phases.total }}</span>
+        <span class="mx-2">Total: {{ props.milestones.total }}</span>
         <button
-          v-if="props.phases.next_page_url"
-          @click="fetchPage(props.phases.next_page_url)"
+          v-if="props.milestones.next_page_url"
+          @click="fetchPage(props.milestones.next_page_url)"
           class="px-4 py-2 bg-blue-500 text-white rounded-lg"
         >
           Next
