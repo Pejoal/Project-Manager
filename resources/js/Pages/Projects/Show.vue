@@ -14,6 +14,8 @@ const form = useForm({});
 const filtersForm = useForm({
   show_description: false,
   show_status: true,
+  show_priority: true,
+  show_assigned_to: true,
 });
 
 const destroy = () => {
@@ -120,6 +122,28 @@ watch(
               name="show_status"
             />
           </section>
+
+          <section class="flex items-center">
+            <InputLabel for="show_priority" value="Show Priority" />
+
+            <Checkbox
+              class="ml-4 w-6 h-6 rounded-lg transition duration-150 ease-in-out"
+              id="show_priority"
+              v-model:checked="filtersForm.show_priority"
+              name="show_priority"
+            />
+          </section>
+
+          <section class="flex items-center">
+            <InputLabel for="show_assigned_to" value="Show Assigned to" />
+
+            <Checkbox
+              class="ml-4 w-6 h-6 rounded-lg transition duration-150 ease-in-out"
+              id="show_assigned_to"
+              v-model:checked="filtersForm.show_assigned_to"
+              name="show_assigned_to"
+            />
+          </section>
         </form>
         <Draggable
           v-model="project.phases"
@@ -160,13 +184,16 @@ watch(
                         task.status?.name
                       }}</span>
                     </p>
-                    <p>
+                    <p v-if="filtersForm.show_priority">
                       Priority:
                       <span :style="{ color: task.priority?.color }">{{
                         task.priority?.name
                       }}</span>
                     </p>
-                    <p class="dark:text-gray-200">
+                    <p
+                      v-if="filtersForm.show_assigned_to"
+                      class="dark:text-gray-200"
+                    >
                       Assigned to:
                       <span
                         v-for="(user, index) in task.assigned_to"
