@@ -24,6 +24,11 @@ class DatabaseSeeder extends Seeder
   {
     // User::factory(10)->withPersonalTeam()->create();
 
+    Settings::create([
+      'clients_color' => '#0FA0FF',
+      'projects_color' => '#F02050',
+      'tasks_color' => '#30F030',
+    ]);
     User::factory()
       ->withPersonalTeam()
       ->create([
@@ -136,10 +141,6 @@ class DatabaseSeeder extends Seeder
       ]);
     });
 
-    Settings::create([
-      'clients_color' => '#0FA0FF',
-      'projects_color' => '#F02050',
-      'tasks_color' => '#30F030',
-    ]);
+    
   }
 }
