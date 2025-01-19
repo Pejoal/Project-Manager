@@ -14,6 +14,11 @@ class Project extends Model
     return $this->hasMany(Phase::class)->orderBy('order', 'ASC');
   }
 
+  public function milestones()
+  {
+    return $this->hasMany(Milestone::class)->orderBy('order', 'ASC');
+  }
+
   public function tasks()
   {
     return $this->hasMany(Task::class);

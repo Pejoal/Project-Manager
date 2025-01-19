@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Client;
+use App\Models\Milestone;
 use App\Models\Phase;
 use App\Models\Project;
 use App\Models\ProjectPriority;
@@ -99,19 +100,38 @@ class DatabaseSeeder extends Seeder
         'project_id' => $project->id,
       ]);
 
+      $milestone1 = Milestone::factory()->create([
+        'name' => "Milestone 1",
+        'project_id' => $project->id,
+        'phase_id' => $phase1->id,
+      ]);
+      $milestone2 = Milestone::factory()->create([
+        'name' => "Milestone 2",
+        'project_id' => $project->id,
+        'phase_id' => $phase1->id,
+      ]);
+      $milestone3 = Milestone::factory()->create([
+        'name' => "Milestone 3",
+        'project_id' => $project->id,
+        'phase_id' => $phase1->id,
+      ]);
+
       Task::factory(2)->create([
         'project_id' => $project->id,
         'phase_id' => $phase1->id,
+        'milestone_id' => $milestone1->id,
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
       Task::factory(2)->create([
         'project_id' => $project->id,
         'phase_id' => $phase2->id,
+        'milestone_id' => $milestone2->id,
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
       Task::factory(2)->create([
         'project_id' => $project->id,
         'phase_id' => $phase3->id,
+        'milestone_id' => $milestone3->id,
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
     });
