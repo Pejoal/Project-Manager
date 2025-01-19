@@ -3,6 +3,7 @@
 use App\Events\MessageSent;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MilestoneController;
 use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectPriorityController;
@@ -145,6 +146,28 @@ Route::group(
           );
           Route::delete('/{phase}', [PhaseController::class, 'destroy'])->name(
             'phases.destroy'
+          );
+        });
+
+        // Milestone Management Routes
+        Route::prefix('{project:slug}/milestones')->group(function () {
+          Route::get('/', [MilestoneController::class, 'index'])->name(
+            'milestones.index'
+          );
+          Route::post('/', [MilestoneController::class, 'store'])->name(
+            'milestones.store'
+          );
+          Route::get('/{milestone}', [MilestoneController::class, 'show'])->name(
+            'milestones.show'
+          );
+          Route::get('/{milestone}/edit', [MilestoneController::class, 'edit'])->name(
+            'milestones.edit'
+          );
+          Route::put('/{milestone}', [MilestoneController::class, 'update'])->name(
+            'milestones.update'
+          );
+          Route::delete('/{milestone}', [MilestoneController::class, 'destroy'])->name(
+            'milestones.destroy'
           );
         });
 

@@ -86,6 +86,12 @@ watch(
           View Phases
         </Link>
         <Link
+          :href="route('milestones.index', { project: project.slug })"
+          class="text-blue-500 dark:text-blue-400 hover:underline"
+        >
+          View Milestones
+        </Link>
+        <Link
           :href="route('tasks.index', { project: project.slug })"
           class="text-blue-500 dark:text-blue-400 hover:underline"
         >
