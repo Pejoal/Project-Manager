@@ -3,12 +3,18 @@ import { defineProps, ref, watch } from 'vue';
 import { useForm, Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Draggable from 'vuedraggable';
+import Checkbox from '@/Components/Checkbox.vue';
+import InputLabel from '@/Components/InputLabel.vue';
 
 const props = defineProps({
   project: Object,
 });
 
 const form = useForm({});
+const filtersForm = useForm({
+  show_description: false,
+  show_status: true,
+});
 
 const destroy = () => {
   if (confirm('Are you sure?')) {
@@ -90,6 +96,29 @@ watch(
       </section>
 
       <section class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+        <form class="my-2 flex gap-2">
+          <section class="flex items-center">
+            <InputLabel for="show_description" value="Show Description" />
+
+            <Checkbox
+              class="ml-4 w-6 h-6 rounded-lg transition duration-150 ease-in-out"
+              id="show_description"
+              v-model:checked="filtersForm.show_description"
+              name="show_description"
+            />
+          </section>
+
+          <section class="flex items-center">
+            <InputLabel for="show_status" value="Show Status" />
+
+            <Checkbox
+              class="ml-4 w-6 h-6 rounded-lg transition duration-150 ease-in-out"
+              id="show_status"
+              v-model:checked="filtersForm.show_status"
+              name="show_status"
+            />
+          </section>
+        </form>
         <Draggable
           v-model="project.phases"
           group="phases"
@@ -111,10 +140,13 @@ watch(
                     class="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 mb-2 shadow-sm text-gray-800 dark:text-gray-100"
                   >
                     <h3>{{ task.name }}</h3>
-                    <p class="dark:text-gray-400">
+                    <p
+                      v-if="filtersForm.show_description"
+                      class="dark:text-gray-400"
+                    >
                       Description: {{ task.description }}
                     </p>
-                    <p>
+                    <p v-if="filtersForm.show_status">
                       Status:
                       <span :style="{ color: task.status?.color }">{{
                         task.status?.name
