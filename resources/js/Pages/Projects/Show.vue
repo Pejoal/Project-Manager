@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 import { useForm, Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Draggable from 'vuedraggable';
@@ -18,12 +18,22 @@ const destroy = () => {
   }
 };
 
+const drag = ref(false);
+
+watch(
+  () => drag.value,
+  (newDrag) => {
+    console.log(newDrag);
+  }
+);
+
 const phaseMoved = (evt) => {
+  // console.log(evt);
+  // project.value.phases = evt.;
   axios.put(route('phases.sync', props.project.slug), {
     phases: project.value.phases,
   });
 };
-
 </script>
 
 <template>
@@ -92,6 +102,8 @@ const phaseMoved = (evt) => {
           v-model="project.phases"
           group="phases"
           @move="phaseMoved"
+          @start="drag = true"
+          @end="drag = false"
           item-key="id"
           class="flex gap-4"
         >
@@ -104,11 +116,7 @@ const phaseMoved = (evt) => {
               >
                 {{ element.name }}
               </h2>
-              <Draggable
-                v-model="element.tasks"
-                group="tasks"
-                item-key="id"
-              >
+              <Draggable v-model="element.tasks" group="tasks" item-key="id">
                 <template #item="{ element: task }">
                   <div
                     class="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 mb-2 shadow-sm text-gray-800 dark:text-gray-200"
