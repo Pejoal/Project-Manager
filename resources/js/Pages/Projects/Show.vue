@@ -43,6 +43,7 @@ watch(
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <h2 class="text-xl font-bold dark:text-gray-100">Basic Data</h2>
       <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Project ID: {{ project.id }}
@@ -96,6 +97,7 @@ watch(
       </section>
 
       <section class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+        <h2 class="text-xl font-bold dark:text-gray-100">Kanban View</h2>
         <form class="my-2 flex gap-2">
           <section class="flex items-center">
             <InputLabel for="show_description" value="Show Description" />
