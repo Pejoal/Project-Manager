@@ -52,7 +52,15 @@ class ProjectController extends Controller
 
   public function show(Project $project)
   {
-    $project->load(['clients', 'status', 'priority', 'phases.tasks']);
+    $project->load([
+      'clients',
+      'status',
+      'priority',
+      'phases.tasks',
+      'tasks.status',
+      'tasks.priority',
+      'tasks.assignedTo',
+    ]);
     return Inertia::render('Projects/Show', compact('project'));
   }
 

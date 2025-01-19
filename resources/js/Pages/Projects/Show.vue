@@ -112,7 +112,26 @@ watch(
                   <div
                     class="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 mb-2 shadow-sm text-gray-800 dark:text-gray-200"
                   >
-                    {{ task.name }}
+                    <h3>{{ task.name }}</h3>
+                    <p>Description: {{ task.description }}</p>
+                    <p>
+                      Status:
+                      <span :style="{ color: task.status?.color }">{{
+                        task.status?.name
+                      }}</span>
+                    </p>
+                    <p>
+                      Priority:
+                      <span :style="{ color: task.priority?.color }">{{
+                        task.priority?.name
+                      }}</span>
+                    </p>
+                    <p>
+                      Assigned to:
+                      <span v-for="user in task.assigned_to" :key="user.id">{{
+                        user.name
+                      }}</span>
+                    </p>
                   </div>
                 </template>
               </Draggable>
