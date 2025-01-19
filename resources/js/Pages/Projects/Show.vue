@@ -11,7 +11,8 @@ const props = defineProps({
 });
 
 const form = useForm({});
-const filtersForm = useForm({
+
+const filtersForm = ref({
   show_description: false,
   show_status: true,
   show_priority: true,
