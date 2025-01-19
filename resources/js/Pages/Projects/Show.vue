@@ -172,7 +172,18 @@ watch(
                   <div
                     class="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 mb-2 shadow-sm text-gray-800 dark:text-gray-100"
                   >
-                    <h3>{{ task.name }}</h3>
+                    <Link
+                      :href="
+                        route('tasks.show', {
+                          project: project.slug,
+                          task: task.id,
+                        })
+                      "
+                      class="text-blue-500 dark:text-blue-400 hover:underline"
+                    >
+                      {{ task.name }}
+                      #{{ task.id }}
+                    </Link>
                     <p
                       v-if="filtersForm.show_description"
                       class="dark:text-gray-400"
