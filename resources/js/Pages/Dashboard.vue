@@ -25,17 +25,6 @@ const props = defineProps({
 
 Chart.register(...registerables);
 
-const polarAreaChartData = ref({
-  labels: ['Red', 'Green', 'Yellow', 'Grey', 'Blue'],
-  datasets: [
-    {
-      data: [11, 16, 7, 3, 14],
-      backgroundColor: ['#FF6384', '#4BC0C0', '#FFCE56', '#E7E9ED', '#36A2EB'],
-      label: 'My dataset', // for legend
-    },
-  ],
-});
-
 const chartOptions = ref({
   responsive: true,
   maintainAspectRatio: false,
@@ -153,15 +142,6 @@ const updateSettings = () => {
             Pie Chart Example
           </h3>
           <PieChart :chart-data="doughnutData" :options="chartOptions" />
-        </div>
-        <div class="mb-8">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-            Polar Area Chart Example
-          </h3>
-          <PolarAreaChart
-            :chart-data="polarAreaChartData"
-            :options="chartOptions"
-          />
         </div>
       </div>
     </div>
