@@ -33,7 +33,7 @@ const submit = () => {
     return;
   }
   form.post(
-    route('phases.store', {
+    route('milestones.store', {
       project: slug,
     }),
     {
@@ -48,7 +48,7 @@ const submit = () => {
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title>Create Phase</template>
+    <template #title>Create Milestone</template>
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
         <!-- Project Selection -->
