@@ -12,7 +12,6 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TaskStatusController;
 use App\Http\Controllers\TaskPriorityController;
-use App\Http\Controllers\UserProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -67,10 +66,6 @@ Route::group(
 
       Route::get('/dashboard', [DashboardController::class, 'show'])->name(
         'dashboard'
-      );
-
-      Route::get('/profile', [UserProfileController::class, 'show'])->name(
-        'profile.show'
       );
 
       // Client Management Routes
@@ -157,18 +152,22 @@ Route::group(
           Route::post('/', [MilestoneController::class, 'store'])->name(
             'milestones.store'
           );
-          Route::get('/{milestone}', [MilestoneController::class, 'show'])->name(
-            'milestones.show'
-          );
-          Route::get('/{milestone}/edit', [MilestoneController::class, 'edit'])->name(
-            'milestones.edit'
-          );
-          Route::put('/{milestone}', [MilestoneController::class, 'update'])->name(
-            'milestones.update'
-          );
-          Route::delete('/{milestone}', [MilestoneController::class, 'destroy'])->name(
-            'milestones.destroy'
-          );
+          Route::get('/{milestone}', [
+            MilestoneController::class,
+            'show',
+          ])->name('milestones.show');
+          Route::get('/{milestone}/edit', [
+            MilestoneController::class,
+            'edit',
+          ])->name('milestones.edit');
+          Route::put('/{milestone}', [
+            MilestoneController::class,
+            'update',
+          ])->name('milestones.update');
+          Route::delete('/{milestone}', [
+            MilestoneController::class,
+            'destroy',
+          ])->name('milestones.destroy');
         });
 
         // Task Management Routes
