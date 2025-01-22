@@ -145,7 +145,7 @@ return [
       //     'filterableAttributes'=> ['id', 'name', 'email'],
       // ],
       Task::class => [
-        'filterableAttributes' => ['name', 'description', 'project_id'],
+        'filterableAttributes' => ['project_id'],
         'sortableAttributes' => ['created_at'],
         // Other settings fields...
       ],

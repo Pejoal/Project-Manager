@@ -46,12 +46,12 @@ class DatabaseSeeder extends Seeder
       ]);
 
     ProjectStatus::insert([
-      ['name' => 'Planned', 'color' => '#FF5733', 'completed' => false],
-      ['name' => 'In Progress', 'color' => '#36A2EB', 'completed' => false],
-      ['name' => 'Completed', 'color' => '#4BC0C0', 'completed' => true],
-      ['name' => 'On Hold', 'color' => '#FFA500', 'completed' => false],
-      ['name' => 'Cancelled', 'color' => '#808080', 'completed' => false],
-      ['name' => 'Deferred', 'color' => '#C70039', 'completed' => false],
+      ['name' => 'Planned', 'color' => '#FF5733', 'completed_field' => false],
+      ['name' => 'In Progress', 'color' => '#36A2EB', 'completed_field' => false],
+      ['name' => 'Completed', 'color' => '#4BC0C0', 'completed_field' => true],
+      ['name' => 'On Hold', 'color' => '#FFA500', 'completed_field' => false],
+      ['name' => 'Cancelled', 'color' => '#808080', 'completed_field' => false],
+      ['name' => 'Deferred', 'color' => '#C70039', 'completed_field' => false],
     ]);
 
     ProjectPriority::insert([
