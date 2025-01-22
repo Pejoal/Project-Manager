@@ -19,7 +19,15 @@ class TaskStatusController extends Controller
     $request->validate([
       'name' => 'required|string|max:255',
       'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+      'completed_field' => 'boolean',
     ]);
+
+    if ($request->completed_field) {
+      TaskStatus::where('completed_field', true)->update([
+        'completed_field' => false,
+      ]);
+    }
+
     TaskStatus::create($request->all());
     return redirect()->route('task-statuses.index');
   }
@@ -29,7 +37,15 @@ class TaskStatusController extends Controller
     $request->validate([
       'name' => 'required|string|max:255',
       'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+      'completed_field' => 'boolean',
     ]);
+
+    if ($request->completed_field) {
+      TaskStatus::where('completed_field', true)->update([
+        'completed_field' => false,
+      ]);
+    }
+
     $taskStatus->update($request->all());
     return redirect()->route('task-statuses.index');
   }
