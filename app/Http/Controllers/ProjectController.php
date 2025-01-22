@@ -82,7 +82,7 @@ class ProjectController extends Controller
 
     return Inertia::render(
       'Projects/Show',
-      compact('project', 'totalTasks', 'completedTasks', 'completedStatusColor')
+      compact('project', 'totalTasks', 'completedTasks')
     );
   }
 
