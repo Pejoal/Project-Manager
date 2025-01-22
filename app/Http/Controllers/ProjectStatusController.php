@@ -10,7 +10,7 @@ class ProjectStatusController extends Controller
 {
   public function index()
   {
-    $statuses = ProjectStatus::all();
+    $statuses = ProjectStatus::latest('created_at')->get();
     return Inertia::render('ProjectStatuses/Index', compact('statuses'));
   }
 

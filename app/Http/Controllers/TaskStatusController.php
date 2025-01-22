@@ -10,7 +10,7 @@ class TaskStatusController extends Controller
 {
   public function index()
   {
-    $statuses = TaskStatus::all();
+    $statuses = TaskStatus::latest('created_at')->get();
     return Inertia::render('TaskStatuses/Index', compact('statuses'));
   }
 

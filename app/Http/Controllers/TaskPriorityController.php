@@ -8,7 +8,7 @@ class TaskPriorityController extends Controller
 {
   public function index()
   {
-    $priorities = TaskPriority::all();
+    $priorities = TaskPriority::latest('created_at')->get();
     return Inertia::render('TaskPriorities/Index', compact('priorities'));
   }
 
