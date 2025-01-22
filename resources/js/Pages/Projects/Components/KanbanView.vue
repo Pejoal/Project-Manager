@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineProps, reactive, ref, watch } from 'vue';
+import { computed, defineProps, ref, watch } from 'vue';
 import Draggable from 'vuedraggable';
 import Checkbox from '@/Components/Checkbox.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -11,30 +11,17 @@ const props = defineProps({
   filtersForm: Object,
 });
 
-const phases = ref(props.project.phases);
-// Create a copy of the phases for Draggable
-const phasesCopy = computed(
-  {
-    get: () => JSON.parse(JSON.stringify(phases.value)),
-    set: (value) => {
-      // Update the original project.phases when the order changes
-      phases.value = value;
-    },
-  },
-  {
-    deep: true,
-  }
-);
+const phases = ref(JSON.parse(JSON.stringify(props.project.phases)));
 
-// watch(
-//   () => phases.value,
-//   (newPhases) => {
-//     axios.put(route('phases.sync', props.project.slug), {
-//       phases: newPhases,
-//     });
-//   },
-//   { deep: true }
-// );
+watch(
+  () => phases.value,
+  (newPhases) => {
+    axios.put(route('phases.sync', props.project.slug), {
+      phases: newPhases,
+    });
+  },
+  { deep: true }
+);
 
 const drag = ref(false);
 
@@ -95,7 +82,7 @@ const tasksDragOptions = {
       </section>
     </form>
     <Draggable
-      v-model="phasesCopy"
+      v-model="phases"
       @start="drag = true"
       @end="drag = false"
       group="phases"
@@ -109,10 +96,7 @@ const tasksDragOptions = {
         >
           <Link
             :href="
-              route('phases.show', {
-                project: project.slug,
-                phase: element.id,
-              })
+              route('phases.show', { project: project.slug, phase: element.id })
             "
             class="text-lg text-blue-500 dark:text-blue-400 hover:underline"
           >
