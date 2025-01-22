@@ -72,7 +72,7 @@ const dragOptions = {
       v-bind="dragOptions"
       :component-data="{
         tag: 'ul',
-        type: 'transition-group',
+        type: 'phases',
         name: !drag ? 'flip-list' : null,
       }"
     >
@@ -91,7 +91,17 @@ const dragOptions = {
           >
             {{ element.name }}
           </Link>
-          <Draggable v-model="element.tasks" group="tasks" item-key="id">
+          <Draggable
+            v-model="element.tasks"
+            group="tasks"
+            item-key="id"
+            v-bind="dragOptions"
+            :component-data="{
+              tag: 'ul',
+              type: 'tasks',
+              name: !drag ? 'flip-list' : null,
+            }"
+          >
             <template #item="{ element: task }">
               <KanbanTask
                 :task="task"
