@@ -43,7 +43,7 @@ const tasksDragOptions = {
 <template>
   <section class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
     <h2 class="text-xl font-bold dark:text-gray-100">Kanban View</h2>
-    <form class="my-2 flex gap-2">
+    <form class="my-2 flex flex-wrap gap-2">
       <section class="flex items-center">
         <InputLabel for="show_description" value="Show Description" />
         <Checkbox
@@ -87,12 +87,12 @@ const tasksDragOptions = {
       @end="drag = false"
       group="phases"
       item-key="id"
-      class="flex gap-4"
+      class="flex flex-wrap gap-4"
       v-bind="phasesDragOptions"
     >
       <template #item="{ element }">
         <div
-          class="cursor-move bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md w-80"
+          class="cursor-move bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md w-full sm:w-80"
         >
           <Link
             :href="
