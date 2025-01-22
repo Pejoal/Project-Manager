@@ -79,7 +79,7 @@ class DatabaseSeeder extends Seeder
     TaskStatus::insert([
       ['name' => 'Pending', 'color' => '#E70A1D','completed_field'=> false],
       ['name' => 'In Progress', 'color' => '#36A2EB','completed_field'=> false],
-      ['name' => 'Completed', 'color' => '#2BFFC0','completed_field'=> true],
+      ['name' => 'Completed', 'color' => '#2BFF10','completed_field'=> true],
       ['name' => 'On Hold', 'color' => '#FFA500','completed_field'=> false],
       ['name' => 'Cancelled', 'color' => '#808080','completed_field'=> false],
       ['name' => 'Review', 'color' => '#FFD700','completed_field'=> false],
