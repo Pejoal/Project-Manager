@@ -75,7 +75,7 @@ const fetchPage = (url) => {
 </script>
 
 <template>
-  <Head :title="title" />
+  <Head title="Tasks" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
