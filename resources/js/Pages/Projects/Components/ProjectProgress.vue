@@ -24,8 +24,9 @@ const progress = computed(() => {
         }"
       ></div>
     </div>
-    <div class="text-sm dark:text-gray-300">
-      {{ completedTasks }} / {{ totalTasks }} tasks completed
+    <div class="text-sm flex items-center justify-between dark:text-gray-300">
+      <p>{{ completedTasks }} / {{ totalTasks }} tasks completed</p>
+      <p>Progress: {{ progress.toFixed(2) }}%</p>
     </div>
   </div>
 </template>
