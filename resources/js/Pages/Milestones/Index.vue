@@ -115,7 +115,8 @@ const fetchPage = (url) => {
           Previous
         </button>
         <span class="mx-2"
-          >{{ props.milestones.current_page }} / {{ props.milestones.last_page }}</span
+          >{{ props.milestones.current_page }} /
+          {{ props.milestones.last_page }}</span
         >
         <span class="mx-2">Total: {{ props.milestones.total }}</span>
         <button

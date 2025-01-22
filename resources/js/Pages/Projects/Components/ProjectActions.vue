@@ -1,4 +1,3 @@
-
 <script setup>
 import { defineProps, defineEmits } from 'vue';
 import { Link } from '@inertiajs/vue3';

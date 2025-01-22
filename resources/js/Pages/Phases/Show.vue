@@ -77,7 +77,11 @@ const destroy = () => {
             </Link>
             <p class="text-sm text-gray-600 dark:text-gray-400">
               Assigned to:
-              <span class="text-gray-200" v-for="(user, index) in task.assigned_to" :key="user.id">
+              <span
+                class="text-gray-200"
+                v-for="(user, index) in task.assigned_to"
+                :key="user.id"
+              >
                 {{ user.name
                 }}<span v-if="index < task.assigned_to.length - 1">, </span>
               </span>

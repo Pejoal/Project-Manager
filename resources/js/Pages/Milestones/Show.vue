@@ -77,7 +77,11 @@ const destroy = () => {
             </Link>
             <p class="text-sm text-gray-600 dark:text-gray-400">
               Assigned to:
-              <span class="text-gray-200" v-for="(user, index) in task.assigned_to" :key="user.id">
+              <span
+                class="text-gray-200"
+                v-for="(user, index) in task.assigned_to"
+                :key="user.id"
+              >
                 {{ user.name
                 }}<span v-if="index < task.assigned_to.length - 1">, </span>
               </span>
@@ -99,7 +103,10 @@ const destroy = () => {
       </div>
       <Link
         :href="
-          route('milestones.edit', { project: milestone.project.slug, milestone: milestone.id })
+          route('milestones.edit', {
+            project: milestone.project.slug,
+            milestone: milestone.id,
+          })
         "
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >

@@ -30,9 +30,6 @@
               class="w-16 h-6"
               :style="{ backgroundColor: status.color }"
             ></div>
-            <span v-if="status.completed" class="text-green-500"
-              >Completed</span
-            >
           </div>
 
           <div>

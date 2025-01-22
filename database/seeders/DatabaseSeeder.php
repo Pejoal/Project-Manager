@@ -46,12 +46,15 @@ class DatabaseSeeder extends Seeder
       ]);
 
     ProjectStatus::insert([
-      ['name' => 'Planned', 'color' => '#FF5733', 'completed_field' => false],
-      ['name' => 'In Progress', 'color' => '#36A2EB', 'completed_field' => false],
-      ['name' => 'Completed', 'color' => '#4BC0C0', 'completed_field' => true],
-      ['name' => 'On Hold', 'color' => '#FFA500', 'completed_field' => false],
-      ['name' => 'Cancelled', 'color' => '#808080', 'completed_field' => false],
-      ['name' => 'Deferred', 'color' => '#C70039', 'completed_field' => false],
+      ['name' => 'Planned', 'color' => '#FF5733'],
+      [
+        'name' => 'In Progress',
+        'color' => '#36A2EB',
+      ],
+      ['name' => 'Completed', 'color' => '#4BC0C0'],
+      ['name' => 'On Hold', 'color' => '#FFA500'],
+      ['name' => 'Cancelled', 'color' => '#808080'],
+      ['name' => 'Deferred', 'color' => '#C70039'],
     ]);
 
     ProjectPriority::insert([
@@ -74,13 +77,13 @@ class DatabaseSeeder extends Seeder
     }
 
     TaskStatus::insert([
-      ['name' => 'Pending', 'color' => '#E70A1D'],
-      ['name' => 'In Progress', 'color' => '#36A2EB'],
-      ['name' => 'Completed', 'color' => '#4BC0C0'],
-      ['name' => 'On Hold', 'color' => '#FFA500'],
-      ['name' => 'Cancelled', 'color' => '#808080'],
-      ['name' => 'Review', 'color' => '#FFD700'],
-      ['name' => 'Testing', 'color' => '#8A2BE2'],
+      ['name' => 'Pending', 'color' => '#E70A1D','completed_field'=> false],
+      ['name' => 'In Progress', 'color' => '#36A2EB','completed_field'=> false],
+      ['name' => 'Completed', 'color' => '#2BFFC0','completed_field'=> true],
+      ['name' => 'On Hold', 'color' => '#FFA500','completed_field'=> false],
+      ['name' => 'Cancelled', 'color' => '#808080','completed_field'=> false],
+      ['name' => 'Review', 'color' => '#FFD700','completed_field'=> false],
+      ['name' => 'Testing', 'color' => '#8A2BE2','completed_field'=> false],
     ]);
 
     TaskPriority::insert([

@@ -4,6 +4,7 @@ use App\Models\Client;
 use App\Models\Project;
 use App\Models\ProjectPriority;
 use App\Models\ProjectStatus;
+use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -62,27 +63,23 @@ class ProjectController extends Controller
     ]);
 
     $totalTasks = $project->tasks()->count();
-
-    $completedTasks = $project
-      ->tasks()
-      ->whereHas('status', function ($query) {
-        $query->where('name', 'Completed');
-      })
-      ->count();
-
-    // $completedTasks = $project
-    //   ->tasks()
-    //   ->whereHas('status', function ($query) {
-    //     $query->where('completed_field', true);
-    //   })
-    //   ->count();
-
-    // $completedStatusColor = ProjectStatus::where('completed', true)->first()
-    //   ->color;
+    $completedStatus = TaskStatus::where('completed_field', true)->first();
+    if ($completedStatus) {
+      $completedStatusColor = $completedStatus->color;
+      $completedTasks = $project
+        ->tasks()
+        ->whereHas('status', function ($query) use ($completedStatus) {
+          $query->where('id', $completedStatus->id);
+        })
+        ->count();
+    } else {
+      $completedStatusColor = null;
+      $completedTasks = 0;
+    }
 
     return Inertia::render(
       'Projects/Show',
-      compact('project', 'totalTasks', 'completedTasks')
+      compact('project', 'totalTasks', 'completedTasks', 'completedStatusColor')
     );
   }
 

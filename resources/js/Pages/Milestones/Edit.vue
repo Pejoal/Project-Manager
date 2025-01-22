@@ -20,7 +20,10 @@ const form = useForm({
 
 const submit = () => {
   form.put(
-    route('milestones.update', { project: props.project.slug, milestone: props.milestone.id })
+    route('milestones.update', {
+      project: props.project.slug,
+      milestone: props.milestone.id,
+    })
   );
 };
 </script>
@@ -75,7 +78,12 @@ const submit = () => {
           Update
         </button>
         <Link
-          :href="route('milestones.show', { project: project.slug, milestone: milestone.id })"
+          :href="
+            route('milestones.show', {
+              project: project.slug,
+              milestone: milestone.id,
+            })
+          "
           class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
         >
           Show milestone

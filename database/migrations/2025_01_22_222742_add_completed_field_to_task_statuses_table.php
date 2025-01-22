@@ -10,7 +10,7 @@ return new class extends Migration {
    */
   public function up(): void
   {
-    Schema::table('project_statuses', function (Blueprint $table) {
+    Schema::table('task_statuses', function (Blueprint $table) {
       $table->boolean('completed_field')->default(false);
     });
   }
@@ -20,7 +20,7 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::table('project_statuses', function (Blueprint $table) {
+    Schema::table('task_statuses', function (Blueprint $table) {
       $table->dropColumn('completed_field');
     });
   }
