@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref, computed, watch } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 import { Link, Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateTaskModal from './CreateTaskModal.vue';
@@ -27,10 +27,6 @@ const openModal = () => {
 const closeModal = () => {
   showModal.value = false;
 };
-
-const title = computed(() =>
-  props.project ? `Tasks for ${props.project.name}` : 'All Tasks'
-);
 
 const filtersVisible = ref(true);
 
@@ -83,15 +79,16 @@ const fetchPage = (url) => {
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        {{ title }}
-        <template v-if="project">
+        <section v-if="project">
+          Tasks for
           <Link
             :href="route('projects.show', { project: project.slug })"
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
             {{ project.name }}
           </Link>
-        </template>
+        </section>
+        <p v-else>All Tasks</p>
       </h1>
     </template>
     <div
