@@ -77,8 +77,8 @@ class ProjectController extends Controller
     //   })
     //   ->count();
 
-    $completedStatusColor = ProjectStatus::where('completed', true)->first()
-      ->color;
+    // $completedStatusColor = ProjectStatus::where('completed', true)->first()
+    //   ->color;
 
     return Inertia::render(
       'Projects/Show',

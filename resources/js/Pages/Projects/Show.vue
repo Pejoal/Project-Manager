@@ -11,7 +11,7 @@ const props = defineProps({
   project: Object,
   totalTasks: Number,
   completedTasks: Number,
-  completedStatusColor: String,
+  // completedStatusColor: String,
 });
 
 const form = useForm({});
@@ -43,7 +43,6 @@ const destroy = () => {
       <ProjectProgress
         :totalTasks="totalTasks"
         :completedTasks="completedTasks"
-        :completedStatusColor="completedStatusColor"
       />
       <ProjectActions :project="project" @destroy="destroy" />
       <KanbanView :project="project" :filtersForm="filtersForm" />
