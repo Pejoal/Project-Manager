@@ -10,7 +10,7 @@ const emit = defineEmits(['destroy']);
 </script>
 
 <template>
-  <section class="space-x-2 my-2">
+  <section class="flex flex-wrap gap-2 my-2">
     <Link
       :href="route('projects.edit', { project: project.slug })"
       class="text-blue-500 dark:text-blue-400 hover:underline"
