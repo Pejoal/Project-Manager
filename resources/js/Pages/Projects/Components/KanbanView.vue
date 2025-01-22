@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 import Draggable from 'vuedraggable';
 import Checkbox from '@/Components/Checkbox.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -10,6 +10,18 @@ const props = defineProps({
   project: Object,
   filtersForm: Object,
 });
+
+const phases = ref(props.project.phases);
+
+watch(
+  () => phases.value,
+  (newPhases) => {
+    axios.put(route('phases.sync', props.project.slug), {
+      phases: newPhases,
+    });
+  },
+  { deep: true }
+);
 
 const drag = ref(false);
 
@@ -70,7 +82,7 @@ const tasksDragOptions = {
       </section>
     </form>
     <Draggable
-      v-model="project.phases"
+      v-model="phases"
       @start="drag = true"
       @end="drag = false"
       group="phases"

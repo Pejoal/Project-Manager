@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref, watch } from 'vue';
+import { defineProps, ref } from 'vue';
 import { useForm, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ProjectDetails from './Components/ProjectDetails.vue';
@@ -24,16 +24,6 @@ const destroy = () => {
     form.delete(route('projects.destroy', { project: props.project.slug }));
   }
 };
-
-watch(
-  () => props.project.phases,
-  (newPhases) => {
-    axios.put(route('phases.sync', props.project.slug), {
-      phases: newPhases,
-    });
-  },
-  { deep: true }
-);
 </script>
 
 <template>
