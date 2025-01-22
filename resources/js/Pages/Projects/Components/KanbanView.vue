@@ -1,4 +1,3 @@
-
 <script setup>
 import { defineProps, ref } from 'vue';
 import Draggable from 'vuedraggable';
@@ -13,6 +12,13 @@ const props = defineProps({
 });
 
 const drag = ref(false);
+
+const dragOptions = {
+  animation: 200,
+  group: 'description',
+  disabled: false,
+  ghostClass: 'ghost',
+};
 </script>
 
 <template>
@@ -63,9 +69,17 @@ const drag = ref(false);
       group="phases"
       item-key="id"
       class="flex gap-4"
+      v-bind="dragOptions"
+      :component-data="{
+        tag: 'ul',
+        type: 'transition-group',
+        name: !drag ? 'flip-list' : null,
+      }"
     >
       <template #item="{ element }">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md w-80">
+        <div
+          class="cursor-move bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md w-80"
+        >
           <Link
             :href="
               route('phases.show', {
@@ -77,15 +91,13 @@ const drag = ref(false);
           >
             {{ element.name }}
           </Link>
-          <Draggable
-            v-model="element.tasks"
-            @start="drag = true"
-            @end="drag = false"
-            group="tasks"
-            item-key="id"
-          >
+          <Draggable v-model="element.tasks" group="tasks" item-key="id">
             <template #item="{ element: task }">
-              <KanbanTask :task="task" :project="project" :filtersForm="filtersForm" />
+              <KanbanTask
+                :task="task"
+                :project="project"
+                :filtersForm="filtersForm"
+              />
             </template>
           </Draggable>
         </div>
@@ -93,3 +105,10 @@ const drag = ref(false);
     </Draggable>
   </section>
 </template>
+
+<style>
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
+}
+</style>
