@@ -40,7 +40,7 @@ class TaskStatusController extends Controller
       'completed_field' => 'boolean',
     ]);
 
-    if ($request->completed_field) {
+    if ($request->completed_field && !$taskStatus->completed_field) {
       TaskStatus::where('completed_field', true)->update([
         'completed_field' => false,
       ]);
