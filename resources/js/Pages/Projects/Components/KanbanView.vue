@@ -1,6 +1,6 @@
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 import Draggable from 'vuedraggable';
 import Checkbox from '@/Components/Checkbox.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -11,6 +11,8 @@ const props = defineProps({
   project: Object,
   filtersForm: Object,
 });
+
+const drag = ref(false);
 </script>
 
 <template>
