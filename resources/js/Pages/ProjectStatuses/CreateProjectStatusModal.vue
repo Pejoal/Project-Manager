@@ -4,6 +4,7 @@ import DialogModal from '@/Components/DialogModal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Checkbox from '@/Components/Checkbox.vue';
 import { ref, watch } from 'vue';
 
 const emit = defineEmits(['close']);
@@ -20,6 +21,7 @@ const status = ref(props.status);
 const form = useForm({
   name: status.value ? status.value.name : '',
   color: status.value ? status.value.color : '#000000',
+  completed: status.value ? status.value.completed : false,
 });
 
 watch(
@@ -29,6 +31,7 @@ watch(
       status.value = newStatus;
       form.name = newStatus.name;
       form.color = newStatus.color;
+      form.completed = newStatus.completed;
     }
   }
 );
@@ -81,6 +84,15 @@ const submit = () => {
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
           <InputError class="mt-2" :message="form.errors.color" />
+        </div>
+        <div>
+          <InputLabel for="completed" value="Completed" />
+          <Checkbox
+            id="completed"
+            v-model="form.completed"
+            class="mt-1 block"
+          />
+          <InputError class="mt-2" :message="form.errors.completed" />
         </div>
       </form>
     </template>

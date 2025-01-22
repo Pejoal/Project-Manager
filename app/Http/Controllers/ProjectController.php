@@ -65,13 +65,15 @@ class ProjectController extends Controller
     $completedTasks = $project
       ->tasks()
       ->whereHas('status', function ($query) {
-        $query->where('name', 'Completed');
+        $query->where('completed', true);
       })
       ->count();
+    $completedStatusColor = ProjectStatus::where('completed', true)->first()
+      ->color;
 
     return Inertia::render(
       'Projects/Show',
-      compact('project', 'totalTasks', 'completedTasks')
+      compact('project', 'totalTasks', 'completedTasks', 'completedStatusColor')
     );
   }
 

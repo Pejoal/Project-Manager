@@ -4,6 +4,7 @@ import { defineProps, computed } from 'vue';
 const props = defineProps({
   totalTasks: Number,
   completedTasks: Number,
+  completedStatusColor: String,
 });
 
 const progress = computed(() => {
@@ -16,8 +17,11 @@ const progress = computed(() => {
   <div class="w-full">
     <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden mb-2">
       <div
-        class="h-full bg-green-500 transition-all duration-300"
-        :style="{ width: progress + '%' }"
+        class="h-full transition-all duration-300"
+        :style="{
+          width: progress + '%',
+          backgroundColor: completedStatusColor,
+        }"
       ></div>
     </div>
     <div class="text-sm dark:text-gray-300">

@@ -46,12 +46,12 @@ class DatabaseSeeder extends Seeder
       ]);
 
     ProjectStatus::insert([
-      ['name' => 'Planned', 'color' => '#FF5733'],
-      ['name' => 'In Progress', 'color' => '#36A2EB'],
-      ['name' => 'Completed', 'color' => '#4BC0C0'],
-      ['name' => 'On Hold', 'color' => '#FFA500'],
-      ['name' => 'Cancelled', 'color' => '#808080'],
-      ['name' => 'Deferred', 'color' => '#C70039'],
+      ['name' => 'Planned', 'color' => '#FF5733', 'completed' => false],
+      ['name' => 'In Progress', 'color' => '#36A2EB', 'completed' => false],
+      ['name' => 'Completed', 'color' => '#4BC0C0', 'completed' => true],
+      ['name' => 'On Hold', 'color' => '#FFA500', 'completed' => false],
+      ['name' => 'Cancelled', 'color' => '#808080', 'completed' => false],
+      ['name' => 'Deferred', 'color' => '#C70039', 'completed' => false],
     ]);
 
     ProjectPriority::insert([
@@ -93,30 +93,30 @@ class DatabaseSeeder extends Seeder
     $projects = Project::get();
     $projects->each(function ($project) {
       $phase1 = Phase::factory()->create([
-        'name' => "Phase 1",
+        'name' => 'Phase 1',
         'project_id' => $project->id,
       ]);
       $phase2 = Phase::factory()->create([
-        'name' => "Phase 2",
+        'name' => 'Phase 2',
         'project_id' => $project->id,
       ]);
       $phase3 = Phase::factory()->create([
-        'name' => "Phase 3",
+        'name' => 'Phase 3',
         'project_id' => $project->id,
       ]);
 
       $milestone1 = Milestone::factory()->create([
-        'name' => "Milestone 1",
+        'name' => 'Milestone 1',
         'project_id' => $project->id,
         'phase_id' => $phase1->id,
       ]);
       $milestone2 = Milestone::factory()->create([
-        'name' => "Milestone 2",
+        'name' => 'Milestone 2',
         'project_id' => $project->id,
         'phase_id' => $phase1->id,
       ]);
       $milestone3 = Milestone::factory()->create([
-        'name' => "Milestone 3",
+        'name' => 'Milestone 3',
         'project_id' => $project->id,
         'phase_id' => $phase1->id,
       ]);
@@ -140,7 +140,5 @@ class DatabaseSeeder extends Seeder
         'created_at' => now()->subMonths(rand(0, 11)),
       ]);
     });
-
-    
   }
 }
