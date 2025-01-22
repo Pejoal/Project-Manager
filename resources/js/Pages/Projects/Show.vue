@@ -153,6 +153,8 @@ watch(
         </form>
         <Draggable
           v-model="project.phases"
+          @start="drag = true"
+          @end="drag = false"
           group="phases"
           item-key="id"
           class="flex gap-4"
@@ -172,7 +174,13 @@ watch(
               >
                 {{ element.name }}
               </Link>
-              <Draggable v-model="element.tasks" group="tasks" item-key="id">
+              <Draggable
+                v-model="element.tasks"
+                @start="drag = true"
+                @end="drag = false"
+                group="tasks"
+                item-key="id"
+              >
                 <template #item="{ element: task }">
                   <div
                     class="bg-gray-50 dark:bg-gray-900 rounded-lg p-2 mb-2 shadow-sm text-gray-800 dark:text-gray-100"
