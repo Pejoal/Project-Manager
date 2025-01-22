@@ -70,12 +70,12 @@ class ProjectController extends Controller
       })
       ->count();
 
-    $completedTasks = $project
-      ->tasks()
-      ->whereHas('status', function ($query) {
-        $query->where('completed_field', true);
-      })
-      ->count();
+    // $completedTasks = $project
+    //   ->tasks()
+    //   ->whereHas('status', function ($query) {
+    //     $query->where('completed_field', true);
+    //   })
+    //   ->count();
 
     $completedStatusColor = ProjectStatus::where('completed', true)->first()
       ->color;
