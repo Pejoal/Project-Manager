@@ -10,4 +10,11 @@ class TaskStatus extends Model
   use HasFactory;
 
   protected $guarded = [];
+
+  protected function casts(): array
+  {
+    return [
+      'completed_field' => 'boolean',
+    ];
+  }
 }

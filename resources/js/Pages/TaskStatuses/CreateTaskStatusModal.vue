@@ -21,7 +21,7 @@ const status = ref(props.status);
 const form = useForm({
   name: status.value ? status.value.name : '',
   color: status.value ? status.value.color : '#000000',
-  completed: status.value ? status.value.completed : false,
+  completed_field: status.value ? status.value.completed_field : false,
 });
 
 watch(
@@ -31,7 +31,7 @@ watch(
       status.value = newStatus;
       form.name = newStatus.name;
       form.color = newStatus.color;
-      form.completed = newStatus.completed;
+      form.completed_field = newStatus.completed_field;
     }
   }
 );
@@ -85,14 +85,14 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.color" />
         </div>
-        <div>
-          <InputLabel for="completed" value="Completed" />
+        <div class="flex items-center gap-2">
+          <InputLabel class="inline-block" for="completed_field" value="Is Completed Field" />
           <Checkbox
-            id="completed"
-            v-model="form.completed"
-            class="mt-1 block"
+            id="completed_field"
+            v-model:checked="form.completed_field"
+            class="mt-1"
           />
-          <InputError class="mt-2" :message="form.errors.completed" />
+          <InputError class="mt-2" :message="form.errors.completed_field" />
         </div>
       </form>
     </template>
