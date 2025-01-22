@@ -13,9 +13,16 @@ const props = defineProps({
 
 const drag = ref(false);
 
-const dragOptions = {
+const phasesDragOptions = {
   animation: 200,
-  group: 'description',
+  group: 'phases',
+  disabled: false,
+  ghostClass: 'ghost',
+};
+
+const tasksDragOptions = {
+  animation: 200,
+  group: 'tasks',
   disabled: false,
   ghostClass: 'ghost',
 };
@@ -69,7 +76,7 @@ const dragOptions = {
       group="phases"
       item-key="id"
       class="flex gap-4"
-      v-bind="dragOptions"
+      v-bind="phasesDragOptions"
       :component-data="{
         tag: 'ul',
         type: 'phases',
@@ -95,7 +102,7 @@ const dragOptions = {
             v-model="element.tasks"
             group="tasks"
             item-key="id"
-            v-bind="dragOptions"
+            v-bind="tasksDragOptions"
             :component-data="{
               tag: 'ul',
               type: 'tasks',
