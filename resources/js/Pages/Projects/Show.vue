@@ -28,7 +28,6 @@ const destroy = () => {
 watch(
   () => props.project.phases,
   (newPhases) => {
-    console.log(newPhases);
     axios.put(route('phases.sync', props.project.slug), {
       phases: newPhases,
     });
