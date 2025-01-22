@@ -77,11 +77,6 @@ const tasksDragOptions = {
       item-key="id"
       class="flex gap-4"
       v-bind="phasesDragOptions"
-      :component-data="{
-        tag: 'ul',
-        type: 'phases',
-        name: !drag ? 'flip-list' : null,
-      }"
     >
       <template #item="{ element }">
         <div
@@ -103,11 +98,6 @@ const tasksDragOptions = {
             group="tasks"
             item-key="id"
             v-bind="tasksDragOptions"
-            :component-data="{
-              tag: 'ul',
-              type: 'tasks',
-              name: !drag ? 'flip-list' : null,
-            }"
           >
             <template #item="{ element: task }">
               <KanbanTask
