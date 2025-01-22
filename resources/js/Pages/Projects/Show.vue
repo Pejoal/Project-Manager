@@ -5,9 +5,12 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import ProjectDetails from './Components/ProjectDetails.vue';
 import ProjectActions from './Components/ProjectActions.vue';
 import KanbanView from './Components/KanbanView.vue';
+import ProjectProgress from './Components/ProjectProgress.vue';
 
 const props = defineProps({
   project: Object,
+  totalTasks: Number,
+  completedTasks: Number,
 });
 
 const form = useForm({});
@@ -36,6 +39,10 @@ const destroy = () => {
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <ProjectDetails :project="project" />
+      <ProjectProgress
+        :totalTasks="totalTasks"
+        :completedTasks="completedTasks"
+      />
       <ProjectActions :project="project" @destroy="destroy" />
       <KanbanView :project="project" :filtersForm="filtersForm" />
     </div>

@@ -60,7 +60,19 @@ class ProjectController extends Controller
       'phases.tasks.priority',
       'phases.tasks.assignedTo',
     ]);
-    return Inertia::render('Projects/Show', compact('project'));
+
+    $totalTasks = $project->tasks()->count();
+    $completedTasks = $project
+      ->tasks()
+      ->whereHas('status', function ($query) {
+        $query->where('name', 'Completed');
+      })
+      ->count();
+
+    return Inertia::render(
+      'Projects/Show',
+      compact('project', 'totalTasks', 'completedTasks')
+    );
   }
 
   public function edit(Project $project)
