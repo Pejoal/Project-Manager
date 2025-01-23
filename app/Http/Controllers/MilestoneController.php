@@ -52,6 +52,10 @@ class MilestoneController extends Controller
 
   public function edit(Project $project, Milestone $milestone)
   {
+    if ($milestone->project_id !== $project->id) {
+      abort(403, 'Milestone not found in this project');
+    }
+
     return Inertia::render('Milestones/Edit', compact('milestone', 'project'));
   }
 
@@ -60,6 +64,10 @@ class MilestoneController extends Controller
     Project $project,
     Milestone $milestone
   ) {
+    if ($milestone->project_id !== $project->id) {
+      abort(403, 'Milestone not found in this project');
+    }
+
     $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',
@@ -71,6 +79,10 @@ class MilestoneController extends Controller
 
   public function destroy(Project $project, Milestone $milestone)
   {
+    if ($milestone->project_id !== $project->id) {
+      abort(403, 'Milestone not found in this project');
+    }
+    
     $milestone->delete();
     return redirect()->route('milestones.index', $project);
   }

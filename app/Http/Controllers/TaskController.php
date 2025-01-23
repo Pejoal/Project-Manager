@@ -235,6 +235,10 @@ class TaskController extends Controller
 
   public function destroy(Project $project, Task $task)
   {
+    if ($task->project_id !== $project->id) {
+      abort(403, 'Task not found in this project');
+    }
+    
     $task->delete();
     return redirect()->route('tasks.index', $project);
   }

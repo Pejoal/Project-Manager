@@ -69,6 +69,10 @@ class PhaseController extends Controller
 
   public function destroy(Project $project, Phase $phase)
   {
+    if ($phase->project_id !== $project->id) {
+      abort(403, 'Phase not found in this project');
+    }
+    
     $phase->delete();
     return redirect()->route('phases.index', $project);
   }
