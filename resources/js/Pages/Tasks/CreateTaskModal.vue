@@ -91,6 +91,39 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.project" />
         </div>
         <div>
+          <InputLabel for="phase" value="Phase" />
+          <vSelect
+            v-if="props.phases.length > 0"
+            id="phase"
+            v-model="form.phase_id"
+            :options="props.phases"
+            :reduce="(phase) => phase.id"
+            label="name"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+
+          <InputError class="mt-2" :message="form.errors.phase" />
+        </div>
+
+        <div>
+          <InputLabel for="milestone" value="Milestone" />
+          <vSelect
+            v-if="props.milestones.length > 0"
+            id="milestone"
+            v-model="form.milestone_id"
+            :options="props.milestones"
+            :reduce="(milestone) => milestone.id"
+            label="name"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+
+          <InputError class="mt-2" :message="form.errors.milestone" />
+        </div>
+        <div>
           <InputLabel for="name" value="Name" />
           <TextInput
             id="name"

@@ -60,6 +60,7 @@ class ProjectController extends Controller
       'clients',
       'status',
       'priority',
+      'phases.milestones',
       'phases.tasks.status',
       'phases.tasks.priority',
       'phases.tasks.assignedTo',
