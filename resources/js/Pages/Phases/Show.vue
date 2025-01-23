@@ -81,9 +81,17 @@ const destroy = () => {
             class="mt-2"
           >
             <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm">
-              <h4 class="text-md font-medium text-gray-900 dark:text-gray-100">
+              <Link
+                :href="
+                  route('milestones.show', {
+                    project: props.phase.project.slug,
+                    milestone: milestone.id,
+                  })
+                "
+                class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
+              >
                 {{ milestone.name }}
-              </h4>
+              </Link>
               <p class="text-sm text-gray-700 dark:text-gray-300">
                 {{ milestone.description }}
               </p>
