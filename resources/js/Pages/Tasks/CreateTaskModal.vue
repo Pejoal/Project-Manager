@@ -90,7 +90,7 @@ const submit = () => {
             type="text"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
           />
-          <InputError class="mt-2" :message="form.errors.project" />
+          <InputError class="mt-2" :message="form.errors.project_slug" />
         </div>
         <div>
           <InputLabel for="phase" value="Phase" />
@@ -106,7 +106,7 @@ const submit = () => {
           >
           </vSelect>
 
-          <InputError class="mt-2" :message="form.errors.phase" />
+          <InputError class="mt-2" :message="form.errors.phase_id" />
         </div>
 
         <div>
@@ -123,7 +123,7 @@ const submit = () => {
           >
           </vSelect>
 
-          <InputError class="mt-2" :message="form.errors.milestone" />
+          <InputError class="mt-2" :message="form.errors.milestone_id" />
         </div>
         <div>
           <InputLabel for="name" value="Name" />
