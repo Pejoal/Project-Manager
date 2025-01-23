@@ -95,7 +95,7 @@ const submit = () => {
         <div>
           <InputLabel for="phase" value="Phase" />
           <vSelect
-            v-if="props.project.phases.length > 0"
+            v-if="props.project.phases?.length > 0"
             id="phase"
             v-model="form.phase_id"
             :options="props.project.phases"
