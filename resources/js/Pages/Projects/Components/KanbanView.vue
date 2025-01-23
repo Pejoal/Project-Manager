@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineProps, ref, watch } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 import Draggable from 'vuedraggable';
 import Checkbox from '@/Components/Checkbox.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -43,6 +43,7 @@ const tasksDragOptions = {
 <template>
   <section class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
     <h2 class="text-xl font-bold dark:text-gray-100">Kanban View</h2>
+    <h3 class="text-lg font-bold dark:text-gray-100">Phases - Tasks</h3>
     <form class="my-2 flex flex-wrap gap-2">
       <section class="flex items-center">
         <InputLabel for="show_description" value="Show Description" />
