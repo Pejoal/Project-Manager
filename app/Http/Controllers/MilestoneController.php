@@ -31,9 +31,10 @@ class MilestoneController extends Controller
     $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',
+      'phase_id' => 'required|exists:phases,id',
     ]);
 
-    $project->milestones()->create($request->except(['project_slug']));
+    $project->milestones()->create($request->all());
 
     return redirect()->route('milestones.index', $project);
   }

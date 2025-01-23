@@ -23,7 +23,7 @@ class PhaseController extends Controller
       'description' => 'nullable|string',
     ]);
 
-    $project->phases()->create($request->except(['project_slug']));
+    $project->phases()->create($request->all());
 
     return redirect()->route('phases.index', $project);
   }
