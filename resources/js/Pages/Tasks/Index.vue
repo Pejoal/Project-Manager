@@ -234,7 +234,9 @@ const fetchPage = (url) => {
               >
               </Link>
             </p>
-            <p v-html="task.description">
+            <p>
+              Description:
+              <span v-html="task.description"></span>
             </p>
             <p>
               Project:
