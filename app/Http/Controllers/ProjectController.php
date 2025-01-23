@@ -155,6 +155,7 @@ class ProjectController extends Controller
   public function destroy(Project $project)
   {
     $project->delete();
+    event(new ActivityLogged(auth()->user(), 'updated_project', 'Updated a project', $project));
 
     return redirect()->route('projects.index');
   }
