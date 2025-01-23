@@ -230,9 +230,11 @@ const fetchPage = (url) => {
                   })
                 "
                 class="text-blue-500 dark:text-blue-400 hover:underline"
-                v-text="task.name"
+                v-html="task.name"
               >
               </Link>
+            </p>
+            <p v-html="task.description">
             </p>
             <p>
               Project:

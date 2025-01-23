@@ -1,4 +1,6 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,5 +39,25 @@ class Task extends Model
       'name' => $this->name,
       'description' => $this->description,
     ];
+  }
+
+  protected static function boot()
+  {
+    parent::boot();
+
+    static::creating(function ($task) {
+      $task->name = self::sanitize($task->name);
+      $task->description = self::sanitize($task->description);
+    });
+
+    static::updating(function ($task) {
+      $task->name = self::sanitize($task->name);
+      $task->description = self::sanitize($task->description);
+    });
+  }
+
+  protected static function sanitize($input)
+  {
+    return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
   }
 }
