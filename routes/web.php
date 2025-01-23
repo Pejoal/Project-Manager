@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\MessageSent;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MilestoneController;
@@ -67,6 +68,7 @@ Route::group(
       Route::get('/dashboard', [DashboardController::class, 'show'])->name(
         'dashboard'
       );
+      Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
 
       // Client Management Routes
       Route::prefix('clients')->group(function () {

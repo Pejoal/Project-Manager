@@ -270,6 +270,14 @@ const logout = () => {
                       class="border-t border-gray-200 dark:border-gray-600"
                     />
 
+                    <DropdownLink :href="route('activities.index')">
+                      Activities
+                    </DropdownLink>
+
+                    <div
+                      class="border-t border-gray-200 dark:border-gray-600"
+                    />
+
                     <DropdownLink
                       v-if="$page.props.jetstream.hasApiFeatures"
                       :href="route('api-tokens.index')"
@@ -448,6 +456,15 @@ const logout = () => {
                 :active="route().current('task-priorities.index')"
               >
                 Task Priorities
+              </ResponsiveNavLink>
+
+              <div class="border-t border-gray-200 dark:border-gray-600" />
+
+              <ResponsiveNavLink
+                :href="route('activities.index')"
+                :active="route().current('activities.index')"
+              >
+                Activities
               </ResponsiveNavLink>
 
               <div class="border-t border-gray-200 dark:border-gray-600" />
