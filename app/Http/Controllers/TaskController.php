@@ -172,8 +172,8 @@ class TaskController extends Controller
       'assigned_to.*' => 'exists:users,id',
       'status_id' => 'required|exists:task_statuses,id',
       'priority_id' => 'required|exists:task_priorities,id',
-      'phase_id' => 'required|exists:phases,id',
-      'milestone_id' => 'required|exists:milestones,id',
+      'phase_id' => 'nullable|exists:phases,id',
+      'milestone_id' => 'nullable|exists:milestones,id',
     ]);
 
     $task = $project
@@ -238,8 +238,8 @@ class TaskController extends Controller
       'assigned_to.*' => 'exists:users,id',
       'status_id' => 'required|exists:task_statuses,id',
       'priority_id' => 'required|exists:task_priorities,id',
-      'phase_id' => 'required|exists:phases,id',
-      'milestone_id' => 'required|exists:milestones,id',
+      'phase_id' => 'nullable|exists:phases,id',
+      'milestone_id' => 'nullable|exists:milestones,id',
     ]);
 
     $task->update($request->except('assigned_to'));

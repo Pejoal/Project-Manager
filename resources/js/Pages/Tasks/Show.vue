@@ -46,10 +46,9 @@ const destroy = () => {
             {{ task.project.name }} #{{ task.project.id }}
           </Link>
         </p>
-        <p class="mb-2 text-gray-700 dark:text-gray-300">
+        <p v-if="task.phase?.id" class="mb-2 text-gray-700 dark:text-gray-300">
           Phase:
           <Link
-            v-if="task.phase?.id"
             :href="
               route('phases.show', {
                 project: task.project.slug,
@@ -61,10 +60,12 @@ const destroy = () => {
             {{ task.phase?.name }} #{{ task.phase?.id }}
           </Link>
         </p>
-        <p class="mb-2 text-gray-700 dark:text-gray-300">
+        <p
+          v-if="task.milestone?.id"
+          class="mb-2 text-gray-700 dark:text-gray-300"
+        >
           Milestone:
           <Link
-          v-if="task.milestone?.id"
             :href="
               route('milestones.show', {
                 project: task.project.slug,
