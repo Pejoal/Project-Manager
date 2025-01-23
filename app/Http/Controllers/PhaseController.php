@@ -45,11 +45,19 @@ class PhaseController extends Controller
 
   public function edit(Project $project, Phase $phase)
   {
+    if ($phase->project_id !== $project->id) {
+      abort(403, 'Phase not found in this project');
+    }
+
     return Inertia::render('Phases/Edit', compact('phase', 'project'));
   }
 
   public function update(Request $request, Project $project, Phase $phase)
   {
+    if ($phase->project_id !== $project->id) {
+      abort(403, 'Phase not found in this project');
+    }
+    
     $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',

@@ -66,6 +66,7 @@ const submit = () => {
           </vSelect>
           <InputError class="mt-2" :message="form.errors.project" />
         </div>
+        
         <div>
           <InputLabel for="name" value="Name" />
           <TextInput

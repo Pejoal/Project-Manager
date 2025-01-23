@@ -190,6 +190,10 @@ class TaskController extends Controller
 
   public function edit(Project $project, Task $task)
   {
+    if ($task->project_id !== $project->id) {
+      abort(403, 'Task not found in this project');
+    }
+
     $users = User::orderBy('id', 'desc')->get();
     $task->load('assignedTo');
     $statuses = TaskStatus::all();
@@ -202,6 +206,10 @@ class TaskController extends Controller
 
   public function update(Request $request, Project $project, Task $task)
   {
+    if ($task->project_id !== $project->id) {
+      abort(403, 'Task not found in this project');
+    }
+
     $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',
