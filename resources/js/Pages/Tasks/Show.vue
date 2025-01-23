@@ -52,12 +52,12 @@ const destroy = () => {
             :href="
               route('phases.show', {
                 project: task.project.slug,
-                phase: task.phase.id,
+                phase: task.phase?.id,
               })
             "
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
-            {{ task.phase.name }} #{{ task.phase.id }}
+            {{ task.phase?.name }} #{{ task.phase?.id }}
           </Link>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
@@ -66,12 +66,12 @@ const destroy = () => {
             :href="
               route('milestones.show', {
                 project: task.project.slug,
-                milestone: task.milestone.id,
+                milestone: task.milestone?.id,
               })
             "
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
-            {{ task.milestone.name }} #{{ task.milestone.id }}
+            {{ task.milestone?.name }} #{{ task.milestone?.id }}
           </Link>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
