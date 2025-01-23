@@ -38,15 +38,40 @@ const destroy = () => {
           Description: {{ task.description }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Project ID: {{ task.project.id }}
-        </p>
-        <p class="mb-2 text-gray-700 dark:text-gray-300">
           Project:
           <Link
             :href="route('projects.show', { project: task.project.slug })"
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
-            {{ task.project.name }}
+            {{ task.project.name }} #{{ task.project.id }}
+          </Link>
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Phase:
+          <Link
+            :href="
+              route('phases.show', {
+                project: task.project.slug,
+                phase: task.phase.id,
+              })
+            "
+            class="text-blue-500 dark:text-blue-400 hover:underline"
+          >
+            {{ task.phase.name }} #{{ task.phase.id }}
+          </Link>
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Milestone:
+          <Link
+            :href="
+              route('milestones.show', {
+                project: task.project.slug,
+                milestone: task.milestone.id,
+              })
+            "
+            class="text-blue-500 dark:text-blue-400 hover:underline"
+          >
+            {{ task.milestone.name }} #{{ task.milestone.id }}
           </Link>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">

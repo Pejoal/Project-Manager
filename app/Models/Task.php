@@ -18,6 +18,16 @@ class Task extends Model
     return $this->belongsTo(Project::class);
   }
 
+  public function phase()
+  {
+    return $this->belongsTo(Phase::class);
+  }
+
+  public function milestone()
+  {
+    return $this->belongsTo(Milestone::class);
+  }
+
   public function assignedTo()
   {
     return $this->belongsToMany(User::class, 'task_user');

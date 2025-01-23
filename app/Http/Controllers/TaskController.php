@@ -202,7 +202,14 @@ class TaskController extends Controller
       abort(403, 'Task not found in this project');
     }
 
-    $task->load(['assignedTo', 'status', 'priority', 'project']);
+    $task->load([
+      'assignedTo:id,name',
+      'status:id,name,color',
+      'priority:id,name,color',
+      'project:id,name,slug',
+      'phase:id,name',
+      'milestone:id,name',
+    ]);
     return Inertia::render('Tasks/Show', compact('task'));
   }
 
