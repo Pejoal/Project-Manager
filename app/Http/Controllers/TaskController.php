@@ -63,9 +63,13 @@ class TaskController extends Controller
   public function all(Request $request)
   {
     $users = User::latest('created_at')->select('id', 'name')->get();
-    $projects = Project::orderBy('id', 'desc')->get();
-    $statuses = TaskStatus::orderBy('id', 'desc')->get();
-    $priorities = TaskPriority::orderBy('id', 'desc')->get();
+    $projects = Project::latest('created_at')->get();
+    $statuses = TaskStatus::latest('created_at')
+      ->select('id', 'name', 'color')
+      ->get();
+    $priorities = TaskPriority::latest('created_at')
+      ->select('id', 'name', 'color')
+      ->get();
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
@@ -81,21 +85,19 @@ class TaskController extends Controller
         return $meilisearch->search($query, $options);
       })->query(function (Builder $query) use ($request) {
         $query->with(
-          'project.phases:id,name,project_id',
-          'project.phases.milestones:id,name,phase_id',
           'status',
           'priority',
-          'assignedTo'
+          'assignedTo',
+          'project:id,slug,name'
         );
         $this->applyFilters($query, $request);
       });
     } else {
       $query = Task::with(
-        'project.phases:id,name,project_id',
-        'project.phases.milestones:id,name,phase_id',
         'status',
         'priority',
-        'assignedTo'
+        'assignedTo',
+        'project:id,slug,name'
       );
       $this->applyFilters($query, $request);
     }
@@ -138,25 +140,13 @@ class TaskController extends Controller
       })->query(function (Builder $query) use ($project, $request) {
         $query
           ->where('project_id', $project->id)
-          ->with(
-            'project.phases:id,name,project_id',
-            'project.phases.milestones:id,name,phase_id',
-            'status',
-            'priority',
-            'assignedTo'
-          );
+          ->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
         $this->applyFilters($query, $request);
       });
     } else {
       $query = $project
         ->tasks()
-        ->with(
-          'status',
-          'priority',
-          'assignedTo',
-          'phases:id,name,project_id',
-          'phases.milestones:id,name,phase_id'
-        );
+        ->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
       $this->applyFilters($query, $request);
     }
 
