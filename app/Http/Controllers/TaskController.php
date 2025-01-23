@@ -157,6 +157,10 @@ class TaskController extends Controller
       return $task;
     });
 
+    $project->load([
+      'phases:id,name,project_id',
+      'phases.milestones:id,name,phase_id',
+    ]);
     return Inertia::render(
       'Tasks/Index',
       compact('tasks', 'project', 'users', 'statuses', 'priorities')
