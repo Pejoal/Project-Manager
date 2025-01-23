@@ -49,6 +49,20 @@ const destroy = () => {
             {{ milestone.project.name }}
           </Link>
         </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Phase:
+          <Link
+            :href="
+              route('phases.show', {
+                project: milestone.project.slug,
+                phase: milestone.phase.id,
+              })
+            "
+            class="text-blue-500 dark:text-blue-400 hover:underline"
+          >
+            {{ milestone.phase.name }}
+          </Link>
+        </p>
 
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Created at: {{ new Date(milestone.created_at).toLocaleString() }}

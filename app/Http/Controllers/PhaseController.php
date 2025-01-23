@@ -57,7 +57,7 @@ class PhaseController extends Controller
     if ($phase->project_id !== $project->id) {
       abort(403, 'Phase not found in this project');
     }
-    
+
     $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',
@@ -72,7 +72,7 @@ class PhaseController extends Controller
     if ($phase->project_id !== $project->id) {
       abort(403, 'Phase not found in this project');
     }
-    
+
     $phase->delete();
     return redirect()->route('phases.index', $project);
   }

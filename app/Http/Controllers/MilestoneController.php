@@ -46,7 +46,8 @@ class MilestoneController extends Controller
     }
 
     $milestone->load([
-      'project',
+      'project:id,name,slug',
+      'phase:id,name',
       'tasks.status',
       'tasks.priority',
       'tasks.assignedTo',
@@ -60,7 +61,16 @@ class MilestoneController extends Controller
       abort(403, 'Milestone not found in this project');
     }
 
-    return Inertia::render('Milestones/Edit', compact('milestone', 'project'));
+    $phases = $project
+      ->phases()
+      ->latest('created_at')
+      ->select('id', 'name')
+      ->get();
+
+    return Inertia::render(
+      'Milestones/Edit',
+      compact('milestone', 'project', 'phases')
+    );
   }
 
   public function update(

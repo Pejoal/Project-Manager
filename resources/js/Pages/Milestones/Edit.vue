@@ -10,12 +10,14 @@ import 'vue-select/dist/vue-select.css';
 
 const props = defineProps({
   project: Object,
+  phases: Array,
   milestone: Object,
 });
 
 const form = useForm({
   name: props.milestone.name,
   description: props.milestone.description,
+  phase_id: props.milestone.phase_id,
 });
 
 const submit = () => {
@@ -37,8 +39,8 @@ const submit = () => {
       </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <form @submit.prevent="submit">
-        <div class="mb-4">
+      <form class="space-y-4" @submit.prevent="submit">
+        <div>
           <InputLabel for="id" value="ID" />
           <TextInput
             id="id"
@@ -48,7 +50,7 @@ const submit = () => {
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
           />
         </div>
-        <div class="mb-4">
+        <div>
           <InputLabel for="name" value="Name" />
           <TextInput
             id="name"
@@ -59,7 +61,7 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
-        <div class="mb-4">
+        <div>
           <InputLabel for="description" value="Description" />
           <TextInput
             id="description"
@@ -69,7 +71,22 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.description" />
         </div>
+        <div>
+          <InputLabel for="phase" value="Phase" />
+          <vSelect
+            v-if="props.phases.length > 0"
+            id="phase"
+            v-model="form.phase_id"
+            :options="props.phases"
+            :reduce="(phase) => phase.id"
+            label="name"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
 
+          <InputError class="mt-2" :message="form.errors.phase" />
+        </div>
         <button
           type="submit"
           :disabled="form.processing"
@@ -86,7 +103,7 @@ const submit = () => {
           "
           class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
         >
-          Show milestone
+          Show Milestone
         </Link>
       </form>
     </div>

@@ -60,7 +60,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.project" />
         </div>
         <div>
-          <InputLabel for="phase" value="phase" />
+          <InputLabel for="phase" value="Phase" />
           <vSelect
             v-if="props.phases.length > 0"
             id="phase"
