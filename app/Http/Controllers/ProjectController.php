@@ -147,6 +147,7 @@ class ProjectController extends Controller
 
     $project->update($data);
     $project->clients()->sync($request->clients);
+    event(new ActivityLogged(auth()->user(), 'updated_project', 'Updated a project', $project));
 
     return redirect()->route('projects.index');
   }

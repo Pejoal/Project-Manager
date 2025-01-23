@@ -23,9 +23,8 @@ const props = defineProps({
         class="border-b border-gray-200 py-2"
       >
         <p class="dark:text-gray-200">
-          <strong>{{ activity.user.name }}</strong>
-          {{ activity.type }}:
-          <span class="text-gray-600">{{ activity.description }}</span>
+          <strong>{{ activity.user.name }}: </strong>
+          <span class="text-gray-300">{{ activity.description }}</span>
         </p>
         <p class="text-sm dark:text-gray-400">
           <Link
@@ -51,7 +50,9 @@ const props = defineProps({
           >{{ props.activities.current_page }} /
           {{ props.activities.last_page }}</span
         >
-        <span class="mx-2 dark:text-white">Total: {{ props.activities.total }}</span>
+        <span class="mx-2 dark:text-white"
+          >Total: {{ props.activities.total }}</span
+        >
         <button
           v-if="props.activities.next_page_url"
           @click="fetchPage(props.activities.next_page_url)"
