@@ -7,6 +7,7 @@ import CreateMilestoneModal from './CreateMilestoneModal.vue';
 const props = defineProps({
   milestones: Array,
   project: Object,
+  phases: Array,
 });
 
 const showModal = ref(false);
@@ -53,6 +54,7 @@ const fetchPage = (url) => {
       <CreateMilestoneModal
         :show="showModal"
         :project="project"
+        :phases="phases"
         @close="closeModal"
       />
       <button

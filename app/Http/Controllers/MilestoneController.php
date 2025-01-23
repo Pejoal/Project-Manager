@@ -17,9 +17,12 @@ class MilestoneController extends Controller
       ->with('tasks')
       ->latest('created_at')
       ->get();
+
+    $phases = $project->phases;
+
     return Inertia::render(
       'Milestones/Index',
-      compact('milestones', 'project')
+      compact('milestones', 'project', 'phases')
     );
   }
 
@@ -82,7 +85,7 @@ class MilestoneController extends Controller
     if ($milestone->project_id !== $project->id) {
       abort(403, 'Milestone not found in this project');
     }
-    
+
     $milestone->delete();
     return redirect()->route('milestones.index', $project);
   }
