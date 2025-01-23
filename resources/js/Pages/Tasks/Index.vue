@@ -155,7 +155,7 @@ const fetchPage = (url) => {
                 :reduce="(status) => status.id"
                 label="name"
                 multiple
-                placeholder="Select status"
+                placeholder="Select Status"
                 class="w-full text-zinc-900 border rounded-lg p-2"
               />
             </section>
@@ -167,7 +167,7 @@ const fetchPage = (url) => {
                 :reduce="(priority) => priority.id"
                 label="name"
                 multiple
-                placeholder="Select priority"
+                placeholder="Select Priority"
                 class="w-full text-zinc-900 border rounded-lg p-2"
               />
             </section>
