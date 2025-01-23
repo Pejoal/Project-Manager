@@ -19,18 +19,16 @@ const props = defineProps({
 const form = useForm({
   name: '',
   description: '',
-  project_slug: null,
 });
 
 const submit = () => {
-  const slug = props.project.slug ? props.project.slug : form.project_slug;
-  if (!slug) {
+  if (!props.project.slug) {
     form.setError('project', 'Project is required.');
     return;
   }
   form.post(
     route('phases.store', {
-      project: slug,
+      project: props.project.slug,
     }),
     {
       onSuccess: () => {

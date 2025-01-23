@@ -20,18 +20,17 @@ const props = defineProps({
 const form = useForm({
   name: '',
   description: '',
-  project_slug: null,
+  phase_id: '',
 });
 
 const submit = () => {
-  const slug = props.project.slug ? props.project.slug : form.project_slug;
-  if (!slug) {
+  if (!props.project.slug) {
     form.setError('project', 'Project is required.');
     return;
   }
   form.post(
     route('milestones.store', {
-      project: slug,
+      project: props.project.slug,
     }),
     {
       onSuccess: () => {
@@ -60,7 +59,22 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.project" />
         </div>
-        
+        <div>
+          <InputLabel for="phase" value="phase" />
+          <vSelect
+            v-if="props.phases.length > 0"
+            id="phase"
+            v-model="form.phase_id"
+            :options="props.phases"
+            :reduce="(phase) => phase.id"
+            label="name"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+
+          <InputError class="mt-2" :message="form.errors.phase" />
+        </div>
         <div>
           <InputLabel for="name" value="Name" />
           <TextInput
