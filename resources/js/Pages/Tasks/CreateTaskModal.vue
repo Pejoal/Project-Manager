@@ -6,6 +6,7 @@ import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import { computed } from 'vue';
 
 const emit = defineEmits(['close']);
 const props = defineProps({
@@ -41,6 +42,17 @@ const form = useForm({
   assigned_to: [],
   status_id: null,
   priority_id: null,
+});
+
+const milestones = computed(() => {
+  if (form.phase_id) {
+    const selectedPhase = props.project.phases.find(
+      (phase) => phase.id === form.phase_id
+    );
+    return selectedPhase ? selectedPhase.milestones : [];
+  }
+
+  return [];
 });
 
 const submit = () => {
@@ -112,10 +124,10 @@ const submit = () => {
         <div>
           <InputLabel for="milestone" value="Milestone" />
           <vSelect
-            v-if="props.project.phases[form.phase_id]?.milestones.length > 0"
+            v-if="milestones.length > 0"
             id="milestone"
             v-model="form.milestone_id"
-            :options="props.project.phases[form.phase_id]?.milestones"
+            :options="milestones"
             :reduce="(milestone) => milestone.id"
             label="name"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
