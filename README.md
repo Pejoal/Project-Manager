@@ -82,9 +82,36 @@ The Company Management System App is a comprehensive solution designed to stream
   - Upload profile photos
 
 - **Security Features**
+
   - Password reset functionality
   - Password confirmation for sensitive actions
   - CSRF protection
+
+- **Phase Management**
+
+  - View, add, edit, and delete phases within a project
+  - View phase details
+
+- **Milestone Management**
+
+  - View, add, edit, and delete milestones within a project
+  - View milestone details
+
+- **Project Status Management**
+
+  - View, add, edit, and delete project statuses
+
+- **Project Priority Management**
+
+  - View, add, edit, and delete project priorities
+
+- **Task Status Management**
+
+  - View, add, edit, and delete task statuses
+
+- **Task Priority Management**
+
+  - View, add, edit, and delete task priorities
 
 ---
 
