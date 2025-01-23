@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Events\ActivityLogged;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\ProjectPriority;
@@ -30,11 +31,10 @@ class ProjectController extends Controller
 
   public function single(Project $project)
   {
-    return $project
-      ->load([
-        'phases:id,name,project_id',
-        'phases.milestones:id,name,phase_id',
-      ]);
+    return $project->load([
+      'phases:id,name,project_id',
+      'phases.milestones:id,name,phase_id',
+    ]);
   }
 
   public function create()
@@ -58,6 +58,16 @@ class ProjectController extends Controller
 
     $project = Project::create($data);
     $project->clients()->sync($request->clients);
+
+    // Log the activity
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'created_project',
+        'Created a new project',
+        $project
+      )
+    );
 
     return redirect()->route('projects.index');
   }
@@ -90,9 +100,9 @@ class ProjectController extends Controller
       $completedTasks = 0;
     }
 
-    $users = User::latest('created_at')->select('id', 'name')->get();
-    $taskStatuses = TaskStatus::latest('created_at')->get();
-    $taskPriorities = TaskPriority::latest('created_at')->get();
+    $users = User::latest()->select('id', 'name')->get();
+    $taskStatuses = TaskStatus::latest()->get();
+    $taskPriorities = TaskPriority::latest()->get();
 
     return Inertia::render(
       'Projects/Show',

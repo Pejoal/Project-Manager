@@ -8,7 +8,7 @@ class ProjectPriorityController extends Controller
 {
   public function index()
   {
-    $priorities = ProjectPriority::latest('created_at')->get();
+    $priorities = ProjectPriority::latest()->get();
     return Inertia::render('ProjectPriorities/Index', compact('priorities'));
   }
 

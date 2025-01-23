@@ -62,14 +62,10 @@ class TaskController extends Controller
 
   public function all(Request $request)
   {
-    $users = User::latest('created_at')->select('id', 'name')->get();
-    $projects = Project::latest('created_at')->get();
-    $statuses = TaskStatus::latest('created_at')
-      ->select('id', 'name', 'color')
-      ->get();
-    $priorities = TaskPriority::latest('created_at')
-      ->select('id', 'name', 'color')
-      ->get();
+    $users = User::latest()->select('id', 'name')->get();
+    $projects = Project::latest()->get();
+    $statuses = TaskStatus::latest()->select('id', 'name', 'color')->get();
+    $priorities = TaskPriority::latest()->select('id', 'name', 'color')->get();
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
@@ -103,7 +99,7 @@ class TaskController extends Controller
     }
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest('created_at')->paginate($perPage);
+    $tasks = $query->latest()->paginate($perPage);
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
@@ -121,7 +117,7 @@ class TaskController extends Controller
 
   public function index(Project $project, Request $request)
   {
-    $users = User::latest('created_at')->select('id', 'name')->get();
+    $users = User::latest()->select('id', 'name')->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
 
@@ -151,7 +147,7 @@ class TaskController extends Controller
     }
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest('created_at')->paginate($perPage);
+    $tasks = $query->latest()->paginate($perPage);
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
@@ -219,10 +215,10 @@ class TaskController extends Controller
       abort(403, 'Task not found in this project');
     }
 
-    $users = User::latest('created_at')->select('id', 'name')->get();
+    $users = User::latest()->select('id', 'name')->get();
     $task->load('assignedTo');
-    $statuses = TaskStatus::latest('created_at')->get();
-    $priorities = TaskPriority::latest('created_at')->get();
+    $statuses = TaskStatus::latest()->get();
+    $priorities = TaskPriority::latest()->get();
     return Inertia::render(
       'Tasks/Edit',
       compact('task', 'project', 'users', 'statuses', 'priorities')

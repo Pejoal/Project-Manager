@@ -12,11 +12,7 @@ class MilestoneController extends Controller
 {
   public function index(Project $project, Request $request)
   {
-    $milestones = $project
-      ->milestones()
-      ->with('tasks')
-      ->latest('created_at')
-      ->get();
+    $milestones = $project->milestones()->with('tasks')->latest()->get();
 
     $phases = $project->phases;
 
@@ -61,11 +57,7 @@ class MilestoneController extends Controller
       abort(403, 'Milestone not found in this project');
     }
 
-    $phases = $project
-      ->phases()
-      ->latest('created_at')
-      ->select('id', 'name')
-      ->get();
+    $phases = $project->phases()->latest()->select('id', 'name')->get();
 
     return Inertia::render(
       'Milestones/Edit',
