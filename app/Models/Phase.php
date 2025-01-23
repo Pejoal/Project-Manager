@@ -15,6 +15,11 @@ class Phase extends Model
     return $this->belongsTo(Project::class);
   }
 
+  public function milestones()
+  {
+    return $this->hasMany(Milestone::class)->orderBy('order', 'ASC');
+  }
+
   public function tasks()
   {
     return $this->hasMany(Task::class)->orderBy('order', 'ASC');

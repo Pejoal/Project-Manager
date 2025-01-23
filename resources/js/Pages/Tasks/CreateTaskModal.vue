@@ -35,6 +35,8 @@ const props = defineProps({
 const form = useForm({
   name: '',
   project_slug: null,
+  phase_id: null,
+  milestone_id: null,
   description: '',
   assigned_to: [],
   status_id: null,
@@ -93,7 +95,7 @@ const submit = () => {
         <div>
           <InputLabel for="phase" value="Phase" />
           <vSelect
-            v-if="props.phases.length > 0"
+            v-if="props.project.phases.length > 0"
             id="phase"
             v-model="form.phase_id"
             :options="props.phases"
@@ -107,7 +109,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.phase" />
         </div>
 
-        <div>
+        <!-- <div>
           <InputLabel for="milestone" value="Milestone" />
           <vSelect
             v-if="props.milestones.length > 0"
@@ -122,7 +124,7 @@ const submit = () => {
           </vSelect>
 
           <InputError class="mt-2" :message="form.errors.milestone" />
-        </div>
+        </div> -->
         <div>
           <InputLabel for="name" value="Name" />
           <TextInput

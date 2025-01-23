@@ -80,11 +80,23 @@ class TaskController extends Controller
 
         return $meilisearch->search($query, $options);
       })->query(function (Builder $query) use ($request) {
-        $query->with('project', 'status', 'priority', 'assignedTo');
+        $query->with(
+          'project.phases:id,name,project_id',
+          'project.phases.milestones:id,name,phase_id',
+          'status',
+          'priority',
+          'assignedTo'
+        );
         $this->applyFilters($query, $request);
       });
     } else {
-      $query = Task::with('project', 'status', 'priority', 'assignedTo');
+      $query = Task::with(
+        'project.phases:id,name,project_id',
+        'project.phases.milestones:id,name,phase_id',
+        'status',
+        'priority',
+        'assignedTo'
+      );
       $this->applyFilters($query, $request);
     }
 
@@ -126,11 +138,25 @@ class TaskController extends Controller
       })->query(function (Builder $query) use ($project, $request) {
         $query
           ->where('project_id', $project->id)
-          ->with('project', 'status', 'priority', 'assignedTo');
+          ->with(
+            'project.phases:id,name,project_id',
+            'project.phases.milestones:id,name,phase_id',
+            'status',
+            'priority',
+            'assignedTo'
+          );
         $this->applyFilters($query, $request);
       });
     } else {
-      $query = $project->tasks()->with('status', 'priority', 'assignedTo');
+      $query = $project
+        ->tasks()
+        ->with(
+          'status',
+          'priority',
+          'assignedTo',
+          'phases:id,name,project_id',
+          'phases.milestones:id,name,phase_id'
+        );
       $this->applyFilters($query, $request);
     }
 
@@ -242,7 +268,7 @@ class TaskController extends Controller
     if ($task->project_id !== $project->id) {
       abort(403, 'Task not found in this project');
     }
-    
+
     $task->delete();
     return redirect()->route('tasks.index', $project);
   }

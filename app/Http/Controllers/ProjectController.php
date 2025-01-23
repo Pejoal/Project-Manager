@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use App\Models\User;
 
-
 class ProjectController extends Controller
 {
   public function index()
@@ -60,7 +59,8 @@ class ProjectController extends Controller
       'clients',
       'status',
       'priority',
-      'phases.milestones',
+      'phases:id,name,project_id',
+      'phases.milestones:id,name,phase_id',
       'phases.tasks.status',
       'phases.tasks.priority',
       'phases.tasks.assignedTo',
