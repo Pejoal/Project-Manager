@@ -99,6 +99,10 @@ Route::group(
         Route::get('/', [ProjectController::class, 'index'])->name(
           'projects.index'
         );
+        Route::get('/single/{project:slug}', [
+          ProjectController::class,
+          'single',
+        ])->name('projects.single');
         Route::get('/create', [ProjectController::class, 'create'])->name(
           'projects.create'
         );

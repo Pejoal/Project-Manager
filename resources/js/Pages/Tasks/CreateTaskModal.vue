@@ -6,7 +6,7 @@ import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 const emit = defineEmits(['close']);
 const props = defineProps({
@@ -44,9 +44,29 @@ const form = useForm({
   priority_id: null,
 });
 
+const project = ref(JSON.parse(JSON.stringify(props.project)));
+
+watch(
+  () => form.project_slug,
+  async (newProjectSlug) => {
+    if (newProjectSlug) {
+      try {
+        const response = await axios.get(
+          route('projects.single', { project: newProjectSlug })
+        );
+        project.value = response.data;
+        form.phase_id = null;
+        form.milestone_id = null;
+      } catch (error) {
+        console.error('Error fetching project data:', error);
+      }
+    }
+  }
+);
+
 const milestones = computed(() => {
   if (form.phase_id) {
-    const selectedPhase = props.project.phases.find(
+    const selectedPhase = project.value.phases.find(
       (phase) => phase.id === form.phase_id
     );
     return selectedPhase ? selectedPhase.milestones : [];
@@ -113,10 +133,10 @@ const submit = () => {
         <div>
           <InputLabel for="phase" value="Phase" />
           <vSelect
-            v-if="props.project.phases?.length > 0"
+            v-if="project.phases?.length > 0"
             id="phase"
             v-model="form.phase_id"
-            :options="props.project.phases"
+            :options="project.phases"
             :reduce="(phase) => phase.id"
             label="name"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
