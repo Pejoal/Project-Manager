@@ -55,7 +55,6 @@ const submit = () => {
         <div>
           <InputLabel for="project" value="Project" />
           <vSelect
-            v-if="props.projects.length > 0"
             id="project"
             v-model="form.project_slug"
             :options="props.projects"
@@ -65,14 +64,6 @@ const submit = () => {
             placeholder="Select an option"
           >
           </vSelect>
-          <TextInput
-            v-else
-            id="project"
-            :value="props.project.name"
-            readonly
-            type="text"
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
-          />
           <InputError class="mt-2" :message="form.errors.project" />
         </div>
         <div>
