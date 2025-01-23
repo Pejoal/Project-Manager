@@ -49,6 +49,7 @@ const destroy = () => {
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Phase:
           <Link
+            v-if="task.phase?.id"
             :href="
               route('phases.show', {
                 project: task.project.slug,
@@ -63,6 +64,7 @@ const destroy = () => {
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Milestone:
           <Link
+          v-if="task.milestone?.id"
             :href="
               route('milestones.show', {
                 project: task.project.slug,
