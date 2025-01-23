@@ -194,10 +194,10 @@ class TaskController extends Controller
       abort(403, 'Task not found in this project');
     }
 
-    $users = User::orderBy('id', 'desc')->get();
+    $users = User::latest('created_at')->get();
     $task->load('assignedTo');
-    $statuses = TaskStatus::all();
-    $priorities = TaskPriority::all();
+    $statuses = TaskStatus::latest('created_at')->get();
+    $priorities = TaskPriority::latest('created_at')->get();
     return Inertia::render(
       'Tasks/Edit',
       compact('task', 'project', 'users', 'statuses', 'priorities')

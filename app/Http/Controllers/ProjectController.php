@@ -4,10 +4,13 @@ use App\Models\Client;
 use App\Models\Project;
 use App\Models\ProjectPriority;
 use App\Models\ProjectStatus;
+use App\Models\TaskPriority;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use App\Models\User;
+
 
 class ProjectController extends Controller
 {
@@ -77,9 +80,21 @@ class ProjectController extends Controller
       $completedTasks = 0;
     }
 
+    $users = User::latest('created_at')->get();
+    $taskStatuses = TaskStatus::latest('created_at')->get();
+    $taskPriorities = TaskPriority::latest('created_at')->get();
+
     return Inertia::render(
       'Projects/Show',
-      compact('project', 'totalTasks', 'completedTasks', 'completedStatusColor')
+      compact(
+        'project',
+        'totalTasks',
+        'completedTasks',
+        'completedStatusColor',
+        'users',
+        'taskStatuses',
+        'taskPriorities'
+      )
     );
   }
 

@@ -1,12 +1,26 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import CreateTaskModal from '@/Pages/Tasks/CreateTaskModal.vue';
 
 const props = defineProps({
   project: Object,
+  users: Array,
+  taskPriorities: Array,
+  taskStatuses: Array,
 });
 
 const emit = defineEmits(['destroy']);
+
+const showModal = ref(false);
+
+const openModal = () => {
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
 </script>
 
 <template>
@@ -42,6 +56,22 @@ const emit = defineEmits(['destroy']);
     >
       View Tasks
     </Link>
+
+    <CreateTaskModal
+      :show="showModal"
+      :users="users"
+      :project="project"
+      :statuses="taskStatuses"
+      :priorities="taskPriorities"
+      @close="closeModal"
+    />
+    <button
+      @click="openModal"
+      class="text-blue-500 dark:text-blue-400 hover:underline"
+    >
+      Create Task
+    </button>
+
     <button
       @click="$emit('destroy')"
       class="ml-4 text-red-500 dark:text-red-400 hover:underline"

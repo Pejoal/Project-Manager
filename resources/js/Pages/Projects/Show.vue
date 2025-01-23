@@ -12,6 +12,9 @@ const props = defineProps({
   totalTasks: Number,
   completedTasks: Number,
   completedStatusColor: String,
+  users: Array,
+  taskStatuses: Array,
+  taskPriorities: Array,
 });
 
 const form = useForm({});
@@ -45,7 +48,7 @@ const destroy = () => {
         :completedTasks="completedTasks"
         :completedStatusColor="completedStatusColor"
       />
-      <ProjectActions :project="project" @destroy="destroy" />
+      <ProjectActions :taskStatuses="taskStatuses" :taskPriorities="taskPriorities" :project="project" @destroy="destroy" />
       <KanbanView :project="project" :filtersForm="filtersForm" />
     </div>
   </AppLayout>
