@@ -26,12 +26,12 @@ const props = defineProps({
           <strong>{{ activity.user.name }}: </strong>
           <span class="text-gray-300">{{ activity.description }}</span>
         </p>
-        <p class="text-sm dark:text-gray-400">
+        <p class="text-sm dark:text-gray-400" v-if="activity.subject">
           <Link
-            :href="route('projects.show', activity.subject.slug)"
+            :href="route('projects.show', activity.subject?.slug)"
             class="text-blue-500 hover:underline"
           >
-            {{ activity.subject.name }}
+            {{ activity.subject?.name }}
           </Link>
           - {{ new Date(activity.created_at).toLocaleString() }}
         </p>
