@@ -6,7 +6,7 @@ import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 
 const emit = defineEmits(['close']);
 const props = defineProps({
@@ -51,9 +51,15 @@ const milestones = computed(() => {
     );
     return selectedPhase ? selectedPhase.milestones : [];
   }
-
   return [];
 });
+
+watch(
+  () => form.phase_id,
+  (newPhaseId) => {
+    form.milestone_id = null;
+  }
+);
 
 const submit = () => {
   const slug = props.project.slug ? props.project.slug : form.project_slug;
