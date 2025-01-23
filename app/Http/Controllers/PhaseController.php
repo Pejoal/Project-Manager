@@ -36,9 +36,7 @@ class PhaseController extends Controller
 
     $phase->load([
       'project',
-      'tasks.status',
-      'tasks.priority',
-      'tasks.assignedTo',
+      'milestones',
     ]);
     return Inertia::render('Phases/Show', compact('phase'));
   }
