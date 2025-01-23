@@ -98,7 +98,7 @@ const submit = () => {
             v-if="props.project.phases.length > 0"
             id="phase"
             v-model="form.phase_id"
-            :options="props.phases"
+            :options="props.project.phases"
             :reduce="(phase) => phase.id"
             label="name"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
@@ -112,10 +112,10 @@ const submit = () => {
         <!-- <div>
           <InputLabel for="milestone" value="Milestone" />
           <vSelect
-            v-if="props.milestones.length > 0"
+            v-if="props.project.milestones.length > 0"
             id="milestone"
             v-model="form.milestone_id"
-            :options="props.milestones"
+            :options="props.project.milestones"
             :reduce="(milestone) => milestone.id"
             label="name"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
