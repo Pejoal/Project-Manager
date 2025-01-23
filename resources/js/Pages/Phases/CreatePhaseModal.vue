@@ -10,10 +10,6 @@ import 'vue-select/dist/vue-select.css';
 const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
-  projects: {
-    type: Array,
-    default: [],
-  },
   project: {
     type: Object,
     default: {},
@@ -54,16 +50,13 @@ const submit = () => {
         <!-- Project Selection -->
         <div>
           <InputLabel for="project" value="Project" />
-          <vSelect
+          <TextInput
             id="project"
-            v-model="form.project_slug"
-            :options="props.projects"
-            :reduce="(project) => project.slug"
-            label="name"
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
-          >
-          </vSelect>
+            :value="props.project.name"
+            readonly
+            type="text"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm bg-gray-200 dark:bg-zinc-600"
+          />
           <InputError class="mt-2" :message="form.errors.project" />
         </div>
         <div>
