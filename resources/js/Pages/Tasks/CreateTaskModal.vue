@@ -109,13 +109,13 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.phase" />
         </div>
 
-        <!-- <div>
+        <div>
           <InputLabel for="milestone" value="Milestone" />
           <vSelect
-            v-if="props.project.milestones.length > 0"
+            v-if="props.project.phases[form.phase_id]?.milestones.length > 0"
             id="milestone"
             v-model="form.milestone_id"
-            :options="props.project.milestones"
+            :options="props.project.phases[form.phase_id]?.milestones"
             :reduce="(milestone) => milestone.id"
             label="name"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
@@ -124,7 +124,7 @@ const submit = () => {
           </vSelect>
 
           <InputError class="mt-2" :message="form.errors.milestone" />
-        </div> -->
+        </div>
         <div>
           <InputLabel for="name" value="Name" />
           <TextInput
