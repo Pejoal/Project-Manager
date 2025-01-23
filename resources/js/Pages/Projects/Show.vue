@@ -48,7 +48,13 @@ const destroy = () => {
         :completedTasks="completedTasks"
         :completedStatusColor="completedStatusColor"
       />
-      <ProjectActions :taskStatuses="taskStatuses" :taskPriorities="taskPriorities" :project="project" @destroy="destroy" />
+      <ProjectActions
+        :users="users"
+        :taskStatuses="taskStatuses"
+        :taskPriorities="taskPriorities"
+        :project="project"
+        @destroy="destroy"
+      />
       <KanbanView :project="project" :filtersForm="filtersForm" />
     </div>
   </AppLayout>

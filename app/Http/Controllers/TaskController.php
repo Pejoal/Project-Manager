@@ -62,7 +62,7 @@ class TaskController extends Controller
 
   public function all(Request $request)
   {
-    $users = User::orderBy('id', 'desc')->get();
+    $users = User::latest('created_at')->select('id', 'name')->get();
     $projects = Project::orderBy('id', 'desc')->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
@@ -119,7 +119,7 @@ class TaskController extends Controller
 
   public function index(Project $project, Request $request)
   {
-    $users = User::orderBy('id', 'desc')->get();
+    $users = User::latest('created_at')->select('id', 'name')->get();
     $statuses = TaskStatus::orderBy('id', 'desc')->get();
     $priorities = TaskPriority::orderBy('id', 'desc')->get();
 
@@ -222,7 +222,7 @@ class TaskController extends Controller
       abort(403, 'Task not found in this project');
     }
 
-    $users = User::latest('created_at')->get();
+    $users = User::latest('created_at')->select('id', 'name')->get();
     $task->load('assignedTo');
     $statuses = TaskStatus::latest('created_at')->get();
     $priorities = TaskPriority::latest('created_at')->get();

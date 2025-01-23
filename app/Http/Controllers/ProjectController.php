@@ -81,7 +81,7 @@ class ProjectController extends Controller
       $completedTasks = 0;
     }
 
-    $users = User::latest('created_at')->get();
+    $users = User::latest('created_at')->select('id', 'name')->get();
     $taskStatuses = TaskStatus::latest('created_at')->get();
     $taskPriorities = TaskPriority::latest('created_at')->get();
 
