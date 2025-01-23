@@ -250,8 +250,8 @@ const fetchPage = (url) => {
             <div class="space-y-1">
               <p>
                 Status:
-                <span :style="{ color: task.status.color }">{{
-                  task.status.name
+                <span :style="{ color: task.status?.color }">{{
+                  task.status?.name
                 }}</span>
               </p>
               <p>
