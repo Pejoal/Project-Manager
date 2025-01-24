@@ -13,6 +13,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TaskAssigned;
 use Illuminate\Database\Eloquent\Builder;
+use App\Events\ActivityLogged;
 
 class TaskController extends Controller
 {
@@ -184,6 +185,7 @@ class TaskController extends Controller
       ->tasks()
       ->create($request->except(['assigned_to', 'project_slug']));
     $task->assignedTo()->sync($request->assigned_to);
+    event(new ActivityLogged(auth()->user(), 'created_task', 'Created a task', $task));
 
     // Send email notifications
     // if ($request->has('assigned_to')) {
@@ -248,6 +250,7 @@ class TaskController extends Controller
 
     $task->update($request->except('assigned_to'));
     $task->assignedTo()->sync($request->assigned_to);
+    event(new ActivityLogged(auth()->user(), 'updated_task', 'Updated a task', $task));
 
     // Send email notifications
     // if ($request->has('assigned_to')) {
@@ -267,6 +270,7 @@ class TaskController extends Controller
     }
 
     $task->delete();
+    event(new ActivityLogged(auth()->user(), 'deleted_task', 'Deleted a task', $task));
     return redirect()->route('tasks.index', $project);
   }
 }

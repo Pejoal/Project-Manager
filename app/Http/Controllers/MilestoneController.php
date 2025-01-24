@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Events\ActivityLogged;
 
 class MilestoneController extends Controller
 {
@@ -30,8 +31,8 @@ class MilestoneController extends Controller
       'phase_id' => 'required|exists:phases,id',
     ]);
 
-    $project->milestones()->create($request->all());
-
+    $milestone = $project->milestones()->create($request->all());
+    event(new ActivityLogged(auth()->user(), 'created_milestone', 'Created a milestone', $milestone));
     return redirect()->route('milestones.index', $project);
   }
 
@@ -80,6 +81,7 @@ class MilestoneController extends Controller
     ]);
 
     $milestone->update($request->all());
+    event(new ActivityLogged(auth()->user(), 'updated_milestone', 'Updated a milestone', $milestone));
     return redirect()->route('milestones.index', $project);
   }
 
@@ -90,6 +92,7 @@ class MilestoneController extends Controller
     }
 
     $milestone->delete();
+    event(new ActivityLogged(auth()->user(), 'deleted_milestone', 'Deleted a milestone', $milestone));
     return redirect()->route('milestones.index', $project);
   }
 
