@@ -54,19 +54,32 @@ watch(
 );
 
 const applyFilters = () => {
+  const params = {
+    assigned_to_me: form.assigned_to_me,
+    search: form.search,
+    perPage: form.perPage,
+    status: form.status,
+    priority: form.priority,
+    assigned_to: form.assigned_to,
+    projects: form.projects,
+  };
+
   if (props.project) {
     form.get(route('tasks.index', props.project.slug), {
       preserveState: true,
       preserveScroll: true,
+      replace: true,
+      data: params,
     });
   } else {
     form.get(route('tasks.all'), {
       preserveState: true,
       preserveScroll: true,
+      replace: true,
+      data: params,
     });
   }
 };
-
 
 const pagination = computed(() => {
   return {

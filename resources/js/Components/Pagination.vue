@@ -8,9 +8,12 @@ defineProps({
 const form = useForm({});
 
 const fetchPage = (url) => {
+  const params = new URLSearchParams(window.location.search);
   form.get(url, {
     preserveState: true,
     preserveScroll: true,
+    replace: true,
+    data: Object.fromEntries(params.entries()),
   });
 };
 </script>

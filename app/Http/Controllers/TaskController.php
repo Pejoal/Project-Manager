@@ -100,7 +100,7 @@ class TaskController extends Controller
     }
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest()->paginate($perPage);
+    $tasks = $query->latest()->paginate($perPage)->appends($request->except('page'));
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
@@ -148,7 +148,7 @@ class TaskController extends Controller
     }
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest()->paginate($perPage);
+    $tasks = $query->latest()->paginate($perPage)->appends($request->except('page'));
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
