@@ -5,6 +5,7 @@ import { ref } from 'vue';
 
 const props = defineProps({
   activities: Object,
+  pagination: Object,
 });
 
 const activeTab = ref(Object.keys(props.activities)[0]);
@@ -13,9 +14,7 @@ const setActiveTab = (tab) => {
   activeTab.value = tab;
 };
 
-
-const form = useForm({
-});
+const form = useForm({});
 
 const fetchPage = (url) => {
   form.get(url, {
@@ -61,7 +60,7 @@ const fetchPage = (url) => {
           <div class="flex items-center space-x-4">
             <div class="flex-shrink-0">
               <img
-                :src="activity.user.avatar"
+                :src="activity.user.profile_photo_url"
                 alt="User Avatar"
                 class="h-10 w-10 rounded-full"
               />
@@ -84,22 +83,22 @@ const fetchPage = (url) => {
       <!-- Pagination Controls -->
       <section class="flex items-center justify-between my-2">
         <button
-          v-if="props.activities.prev_page_url"
-          @click="fetchPage(props.activities.prev_page_url)"
+          v-if="pagination.prev_page_url"
+          @click="fetchPage(pagination.prev_page_url)"
           class="px-4 py-2 bg-blue-500 dark:text-white rounded-lg"
         >
           Previous
         </button>
         <span class="mx-2 dark:text-white"
-          >{{ props.activities.current_page }} /
-          {{ props.activities.last_page }}</span
+          >{{ pagination.current_page }} /
+          {{ pagination.last_page }}</span
         >
         <span class="mx-2 dark:text-white"
-          >Total: {{ props.activities.total }}</span
+          >Total: {{ pagination.total }}</span
         >
         <button
-          v-if="props.activities.next_page_url"
-          @click="fetchPage(props.activities.next_page_url)"
+          v-if="pagination.next_page_url"
+          @click="fetchPage(pagination.next_page_url)"
           class="px-4 py-2 bg-blue-500 dark:text-white rounded-lg"
         >
           Next
