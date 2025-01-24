@@ -93,10 +93,10 @@ const destroy = () => {
 
         <div class="mb-2">
           <p class="text-gray-700 dark:text-gray-300">
-            Start Date: {{ new Date(task.start_datetime).toLocaleDateString() }}
+            Start Date: {{ new Date(task.start_datetime).toLocaleString() }}
           </p>
           <p class="text-gray-700 dark:text-gray-300">
-            End Date: {{ new Date(task.start_datetime).toLocaleDateString() }}
+            End Date: {{ new Date(task.end_datetime).toLocaleString() }}
           </p>
         </div>
 
