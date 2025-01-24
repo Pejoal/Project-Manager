@@ -139,7 +139,7 @@ const updateSettings = () => {
         </div>
         <div class="mb-8">
           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-            Pie Chart Example
+            Clients, Projects, and Tasks
           </h3>
           <PieChart :chart-data="doughnutData" :options="chartOptions" />
         </div>
