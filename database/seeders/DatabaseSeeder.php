@@ -77,13 +77,17 @@ class DatabaseSeeder extends Seeder
     }
 
     TaskStatus::insert([
-      ['name' => 'Pending', 'color' => '#E70A1D','completed_field'=> false],
-      ['name' => 'In Progress', 'color' => '#36A2EB','completed_field'=> false],
-      ['name' => 'Completed', 'color' => '#2BFF10','completed_field'=> true],
-      ['name' => 'On Hold', 'color' => '#FFA500','completed_field'=> false],
-      ['name' => 'Cancelled', 'color' => '#808080','completed_field'=> false],
-      ['name' => 'Review', 'color' => '#FFD700','completed_field'=> false],
-      ['name' => 'Testing', 'color' => '#8A2BE2','completed_field'=> false],
+      ['name' => 'Pending', 'color' => '#E70A1D', 'completed_field' => false],
+      [
+        'name' => 'In Progress',
+        'color' => '#36A2EB',
+        'completed_field' => false,
+      ],
+      ['name' => 'Completed', 'color' => '#2BFF10', 'completed_field' => true],
+      ['name' => 'On Hold', 'color' => '#FFA500', 'completed_field' => false],
+      ['name' => 'Cancelled', 'color' => '#808080', 'completed_field' => false],
+      ['name' => 'Review', 'color' => '#FFD700', 'completed_field' => false],
+      ['name' => 'Testing', 'color' => '#8A2BE2', 'completed_field' => false],
     ]);
 
     TaskPriority::insert([
@@ -107,12 +111,7 @@ class DatabaseSeeder extends Seeder
         'name' => 'Phase 3',
         'project_id' => $project->id,
       ]);
-      for ($i = 0; $i < 12; $i++) {
-        $phase3 = Phase::factory()->create([
-          'name' => 'Phase 3',
-          'project_id' => $project->id,
-        ]);
-      }
+
       $milestone1 = Milestone::factory()->create([
         'name' => 'Milestone 1',
         'project_id' => $project->id,
@@ -123,7 +122,7 @@ class DatabaseSeeder extends Seeder
         'project_id' => $project->id,
         'phase_id' => $phase1->id,
       ]);
-      
+
       $milestone3 = Milestone::factory()->create([
         'name' => 'Milestone 3',
         'project_id' => $project->id,
