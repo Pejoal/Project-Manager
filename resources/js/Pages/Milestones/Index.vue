@@ -6,7 +6,7 @@ import CreateMilestoneModal from './CreateMilestoneModal.vue';
 import Pagination from '@/Components/Pagination.vue';
 
 const props = defineProps({
-  milestones: Array,
+  milestones: Object,
   project: Object,
   phases: Array,
 });
@@ -20,10 +20,6 @@ const openModal = () => {
 const closeModal = () => {
   showModal.value = false;
 };
-
-const title = computed(() =>
-  props.project ? `Milestones for ${props.project.name}` : 'All Milestones'
-);
 
 const pagination = computed(() => {
   return {
@@ -39,19 +35,19 @@ const pagination = computed(() => {
 </script>
 
 <template>
-  <Head :title="title" />
+  <Head :title="`Milestones for ${project.name}`" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        {{ title }}
-        <template v-if="project">
+        <section>
+          Milestones for
           <Link
             :href="route('projects.show', { project: project.slug })"
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
             {{ project.name }}
           </Link>
-        </template>
+        </section>
       </h1>
     </template>
     <div
@@ -72,7 +68,7 @@ const pagination = computed(() => {
 
       <ul class="my-2 space-y-4">
         <li
-          v-for="milestone in milestones"
+          v-for="milestone in milestones.data"
           :key="milestone.id"
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >

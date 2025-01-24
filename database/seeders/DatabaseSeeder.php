@@ -107,7 +107,13 @@ class DatabaseSeeder extends Seeder
         'name' => 'Phase 3',
         'project_id' => $project->id,
       ]);
-
+      for ($i = 0; $i < 12; $i++) {
+        $milestone1 = Milestone::factory()->create([
+          'name' => 'Milestone xx',
+          'project_id' => $project->id,
+          'phase_id' => $phase1->id,
+        ]);
+      }
       $milestone1 = Milestone::factory()->create([
         'name' => 'Milestone 1',
         'project_id' => $project->id,
@@ -118,6 +124,7 @@ class DatabaseSeeder extends Seeder
         'project_id' => $project->id,
         'phase_id' => $phase1->id,
       ]);
+      
       $milestone3 = Milestone::factory()->create([
         'name' => 'Milestone 3',
         'project_id' => $project->id,
