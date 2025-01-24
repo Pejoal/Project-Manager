@@ -1,4 +1,5 @@
 <script setup>
+import { ref, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import DialogModal from '@/Components/DialogModal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -25,6 +26,8 @@ const form = useForm({
   description: '',
   status_id: null,
   priority_id: null,
+  start_date: '',
+  end_date: '',
 });
 
 const submit = () => {
@@ -35,6 +38,16 @@ const submit = () => {
     },
   });
 };
+
+const endDateError = ref('');
+
+watch([() => form.start_date, () => form.end_date], ([newStartDate, newEndDate]) => {
+  if (newEndDate && newStartDate && newEndDate < newStartDate) {
+    endDateError.value = 'End date must be after start date';
+  } else {
+    endDateError.value = '';
+  }
+});
 </script>
 
 <template>
@@ -62,6 +75,26 @@ const submit = () => {
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
           <InputError class="mt-2" :message="form.errors.description" />
+        </div>
+        <div>
+          <InputLabel for="start_date" value="Start Date" />
+          <TextInput
+            id="start_date"
+            v-model="form.start_date"
+            type="date"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.start_date" />
+        </div>
+        <div>
+          <InputLabel for="end_date" value="End Date" />
+          <TextInput
+            id="end_date"
+            v-model="form.end_date"
+            type="date"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.end_date || endDateError" />
         </div>
         <div>
           <InputLabel for="status" value="Status" />

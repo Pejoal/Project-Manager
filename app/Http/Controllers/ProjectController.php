@@ -51,6 +51,8 @@ class ProjectController extends Controller
       'clients.*' => 'exists:clients,id',
       'status_id' => 'required|exists:project_statuses,id',
       'priority_id' => 'required|exists:project_priorities,id',
+      'start_date' => 'required|date',
+      'end_date' => 'required|date|after:start_date',
     ]);
 
     $data = $request->except(['clients']);
@@ -140,6 +142,8 @@ class ProjectController extends Controller
       'clients.*' => 'exists:clients,id',
       'status_id' => 'required|exists:project_statuses,id',
       'priority_id' => 'required|exists:project_priorities,id',
+      'start_date' => 'required|date',
+      'end_date' => 'required|date|after:start_date',
     ]);
 
     $data = $request->except(['clients']);
