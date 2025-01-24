@@ -28,6 +28,14 @@ const props = defineProps({
     <p class="mb-2 text-gray-700 dark:text-gray-300">
       Priority: {{ project.priority?.name }}
     </p>
+    <div class="mb-2">
+      <p class="text-gray-700 dark:text-gray-300">
+        Start Date: {{ new Date(project.start_date).toLocaleDateString() }}
+      </p>
+      <p class="text-gray-700 dark:text-gray-300">
+        End Date: {{ new Date(project.end_date).toLocaleDateString() }}
+      </p>
+    </div>
     <p class="mb-2 text-gray-700 dark:text-gray-300">
       Created at: {{ new Date(project.created_at).toLocaleString() }}
     </p>

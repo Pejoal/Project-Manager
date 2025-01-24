@@ -1,6 +1,6 @@
 <script setup>
 import { useForm, Head, Link } from '@inertiajs/vue3';
-import { computed, defineProps, watch } from 'vue';
+import { computed, defineProps, ref, watch } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
@@ -27,8 +27,26 @@ const form = useForm({
   priority_id: props.task.priority_id,
   phase_id: props.task.phase_id,
   milestone_id: props.task.milestone_id,
+  start_datetime: props.task.start_datetime,
+  end_datetime: props.task.end_datetime,
 });
 
+const endDateTimeError = ref('');
+
+watch(
+  [() => form.start_datetime, () => form.end_datetime],
+  ([newStartDateTime, newEndDateTime]) => {
+    if (
+      newEndDateTime &&
+      newStartDateTime &&
+      newEndDateTime < newStartDateTime
+    ) {
+      endDateTimeError.value = 'End datetime must be after start datetime';
+    } else {
+      endDateTimeError.value = '';
+    }
+  }
+);
 const milestones = computed(() => {
   if (form.phase_id) {
     const selectedPhase = props.project.phases.find(
@@ -169,6 +187,29 @@ const submit = () => {
           </vSelect>
 
           <InputError class="mt-2" :message="form.errors.milestone_id" />
+        </div>
+        <div class="mb-4">
+          <InputLabel for="start_date" value="Start Date" />
+          <TextInput
+            id="start_date"
+            v-model="form.start_datetime"
+            type="datetime-local"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.start_datetime" />
+        </div>
+        <div class="mb-4">
+          <InputLabel for="end_date" value="End Date" />
+          <TextInput
+            id="end_date"
+            v-model="form.end_datetime"
+            type="datetime-local"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError
+            class="mt-2"
+            :message="form.errors.end_datetime || endDateTimeError"
+          />
         </div>
         <button
           type="submit"

@@ -21,10 +21,24 @@ const form = useForm({
   clients: props.project.clients
     ? props.project.clients.map((client) => client.id)
     : [],
-
   status_id: props.project.status_id,
   priority_id: props.project.priority_id,
+  start_date: props.project.start_date,
+  end_date: props.project.end_date,
 });
+
+const endDateError = ref('');
+
+watch(
+  [() => form.start_date, () => form.end_date],
+  ([newStartDate, newEndDate]) => {
+    if (newEndDate && newStartDate && newEndDate < newStartDate) {
+      endDateError.value = 'End date must be after start date';
+    } else {
+      endDateError.value = '';
+    }
+  }
+);
 
 const submit = () => {
   form.put(route('projects.update', { project: props.project.slug }));
@@ -86,6 +100,26 @@ const submit = () => {
           >
           </vSelect>
           <InputError class="mt-2" :message="form.errors.clients" />
+        </div>
+        <div class="mb-4">
+          <InputLabel for="start_date" value="Start Date" />
+          <TextInput
+            id="start_date"
+            v-model="form.start_date"
+            type="date"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.start_date" />
+        </div>
+        <div class="mb-4">
+          <InputLabel for="end_date" value="End Date" />
+          <TextInput
+            id="end_date"
+            v-model="form.end_date"
+            type="date"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.end_date || endDateError" />
         </div>
         <div>
           <InputLabel for="status" value="Status" />

@@ -85,13 +85,23 @@ const destroy = () => {
           </span>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Created at: {{ new Date(task.created_at).toLocaleString() }}
-        </p>
-        <p class="mb-2 text-gray-700 dark:text-gray-300">
           Status: {{ task.status?.name }}
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
           Priority: {{ task.priority?.name }}
+        </p>
+
+        <div class="mb-2">
+          <p class="text-gray-700 dark:text-gray-300">
+            Start Date: {{ new Date(task.start_datetime).toLocaleDateString() }}
+          </p>
+          <p class="text-gray-700 dark:text-gray-300">
+            End Date: {{ new Date(task.start_datetime).toLocaleDateString() }}
+          </p>
+        </div>
+
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          Created at: {{ new Date(task.created_at).toLocaleString() }}
         </p>
       </div>
       <Link
