@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref, watch } from 'vue';
+import { computed, defineProps, ref, watch } from 'vue';
 import { Link, Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateTaskModal from './CreateTaskModal.vue';
@@ -8,6 +8,7 @@ import 'vue-select/dist/vue-select.css';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import Pagination from '@/Components/Pagination.vue';
 
 const props = defineProps({
   users: Array,
@@ -66,12 +67,18 @@ const applyFilters = () => {
   }
 };
 
-const fetchPage = (url) => {
-  form.get(url, {
-    preserveState: true,
-    preserveScroll: true,
-  });
-};
+
+const pagination = computed(() => {
+  return {
+    prev_page_url: props.tasks.prev_page_url,
+    prev_page_url: props.tasks.prev_page_url,
+    current_page: props.tasks.current_page,
+    last_page: props.tasks.last_page,
+    total: props.tasks.total,
+    next_page_url: props.tasks.next_page_url,
+    next_page_url: props.tasks.next_page_url,
+  };
+});
 </script>
 
 <template>
@@ -284,27 +291,8 @@ const fetchPage = (url) => {
           </div>
         </li>
       </ul>
-      <!-- Pagination Controls -->
-      <section class="flex items-center justify-between my-2">
-        <button
-          v-if="props.tasks.prev_page_url"
-          @click="fetchPage(props.tasks.prev_page_url)"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Previous
-        </button>
-        <span class="mx-2"
-          >{{ props.tasks.current_page }} / {{ props.tasks.last_page }}</span
-        >
-        <span class="mx-2">Total: {{ props.tasks.total }}</span>
-        <button
-          v-if="props.tasks.next_page_url"
-          @click="fetchPage(props.tasks.next_page_url)"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Next
-        </button>
-      </section>
+
+      <Pagination :pagination="pagination" />
     </div>
   </AppLayout>
 </template>
