@@ -42,6 +42,18 @@ const form = useForm({
   assigned_to: [],
   status_id: null,
   priority_id: null,
+  start_datetime: '',
+  end_datetime: '',
+});
+
+const endDateTimeError = ref('');
+
+watch([() => form.start_datetime, () => form.end_datetime], ([newStartDateTime, newEndDateTime]) => {
+  if (newEndDateTime && newStartDateTime && newEndDateTime < newStartDateTime) {
+    endDateTimeError.value = 'End datetime must be after start datetime';
+  } else {
+    endDateTimeError.value = '';
+  }
 });
 
 const project = ref(JSON.parse(JSON.stringify(props.project)));
@@ -183,6 +195,26 @@ const submit = () => {
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
           <InputError class="mt-2" :message="form.errors.description" />
+        </div>
+        <div>
+          <InputLabel for="start_datetime" value="Start DateTime" />
+          <TextInput
+            id="start_datetime"
+            v-model="form.start_datetime"
+            type="datetime-local"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.start_datetime" />
+        </div>
+        <div>
+          <InputLabel for="end_datetime" value="End DateTime" />
+          <TextInput
+            id="end_datetime"
+            v-model="form.end_datetime"
+            type="datetime-local"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+          />
+          <InputError class="mt-2" :message="form.errors.end_datetime || endDateTimeError" />
         </div>
         <div>
           <InputLabel for="status" value="Status" />
