@@ -58,11 +58,19 @@ const setActiveTab = (tab) => {
               />
             </div>
             <div>
-              <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                {{ activity.user.name }}
+              <section class="flex gap-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                <p>
+                  {{ activity.user.name }}
+                </p>
+                <p class="dark:text-gray-400">
+                  {{ activity.user.email }}
+                </p>
+              </section>
+              <p class="text-sm text-gray-500 dark:text-gray-300">
+                {{ activity.description }}
               </p>
               <p class="text-sm text-gray-500 dark:text-gray-400">
-                {{ activity.description }}
+                Object ID: {{ activity.subject_id }}
               </p>
               <p class="text-sm text-gray-400 dark:text-gray-500">
                 {{ new Date(activity.created_at).toLocaleString() }}
