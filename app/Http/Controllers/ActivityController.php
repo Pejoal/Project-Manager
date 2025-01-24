@@ -9,7 +9,7 @@ class ActivityController extends Controller
 {
   public function index()
   {
-    $activities = Activity::with('user', 'subject')->latest()->paginate(10);
+    $activities = Activity::with('user', 'subject')->latest()->paginate(100)->groupBy('subject_type');
     return Inertia::render('Activities/Index', [
       'activities' => $activities,
     ]);

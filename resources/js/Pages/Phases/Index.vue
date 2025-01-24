@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, ref, computed } from 'vue';
-import { Link, Head } from '@inertiajs/vue3';
+import { Link, Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreatePhaseModal from './CreatePhaseModal.vue';
 
@@ -22,6 +22,9 @@ const closeModal = () => {
 const title = computed(() =>
   props.project ? `Phases for ${props.project.name}` : 'All Phases'
 );
+
+const form = useForm({
+});
 
 const fetchPage = (url) => {
   form.get(url, {

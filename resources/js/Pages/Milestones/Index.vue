@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, ref, computed } from 'vue';
-import { Link, Head } from '@inertiajs/vue3';
+import { Link, Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateMilestoneModal from './CreateMilestoneModal.vue';
 
@@ -23,6 +23,8 @@ const closeModal = () => {
 const title = computed(() =>
   props.project ? `Milestones for ${props.project.name}` : 'All Milestones'
 );
+
+const form = useForm({});
 
 const fetchPage = (url) => {
   form.get(url, {
