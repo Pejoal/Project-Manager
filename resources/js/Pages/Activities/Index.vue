@@ -27,7 +27,7 @@ const setActiveTab = (tab) => {
 
     <main class="bg-zinc-900 shadow-md rounded-lg p-4">
       <!-- Tabs for activity groups -->
-      <div class="flex space-x-4 mb-4">
+      <div class="flex space-x-4 overflow-x-auto mb-4">
         <button
           v-for="(activityGroup, key) in activities"
           :key="key"
@@ -38,7 +38,7 @@ const setActiveTab = (tab) => {
           }"
           class="px-4 py-2 rounded-lg"
         >
-          {{ key }}
+          {{ key.split('\\').pop() }}
         </button>
       </div>
 
