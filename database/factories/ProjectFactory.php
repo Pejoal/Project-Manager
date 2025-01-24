@@ -16,6 +16,8 @@ class ProjectFactory extends Factory
       'slug' => $this->faker->slug,
       'status_id' => ProjectStatus::inRandomOrder()->first()->id,
       'priority_id' => ProjectPriority::inRandomOrder()->first()->id,
+      'start_date' => now(),
+      'end_date' => now(),
     ];
   }
 }

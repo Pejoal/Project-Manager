@@ -33,6 +33,8 @@ class TaskFactory extends Factory
       'description' => $this->faker->paragraph,
       'status_id' => TaskStatus::inRandomOrder()->first()->id,
       'priority_id' => TaskPriority::inRandomOrder()->first()->id,
+      'start_datetime' => now(),
+      'end_datetime' => now(),
       'project_id' => $project->id,
       'phase_id' => $phase->id,
       'milestone_id' => $milestone->id,

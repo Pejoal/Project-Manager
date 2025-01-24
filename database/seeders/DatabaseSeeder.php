@@ -128,7 +128,8 @@ class DatabaseSeeder extends Seeder
         'project_id' => $project->id,
         'phase_id' => $phase3->id,
       ]);
-
     });
+
+    $this->call(DataSeeder::class);
   }
 }
