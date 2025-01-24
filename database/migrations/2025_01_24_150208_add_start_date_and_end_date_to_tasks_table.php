@@ -10,9 +10,8 @@ return new class extends Migration {
    */
   public function up(): void
   {
-    Schema::table('projects', function (Blueprint $table) {
-      $table->date('start_date')->nullable();
-      $table->date('end_date')->nullable();
+    Schema::table('tasks', function (Blueprint $table) {
+      //
     });
   }
 
@@ -21,8 +20,8 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::table('projects', function (Blueprint $table) {
-      $table->dropColumn(['start_date', 'end_date']);
+    Schema::table('tasks', function (Blueprint $table) {
+      //
     });
   }
 };

@@ -41,7 +41,9 @@ watch(
 );
 
 const submit = () => {
-  form.put(route('projects.update', { project: props.project.slug }));
+  form.put(route('projects.update', { project: props.project.slug }), {
+    preserveScroll: true,
+  });
 };
 </script>
 
@@ -119,7 +121,10 @@ const submit = () => {
             type="date"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
-          <InputError class="mt-2" :message="form.errors.end_date || endDateError" />
+          <InputError
+            class="mt-2"
+            :message="form.errors.end_date || endDateError"
+          />
         </div>
         <div>
           <InputLabel for="status" value="Status" />

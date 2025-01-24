@@ -25,7 +25,10 @@ const submit = () => {
     route('milestones.update', {
       project: props.project.slug,
       milestone: props.milestone.id,
-    })
+    }),
+    {
+      preserveScroll: true,
+    }
   );
 };
 </script>

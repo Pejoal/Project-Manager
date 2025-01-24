@@ -41,13 +41,16 @@ const submit = () => {
 
 const endDateError = ref('');
 
-watch([() => form.start_date, () => form.end_date], ([newStartDate, newEndDate]) => {
-  if (newEndDate && newStartDate && newEndDate < newStartDate) {
-    endDateError.value = 'End date must be after start date';
-  } else {
-    endDateError.value = '';
+watch(
+  [() => form.start_date, () => form.end_date],
+  ([newStartDate, newEndDate]) => {
+    if (newEndDate && newStartDate && newEndDate < newStartDate) {
+      endDateError.value = 'End date must be after start date';
+    } else {
+      endDateError.value = '';
+    }
   }
-});
+);
 </script>
 
 <template>
@@ -94,7 +97,10 @@ watch([() => form.start_date, () => form.end_date], ([newStartDate, newEndDate])
             type="date"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
-          <InputError class="mt-2" :message="form.errors.end_date || endDateError" />
+          <InputError
+            class="mt-2"
+            :message="form.errors.end_date || endDateError"
+          />
         </div>
         <div>
           <InputLabel for="status" value="Status" />

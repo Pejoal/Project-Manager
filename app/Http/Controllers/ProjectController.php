@@ -151,7 +151,14 @@ class ProjectController extends Controller
 
     $project->update($data);
     $project->clients()->sync($request->clients);
-    event(new ActivityLogged(auth()->user(), 'updated_project', 'Updated a project', $project));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'updated_project',
+        'Updated a project',
+        $project
+      )
+    );
 
     return redirect()->route('projects.index');
   }
@@ -159,7 +166,14 @@ class ProjectController extends Controller
   public function destroy(Project $project)
   {
     $project->delete();
-    event(new ActivityLogged(auth()->user(), 'deleted_project', 'Deleted a project', $project));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'deleted_project',
+        'Deleted a project',
+        $project
+      )
+    );
 
     return redirect()->route('projects.index');
   }

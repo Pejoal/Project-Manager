@@ -66,7 +66,10 @@ watch(
 
 const submit = () => {
   form.put(
-    route('tasks.update', { project: props.project.slug, task: props.task.id })
+    route('tasks.update', { project: props.project.slug, task: props.task.id }),
+    {
+      preserveScroll: true,
+    }
   );
 };
 </script>

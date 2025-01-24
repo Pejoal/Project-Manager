@@ -63,11 +63,17 @@ const closeModal = () => {
                 }}<span v-if="index < project.clients.length - 1">, </span>
               </span>
             </p>
-            <p v-if="project.start_date" class="text-gray-700 dark:text-gray-300">
+            <p
+              v-if="project.start_date"
+              class="text-gray-700 dark:text-gray-300"
+            >
               Start Date:
               {{ new Date(project.start_date).toLocaleDateString() }}
             </p>
-            <p v-if="project.end_date" class="mb-2 text-gray-700 dark:text-gray-300">
+            <p
+              v-if="project.end_date"
+              class="mb-2 text-gray-700 dark:text-gray-300"
+            >
               End Date: {{ new Date(project.end_date).toLocaleDateString() }}
             </p>
 

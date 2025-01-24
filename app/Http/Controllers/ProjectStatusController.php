@@ -22,7 +22,14 @@ class ProjectStatusController extends Controller
       'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
     ]);
     $projectStatus = ProjectStatus::create($request->all());
-    event(new ActivityLogged(auth()->user(), 'created_project_status', 'Created a project status', $projectStatus));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'created_project_status',
+        'Created a project status',
+        $projectStatus
+      )
+    );
     return redirect()->route('project-statuses.index');
   }
 
@@ -33,14 +40,28 @@ class ProjectStatusController extends Controller
       'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
     ]);
     $projectStatus->update($request->all());
-    event(new ActivityLogged(auth()->user(), 'updated_project_status', 'Updated a project status', $projectStatus));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'updated_project_status',
+        'Updated a project status',
+        $projectStatus
+      )
+    );
     return redirect()->route('project-statuses.index');
   }
 
   public function destroy(ProjectStatus $projectStatus)
   {
     $projectStatus->delete();
-    event(new ActivityLogged(auth()->user(), 'deleted_project_status', 'Deleted a project status', $projectStatus));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'deleted_project_status',
+        'Deleted a project status',
+        $projectStatus
+      )
+    );
     return redirect()->route('project-statuses.index');
   }
 

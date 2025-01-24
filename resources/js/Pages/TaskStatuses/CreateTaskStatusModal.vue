@@ -86,7 +86,11 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.color" />
         </div>
         <div class="flex items-center gap-2">
-          <InputLabel class="inline-block" for="completed_field" value="Is Completed Field" />
+          <InputLabel
+            class="inline-block"
+            for="completed_field"
+            value="Is Completed Field"
+          />
           <Checkbox
             id="completed_field"
             v-model:checked="form.completed_field"

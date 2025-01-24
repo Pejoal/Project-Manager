@@ -48,13 +48,20 @@ const form = useForm({
 
 const endDateTimeError = ref('');
 
-watch([() => form.start_datetime, () => form.end_datetime], ([newStartDateTime, newEndDateTime]) => {
-  if (newEndDateTime && newStartDateTime && newEndDateTime < newStartDateTime) {
-    endDateTimeError.value = 'End datetime must be after start datetime';
-  } else {
-    endDateTimeError.value = '';
+watch(
+  [() => form.start_datetime, () => form.end_datetime],
+  ([newStartDateTime, newEndDateTime]) => {
+    if (
+      newEndDateTime &&
+      newStartDateTime &&
+      newEndDateTime < newStartDateTime
+    ) {
+      endDateTimeError.value = 'End datetime must be after start datetime';
+    } else {
+      endDateTimeError.value = '';
+    }
   }
-});
+);
 
 const project = ref(JSON.parse(JSON.stringify(props.project)));
 
@@ -214,7 +221,10 @@ const submit = () => {
             type="datetime-local"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
-          <InputError class="mt-2" :message="form.errors.end_datetime || endDateTimeError" />
+          <InputError
+            class="mt-2"
+            :message="form.errors.end_datetime || endDateTimeError"
+          />
         </div>
         <div>
           <InputLabel for="status" value="Status" />

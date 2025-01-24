@@ -23,7 +23,10 @@ const submit = () => {
     route('phases.update', {
       project: props.project.slug,
       phase: props.phase.id,
-    })
+    }),
+    {
+      preserveScroll: true,
+    }
   );
 };
 </script>

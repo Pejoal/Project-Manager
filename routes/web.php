@@ -68,7 +68,9 @@ Route::group(
       Route::get('/dashboard', [DashboardController::class, 'show'])->name(
         'dashboard'
       );
-      Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+      Route::get('/activities', [ActivityController::class, 'index'])->name(
+        'activities.index'
+      );
 
       // Client Management Routes
       Route::prefix('clients')->group(function () {

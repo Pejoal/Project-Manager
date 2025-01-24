@@ -20,7 +20,14 @@ class ProjectPriorityController extends Controller
       'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
     ]);
     $projectPriority = ProjectPriority::create($request->all());
-    event(new ActivityLogged(auth()->user(), 'created_project_priority', 'Created a project priority', $projectPriority));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'created_project_priority',
+        'Created a project priority',
+        $projectPriority
+      )
+    );
     return redirect()->route('project-priorities.index');
   }
 
@@ -31,14 +38,28 @@ class ProjectPriorityController extends Controller
       'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
     ]);
     $projectPriority->update($request->all());
-    event(new ActivityLogged(auth()->user(), 'updated_project_priority', 'Updated a project priority', $projectPriority));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'updated_project_priority',
+        'Updated a project priority',
+        $projectPriority
+      )
+    );
     return redirect()->route('project-priorities.index');
   }
 
   public function destroy(ProjectPriority $projectPriority)
   {
     $projectPriority->delete();
-    event(new ActivityLogged(auth()->user(), 'deleted_project_priority', 'Deleted a project priority', $projectPriority));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'deleted_project_priority',
+        'Deleted a project priority',
+        $projectPriority
+      )
+    );
     return redirect()->route('project-priorities.index');
   }
 
