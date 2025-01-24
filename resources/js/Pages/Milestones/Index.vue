@@ -3,6 +3,7 @@ import { defineProps, ref, computed } from 'vue';
 import { Link, Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreateMilestoneModal from './CreateMilestoneModal.vue';
+import Pagination from '@/Components/Pagination.vue';
 
 const props = defineProps({
   milestones: Array,
@@ -24,14 +25,17 @@ const title = computed(() =>
   props.project ? `Milestones for ${props.project.name}` : 'All Milestones'
 );
 
-const form = useForm({});
-
-const fetchPage = (url) => {
-  form.get(url, {
-    preserveState: true,
-    preserveScroll: true,
-  });
-};
+const pagination = computed(() => {
+  return {
+    prev_page_url: props.milestones.prev_page_url,
+    prev_page_url: props.milestones.prev_page_url,
+    current_page: props.milestones.current_page,
+    last_page: props.milestones.last_page,
+    total: props.milestones.total,
+    next_page_url: props.milestones.next_page_url,
+    next_page_url: props.milestones.next_page_url,
+  };
+});
 </script>
 
 <template>
@@ -109,28 +113,8 @@ const fetchPage = (url) => {
           </div>
         </li>
       </ul>
-      <!-- Pagination Controls -->
-      <section class="flex items-center justify-between my-2">
-        <button
-          v-if="props.milestones.prev_page_url"
-          @click="fetchPage(props.milestones.prev_page_url)"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Previous
-        </button>
-        <span class="mx-2"
-          >{{ props.milestones.current_page }} /
-          {{ props.milestones.last_page }}</span
-        >
-        <span class="mx-2">Total: {{ props.milestones.total }}</span>
-        <button
-          v-if="props.milestones.next_page_url"
-          @click="fetchPage(props.milestones.next_page_url)"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Next
-        </button>
-      </section>
+
+      <Pagination :pagination="pagination" />
     </div>
   </AppLayout>
 </template>
