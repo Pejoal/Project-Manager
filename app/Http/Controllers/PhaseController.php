@@ -13,7 +13,7 @@ class PhaseController extends Controller
 {
   public function index(Project $project, Request $request)
   {
-    $phases = $project->phases()->with('tasks')->latest()->get();
+    $phases = $project->phases()->with('tasks')->latest()->paginate(5);
     return Inertia::render('Phases/Index', compact('phases', 'project'));
   }
 

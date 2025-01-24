@@ -13,7 +13,7 @@ class MilestoneController extends Controller
 {
   public function index(Project $project, Request $request)
   {
-    $milestones = $project->milestones()->with('tasks')->latest()->paginate(5);
+    $milestones = $project->milestones()->with('tasks')->latest()->paginate(50);
 
     $phases = $project->phases;
 

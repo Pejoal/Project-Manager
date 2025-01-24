@@ -3,9 +3,10 @@ import { defineProps, ref, computed } from 'vue';
 import { Link, Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import CreatePhaseModal from './CreatePhaseModal.vue';
+import Pagination from '@/Components/Pagination.vue';
 
 const props = defineProps({
-  phases: Array,
+  phases: Object,
   project: Object,
 });
 
@@ -19,35 +20,33 @@ const closeModal = () => {
   showModal.value = false;
 };
 
-const title = computed(() =>
-  props.project ? `Phases for ${props.project.name}` : 'All Phases'
-);
-
-const form = useForm({
+const pagination = computed(() => {
+  return {
+    prev_page_url: props.phases.prev_page_url,
+    prev_page_url: props.phases.prev_page_url,
+    current_page: props.phases.current_page,
+    last_page: props.phases.last_page,
+    total: props.phases.total,
+    next_page_url: props.phases.next_page_url,
+    next_page_url: props.phases.next_page_url,
+  };
 });
-
-const fetchPage = (url) => {
-  form.get(url, {
-    preserveState: true,
-    preserveScroll: true,
-  });
-};
 </script>
 
 <template>
-  <Head :title="title" />
+  <Head :title="`Phases for ${project.name}`" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        {{ title }}
-        <template v-if="project">
+        <section>
+          Phases for
           <Link
             :href="route('projects.show', { project: project.slug })"
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
             {{ project.name }}
           </Link>
-        </template>
+        </section>
       </h1>
     </template>
     <div
@@ -67,7 +66,7 @@ const fetchPage = (url) => {
 
       <ul class="my-2 space-y-4">
         <li
-          v-for="phase in phases"
+          v-for="phase in phases.data"
           :key="phase.id"
           class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
         >
@@ -108,27 +107,8 @@ const fetchPage = (url) => {
           </div>
         </li>
       </ul>
-      <!-- Pagination Controls -->
-      <section class="flex items-center justify-between my-2">
-        <button
-          v-if="props.phases.prev_page_url"
-          @click="fetchPage(props.phases.prev_page_url)"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Previous
-        </button>
-        <span class="mx-2"
-          >{{ props.phases.current_page }} / {{ props.phases.last_page }}</span
-        >
-        <span class="mx-2">Total: {{ props.phases.total }}</span>
-        <button
-          v-if="props.phases.next_page_url"
-          @click="fetchPage(props.phases.next_page_url)"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Next
-        </button>
-      </section>
+
+      <Pagination :pagination="pagination" />
     </div>
   </AppLayout>
 </template>
