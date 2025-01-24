@@ -4,7 +4,6 @@ import {
   DoughnutChart,
   BarChart,
   LineChart,
-  PolarAreaChart,
   PieChart,
 } from 'vue-chart-3';
 import { Chart, registerables } from 'chart.js';
