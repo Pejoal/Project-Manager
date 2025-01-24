@@ -1,6 +1,6 @@
 <script setup>
 import { useForm, Head, Link } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
+import { computed, defineProps, watch } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
@@ -25,7 +25,26 @@ const form = useForm({
     : [],
   status_id: props.task.status_id,
   priority_id: props.task.priority_id,
+  phase_id: props.task.phase_id,
+  milestone_id: props.task.milestone_id,
 });
+
+const milestones = computed(() => {
+  if (form.phase_id) {
+    const selectedPhase = props.project.phases.find(
+      (phase) => phase.id === form.phase_id
+    );
+    return selectedPhase ? selectedPhase.milestones : [];
+  }
+  return [];
+});
+
+watch(
+  () => form.phase_id,
+  (newPhaseId) => {
+    form.milestone_id = null;
+  }
+);
 
 const submit = () => {
   form.put(
@@ -118,10 +137,43 @@ const submit = () => {
           >
           </vSelect>
         </div>
+        <div>
+          <InputLabel for="phase" value="Phase" />
+          <vSelect
+            v-if="project.phases?.length > 0"
+            id="phase"
+            v-model="form.phase_id"
+            :options="project.phases"
+            :reduce="(phase) => phase.id"
+            label="name"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+
+          <InputError class="mt-2" :message="form.errors.phase_id" />
+        </div>
+
+        <div>
+          <InputLabel for="milestone" value="Milestone" />
+          <vSelect
+            v-if="milestones.length > 0"
+            id="milestone"
+            v-model="form.milestone_id"
+            :options="milestones"
+            :reduce="(milestone) => milestone.id"
+            label="name"
+            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
+            placeholder="Select an option"
+          >
+          </vSelect>
+
+          <InputError class="mt-2" :message="form.errors.milestone_id" />
+        </div>
         <button
           type="submit"
           :disabled="form.processing"
-          class="px-4 py-2 mt-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
+          class="px-4 py-2 mt-4 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
         >
           Update
         </button>

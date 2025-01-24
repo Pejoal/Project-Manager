@@ -100,7 +100,10 @@ class TaskController extends Controller
     }
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest()->paginate($perPage)->appends($request->except('page'));
+    $tasks = $query
+      ->latest()
+      ->paginate($perPage)
+      ->appends($request->except('page'));
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
@@ -148,7 +151,10 @@ class TaskController extends Controller
     }
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest()->paginate($perPage)->appends($request->except('page'));
+    $tasks = $query
+      ->latest()
+      ->paginate($perPage)
+      ->appends($request->except('page'));
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
@@ -185,7 +191,14 @@ class TaskController extends Controller
       ->tasks()
       ->create($request->except(['assigned_to', 'project_slug']));
     $task->assignedTo()->sync($request->assigned_to);
-    event(new ActivityLogged(auth()->user(), 'created_task', 'Created a task', $task));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'created_task',
+        'Created a task',
+        $task
+      )
+    );
 
     // Send email notifications
     // if ($request->has('assigned_to')) {
@@ -223,6 +236,10 @@ class TaskController extends Controller
 
     $users = User::latest()->select('id', 'name')->get();
     $task->load('assignedTo');
+    $project->load(
+      'phases:id,name,project_id',
+      'phases.milestones:id,name,phase_id'
+    );
     $statuses = TaskStatus::latest()->get();
     $priorities = TaskPriority::latest()->get();
     return Inertia::render(
@@ -250,7 +267,14 @@ class TaskController extends Controller
 
     $task->update($request->except('assigned_to'));
     $task->assignedTo()->sync($request->assigned_to);
-    event(new ActivityLogged(auth()->user(), 'updated_task', 'Updated a task', $task));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'updated_task',
+        'Updated a task',
+        $task
+      )
+    );
 
     // Send email notifications
     // if ($request->has('assigned_to')) {
@@ -270,7 +294,14 @@ class TaskController extends Controller
     }
 
     $task->delete();
-    event(new ActivityLogged(auth()->user(), 'deleted_task', 'Deleted a task', $task));
+    event(
+      new ActivityLogged(
+        auth()->user(),
+        'deleted_task',
+        'Deleted a task',
+        $task
+      )
+    );
     return redirect()->route('tasks.index', $project);
   }
 }
