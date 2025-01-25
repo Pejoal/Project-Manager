@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Str;
 
-$DATABASE_URL = parse_url(env('DATABASE_URL'));
+// $DATABASE_URL = parse_url(env('DATABASE_URL'));
 return [
   /*
     |--------------------------------------------------------------------------
@@ -87,17 +87,20 @@ return [
 
     'pgsql' => [
       'driver' => 'pgsql',
-      'url' => env('DB_URL'),
-      'host' => $DATABASE_URL['host'],
-      'port' => $DATABASE_URL['port'],
-      'database' => ltrim($DATABASE_URL['port'], '/'),
-      'username' => $DATABASE_URL['pass'],
-      'password' => $DATABASE_URL['pass'],
-      'charset' => env('DB_CHARSET', 'utf8'),
+      'host' => env('DB_HOST', '127.0.0.1'),
+      'port' => env('DB_PORT', '5432'),
+      'database' => env('DB_DATABASE', 'forge'),
+      'username' => env('DB_USERNAME', 'forge'),
+      'password' => env('DB_PASSWORD', ''),
+      'charset' => 'utf8',
       'prefix' => '',
-      'prefix_indexes' => true,
-      'search_path' => 'public',
-      'sslmode' => 'prefer',
+      'schema' => 'public',
+      'sslmode' => env('DB_SSL_MODE', 'prefer'),
+      'options' => [
+        PDO::MYSQL_ATTR_SSL_CA => base_path(
+          'path/to/rds-combined-ca-bundle.pem'
+        ),
+      ],
     ],
 
     'sqlsrv' => [
