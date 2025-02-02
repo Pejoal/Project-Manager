@@ -2,7 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { DoughnutChart, BarChart, LineChart, PieChart } from 'vue-chart-3';
 import { Chart, registerables } from 'chart.js';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -35,6 +35,13 @@ const updateSettings = () => {
     preserveScroll: true,
   });
 };
+
+onMounted(() => {
+  window.Echo.channel('chat').listen('MessageSent', (data) => {
+    console.log('Message received:', data.message);
+  });
+});
+
 </script>
 
 <template>
