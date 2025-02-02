@@ -58,7 +58,9 @@ const setActiveTab = (tab) => {
               />
             </div>
             <div>
-              <section class="flex gap-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+              <section
+                class="flex gap-2 text-sm font-medium text-gray-900 dark:text-gray-100"
+              >
                 <p>
                   {{ activity.user.name }}
                 </p>
@@ -70,7 +72,7 @@ const setActiveTab = (tab) => {
                 {{ activity.description }}
               </p>
               <p class="text-sm text-gray-500 dark:text-gray-400">
-                Object ID: {{ activity.subject_id }}
+                ID: {{ activity.subject_id }}
               </p>
               <p class="text-sm text-gray-400 dark:text-gray-500">
                 {{ new Date(activity.created_at).toLocaleString() }}

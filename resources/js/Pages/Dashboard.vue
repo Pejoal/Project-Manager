@@ -1,11 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import {
-  DoughnutChart,
-  BarChart,
-  LineChart,
-  PieChart,
-} from 'vue-chart-3';
+import { DoughnutChart, BarChart, LineChart, PieChart } from 'vue-chart-3';
 import { Chart, registerables } from 'chart.js';
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
