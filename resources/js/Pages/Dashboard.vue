@@ -143,5 +143,4 @@ const updateSettings = () => {
 </template>
 
 <style scoped>
-/* Add any additional styling here */
 </style>
