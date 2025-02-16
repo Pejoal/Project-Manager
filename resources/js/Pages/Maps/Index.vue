@@ -9,8 +9,12 @@ const mapContainer = ref(null);
 const map = ref(null);
 const styles = ref([
   { name: 'Default', url: 'https://demotiles.maplibre.org/style.json' },
-  { name: 'Streets', url: 'mapbox://styles/mapbox/streets-v11' },
-  { name: 'Satellite', url: 'mapbox://styles/mapbox/satellite-v9' },
+  { name: 'Satellite', url: 'https://api.maptiler.com/maps/hybrid/style.json?key=BvYa8EIWKdXmAJXCUcf4' },
+  { name: 'Basic', url: 'https://api.maptiler.com/maps/basic/style.json?key=BvYa8EIWKdXmAJXCUcf4' },
+  { name: 'Streets', url: 'https://api.maptiler.com/maps/streets/style.json?key=BvYa8EIWKdXmAJXCUcf4' },
+  { name: 'Topo', url: 'https://api.maptiler.com/maps/topo/style.json?key=BvYa8EIWKdXmAJXCUcf4' },
+  { name: 'Bright', url: 'https://api.maptiler.com/maps/bright/style.json?key=BvYa8EIWKdXmAJXCUcf4' },
+  { name: 'Pastel', url: 'https://api.maptiler.com/maps/pastel/style.json?key=BvYa8EIWKdXmAJXCUcf4' },
 ]);
 const selectedStyle = ref(styles.value[0].url);
 
@@ -26,20 +30,12 @@ onMounted(() => {
 
   new maplibregl.Marker()
     .setLngLat([6.617, 51.6581])
-    .setPopup(
-      new maplibregl.Popup().setHTML(
-        '<h3>Marker 1</h3><p>Description for Marker 1</p>'
-      )
-    )
+    .setPopup(new maplibregl.Popup().setHTML('<h3>Marker 1</h3><p>Description for Marker 1</p>'))
     .addTo(map.value);
 
   new maplibregl.Marker()
     .setLngLat([7.617, 50.6581])
-    .setPopup(
-      new maplibregl.Popup().setHTML(
-        '<h3>Marker 2</h3><p>Description for Marker 2</p>'
-      )
-    )
+    .setPopup(new maplibregl.Popup().setHTML('<h3>Marker 2</h3><p>Description for Marker 2</p>'))
     .addTo(map.value);
 });
 
@@ -52,15 +48,11 @@ const changeStyle = (styleUrl) => {
   <Head title="Maps" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Map Example
-      </h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Maplibre Example</h1>
     </template>
     <main class="mx-4">
       <div class="mb-4">
-        <label
-          for="mapStyle"
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+        <label for="mapStyle" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >Select Map Style:</label
         >
         <select
