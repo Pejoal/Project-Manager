@@ -23,7 +23,9 @@ Route::get('/broadcast-test', function () {
   event(new MessageSent('Hello from Laravel Reverb!'));
   return 'Message broadcasted!';
 });
-
+Route::get('/maps', function () {
+  return Inertia::render('Maps/Index', []);
+});
 
 Route::group(
   [
