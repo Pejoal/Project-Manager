@@ -18,12 +18,15 @@ const styles = ref([
 ]);
 const selectedStyle = ref(styles.value[1].url);
 
+const DEFAULT_CENTER = [6.617, 51.6581];
+const DEFAULT_ZOOM = 5;
+
 onMounted(() => {
   map.value = new maplibregl.Map({
     container: mapContainer.value,
     style: selectedStyle.value,
-    center: [6.617, 51.6581],
-    zoom: 5,
+    center: DEFAULT_CENTER,
+    zoom: DEFAULT_ZOOM,
   });
 
   map.value.addControl(new maplibregl.NavigationControl(), 'top-right');
@@ -81,7 +84,6 @@ onMounted(() => {
       type: 'symbol',
       source: 'points',
       layout: {
-        'icon-image': 'marker-15',
         'text-field': ['get', 'title'],
         'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
         'text-offset': [0, 0.6],
@@ -109,6 +111,14 @@ onMounted(() => {
 const changeStyle = (styleUrl) => {
   map.value.setStyle(styleUrl);
 };
+
+const resetView = () => {
+  map.value.flyTo({
+    center: DEFAULT_CENTER,
+    zoom: DEFAULT_ZOOM,
+    essential: true, // This ensures the animation is considered essential and will not be affected by user preferences
+  });
+};
 </script>
 
 <template>
@@ -130,6 +140,11 @@ const changeStyle = (styleUrl) => {
         >
           <option v-for="style in styles" :key="style.url" :value="style.url">{{ style.name }}</option>
         </select>
+      </div>
+      <div class="mb-4">
+        <button @click="resetView" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+          Reset View
+        </button>
       </div>
       <div ref="mapContainer" class="map-container"></div>
     </main>
