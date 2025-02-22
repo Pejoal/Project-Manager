@@ -19,7 +19,7 @@ const styles = ref([
 const selectedStyle = ref(styles.value[1].url);
 
 const DEFAULT_CENTER = [6.617, 51.6581];
-const DEFAULT_ZOOM = 5;
+const DEFAULT_ZOOM = 7;
 
 onMounted(() => {
   map.value = new maplibregl.Map({
@@ -117,10 +117,11 @@ const resetView = () => {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
     essential: true, // This ensures the animation is considered essential and will not be affected by user preferences
-    speed: 2,
   });
-  map.value.easeTo({ pitch: 0, bearing: 0 });
 
+  setTimeout(() => {
+    map.value.easeTo({ bearing: 0 });
+  }, 500);
 };
 </script>
 
