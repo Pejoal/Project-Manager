@@ -21,7 +21,7 @@ const selectedStyle = ref(styles.value[1].url);
 const DEFAULT_CENTER = [6.501040309667587, 51.762021620941596];
 const DEFAULT_ZOOM = 15;
 
-const addingPoints = ref(false);
+const addingPoints = ref(true);
 const addingLineString = ref(false);
 const addingPolygon = ref(false);
 const lineCoordinates = ref([]);
@@ -31,7 +31,7 @@ const filterText = ref('');
 const selectedFeature = ref(null);
 const newPropertyKey = ref('');
 const newPropertyValue = ref('');
-const isFeaturesListOpen = ref(false);
+const isFeaturesListOpen = ref(true);
 const isControlsOpen = ref(false);
 
 const filteredFeatures = computed(() => {
