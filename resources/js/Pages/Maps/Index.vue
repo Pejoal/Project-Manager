@@ -384,12 +384,10 @@ const resetView = () => {
     zoom: DEFAULT_ZOOM,
     essential: true, // This ensures the animation is considered essential and will not be affected by user preferences
     pitch: 0,
+    bearing: 0,
     speed: 2,
   });
 
-  setTimeout(() => {
-    map.value.easeTo({ bearing: 0 });
-  }, 1500);
   savePreferences();
 };
 
@@ -499,6 +497,9 @@ const selectFeature = (feature) => {
 
   map.value.fitBounds(bounds, {
     padding: 20,
+    maxZoom: 16,
+    bearing: 0,
+    pitch: 0,
   });
 };
 
