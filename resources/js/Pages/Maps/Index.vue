@@ -441,41 +441,45 @@ const toggleAddingPolygon = () => {
 };
 
 const deleteFeatures = () => {
-  features.value = [];
-  selectedFeature.value = null;
+  if (confirm('Are you sure you want to delete all features?')) {
+    features.value = [];
+    selectedFeature.value = null;
 
-  map.value.getSource('points').setData({
-    type: 'FeatureCollection',
-    features: [],
-  });
-  map.value.getSource('lines').setData({
-    type: 'FeatureCollection',
-    features: [],
-  });
-  map.value.getSource('polygons').setData({
-    type: 'FeatureCollection',
-    features: [],
-  });
-  savePreferences();
+    map.value.getSource('points').setData({
+      type: 'FeatureCollection',
+      features: [],
+    });
+    map.value.getSource('lines').setData({
+      type: 'FeatureCollection',
+      features: [],
+    });
+    map.value.getSource('polygons').setData({
+      type: 'FeatureCollection',
+      features: [],
+    });
+    savePreferences();
+  }
 };
 
 const deleteFeature = (feature) => {
-  features.value = features.value.filter((f) => f !== feature);
-  selectedFeature.value = null;
+  if (confirm('Are you sure you want to delete this feature?')) {
+    features.value = features.value.filter((f) => f !== feature);
+    selectedFeature.value = null;
 
-  map.value.getSource('points').setData({
-    type: 'FeatureCollection',
-    features: features.value.filter((f) => f.geometry.type === 'Point'),
-  });
-  map.value.getSource('lines').setData({
-    type: 'FeatureCollection',
-    features: features.value.filter((f) => f.geometry.type === 'LineString'),
-  });
-  map.value.getSource('polygons').setData({
-    type: 'FeatureCollection',
-    features: features.value.filter((f) => f.geometry.type === 'Polygon'),
-  });
-  savePreferences();
+    map.value.getSource('points').setData({
+      type: 'FeatureCollection',
+      features: features.value.filter((f) => f.geometry.type === 'Point'),
+    });
+    map.value.getSource('lines').setData({
+      type: 'FeatureCollection',
+      features: features.value.filter((f) => f.geometry.type === 'LineString'),
+    });
+    map.value.getSource('polygons').setData({
+      type: 'FeatureCollection',
+      features: features.value.filter((f) => f.geometry.type === 'Polygon'),
+    });
+    savePreferences();
+  }
 };
 
 const selectFeature = (feature) => {
@@ -539,7 +543,7 @@ const toggleControls = () => {
         </button>
       </div>
       <section
-        class="fixed overflow-y-auto h-3/4 bottom-4 left-1/2 transform -translate-x-1/2 w-3/4 dark:bg-zinc-700 bg-white rounded-lg shadow-lg p-4 z-40"
+        class="fixed overflow-y-auto h-3/4 w-3/4 bottom-4 left-1/2 transform -translate-x-1/2 dark:bg-zinc-700 bg-white rounded-lg shadow-lg p-4 z-40"
         v-if="isControlsOpen"
       >
         <div class="m-2">
