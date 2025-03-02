@@ -44,18 +44,27 @@ const savePreferences = () => {
   const preferences = {
     center: map.value.getCenter(),
     zoom: map.value.getZoom(),
-    style: selectedStyle.value,
+    selectedStyle: selectedStyle.value,
+    addingPoints: addingPoints.value,
+    addingLineString: addingLineString.value,
+    addingPolygon: addingPolygon.value,
+    isFeaturesListOpen: isFeaturesListOpen.value,
   };
-  localStorage.setItem('mapPreferences', JSON.stringify(preferences));
+  localStorage.setItem('preferences', JSON.stringify(preferences));
 };
 
 // Load map preferences
 const loadPreferences = () => {
-  const preferences = JSON.parse(localStorage.getItem('mapPreferences'));
+  const preferences = JSON.parse(localStorage.getItem('preferences'));
   if (preferences) {
     map.value.setCenter(preferences.center);
     map.value.setZoom(preferences.zoom);
-    selectedStyle.value = preferences.style;
+    addingPoints.value = preferences.addingPoints;
+    selectedStyle.value = preferences.selectedStyle;
+    changeStyle(preferences.selectedStyle);
+    addingLineString.value = preferences.addingLineString;
+    addingPolygon.value = preferences.addingPolygon;
+    isFeaturesListOpen.value = preferences.isFeaturesListOpen;
   }
 };
 
