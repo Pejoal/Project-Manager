@@ -18,7 +18,7 @@ const styles = ref([
 ]);
 const selectedStyle = ref(styles.value[1].url);
 
-const DEFAULT_CENTER = [6.617, 51.6581];
+const DEFAULT_CENTER = [6.501040309667587, 51.762021620941596];
 const DEFAULT_ZOOM = 15;
 
 const addingPoints = ref(false);
