@@ -230,7 +230,7 @@ onMounted(() => {
     } else if (addingLineString.value) {
       lineCoordinates.value.push([e.lngLat.lng, e.lngLat.lat]);
 
-      if (lineCoordinates.value.length === 1) {
+      if (lineCoordinates.value.length === 2) {
         // Start a new LineString feature
         const feature = {
           type: 'Feature',
@@ -255,7 +255,7 @@ onMounted(() => {
     } else if (addingPolygon.value) {
       polygonCoordinates.value.push([e.lngLat.lng, e.lngLat.lat]);
 
-      if (polygonCoordinates.value.length === 1) {
+      if (polygonCoordinates.value.length === 3) {
         // Start a new Polygon feature
         const feature = {
           type: 'Feature',
