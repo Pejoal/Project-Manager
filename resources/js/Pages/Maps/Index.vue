@@ -21,6 +21,10 @@ const selectedStyle = ref(styles.value[1].url);
 const DEFAULT_CENTER = [6.617, 51.6581];
 const DEFAULT_ZOOM = 15;
 
+const addingPoints = ref(false);
+const addingLineString = ref(false);
+const lineCoordinates = ref([]);
+
 onMounted(() => {
   map.value = new maplibregl.Map({
     container: mapContainer.value,
@@ -69,23 +73,61 @@ onMounted(() => {
         'circle-stroke-color': '#ffffff',
       },
     });
-  });
 
-  // Add a click event listener to add a point
-  map.value.on('click', (e) => {
-    const features = map.value.getSource('points')._data.features;
-    features.push({
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [e.lngLat.lng, e.lngLat.lat],
+    map.value.addSource('lines', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: [],
       },
     });
 
-    map.value.getSource('points').setData({
-      type: 'FeatureCollection',
-      features: features,
+    map.value.addLayer({
+      id: 'lines',
+      type: 'line',
+      source: 'lines',
+      paint: {
+        'line-color': '#ff0000',
+        'line-width': 2,
+      },
     });
+  });
+
+  // Add a click event listener to add a point or a line
+  map.value.on('click', (e) => {
+    if (addingPoints.value) {
+      const features = map.value.getSource('points')._data.features;
+      features.push({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [e.lngLat.lng, e.lngLat.lat],
+        },
+      });
+
+      map.value.getSource('points').setData({
+        type: 'FeatureCollection',
+        features: features,
+      });
+    } else if (addingLineString.value) {
+      lineCoordinates.value.push([e.lngLat.lng, e.lngLat.lat]);
+
+      if (lineCoordinates.value.length > 1) {
+        const features = map.value.getSource('lines')._data.features;
+        features.push({
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: lineCoordinates.value,
+          },
+        });
+
+        map.value.getSource('lines').setData({
+          type: 'FeatureCollection',
+          features: features,
+        });
+      }
+    }
   });
 });
 
@@ -105,6 +147,18 @@ const resetView = () => {
   setTimeout(() => {
     map.value.easeTo({ bearing: 0 });
   }, 1500);
+};
+
+const toggleAddingPoints = () => {
+  addingPoints.value = !addingPoints.value;
+  addingLineString.value = false;
+  lineCoordinates.value = [];
+};
+
+const toggleAddingLineString = () => {
+  addingLineString.value = !addingLineString.value;
+  addingPoints.value = false;
+  lineCoordinates.value = [];
 };
 </script>
 
@@ -131,6 +185,22 @@ const resetView = () => {
       <div class="mb-4">
         <button @click="resetView" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
           Reset View
+        </button>
+      </div>
+      <div class="mb-4">
+        <button
+          @click="toggleAddingPoints"
+          :class="{ 'bg-green-500': addingPoints, 'bg-gray-500': !addingPoints }"
+          class="px-4 py-2 text-white rounded-md hover:bg-green-600"
+        >
+          {{ addingPoints ? 'Disable' : 'Enable' }} Adding Points
+        </button>
+        <button
+          @click="toggleAddingLineString"
+          :class="{ 'bg-green-500': addingLineString, 'bg-gray-500': !addingLineString }"
+          class="px-4 py-2 text-white rounded-md hover:bg-green-600 ml-2"
+        >
+          {{ addingLineString ? 'Disable' : 'Enable' }} Adding LineString
         </button>
       </div>
       <div ref="mapContainer" class="map-container"></div>
