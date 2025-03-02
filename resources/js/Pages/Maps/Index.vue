@@ -497,7 +497,7 @@ const selectFeature = (feature) => {
 
   map.value.fitBounds(bounds, {
     padding: 20,
-    maxZoom: 16,
+    maxZoom: 17,
     bearing: 0,
     pitch: 0,
   });
