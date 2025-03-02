@@ -493,11 +493,8 @@ const toggleFeaturesList = () => {
 </script>
 
 <template>
-  <Head title="Maps" />
+  <Head title="Maplibre Example" />
   <AppLayout>
-    <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Maplibre Example</h1>
-    </template>
     <main class="mx-4">
       <div class="mb-4">
         <label for="mapStyle" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
