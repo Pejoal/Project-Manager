@@ -393,6 +393,12 @@ const resetView = () => {
   savePreferences();
 };
 
+const enableSelectMode = () => {
+  addingPoints.value = false;
+  addingLineString.value = false;
+  addingPolygon.value = false;
+};
+
 const toggleAddingPoints = () => {
   addingPoints.value = !addingPoints.value;
   addingLineString.value = false;
@@ -542,9 +548,12 @@ const toggleControls = () => {
             <option v-for="style in styles" :key="style.url" :value="style.url">{{ style.name }}</option>
           </select>
         </div>
-        <div class="m-2">
+        <div class="flex flex-wrap gap-2 m-2">
           <button @click="resetView" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
             Reset View
+          </button>
+          <button @click="enableSelectMode" class="px-4 py-2 bg-lime-500 text-white rounded-md hover:bg-lime-600">
+            Select Mode
           </button>
         </div>
         <div class="flex flex-wrap gap-2 m-2">
