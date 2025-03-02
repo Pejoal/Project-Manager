@@ -49,6 +49,7 @@ const savePreferences = () => {
     addingLineString: addingLineString.value,
     addingPolygon: addingPolygon.value,
     isFeaturesListOpen: isFeaturesListOpen.value,
+    features: features.value,
   };
   localStorage.setItem('preferences', JSON.stringify(preferences));
 };
@@ -65,6 +66,29 @@ const loadPreferences = () => {
     addingLineString.value = preferences.addingLineString;
     addingPolygon.value = preferences.addingPolygon;
     isFeaturesListOpen.value = preferences.isFeaturesListOpen;
+    features.value = preferences.features || [];
+
+    // Re-add sources and layers for points, lines, and polygons
+    if (map.value.getSource('points')) {
+      map.value.getSource('points').setData({
+        type: 'FeatureCollection',
+        features: features.value.filter((f) => f.geometry.type === 'Point'),
+      });
+    }
+
+    if (map.value.getSource('lines')) {
+      map.value.getSource('lines').setData({
+        type: 'FeatureCollection',
+        features: features.value.filter((f) => f.geometry.type === 'LineString'),
+      });
+    }
+
+    if (map.value.getSource('polygons')) {
+      map.value.getSource('polygons').setData({
+        type: 'FeatureCollection',
+        features: features.value.filter((f) => f.geometry.type === 'Polygon'),
+      });
+    }
   }
 };
 
@@ -75,8 +99,6 @@ onMounted(() => {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
   });
-
-  loadPreferences();
 
   map.value.addControl(new maplibregl.NavigationControl(), 'top-right');
   map.value.addControl(
@@ -154,6 +176,8 @@ onMounted(() => {
         'fill-opacity': 0.5,
       },
     });
+
+    loadPreferences();
   });
 
   // Change cursor style on mouse enter and leave for points and lines
@@ -183,8 +207,6 @@ onMounted(() => {
 
   // Add a click event listener to add a point, line, or polygon
   map.value.on('click', (e) => {
-    savePreferences();
-
     if (addingPoints.value) {
       const feature = {
         type: 'Feature',
@@ -254,6 +276,8 @@ onMounted(() => {
       // Deselect feature if clicking on the map without adding mode
       selectedFeature.value = null;
     }
+
+    savePreferences();
   });
 
   // Add a click event listener to select a feature
