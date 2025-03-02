@@ -93,6 +93,22 @@ onMounted(() => {
     });
   });
 
+  map.value.on('mouseenter', 'points', () => {
+    map.value.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.value.on('mouseleave', 'points', () => {
+    map.value.getCanvas().style.cursor = '';
+  });
+
+  map.value.on('mouseenter', 'lines', () => {
+    map.value.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.value.on('mouseleave', 'lines', () => {
+    map.value.getCanvas().style.cursor = '';
+  });
+
   // Add a click event listener to add a point or a line
   map.value.on('click', (e) => {
     if (addingPoints.value) {
@@ -127,6 +143,9 @@ onMounted(() => {
           features: features,
         });
       }
+
+      // Change cursor style while drawing a line
+      map.value.getCanvas().style.cursor = 'crosshair';
     }
   });
 });
@@ -153,12 +172,14 @@ const toggleAddingPoints = () => {
   addingPoints.value = !addingPoints.value;
   addingLineString.value = false;
   lineCoordinates.value = [];
+  map.value.getCanvas().style.cursor = addingPoints.value ? 'pointer' : '';
 };
 
 const toggleAddingLineString = () => {
   addingLineString.value = !addingLineString.value;
   addingPoints.value = false;
   lineCoordinates.value = [];
+  map.value.getCanvas().style.cursor = addingLineString.value ? 'crosshair' : '';
 };
 </script>
 
