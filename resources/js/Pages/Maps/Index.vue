@@ -441,6 +441,18 @@ const toggleFeaturesList = () => {
           Edit Feature: {{ selectedFeature.properties.name }}
         </h2>
         <div class="mt-2">
+          <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">Properties:</h3>
+          <ul class="list-disc pl-5">
+            <li
+              v-for="(value, key) in selectedFeature.properties"
+              :key="key"
+              class="text-sm text-gray-700 dark:text-gray-300"
+            >
+              {{ key }}: {{ value }}
+            </li>
+          </ul>
+        </div>
+        <div class="mt-2">
           <label for="newPropertyKey" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >Property Key</label
           >
