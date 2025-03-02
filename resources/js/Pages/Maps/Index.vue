@@ -117,11 +117,12 @@ const resetView = () => {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
     essential: true, // This ensures the animation is considered essential and will not be affected by user preferences
+    speed: 2,
   });
 
   setTimeout(() => {
     map.value.easeTo({ bearing: 0 });
-  }, 500);
+  }, 1000);
 };
 </script>
 
