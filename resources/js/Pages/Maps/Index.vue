@@ -451,6 +451,32 @@ const deleteFeature = (feature) => {
 
 const selectFeature = (feature) => {
   selectedFeature.value = feature;
+
+  const coordinates = feature.geometry.coordinates;
+  let bounds;
+
+  if (feature.geometry.type === 'Point') {
+    bounds = new maplibregl.LngLatBounds(coordinates, coordinates);
+  } else if (feature.geometry.type === 'LineString') {
+    bounds = coordinates.reduce(
+      (bounds, coord) => {
+        return bounds.extend(coord);
+      },
+      new maplibregl.LngLatBounds(coordinates[0], coordinates[0])
+    );
+  } else if (feature.geometry.type === 'Polygon') {
+    const flattenedCoordinates = coordinates.flat();
+    bounds = flattenedCoordinates.reduce(
+      (bounds, coord) => {
+        return bounds.extend(coord);
+      },
+      new maplibregl.LngLatBounds(flattenedCoordinates[0], flattenedCoordinates[0])
+    );
+  }
+
+  map.value.fitBounds(bounds, {
+    padding: 20,
+  });
 };
 
 const addPropertyToFeature = () => {
