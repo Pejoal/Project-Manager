@@ -373,6 +373,7 @@ const changeStyle = (styleUrl) => {
       });
     }
   });
+  savePreferences();
 };
 
 const resetView = () => {
@@ -387,6 +388,7 @@ const resetView = () => {
   setTimeout(() => {
     map.value.easeTo({ bearing: 0 });
   }, 1500);
+  savePreferences();
 };
 
 const toggleAddingPoints = () => {
@@ -396,6 +398,7 @@ const toggleAddingPoints = () => {
   lineCoordinates.value = [];
   polygonCoordinates.value = [];
   map.value.getCanvas().style.cursor = addingPoints.value ? 'pointer' : '';
+  savePreferences();
 };
 
 const toggleAddingLineString = () => {
@@ -405,6 +408,7 @@ const toggleAddingLineString = () => {
   lineCoordinates.value = [];
   polygonCoordinates.value = [];
   map.value.getCanvas().style.cursor = addingLineString.value ? 'crosshair' : '';
+  savePreferences();
 };
 
 const toggleAddingPolygon = () => {
@@ -414,6 +418,7 @@ const toggleAddingPolygon = () => {
   lineCoordinates.value = [];
   polygonCoordinates.value = [];
   map.value.getCanvas().style.cursor = addingPolygon.value ? 'crosshair' : '';
+  savePreferences();
 };
 
 const deleteFeatures = () => {
@@ -432,6 +437,7 @@ const deleteFeatures = () => {
     type: 'FeatureCollection',
     features: [],
   });
+  savePreferences();
 };
 
 const deleteFeature = (feature) => {
@@ -450,6 +456,7 @@ const deleteFeature = (feature) => {
     type: 'FeatureCollection',
     features: features.value.filter((f) => f.geometry.type === 'Polygon'),
   });
+  savePreferences();
 };
 
 const selectFeature = (feature) => {
@@ -511,8 +518,11 @@ const toggleControls = () => {
           {{ isControlsOpen ? 'Hide' : 'Show' }} Controls
         </button>
       </div>
-      <section class="mx-4" v-if="isControlsOpen">
-        <div class="mb-4">
+      <section
+        class="fixed overflow-y-auto h-3/4 bottom-4 left-1/2 transform -translate-x-1/2 w-3/4 dark:bg-zinc-700 bg-white rounded-lg shadow-lg p-4 z-40"
+        v-if="isControlsOpen"
+      >
+        <div class="m-2">
           <label for="mapStyle" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >Select Map Style:</label
           >
@@ -525,12 +535,12 @@ const toggleControls = () => {
             <option v-for="style in styles" :key="style.url" :value="style.url">{{ style.name }}</option>
           </select>
         </div>
-        <div class="mb-4">
+        <div class="m-2">
           <button @click="resetView" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
             Reset View
           </button>
         </div>
-        <div class="mb-4">
+        <div class="flex flex-wrap gap-2 m-2">
           <button
             @click="toggleAddingPoints"
             :class="{ 'bg-green-500': addingPoints, 'bg-gray-500': !addingPoints }"
@@ -541,22 +551,22 @@ const toggleControls = () => {
           <button
             @click="toggleAddingLineString"
             :class="{ 'bg-green-500': addingLineString, 'bg-gray-500': !addingLineString }"
-            class="px-4 py-2 text-white rounded-md hover:bg-green-600 ml-2"
+            class="px-4 py-2 text-white rounded-md hover:bg-green-600"
           >
             {{ addingLineString ? 'Disable' : 'Enable' }} Adding LineString
           </button>
           <button
             @click="toggleAddingPolygon"
             :class="{ 'bg-green-500': addingPolygon, 'bg-gray-500': !addingPolygon }"
-            class="px-4 py-2 text-white rounded-md hover:bg-green-600 ml-2"
+            class="px-4 py-2 text-white rounded-md hover:bg-green-600"
           >
             {{ addingPolygon ? 'Disable' : 'Enable' }} Adding Polygon
           </button>
-          <button @click="deleteFeatures" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 ml-2">
+          <button @click="deleteFeatures" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
             Delete All Features
           </button>
         </div>
-        <div class="mb-4">
+        <div class="m-2">
           <button
             @click="toggleFeaturesList"
             :class="{ 'bg-green-500': isFeaturesListOpen, 'bg-gray-500': !isFeaturesListOpen }"
@@ -565,7 +575,7 @@ const toggleControls = () => {
             {{ isFeaturesListOpen ? 'Hide' : 'Show' }} Features List
           </button>
         </div>
-        <div v-if="isFeaturesListOpen" class="mb-4">
+        <div v-if="isFeaturesListOpen" class="m-2">
           <input
             type="text"
             v-model="filterText"
@@ -621,7 +631,7 @@ const toggleControls = () => {
             </tbody>
           </table>
         </div>
-        <div v-if="selectedFeature" class="mb-4">
+        <div v-if="selectedFeature" class="m-2">
           <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
             Edit Feature: {{ selectedFeature.properties.name }}
           </h2>
