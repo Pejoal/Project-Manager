@@ -31,6 +31,7 @@ const filterText = ref('');
 const selectedFeature = ref(null);
 const newPropertyKey = ref('');
 const newPropertyValue = ref('');
+const isFeaturesListOpen = ref(false);
 
 const filteredFeatures = computed(() => {
   return features.value.filter((feature) => {
@@ -216,6 +217,31 @@ onMounted(() => {
 
       // Change cursor style while drawing a polygon
       map.value.getCanvas().style.cursor = 'crosshair';
+    } else {
+      // Deselect feature if clicking on the map without adding mode
+      selectedFeature.value = null;
+    }
+  });
+
+  // Add a click event listener to select a feature
+  map.value.on('click', 'points', (e) => {
+    if (!addingPoints.value && !addingLineString.value && !addingPolygon.value) {
+      const feature = e.features[0];
+      selectFeature(feature);
+    }
+  });
+
+  map.value.on('click', 'lines', (e) => {
+    if (!addingPoints.value && !addingLineString.value && !addingPolygon.value) {
+      const feature = e.features[0];
+      selectFeature(feature);
+    }
+  });
+
+  map.value.on('click', 'polygons', (e) => {
+    if (!addingPoints.value && !addingLineString.value && !addingPolygon.value) {
+      const feature = e.features[0];
+      selectFeature(feature);
     }
   });
 });
@@ -267,6 +293,8 @@ const toggleAddingPolygon = () => {
 
 const deleteFeatures = () => {
   features.value = [];
+  selectedFeature.value = null;
+
   map.value.getSource('points').setData({
     type: 'FeatureCollection',
     features: [],
@@ -291,6 +319,10 @@ const addPropertyToFeature = () => {
     newPropertyKey.value = '';
     newPropertyValue.value = '';
   }
+};
+
+const toggleFeaturesList = () => {
+  isFeaturesListOpen.value = !isFeaturesListOpen.value;
 };
 </script>
 
@@ -346,15 +378,22 @@ const addPropertyToFeature = () => {
         </button>
       </div>
       <div class="mb-4">
+        <button
+          @click="toggleFeaturesList"
+          :class="{ 'bg-green-500': isFeaturesListOpen, 'bg-gray-500': !isFeaturesListOpen }"
+          class="px-4 py-2 text-white rounded-md hover:bg-green-600"
+        >
+          {{ isFeaturesListOpen ? 'Hide' : 'Show' }} Features List
+        </button>
+      </div>
+      <div v-if="isFeaturesListOpen" class="mb-4">
         <input
           type="text"
           v-model="filterText"
           placeholder="Filter features"
           class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
         />
-      </div>
-      <div class="mb-4">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-4">
           <thead class="bg-gray-50 dark:bg-gray-800">
             <tr>
               <th
