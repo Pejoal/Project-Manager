@@ -39,6 +39,26 @@ const filteredFeatures = computed(() => {
   });
 });
 
+// Save map preferences
+const savePreferences = () => {
+  const preferences = {
+    center: map.value.getCenter(),
+    zoom: map.value.getZoom(),
+    style: selectedStyle.value,
+  };
+  localStorage.setItem('mapPreferences', JSON.stringify(preferences));
+};
+
+// Load map preferences
+const loadPreferences = () => {
+  const preferences = JSON.parse(localStorage.getItem('mapPreferences'));
+  if (preferences) {
+    map.value.setCenter(preferences.center);
+    map.value.setZoom(preferences.zoom);
+    selectedStyle.value = preferences.style;
+  }
+};
+
 onMounted(() => {
   map.value = new maplibregl.Map({
     container: mapContainer.value,
@@ -46,6 +66,8 @@ onMounted(() => {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
   });
+
+  loadPreferences();
 
   map.value.addControl(new maplibregl.NavigationControl(), 'top-right');
   map.value.addControl(
@@ -152,6 +174,8 @@ onMounted(() => {
 
   // Add a click event listener to add a point, line, or polygon
   map.value.on('click', (e) => {
+    savePreferences();
+
     if (addingPoints.value) {
       const feature = {
         type: 'Feature',
@@ -312,7 +336,7 @@ const deleteFeatures = () => {
 const deleteFeature = (feature) => {
   features.value = features.value.filter((f) => f !== feature);
   selectedFeature.value = null;
-  
+
   map.value.getSource('points').setData({
     type: 'FeatureCollection',
     features: features.value.filter((f) => f.geometry.type === 'Point'),
