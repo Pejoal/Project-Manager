@@ -243,15 +243,6 @@ onMounted(() => {
           },
         };
         features.value.push(feature);
-      } else {
-        // Update the existing LineString feature
-        const feature = features.value.find(
-          (f) => f.geometry.type === 'LineString' && f.geometry.coordinates === lineCoordinates.value
-        );
-
-        if (feature) {
-          feature.geometry.coordinates = lineCoordinates.value;
-        }
       }
 
       map.value.getSource('lines').setData({
@@ -277,14 +268,6 @@ onMounted(() => {
           },
         };
         features.value.push(feature);
-      } else {
-        // Update the existing Polygon feature
-        const feature = features.value.find(
-          (f) => f.geometry.type === 'Polygon' && f.geometry.coordinates[0] === polygonCoordinates.value
-        );
-        if (feature) {
-          feature.geometry.coordinates[0] = polygonCoordinates.value;
-        }
       }
 
       map.value.getSource('polygons').setData({
