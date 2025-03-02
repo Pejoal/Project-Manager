@@ -47,65 +47,6 @@ onMounted(() => {
     'bottom-right'
   );
   map.value.addControl(new maplibregl.FullscreenControl(), 'top-left');
-
-  new maplibregl.Marker()
-    .setLngLat([6.617, 51.6581])
-    .setPopup(new maplibregl.Popup().setHTML('<h3>Marker 1</h3><p>Description for Marker 1</p>'))
-    .addTo(map.value);
-
-  new maplibregl.Marker()
-    .setLngLat([7.617, 50.6581])
-    .setPopup(new maplibregl.Popup().setHTML('<h3>Marker 2</h3><p>Description for Marker 2</p>'))
-    .addTo(map.value);
-
-  map.value.on('load', () => {
-    map.value.addSource('points', {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [6.617, 51.6581],
-            },
-            properties: {
-              title: 'Mapbox',
-              description: 'Essen, Germany',
-            },
-          },
-        ],
-      },
-    });
-
-    map.value.addLayer({
-      id: 'points',
-      type: 'symbol',
-      source: 'points',
-      layout: {
-        'text-field': ['get', 'title'],
-        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-        'text-offset': [0, 0.6],
-        'text-anchor': 'top',
-      },
-    });
-  });
-
-  map.value.on('click', 'points', (e) => {
-    const coordinates = e.features[0].geometry.coordinates.slice();
-    const description = e.features[0].properties.description;
-
-    new maplibregl.Popup().setLngLat(coordinates).setHTML(description).addTo(map.value);
-  });
-
-  map.value.on('mouseenter', 'points', () => {
-    map.value.getCanvas().style.cursor = 'pointer';
-  });
-
-  map.value.on('mouseleave', 'points', () => {
-    map.value.getCanvas().style.cursor = '';
-  });
 });
 
 const changeStyle = (styleUrl) => {
@@ -122,7 +63,7 @@ const resetView = () => {
 
   setTimeout(() => {
     map.value.easeTo({ bearing: 0 });
-  }, 1000);
+  }, 1500);
 };
 </script>
 
