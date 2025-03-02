@@ -39,9 +39,7 @@ const logout = () => {
     <Banner />
 
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <nav
-        class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700"
-      >
+      <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
         <!-- Primary Navigation Menu -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
@@ -55,31 +53,11 @@ const logout = () => {
 
               <!-- Navigation Links -->
               <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                <NavLink
-                  :href="route('dashboard')"
-                  :active="route().current('dashboard')"
-                >
-                  Dashboard
-                </NavLink>
-                <NavLink
-                  :href="route('clients.index')"
-                  :active="route().current('clients.*')"
-                >
-                  Clients
-                </NavLink>
-                <NavLink
-                  :href="route('projects.index')"
-                  :active="route().current('projects.*')"
-                >
-                  Projects
-                </NavLink>
+                <NavLink :href="route('dashboard')" :active="route().current('dashboard')"> Dashboard </NavLink>
+                <NavLink :href="route('clients.index')" :active="route().current('clients.*')"> Clients </NavLink>
+                <NavLink :href="route('projects.index')" :active="route().current('projects.*')"> Projects </NavLink>
 
-                <NavLink
-                  :href="route('tasks.all')"
-                  :active="route().current('tasks.*')"
-                >
-                  Tasks
-                </NavLink>
+                <NavLink :href="route('tasks.all')" :active="route().current('tasks.*')"> Tasks </NavLink>
 
                 <Locales />
               </div>
@@ -88,11 +66,7 @@ const logout = () => {
             <div class="hidden sm:flex sm:items-center sm:ms-6">
               <div class="ms-3 relative">
                 <!-- Teams Dropdown -->
-                <Dropdown
-                  v-if="$page.props.jetstream.hasTeamFeatures"
-                  align="right"
-                  width="60"
-                >
+                <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
                   <template #trigger>
                     <span class="inline-flex rounded-md">
                       <button
@@ -122,53 +96,29 @@ const logout = () => {
                   <template #content>
                     <div class="w-60">
                       <!-- Team Management -->
-                      <div class="block px-4 py-2 text-xs text-gray-400">
-                        Manage Team
-                      </div>
+                      <div class="block px-4 py-2 text-xs text-gray-400">Manage Team</div>
 
                       <!-- Team Settings -->
-                      <DropdownLink
-                        :href="
-                          route(
-                            'teams.show',
-                            $page.props.auth.user.current_team
-                          )
-                        "
-                      >
+                      <DropdownLink :href="route('teams.show', $page.props.auth.user.current_team)">
                         Team Settings
                       </DropdownLink>
 
-                      <DropdownLink
-                        v-if="$page.props.jetstream.canCreateTeams"
-                        :href="route('teams.create')"
-                      >
+                      <DropdownLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')">
                         Create New Team
                       </DropdownLink>
 
                       <!-- Team Switcher -->
-                      <template
-                        v-if="$page.props.auth.user.all_teams.length > 1"
-                      >
-                        <div
-                          class="border-t border-gray-200 dark:border-gray-600"
-                        />
+                      <template v-if="$page.props.auth.user.all_teams.length > 1">
+                        <div class="border-t border-gray-200 dark:border-gray-600" />
 
-                        <div class="block px-4 py-2 text-xs text-gray-400">
-                          Switch Teams
-                        </div>
+                        <div class="block px-4 py-2 text-xs text-gray-400">Switch Teams</div>
 
-                        <template
-                          v-for="team in $page.props.auth.user.all_teams"
-                          :key="team.id"
-                        >
+                        <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
                           <form @submit.prevent="switchToTeam(team)">
                             <DropdownLink as="button">
                               <div class="flex items-center">
                                 <svg
-                                  v-if="
-                                    team.id ==
-                                    $page.props.auth.user.current_team_id
-                                  "
+                                  v-if="team.id == $page.props.auth.user.current_team_id"
                                   class="me-2 size-5 text-green-400"
                                   xmlns="http://www.w3.org/2000/svg"
                                   fill="none"
@@ -224,11 +174,7 @@ const logout = () => {
                           stroke-width="1.5"
                           stroke="currentColor"
                         >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                          />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                       </button>
                     </span>
@@ -236,76 +182,45 @@ const logout = () => {
 
                   <template #content>
                     <!-- Account Management -->
-                    <div class="block px-4 py-2 text-xs text-gray-400">
-                      Manage Account
-                    </div>
+                    <div class="block px-4 py-2 text-xs text-gray-400">Manage Account</div>
 
-                    <DropdownLink :href="route('profile.show')">
-                      Profile
-                    </DropdownLink>
+                    <DropdownLink :href="route('profile.show')"> Profile </DropdownLink>
 
-                    <div
-                      class="border-t border-gray-200 dark:border-gray-600"
-                    />
+                    <div class="border-t border-gray-200 dark:border-gray-600" />
 
-                    <DropdownLink :href="route('project-statuses.index')">
-                      Project Statuses
-                    </DropdownLink>
-                    <DropdownLink :href="route('project-priorities.index')">
-                      Project Priorities
-                    </DropdownLink>
+                    <DropdownLink :href="route('project-statuses.index')"> Project Statuses </DropdownLink>
+                    <DropdownLink :href="route('project-priorities.index')"> Project Priorities </DropdownLink>
 
-                    <div
-                      class="border-t border-gray-200 dark:border-gray-600"
-                    />
+                    <div class="border-t border-gray-200 dark:border-gray-600" />
 
-                    <DropdownLink :href="route('task-statuses.index')">
-                      Task Statuses
-                    </DropdownLink>
-                    <DropdownLink :href="route('task-priorities.index')">
-                      Task Priorities
-                    </DropdownLink>
+                    <DropdownLink :href="route('task-statuses.index')"> Task Statuses </DropdownLink>
+                    <DropdownLink :href="route('task-priorities.index')"> Task Priorities </DropdownLink>
 
-                    <div
-                      class="border-t border-gray-200 dark:border-gray-600"
-                    />
+                    <div class="border-t border-gray-200 dark:border-gray-600" />
 
-                    <DropdownLink :href="route('activities.index')">
-                      Activities
-                    </DropdownLink>
+                    <DropdownLink :href="route('activities.index')"> Activities </DropdownLink>
 
-                    <div
-                      class="border-t border-gray-200 dark:border-gray-600"
-                    />
+                    <div class="border-t border-gray-200 dark:border-gray-600" />
 
-                    <DropdownLink
-                      v-if="$page.props.jetstream.hasApiFeatures"
-                      :href="route('api-tokens.index')"
-                    >
+                    <DropdownLink :href="route('maps.index')"> Map </DropdownLink>
+
+                    <div class="border-t border-gray-200 dark:border-gray-600" />
+
+                    <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
                       API Tokens
                     </DropdownLink>
 
-                    <div
-                      class="border-t border-gray-200 dark:border-gray-600"
-                    />
+                    <div class="border-t border-gray-200 dark:border-gray-600" />
 
-                    <DropdownLink
-                      :href="route('terms.show')"
-                      :active="route().current('terms.show')"
-                    >
+                    <DropdownLink :href="route('terms.show')" :active="route().current('terms.show')">
                       Terms of Service
                     </DropdownLink>
 
-                    <DropdownLink
-                      :href="route('policy.show')"
-                      :active="route().current('policy.show')"
-                    >
+                    <DropdownLink :href="route('policy.show')" :active="route().current('policy.show')">
                       Privacy Policy
                     </DropdownLink>
 
-                    <div
-                      class="border-t border-gray-200 dark:border-gray-600"
-                    />
+                    <div class="border-t border-gray-200 dark:border-gray-600" />
 
                     <!-- Authentication -->
                     <form @submit.prevent="logout">
@@ -322,12 +237,7 @@ const logout = () => {
                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
                 @click="showingNavigationDropdown = !showingNavigationDropdown"
               >
-                <svg
-                  class="size-6"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
+                <svg class="size-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path
                     :class="{
                       hidden: showingNavigationDropdown,
@@ -363,31 +273,19 @@ const logout = () => {
           class="sm:hidden"
         >
           <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink
-              :href="route('dashboard')"
-              :active="route().current('dashboard')"
-            >
+            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
               Dashboard
             </ResponsiveNavLink>
 
-            <ResponsiveNavLink
-              :href="route('clients.index')"
-              :active="route().current('clients.*')"
-            >
+            <ResponsiveNavLink :href="route('clients.index')" :active="route().current('clients.*')">
               Clients
             </ResponsiveNavLink>
 
-            <ResponsiveNavLink
-              :href="route('projects.index')"
-              :active="route().current('projects.*')"
-            >
+            <ResponsiveNavLink :href="route('projects.index')" :active="route().current('projects.*')">
               Projects
             </ResponsiveNavLink>
 
-            <ResponsiveNavLink
-              :href="route('tasks.all')"
-              :active="route().current('tasks.*')"
-            >
+            <ResponsiveNavLink :href="route('tasks.all')" :active="route().current('tasks.*')">
               Tasks
             </ResponsiveNavLink>
 
@@ -397,10 +295,7 @@ const logout = () => {
           <!-- Responsive Settings Options -->
           <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="flex items-center px-4">
-              <div
-                v-if="$page.props.jetstream.managesProfilePhotos"
-                class="shrink-0 me-3"
-              >
+              <div v-if="$page.props.jetstream.managesProfilePhotos" class="shrink-0 me-3">
                 <img
                   class="size-10 rounded-full object-cover"
                   :src="$page.props.auth.user.profile_photo_url"
@@ -409,9 +304,7 @@ const logout = () => {
               </div>
 
               <div>
-                <div
-                  class="font-medium text-base text-gray-800 dark:text-gray-200"
-                >
+                <div class="font-medium text-base text-gray-800 dark:text-gray-200">
                   {{ $page.props.auth.user.name }}
                 </div>
                 <div class="font-medium text-sm text-gray-500">
@@ -421,10 +314,7 @@ const logout = () => {
             </div>
 
             <div class="mt-3 space-y-1">
-              <ResponsiveNavLink
-                :href="route('profile.show')"
-                :active="route().current('profile.show')"
-              >
+              <ResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')">
                 Profile
               </ResponsiveNavLink>
 
@@ -445,10 +335,7 @@ const logout = () => {
 
               <div class="border-t border-gray-200 dark:border-gray-600" />
 
-              <ResponsiveNavLink
-                :href="route('task-statuses.index')"
-                :active="route().current('task-statuses.index')"
-              >
+              <ResponsiveNavLink :href="route('task-statuses.index')" :active="route().current('task-statuses.index')">
                 Task Statuses
               </ResponsiveNavLink>
               <ResponsiveNavLink
@@ -460,11 +347,14 @@ const logout = () => {
 
               <div class="border-t border-gray-200 dark:border-gray-600" />
 
-              <ResponsiveNavLink
-                :href="route('activities.index')"
-                :active="route().current('activities.index')"
-              >
+              <ResponsiveNavLink :href="route('activities.index')" :active="route().current('activities.index')">
                 Activities
+              </ResponsiveNavLink>
+
+              <div class="border-t border-gray-200 dark:border-gray-600" />
+
+              <ResponsiveNavLink :href="route('maps.index')" :active="route().current('maps.index')">
+                Map
               </ResponsiveNavLink>
 
               <div class="border-t border-gray-200 dark:border-gray-600" />
@@ -479,17 +369,11 @@ const logout = () => {
 
               <div class="border-t border-gray-200 dark:border-gray-600" />
 
-              <ResponsiveNavLink
-                :href="route('terms.show')"
-                :active="route().current('terms.show')"
-              >
+              <ResponsiveNavLink :href="route('terms.show')" :active="route().current('terms.show')">
                 Terms of Service
               </ResponsiveNavLink>
 
-              <ResponsiveNavLink
-                :href="route('policy.show')"
-                :active="route().current('policy.show')"
-              >
+              <ResponsiveNavLink :href="route('policy.show')" :active="route().current('policy.show')">
                 Privacy Policy
               </ResponsiveNavLink>
 
@@ -502,15 +386,11 @@ const logout = () => {
               <template v-if="$page.props.jetstream.hasTeamFeatures">
                 <div class="border-t border-gray-200 dark:border-gray-600" />
 
-                <div class="block px-4 py-2 text-xs text-gray-400">
-                  Manage Team
-                </div>
+                <div class="block px-4 py-2 text-xs text-gray-400">Manage Team</div>
 
                 <!-- Team Settings -->
                 <ResponsiveNavLink
-                  :href="
-                    route('teams.show', $page.props.auth.user.current_team)
-                  "
+                  :href="route('teams.show', $page.props.auth.user.current_team)"
                   :active="route().current('teams.show')"
                 >
                   Team Settings
@@ -528,21 +408,14 @@ const logout = () => {
                 <template v-if="$page.props.auth.user.all_teams.length > 1">
                   <div class="border-t border-gray-200 dark:border-gray-600" />
 
-                  <div class="block px-4 py-2 text-xs text-gray-400">
-                    Switch Teams
-                  </div>
+                  <div class="block px-4 py-2 text-xs text-gray-400">Switch Teams</div>
 
-                  <template
-                    v-for="team in $page.props.auth.user.all_teams"
-                    :key="team.id"
-                  >
+                  <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
                     <form @submit.prevent="switchToTeam(team)">
                       <ResponsiveNavLink as="button">
                         <div class="flex items-center">
                           <svg
-                            v-if="
-                              team.id == $page.props.auth.user.current_team_id
-                            "
+                            v-if="team.id == $page.props.auth.user.current_team_id"
                             class="me-2 size-5 text-green-400"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
