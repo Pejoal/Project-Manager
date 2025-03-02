@@ -47,6 +47,46 @@ onMounted(() => {
     'bottom-right'
   );
   map.value.addControl(new maplibregl.FullscreenControl(), 'top-left');
+
+  // Add a source and layer for the points
+  map.value.on('load', () => {
+    map.value.addSource('points', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: [],
+      },
+    });
+
+    map.value.addLayer({
+      id: 'points',
+      type: 'circle',
+      source: 'points',
+      paint: {
+        'circle-radius': 5,
+        'circle-color': '#602cFf',
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#ffffff',
+      },
+    });
+  });
+
+  // Add a click event listener to add a point
+  map.value.on('click', (e) => {
+    const features = map.value.getSource('points')._data.features;
+    features.push({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [e.lngLat.lng, e.lngLat.lat],
+      },
+    });
+
+    map.value.getSource('points').setData({
+      type: 'FeatureCollection',
+      features: features,
+    });
+  });
 });
 
 const changeStyle = (styleUrl) => {
