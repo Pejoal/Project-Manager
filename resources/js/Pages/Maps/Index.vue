@@ -272,6 +272,71 @@ onMounted(() => {
 
 const changeStyle = (styleUrl) => {
   map.value.setStyle(styleUrl);
+
+  map.value.once('idle', () => {
+    // Re-add sources and layers for points, lines, and polygons if they do not exist
+    if (!map.value.getSource('points')) {
+      map.value.addSource('points', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: features.value.filter((f) => f.geometry.type === 'Point'),
+        },
+      });
+
+      map.value.addLayer({
+        id: 'points',
+        type: 'circle',
+        source: 'points',
+        paint: {
+          'circle-radius': 5,
+          'circle-color': '#602cFf',
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff',
+        },
+      });
+    }
+
+    if (!map.value.getSource('lines')) {
+      map.value.addSource('lines', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: features.value.filter((f) => f.geometry.type === 'LineString'),
+        },
+      });
+
+      map.value.addLayer({
+        id: 'lines',
+        type: 'line',
+        source: 'lines',
+        paint: {
+          'line-color': '#ff0000',
+          'line-width': 2,
+        },
+      });
+    }
+
+    if (!map.value.getSource('polygons')) {
+      map.value.addSource('polygons', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: features.value.filter((f) => f.geometry.type === 'Polygon'),
+        },
+      });
+
+      map.value.addLayer({
+        id: 'polygons',
+        type: 'fill',
+        source: 'polygons',
+        paint: {
+          'fill-color': '#00ff00',
+          'fill-opacity': 0.5,
+        },
+      });
+    }
+  });
 };
 
 const resetView = () => {
