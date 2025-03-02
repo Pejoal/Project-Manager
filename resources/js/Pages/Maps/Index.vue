@@ -230,7 +230,8 @@ onMounted(() => {
     } else if (addingLineString.value) {
       lineCoordinates.value.push([e.lngLat.lng, e.lngLat.lat]);
 
-      if (lineCoordinates.value.length > 1) {
+      if (lineCoordinates.value.length === 1) {
+        // Start a new LineString feature
         const feature = {
           type: 'Feature',
           geometry: {
@@ -242,19 +243,29 @@ onMounted(() => {
           },
         };
         features.value.push(feature);
+      } else {
+        // Update the existing LineString feature
+        const feature = features.value.find(
+          (f) => f.geometry.type === 'LineString' && f.geometry.coordinates === lineCoordinates.value
+        );
 
-        map.value.getSource('lines').setData({
-          type: 'FeatureCollection',
-          features: features.value.filter((f) => f.geometry.type === 'LineString'),
-        });
+        if (feature) {
+          feature.geometry.coordinates = lineCoordinates.value;
+        }
       }
+
+      map.value.getSource('lines').setData({
+        type: 'FeatureCollection',
+        features: features.value.filter((f) => f.geometry.type === 'LineString'),
+      });
 
       // Change cursor style while drawing a line
       map.value.getCanvas().style.cursor = 'crosshair';
     } else if (addingPolygon.value) {
       polygonCoordinates.value.push([e.lngLat.lng, e.lngLat.lat]);
 
-      if (polygonCoordinates.value.length > 2) {
+      if (polygonCoordinates.value.length === 1) {
+        // Start a new Polygon feature
         const feature = {
           type: 'Feature',
           geometry: {
@@ -266,12 +277,20 @@ onMounted(() => {
           },
         };
         features.value.push(feature);
-
-        map.value.getSource('polygons').setData({
-          type: 'FeatureCollection',
-          features: features.value.filter((f) => f.geometry.type === 'Polygon'),
-        });
+      } else {
+        // Update the existing Polygon feature
+        const feature = features.value.find(
+          (f) => f.geometry.type === 'Polygon' && f.geometry.coordinates[0] === polygonCoordinates.value
+        );
+        if (feature) {
+          feature.geometry.coordinates[0] = polygonCoordinates.value;
+        }
       }
+
+      map.value.getSource('polygons').setData({
+        type: 'FeatureCollection',
+        features: features.value.filter((f) => f.geometry.type === 'Polygon'),
+      });
 
       // Change cursor style while drawing a polygon
       map.value.getCanvas().style.cursor = 'crosshair';
@@ -463,6 +482,7 @@ const selectFeature = (feature) => {
   selectedFeature.value = feature;
 
   const coordinates = feature.geometry.coordinates;
+
   let bounds;
 
   if (feature.geometry.type === 'Point') {
@@ -685,6 +705,6 @@ const toggleControls = () => {
 <style scoped>
 .map-container {
   width: 100%;
-  height: 500px;
+  height: 80vh;
 }
 </style>

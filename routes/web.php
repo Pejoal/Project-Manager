@@ -23,9 +23,6 @@ Route::get('/broadcast-test', function () {
   event(new MessageSent('Hello from Laravel Reverb!'));
   return 'Message broadcasted!';
 });
-Route::get('/maps', function () {
-  return Inertia::render('Maps/Index', []);
-})->name('maps.index');
 
 Route::group(
   [
@@ -61,6 +58,9 @@ Route::group(
 
       Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
       Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+      Route::get('/maps', function () {
+        return Inertia::render('Maps/Index', []);
+      })->name('maps.index');
 
       // Client Management Routes
       Route::prefix('clients')->group(function () {
