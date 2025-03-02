@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibregl from 'maplibre-gl';
 import AppLayout from '@/Layouts/AppLayout.vue';
@@ -26,6 +26,17 @@ const addingLineString = ref(false);
 const addingPolygon = ref(false);
 const lineCoordinates = ref([]);
 const polygonCoordinates = ref([]);
+const features = ref([]);
+const filterText = ref('');
+const selectedFeature = ref(null);
+const newPropertyKey = ref('');
+const newPropertyValue = ref('');
+
+const filteredFeatures = computed(() => {
+  return features.value.filter((feature) => {
+    return feature.properties.name.toLowerCase().includes(filterText.value.toLowerCase());
+  });
+});
 
 onMounted(() => {
   map.value = new maplibregl.Map({
@@ -141,35 +152,41 @@ onMounted(() => {
   // Add a click event listener to add a point, line, or polygon
   map.value.on('click', (e) => {
     if (addingPoints.value) {
-      const features = map.value.getSource('points')._data.features;
-      features.push({
+      const feature = {
         type: 'Feature',
         geometry: {
           type: 'Point',
           coordinates: [e.lngLat.lng, e.lngLat.lat],
         },
-      });
+        properties: {
+          name: `Point ${features.value.length + 1}`,
+        },
+      };
+      features.value.push(feature);
 
       map.value.getSource('points').setData({
         type: 'FeatureCollection',
-        features: features,
+        features: features.value.filter((f) => f.geometry.type === 'Point'),
       });
     } else if (addingLineString.value) {
       lineCoordinates.value.push([e.lngLat.lng, e.lngLat.lat]);
 
       if (lineCoordinates.value.length > 1) {
-        const features = map.value.getSource('lines')._data.features;
-        features.push({
+        const feature = {
           type: 'Feature',
           geometry: {
             type: 'LineString',
             coordinates: lineCoordinates.value,
           },
-        });
+          properties: {
+            name: `Line ${features.value.length + 1}`,
+          },
+        };
+        features.value.push(feature);
 
         map.value.getSource('lines').setData({
           type: 'FeatureCollection',
-          features: features,
+          features: features.value.filter((f) => f.geometry.type === 'LineString'),
         });
       }
 
@@ -179,18 +196,21 @@ onMounted(() => {
       polygonCoordinates.value.push([e.lngLat.lng, e.lngLat.lat]);
 
       if (polygonCoordinates.value.length > 2) {
-        const features = map.value.getSource('polygons')._data.features;
-        features.push({
+        const feature = {
           type: 'Feature',
           geometry: {
             type: 'Polygon',
             coordinates: [polygonCoordinates.value],
           },
-        });
+          properties: {
+            name: `Polygon ${features.value.length + 1}`,
+          },
+        };
+        features.value.push(feature);
 
         map.value.getSource('polygons').setData({
           type: 'FeatureCollection',
-          features: features,
+          features: features.value.filter((f) => f.geometry.type === 'Polygon'),
         });
       }
 
@@ -246,6 +266,7 @@ const toggleAddingPolygon = () => {
 };
 
 const deleteFeatures = () => {
+  features.value = [];
   map.value.getSource('points').setData({
     type: 'FeatureCollection',
     features: [],
@@ -258,6 +279,18 @@ const deleteFeatures = () => {
     type: 'FeatureCollection',
     features: [],
   });
+};
+
+const selectFeature = (feature) => {
+  selectedFeature.value = feature;
+};
+
+const addPropertyToFeature = () => {
+  if (selectedFeature.value && newPropertyKey.value && newPropertyValue.value) {
+    selectedFeature.value.properties[newPropertyKey.value] = newPropertyValue.value;
+    newPropertyKey.value = '';
+    newPropertyValue.value = '';
+  }
 };
 </script>
 
@@ -311,6 +344,90 @@ const deleteFeatures = () => {
         <button @click="deleteFeatures" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 ml-2">
           Delete All Features
         </button>
+      </div>
+      <div class="mb-4">
+        <input
+          type="text"
+          v-model="filterText"
+          placeholder="Filter features"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        />
+      </div>
+      <div class="mb-4">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
+                Name
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
+                Type
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr v-for="feature in filteredFeatures" :key="feature.properties.name">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                {{ feature.properties.name }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                {{ feature.geometry.type }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button
+                  @click="selectFeature(feature)"
+                  class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-600"
+                >
+                  Edit
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-if="selectedFeature" class="mb-4">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          Edit Feature: {{ selectedFeature.properties.name }}
+        </h2>
+        <div class="mt-2">
+          <label for="newPropertyKey" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Property Key</label
+          >
+          <input
+            type="text"
+            id="newPropertyKey"
+            v-model="newPropertyKey"
+            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          />
+        </div>
+        <div class="mt-2">
+          <label for="newPropertyValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Property Value</label
+          >
+          <input
+            type="text"
+            id="newPropertyValue"
+            v-model="newPropertyValue"
+            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          />
+        </div>
+        <div class="mt-4">
+          <button @click="addPropertyToFeature" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+            Add Property
+          </button>
+        </div>
       </div>
       <div ref="mapContainer" class="map-container"></div>
     </main>
