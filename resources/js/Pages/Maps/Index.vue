@@ -23,7 +23,9 @@ const DEFAULT_ZOOM = 15;
 
 const addingPoints = ref(false);
 const addingLineString = ref(false);
+const addingPolygon = ref(false);
 const lineCoordinates = ref([]);
+const polygonCoordinates = ref([]);
 
 onMounted(() => {
   map.value = new maplibregl.Map({
@@ -52,7 +54,7 @@ onMounted(() => {
   );
   map.value.addControl(new maplibregl.FullscreenControl(), 'top-left');
 
-  // Add a source and layer for the points
+  // Add sources and layers for points, lines, and polygons
   map.value.on('load', () => {
     map.value.addSource('points', {
       type: 'geojson',
@@ -91,8 +93,27 @@ onMounted(() => {
         'line-width': 2,
       },
     });
+
+    map.value.addSource('polygons', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: [],
+      },
+    });
+
+    map.value.addLayer({
+      id: 'polygons',
+      type: 'fill',
+      source: 'polygons',
+      paint: {
+        'fill-color': '#00ff00',
+        'fill-opacity': 0.5,
+      },
+    });
   });
 
+  // Change cursor style on mouse enter and leave for points and lines
   map.value.on('mouseenter', 'points', () => {
     map.value.getCanvas().style.cursor = 'pointer';
   });
@@ -109,7 +130,15 @@ onMounted(() => {
     map.value.getCanvas().style.cursor = '';
   });
 
-  // Add a click event listener to add a point or a line
+  map.value.on('mouseenter', 'polygons', () => {
+    map.value.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.value.on('mouseleave', 'polygons', () => {
+    map.value.getCanvas().style.cursor = '';
+  });
+
+  // Add a click event listener to add a point, line, or polygon
   map.value.on('click', (e) => {
     if (addingPoints.value) {
       const features = map.value.getSource('points')._data.features;
@@ -146,6 +175,27 @@ onMounted(() => {
 
       // Change cursor style while drawing a line
       map.value.getCanvas().style.cursor = 'crosshair';
+    } else if (addingPolygon.value) {
+      polygonCoordinates.value.push([e.lngLat.lng, e.lngLat.lat]);
+
+      if (polygonCoordinates.value.length > 2) {
+        const features = map.value.getSource('polygons')._data.features;
+        features.push({
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: [polygonCoordinates.value],
+          },
+        });
+
+        map.value.getSource('polygons').setData({
+          type: 'FeatureCollection',
+          features: features,
+        });
+      }
+
+      // Change cursor style while drawing a polygon
+      map.value.getCanvas().style.cursor = 'crosshair';
     }
   });
 });
@@ -171,15 +221,43 @@ const resetView = () => {
 const toggleAddingPoints = () => {
   addingPoints.value = !addingPoints.value;
   addingLineString.value = false;
+  addingPolygon.value = false;
   lineCoordinates.value = [];
+  polygonCoordinates.value = [];
   map.value.getCanvas().style.cursor = addingPoints.value ? 'pointer' : '';
 };
 
 const toggleAddingLineString = () => {
   addingLineString.value = !addingLineString.value;
   addingPoints.value = false;
+  addingPolygon.value = false;
   lineCoordinates.value = [];
+  polygonCoordinates.value = [];
   map.value.getCanvas().style.cursor = addingLineString.value ? 'crosshair' : '';
+};
+
+const toggleAddingPolygon = () => {
+  addingPolygon.value = !addingPolygon.value;
+  addingPoints.value = false;
+  addingLineString.value = false;
+  lineCoordinates.value = [];
+  polygonCoordinates.value = [];
+  map.value.getCanvas().style.cursor = addingPolygon.value ? 'crosshair' : '';
+};
+
+const deleteFeatures = () => {
+  map.value.getSource('points').setData({
+    type: 'FeatureCollection',
+    features: [],
+  });
+  map.value.getSource('lines').setData({
+    type: 'FeatureCollection',
+    features: [],
+  });
+  map.value.getSource('polygons').setData({
+    type: 'FeatureCollection',
+    features: [],
+  });
 };
 </script>
 
@@ -222,6 +300,16 @@ const toggleAddingLineString = () => {
           class="px-4 py-2 text-white rounded-md hover:bg-green-600 ml-2"
         >
           {{ addingLineString ? 'Disable' : 'Enable' }} Adding LineString
+        </button>
+        <button
+          @click="toggleAddingPolygon"
+          :class="{ 'bg-green-500': addingPolygon, 'bg-gray-500': !addingPolygon }"
+          class="px-4 py-2 text-white rounded-md hover:bg-green-600 ml-2"
+        >
+          {{ addingPolygon ? 'Disable' : 'Enable' }} Adding Polygon
+        </button>
+        <button @click="deleteFeatures" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 ml-2">
+          Delete All Features
         </button>
       </div>
       <div ref="mapContainer" class="map-container"></div>
