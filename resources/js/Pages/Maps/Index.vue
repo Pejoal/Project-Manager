@@ -309,6 +309,24 @@ const deleteFeatures = () => {
   });
 };
 
+const deleteFeature = (feature) => {
+  features.value = features.value.filter((f) => f !== feature);
+  selectedFeature.value = null;
+  
+  map.value.getSource('points').setData({
+    type: 'FeatureCollection',
+    features: features.value.filter((f) => f.geometry.type === 'Point'),
+  });
+  map.value.getSource('lines').setData({
+    type: 'FeatureCollection',
+    features: features.value.filter((f) => f.geometry.type === 'LineString'),
+  });
+  map.value.getSource('polygons').setData({
+    type: 'FeatureCollection',
+    features: features.value.filter((f) => f.geometry.type === 'Polygon'),
+  });
+};
+
 const selectFeature = (feature) => {
   selectedFeature.value = feature;
 };
@@ -430,6 +448,12 @@ const toggleFeaturesList = () => {
                   class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-600"
                 >
                   Edit
+                </button>
+                <button
+                  @click="deleteFeature(feature)"
+                  class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-600 ml-2"
+                >
+                  Delete
                 </button>
               </td>
             </tr>
