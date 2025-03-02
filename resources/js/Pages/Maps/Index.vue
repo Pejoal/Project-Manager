@@ -98,6 +98,7 @@ const resetView = () => {
     center: DEFAULT_CENTER,
     zoom: DEFAULT_ZOOM,
     essential: true, // This ensures the animation is considered essential and will not be affected by user preferences
+    pitch: 0,
     speed: 2,
   });
 
