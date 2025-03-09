@@ -493,6 +493,14 @@ const selectFeature = (feature) => {
       },
       new maplibregl.LngLatBounds(flattenedCoordinates[0], flattenedCoordinates[0])
     );
+  } else if (feature.geometry.type === 'MultiPolygon') {
+    const flattenedCoordinates = coordinates.flat(2);
+    bounds = flattenedCoordinates.reduce(
+      (bounds, coord) => {
+        return bounds.extend(coord);
+      },
+      new maplibregl.LngLatBounds(flattenedCoordinates[0], flattenedCoordinates[0])
+    );
   }
 
   map.value.fitBounds(bounds, {
