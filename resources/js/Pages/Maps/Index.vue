@@ -541,7 +541,7 @@ const toggleControls = () => {
         </button>
       </div>
       <section
-        class="fixed overflow-y-auto h-3/4 w-3/4 bottom-4 left-1/2 transform -translate-x-1/2 dark:bg-zinc-700 bg-white rounded-lg shadow-lg p-4 z-40"
+        class="fixed overflow-y-auto h-96 md:h-4/5 max-w-xl bottom-3 right-2 dark:bg-zinc-700 bg-white rounded-lg shadow-lg p-4 z-40"
         v-if="isControlsOpen"
       >
         <h2 class="text-2xl text-white font-black">Settings</h2>
