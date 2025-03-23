@@ -544,6 +544,7 @@ const toggleControls = () => {
         class="fixed overflow-y-auto h-3/4 w-3/4 bottom-4 left-1/2 transform -translate-x-1/2 dark:bg-zinc-700 bg-white rounded-lg shadow-lg p-4 z-40"
         v-if="isControlsOpen"
       >
+        <h2 class="text-2xl text-white font-black">Settings</h2>
         <div class="m-2">
           <label for="mapStyle" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >Select Map Style:</label
