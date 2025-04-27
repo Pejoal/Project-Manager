@@ -1,5 +1,7 @@
 # Company Management System App
 
+[Watch the demo video](https://github.com/Pejoal/Project-Manager/raw/refs/heads/main/public/docs/videos/demo.mp4)
+
 ## Description
 
 The Company Management System App is a comprehensive solution designed to streamline and manage various aspects of a company's operations. This application provides tools for managing clients, projects, and tasks efficiently, ensuring smooth workflow and enhanced productivity.
