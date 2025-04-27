@@ -80,7 +80,7 @@ class ProjectController extends Controller
       'clients',
       'status',
       'priority',
-      'phases:id,name,project_id',
+      'phases:id,name,order,project_id',
       'phases.milestones:id,name,phase_id',
       'phases.tasks.status',
       'phases.tasks.priority',
