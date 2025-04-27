@@ -1,6 +1,5 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';

@@ -1,5 +1,4 @@
 <script setup>
-import { defineProps } from 'vue';
 import { useForm, Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
