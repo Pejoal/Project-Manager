@@ -30,6 +30,16 @@ const switchToTeam = (team) => {
 const logout = () => {
   router.post(route('logout'));
 };
+
+const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
+document.documentElement.classList.toggle('dark', isDarkMode.value);
+
+const toggleDarkMode = () => {
+  isDarkMode.value = !isDarkMode.value;
+  const theme = isDarkMode.value ? 'dark' : 'light';
+  document.documentElement.classList.toggle('dark', isDarkMode.value);
+  localStorage.setItem('theme', theme);
+};
 </script>
 
 <template>
@@ -58,6 +68,16 @@ const logout = () => {
                 <NavLink :href="route('projects.index')" :active="route().current('projects.*')"> Projects </NavLink>
 
                 <NavLink :href="route('tasks.all')" :active="route().current('tasks.*')"> Tasks </NavLink>
+
+                <div class="ms-3 relative">
+                  <button
+                    @click="toggleDarkMode"
+                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
+                  >
+                    <span v-if="isDarkMode">☀️ Light Mode</span>
+                    <span v-else>🌙 Dark Mode</span>
+                  </button>
+                </div>
 
                 <Locales />
               </div>
@@ -376,6 +396,16 @@ const logout = () => {
               <ResponsiveNavLink :href="route('policy.show')" :active="route().current('policy.show')">
                 Privacy Policy
               </ResponsiveNavLink>
+
+              <div class="ms-3 relative">
+                <button
+                  @click="toggleDarkMode"
+                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
+                >
+                  <span v-if="isDarkMode">☀️ Light Mode</span>
+                  <span v-else>🌙 Dark Mode</span>
+                </button>
+              </div>
 
               <!-- Authentication -->
               <form method="POST" @submit.prevent="logout">
