@@ -5,6 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <meta name="description" content="Default description for the application">
+        <meta name="keywords" content="default, keywords, application">
+
+        <meta property="og:title" content="{{ config('app.name', 'Laravel') }}">
+        <meta property="og:description" content="Default description for the application">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:type" content="{{ 'website' }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
