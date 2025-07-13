@@ -8,6 +8,7 @@ use App\Models\TimeReport;
 use App\Models\WorkLog;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class TimeReportController extends Controller
@@ -124,21 +125,21 @@ class TimeReportController extends Controller
 
   public function getWeeklyReport(Request $request)
   {
-    $userId = Auth::id();
+    $userId = auth()->id();
     $projectId = $request->get('project_id');
     $weekStart = $request->get('week_start');
 
     $report = TimeReport::getWeeklyReport($userId, $projectId, $weekStart);
 
     return Inertia::render('TimeReports/WeeklyReport', [
-      'report' => $report,
+      'report' => $report->load(['project', 'user']),
       'projects' => Project::all(),
     ]);
   }
 
   public function getMonthlyReport(Request $request)
   {
-    $userId = Auth::id();
+    $userId = auth()->id();
     $projectId = $request->get('project_id');
     $month = $request->get('month');
     $year = $request->get('year');
@@ -146,7 +147,7 @@ class TimeReportController extends Controller
     $report = TimeReport::getMonthlyReport($userId, $projectId, $month, $year);
 
     return Inertia::render('TimeReports/MonthlyReport', [
-      'report' => $report,
+      'report' => $report->load(['project', 'user']),
       'projects' => Project::all(),
     ]);
   }
@@ -257,9 +258,9 @@ class TimeReportController extends Controller
     ]);
 
     $format = $request->format;
-    $filename = "time_report_{$timeReport->id}_{$timeReport->start_date->format(
-      'Y-m-d'
-    )}_{$timeReport->end_date->format('Y-m-d')}.{$format}";
+    $startDate = $timeReport->start_date->format('Y-m-d');
+    $endDate = $timeReport->end_date->format('Y-m-d');
+    $filename = "time_report_{$timeReport->id}_{$startDate}_{$endDate}.{$format}";
 
     switch ($format) {
       case 'csv':

@@ -12,8 +12,8 @@ class TimeReport extends Model
   protected $fillable = ['user_id', 'project_id', 'start_date', 'end_date', 'total_hours', 'breakdown', 'period_type'];
 
   protected $casts = [
-    'start_date' => 'date',
-    'end_date' => 'date',
+    'start_date' => 'datetime',
+    'end_date' => 'datetime',
     'total_hours' => 'decimal:2',
     'breakdown' => 'array',
   ];
@@ -138,8 +138,8 @@ class TimeReport extends Model
 
   public function getFormattedTotalHoursAttribute()
   {
-    $hours = floor($this->total_hours);
-    $minutes = ($this->total_hours - $hours) * 60;
+    $hours = floor((float) $this->total_hours);
+    $minutes = ((float) $this->total_hours - $hours) * 60;
 
     if ($hours > 0) {
       return sprintf('%dh %dm', $hours, $minutes);

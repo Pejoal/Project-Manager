@@ -418,12 +418,12 @@ const generateReport = () => {
 
 const generateWeeklyReport = () => {
   // Navigate to weekly report page
-  router.get(route('time-reports.weekly-report'));
+  router.get(route('time-reports.weekly'));
 };
 
 const generateMonthlyReport = () => {
   // Navigate to monthly report page
-  router.get(route('time-reports.monthly-report'));
+  router.get(route('time-reports.monthly'));
 };
 
 const getDashboardSummary = () => {
