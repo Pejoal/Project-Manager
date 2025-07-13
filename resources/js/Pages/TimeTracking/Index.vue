@@ -332,6 +332,80 @@
         </div>
       </div>
     </div>
+
+    <!-- Edit Timer Modal -->
+    <div
+      v-if="showEditModal"
+      class="fixed inset-0 bg-gray-600 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-75 overflow-y-auto h-full w-full z-50"
+    >
+      <div
+        class="relative top-20 mx-auto p-5 border border-gray-200 dark:border-gray-600 w-96 shadow-lg rounded-md bg-white dark:bg-gray-800"
+      >
+        <div class="mt-3">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Edit Time Entry</h3>
+          <form @submit.prevent="updateEntry">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Task</label>
+              <div class="w-full p-2 bg-gray-100 dark:bg-gray-600 rounded-md text-gray-700 dark:text-gray-300">
+                {{ editForm.task_name }} - {{ editForm.project_name }}
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Task cannot be changed when editing</p>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Start Time</label>
+              <input
+                type="datetime-local"
+                v-model="editForm.start_time"
+                required
+                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">End Time</label>
+              <input
+                type="datetime-local"
+                v-model="editForm.end_time"
+                required
+                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+              />
+              <p
+                v-if="editForm.start_time && editForm.end_time && editForm.end_time <= editForm.start_time"
+                class="text-xs text-red-500 mt-1"
+              >
+                End time must be after start time
+              </p>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >Description (Optional)</label
+              >
+              <textarea
+                v-model="editForm.description"
+                rows="3"
+                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="What were you working on?"
+              ></textarea>
+            </div>
+            <div class="flex justify-end space-x-2">
+              <button
+                type="button"
+                @click="showEditModal = false"
+                class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                :disabled="editForm.start_time && editForm.end_time && editForm.end_time <= editForm.start_time"
+                class="px-4 py-2 text-sm font-medium text-white bg-blue-500 dark:bg-blue-600 rounded-md hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Update Entry
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </AppLayout>
 </template>
 
@@ -349,11 +423,22 @@ const props = defineProps({
 });
 
 const showStartModal = ref(false);
+const showEditModal = ref(false);
 const currentDuration = ref('00:00:00');
 const timerInterval = ref(null);
 
 const startForm = reactive({
   task_id: '',
+  description: '',
+});
+
+const editForm = reactive({
+  id: '',
+  task_id: '',
+  task_name: '',
+  project_name: '',
+  start_time: '',
+  end_time: '',
   description: '',
 });
 
@@ -434,8 +519,29 @@ const stopSpecificTimer = (entry) => {
 };
 
 const editEntry = (entry) => {
-  // Implementation for editing entry
-  console.log('Edit entry:', entry);
+  editForm.id = entry.id;
+  editForm.task_id = entry.task_id;
+  editForm.task_name = entry.task?.name || 'Unknown Task';
+  editForm.project_name = entry.project?.name || 'Unknown Project';
+  editForm.start_time = formatDateTimeLocal(entry.start_time);
+  editForm.end_time = formatDateTimeLocal(entry.end_time);
+  editForm.description = entry.description || '';
+
+  showEditModal.value = true;
+};
+
+const formatDateTimeLocal = (dateTime) => {
+  if (!dateTime) return '';
+  const date = new Date(dateTime);
+  return date.toISOString().slice(0, 16);
+};
+
+const updateEntry = () => {
+  router.put(route('time-tracking.update', editForm.id), editForm, {
+    onSuccess: () => {
+      showEditModal.value = false;
+    },
+  });
 };
 
 const deleteEntry = (entry) => {
