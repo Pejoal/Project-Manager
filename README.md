@@ -189,6 +189,11 @@ Run database migrations and seed the database:
 sail artisan migrate:fresh --seed
 ```
 
+Start Reverb:
+```shell
+sail artisan reverb:start
+```
+
 ### Front-End
 
 Install Node.js dependencies:
