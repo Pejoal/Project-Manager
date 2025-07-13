@@ -48,18 +48,22 @@ class TimeReport extends Model
   // Static methods for generating reports
   public static function generateReport($userId, $projectId, $startDate, $endDate, $periodType = 'custom')
   {
-    $workLogs = WorkLog::forUser($userId)
-      ->forProject($projectId)
+    $workLogsQuery = WorkLog::forUser($userId)
       ->inPeriod($startDate, $endDate)
-      ->with(['task', 'project'])
-      ->get();
-
-    $timeEntries = TimeEntry::forUser($userId)
-      ->forProject($projectId)
+      ->with(['task', 'project']);
+    $timeEntriesQuery = TimeEntry::forUser($userId)
       ->inPeriod($startDate, $endDate)
       ->completed()
-      ->with(['task', 'project'])
-      ->get();
+      ->with(['task', 'project']);
+
+    // If projectId is provided, filter by project
+    if ($projectId) {
+      $workLogsQuery->forProject($projectId);
+      $timeEntriesQuery->forProject($projectId);
+    }
+
+    $workLogs = $workLogsQuery->get();
+    $timeEntries = $timeEntriesQuery->get();
 
     $totalHours = $workLogs->sum('hours_worked');
     $totalTimeEntryHours = $timeEntries->sum('duration_minutes') / 60;
@@ -100,9 +104,21 @@ class TimeReport extends Model
       ],
     ];
 
+    // If no specific project, use the first project found or create a virtual "All Projects" entry
+    $finalProjectId = $projectId;
+    if (!$projectId) {
+      $firstProject = $workLogs->first()?->project ?? $timeEntries->first()?->project;
+      if ($firstProject) {
+        $finalProjectId = $firstProject->id;
+      } else {
+        // No data found, create a dummy project entry
+        $finalProjectId = Project::first()?->id ?? 1;
+      }
+    }
+
     return static::create([
       'user_id' => $userId,
-      'project_id' => $projectId,
+      'project_id' => $finalProjectId,
       'start_date' => $startDate,
       'end_date' => $endDate,
       'total_hours' => $totalHours + $totalTimeEntryHours,

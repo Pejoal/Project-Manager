@@ -82,10 +82,8 @@ class TimeReportController extends Controller
       )
     );
 
-    return response()->json([
-      'message' => 'Time report generated successfully',
-      'report' => $report->load(['project']),
-    ]);
+    session()->flash('flash.banner', 'Time report generated  successfully!');
+    session()->flash('flash.bannerStyle', 'success');
   }
 
   public function show(TimeReport $timeReport)
@@ -126,7 +124,7 @@ class TimeReportController extends Controller
   public function getWeeklyReport(Request $request)
   {
     $userId = auth()->id();
-    $projectId = $request->get('project_id');
+    $projectId = $request->get('project_id'); // This will be null if not specified
     $weekStart = $request->get('week_start');
 
     $report = TimeReport::getWeeklyReport($userId, $projectId, $weekStart);
@@ -140,7 +138,7 @@ class TimeReportController extends Controller
   public function getMonthlyReport(Request $request)
   {
     $userId = auth()->id();
-    $projectId = $request->get('project_id');
+    $projectId = $request->get('project_id'); // This will be null if not specified
     $month = $request->get('month');
     $year = $request->get('year');
 
