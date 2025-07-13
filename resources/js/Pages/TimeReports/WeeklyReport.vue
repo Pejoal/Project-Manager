@@ -64,13 +64,13 @@
               </div>
               <div class="text-center">
                 <div class="text-3xl font-bold text-green-600 dark:text-green-400">
-                  {{ report.breakdown.work_logs?.total_hours || 0 }}h
+                  {{ report.breakdown.work_logs?.total_hours?.toFixed(2) || 0 }}h
                 </div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">Work Log Hours</div>
               </div>
               <div class="text-center">
                 <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                  {{ report.breakdown.time_entries?.total_hours || 0 }}h
+                  {{ report.breakdown.time_entries?.total_hours?.toFixed(2) || 0 }}h
                 </div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">Time Entry Hours</div>
               </div>
@@ -156,13 +156,13 @@
                       {{ task.name }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                      {{ task.workLogHours }}h
+                      {{ task.workLogHours?.toFixed(2) }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                      {{ task.timeEntryHours }}h
+                      {{ task.timeEntryHours?.toFixed(2) }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {{ task.totalHours }}h
+                      {{ task.totalHours?.toFixed(2) }}h
                     </td>
                   </tr>
                 </tbody>
@@ -201,7 +201,7 @@ const getDailyBreakdown = () => {
     days.push({
       date: dateStr,
       dayName: d.toLocaleDateString('en', { weekday: 'short' }),
-      hours: (workLogHours + timeEntryHours).toFixed(1),
+      hours: (workLogHours + timeEntryHours).toFixed(2),
     });
   }
 
