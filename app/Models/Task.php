@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 use Laravel\Scout\Searchable;
 
 class Task extends Model
@@ -41,6 +40,35 @@ class Task extends Model
   public function priority()
   {
     return $this->belongsTo(TaskPriority::class);
+  }
+
+  // Time tracking relationships
+  public function timeEntries()
+  {
+    return $this->hasMany(TimeEntry::class);
+  }
+
+  public function workLogs()
+  {
+    return $this->hasMany(WorkLog::class);
+  }
+
+  // Time tracking methods
+  public function getTotalTrackedHours()
+  {
+    $timeEntryHours = $this->timeEntries()->sum('duration_minutes') / 60;
+    $workLogHours = $this->workLogs()->sum('hours_worked');
+    return $timeEntryHours + $workLogHours;
+  }
+
+  public function getRunningTimeEntry()
+  {
+    return $this->timeEntries()->running()->first();
+  }
+
+  public function hasRunningTimer()
+  {
+    return $this->timeEntries()->running()->exists();
   }
 
   public function toSearchableArray()
