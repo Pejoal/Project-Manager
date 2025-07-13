@@ -234,7 +234,7 @@
               >
                 <option value="">Select a task</option>
                 <option v-for="task in tasks" :key="task.id" :value="task.id">
-                  {{ task.name }} - {{ task.project.name }}
+                  {{ task?.name }} - {{ task?.project?.name }}
                 </option>
               </select>
             </div>

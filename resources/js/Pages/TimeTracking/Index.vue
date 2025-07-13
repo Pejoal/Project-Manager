@@ -17,7 +17,7 @@
               <div>
                 <h3 class="text-lg font-medium text-green-800 dark:text-green-200">Timer Running</h3>
                 <p class="text-sm text-green-600 dark:text-green-300">
-                  {{ runningTimer.task.name }} - {{ runningTimer.project.name }}
+                  {{ runningTimer?.task?.name || 'Unknown Task' }} - {{ runningTimer?.project?.name || 'Unknown Project' }}
                 </p>
                 <p class="text-xs text-green-500 dark:text-green-400 mt-1">
                   Started: {{ formatDateTime(runningTimer.start_time) }}
@@ -62,8 +62,8 @@
                 class="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors bg-gray-50 dark:bg-gray-700"
                 @click="quickStartTimer(task.id)"
               >
-                <h4 class="font-medium text-gray-900 dark:text-gray-100">{{ task.name }}</h4>
-                <p class="text-sm text-gray-500 dark:text-gray-400">{{ task.project.name }}</p>
+                <h4 class="font-medium text-gray-900 dark:text-gray-100">{{ task.name || 'Unknown Task' }}</h4>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ task.project?.name || 'Unknown Project' }}</p>
                 <div class="mt-2 flex items-center text-xs text-gray-400 dark:text-gray-500">
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -193,14 +193,14 @@
                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
                   <tr v-for="entry in timeEntries.data" :key="entry.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ entry.task.name }}</div>
-                      <div class="text-sm text-gray-500 dark:text-gray-400">{{ entry.description }}</div>
+                      <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ entry?.task?.name || 'Unknown Task' }}</div>
+                      <div class="text-sm text-gray-500 dark:text-gray-400">{{ entry.description || '' }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-900 dark:text-gray-100">{{ entry.project.name }}</div>
+                      <div class="text-sm text-gray-900 dark:text-gray-100">{{ entry?.project?.name || 'Unknown Project' }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-900 dark:text-gray-100">{{ entry.formatted_duration }}</div>
+                      <div class="text-sm text-gray-900 dark:text-gray-100">{{ entry.formatted_duration || '0:00' }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="text-sm text-gray-900 dark:text-gray-100">{{ formatDateTime(entry.start_time) }}</div>
@@ -291,7 +291,7 @@
               >
                 <option value="">Select a task</option>
                 <option v-for="task in tasks" :key="task.id" :value="task.id">
-                  {{ task.name }} - {{ task.project.name }}
+                  {{ task.name }} - {{ task.project?.name || 'Unknown Project' }}
                 </option>
               </select>
             </div>
@@ -360,18 +360,20 @@ const filters = reactive({
 
 const recentTasks = computed(() => {
   // Get recent tasks from time entries
+  if (!props.timeEntries?.data) return [];
+  
   const taskIds = new Set();
   return props.timeEntries.data
     .filter((entry) => {
-      if (taskIds.has(entry.task_id)) return false;
+      if (!entry?.task_id || !entry?.task || taskIds.has(entry.task_id)) return false;
       taskIds.add(entry.task_id);
       return true;
     })
     .slice(0, 6)
     .map((entry) => ({
       id: entry.task_id,
-      name: entry.task.name,
-      project: entry.project,
+      name: entry.task?.name || 'Unknown Task',
+      project: entry.project || { name: 'Unknown Project' },
       total_tracked_hours: '0', // This would be calculated from the backend
     }));
 });
