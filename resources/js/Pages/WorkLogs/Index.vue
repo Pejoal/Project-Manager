@@ -300,6 +300,85 @@
         </div>
       </div>
     </div>
+
+    <!-- Edit Work Log Modal -->
+    <div
+      v-if="showEditModal"
+      class="fixed inset-0 bg-gray-600 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-75 overflow-y-auto h-full w-full z-50"
+    >
+      <div
+        class="relative top-20 mx-auto p-5 border border-gray-200 dark:border-gray-600 w-96 shadow-lg rounded-md bg-white dark:bg-gray-800"
+      >
+        <div class="mt-3">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Edit Work Log</h3>
+          <form @submit.prevent="updateWorkLog">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Task</label>
+              <div class="w-full p-2 bg-gray-100 dark:bg-gray-600 rounded-md text-gray-700 dark:text-gray-300">
+                {{ editForm.task_name }} - {{ editForm.project_name }}
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Task cannot be changed when editing</p>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date</label>
+              <div class="w-full p-2 bg-gray-100 dark:bg-gray-600 rounded-md text-gray-700 dark:text-gray-300">
+                {{ formatDate(editForm.date) }}
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Date cannot be changed when editing</p>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hours Worked</label>
+              <input
+                type="number"
+                v-model="editForm.hours_worked"
+                step="0.1"
+                min="0.1"
+                max="24"
+                required
+                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Work Type</label>
+              <select
+                v-model="editForm.work_type"
+                required
+                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+              >
+                <option value="">Select work type</option>
+                <option v-for="(label, key) in workTypes" :key="key" :value="key">
+                  {{ label }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+              <textarea
+                v-model="editForm.description"
+                rows="3"
+                class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="What did you work on?"
+              ></textarea>
+            </div>
+            <div class="flex justify-end space-x-2">
+              <button
+                type="button"
+                @click="showEditModal = false"
+                class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="px-4 py-2 text-sm font-medium text-white bg-blue-500 dark:bg-blue-600 rounded-md hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
+              >
+                Update Work Log
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </AppLayout>
 </template>
 
@@ -318,10 +397,21 @@ const props = defineProps({
 });
 
 const showAddModal = ref(false);
+const showEditModal = ref(false);
 
 const addForm = reactive({
   task_id: '',
   date: new Date().toISOString().split('T')[0],
+  hours_worked: '',
+  work_type: '',
+  description: '',
+});
+
+const editForm = reactive({
+  id: null,
+  task_name: '',
+  project_name: '',
+  date: '',
   hours_worked: '',
   work_type: '',
   description: '',
@@ -365,8 +455,32 @@ const addWorkLog = () => {
 };
 
 const editLog = (log) => {
-  // Implementation for editing log
-  console.log('Edit log:', log);
+  editForm.id = log.id;
+  editForm.task_name = log.task.name;
+  editForm.project_name = log.project.name;
+  editForm.date = log.date;
+  editForm.hours_worked = log.hours_worked;
+  editForm.work_type = log.work_type;
+  editForm.description = log.description || '';
+  showEditModal.value = true;
+};
+
+const updateWorkLog = () => {
+  const updateData = {
+    hours_worked: editForm.hours_worked,
+    work_type: editForm.work_type,
+    description: editForm.description,
+  };
+
+  router.put(route('work-logs.update', editForm.id), updateData, {
+    onSuccess: () => {
+      showEditModal.value = false;
+      // Reset form
+      Object.keys(editForm).forEach((key) => {
+        editForm[key] = key === 'id' ? null : '';
+      });
+    },
+  });
 };
 
 const deleteLog = (log) => {

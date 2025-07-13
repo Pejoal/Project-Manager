@@ -45,7 +45,7 @@ class TimeEntryController extends Controller
 
     // Get projects and tasks for filters
     $projects = Project::orderBy('name')->get(['id', 'name']);
-    $tasks = Task::orderBy('name')->get(['id', 'name']);
+    $tasks = Task::with('project:id,name')->orderBy('name')->get();
 
     // Get running timer for current user
     $runningTimer = TimeEntry::forUser(auth()->id())
