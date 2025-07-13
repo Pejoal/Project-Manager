@@ -69,7 +69,7 @@ const toggleDarkMode = () => {
                 <NavLink :href="route('tasks.all')" :active="route().current('tasks.*')"> Tasks </NavLink>
 
                 <!-- Time Tracking Dropdown -->
-                <div class="relative">
+                <div class="relative self-center">
                   <Dropdown align="left" width="60">
                     <template #trigger>
                       <button
