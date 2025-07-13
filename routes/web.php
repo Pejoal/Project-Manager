@@ -19,10 +19,10 @@ use Inertia\Inertia;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Illuminate\Http\Request;
 
-Route::get('/broadcast-test', function () {
-  event(new MessageSent('Hello from Laravel Reverb!'));
-  return 'Message broadcasted!';
-});
+// Route::get('/broadcast-test', function () {
+//   event(new MessageSent('Hello from Laravel Reverb!'));
+//   return 'Message broadcasted!';
+// });
 
 Route::group(
   [

@@ -36,11 +36,11 @@ const updateSettings = () => {
   });
 };
 
-onMounted(() => {
-  window.Echo.channel('chat').listen('MessageSent', (data) => {
-    console.log('Message received:', data.message);
-  });
-});
+// onMounted(() => {
+//   window.Echo.channel('chat').listen('MessageSent', (data) => {
+//     console.log('Message received:', data.message);
+//   });
+// });
 </script>
 
 <template>
