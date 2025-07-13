@@ -37,13 +37,13 @@
               <div class="flex space-x-2">
                 <button
                   @click="navigateMonth(-1)"
-                  class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  class="p-2 text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   ← Previous Month
                 </button>
                 <button
                   @click="navigateMonth(1)"
-                  class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  class="p-2 text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   Next Month →
                 </button>
@@ -70,7 +70,7 @@
               </div>
               <div class="text-center">
                 <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                  {{ report.breakdown.time_entries?.total_hours || 0 }}h
+                  {{ report.breakdown.time_entries?.total_hours?.toFixed(2) || 0 }}h
                 </div>
                 <div class="text-sm text-gray-500 dark:text-gray-400">Time Entry Hours</div>
               </div>
@@ -219,10 +219,10 @@
                       {{ task.workLogHours }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                      {{ task.timeEntryHours }}h
+                      {{ task.timeEntryHours?.toFixed(2) }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {{ task.totalHours }}h
+                      {{ task.totalHours.toFixed(2) }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {{ task.percentage }}%

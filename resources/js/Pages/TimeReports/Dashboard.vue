@@ -95,7 +95,7 @@
                     </div>
                   </div>
                   <div class="text-right">
-                    <div class="text-lg font-bold text-blue-600 dark:text-blue-400">{{ project.total_hours }}h</div>
+                    <div class="text-lg font-bold text-blue-600 dark:text-blue-400">{{ project.total_hours?.toFixed(2) }}h</div>
                   </div>
                 </div>
 

@@ -65,7 +65,7 @@
           >
             <div class="p-6 text-center">
               <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                {{ timeReport.breakdown.time_entries?.total_hours || 0 }}h
+                {{ timeReport.breakdown.time_entries?.total_hours?.toFixed(2) || 0 }}h
               </div>
               <div class="text-sm text-gray-500 dark:text-gray-400">Time Entry Hours</div>
             </div>
@@ -154,10 +154,10 @@
                       {{ task.workLogHours }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                      {{ task.timeEntryHours }}h
+                      {{ task.timeEntryHours?.toFixed(2) }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {{ task.totalHours }}h
+                      {{ task.totalHours?.toFixed(2) }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {{ task.totalEntries }}
@@ -210,10 +210,10 @@
                       {{ day.workLogHours }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                      {{ day.timeEntryHours }}h
+                      {{ day.timeEntryHours?.toFixed(2) }}h
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {{ day.totalHours }}h
+                      {{ day.totalHours?.toFixed(2) }}h
                     </td>
                   </tr>
                 </tbody>
