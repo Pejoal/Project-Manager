@@ -18,9 +18,7 @@ const props = defineProps({
 const form = useForm({
   name: props.project.name,
   description: props.project.description,
-  clients: props.project.clients
-    ? props.project.clients.map((client) => client.id)
-    : [],
+  clients: props.project.clients ? props.project.clients.map((client) => client.id) : [],
   status_id: props.project.status_id,
   priority_id: props.project.priority_id,
   start_date: props.project.start_date,
@@ -29,16 +27,13 @@ const form = useForm({
 
 const endDateError = ref('');
 
-watch(
-  [() => form.start_date, () => form.end_date],
-  ([newStartDate, newEndDate]) => {
-    if (newEndDate && newStartDate && newEndDate < newStartDate) {
-      endDateError.value = 'End date must be after start date';
-    } else {
-      endDateError.value = '';
-    }
+watch([() => form.start_date, () => form.end_date], ([newStartDate, newEndDate]) => {
+  if (newEndDate && newStartDate && newEndDate < newStartDate) {
+    endDateError.value = 'End date must be after start date';
+  } else {
+    endDateError.value = '';
   }
-);
+});
 
 const submit = () => {
   form.put(route('projects.update', { project: props.project.slug }), {
@@ -51,9 +46,7 @@ const submit = () => {
   <Head :title="`Edit Project - ${project.name}`" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Edit Project
-      </h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Edit Project</h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form @submit.prevent="submit">
@@ -121,10 +114,7 @@ const submit = () => {
             type="date"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
-          <InputError
-            class="mt-2"
-            :message="form.errors.end_date || endDateError"
-          />
+          <InputError class="mt-2" :message="form.errors.end_date || endDateError" />
         </div>
         <div>
           <InputLabel for="status" value="Status" />

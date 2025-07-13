@@ -25,8 +25,6 @@ class TaskAssigned extends Mailable
 
   public function build()
   {
-    return $this->subject(
-      $this->isNew ? 'New Task Assigned' : 'Task Updated'
-    )->view('emails.task_assigned');
+    return $this->subject($this->isNew ? 'New Task Assigned' : 'Task Updated')->view('emails.task_assigned');
   }
 }

@@ -49,20 +49,9 @@ const pagination = computed(() => {
         </section>
       </h1>
     </template>
-    <div
-      class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md"
-    >
-      <CreatePhaseModal
-        :show="showModal"
-        :project="project"
-        @close="closeModal"
-      />
-      <button
-        @click="openModal"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
-        Create Phase
-      </button>
+    <div class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <CreatePhaseModal :show="showModal" :project="project" @close="closeModal" />
+      <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">Create Phase</button>
 
       <ul class="my-2 space-y-4">
         <li
@@ -102,9 +91,7 @@ const pagination = computed(() => {
               Created at: {{ new Date(phase.created_at).toLocaleString() }}
             </div>
           </div>
-          <div class="text-gray-500 dark:text-gray-400 text-sm">
-            Phase ID: {{ phase.id }}
-          </div>
+          <div class="text-gray-500 dark:text-gray-400 text-sm">Phase ID: {{ phase.id }}</div>
         </li>
       </ul>
 

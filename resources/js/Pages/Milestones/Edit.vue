@@ -36,9 +36,7 @@ const submit = () => {
   <Head :title="`Edit milestone - ${milestone.name}`" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Edit Milestone
-      </h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Edit Milestone</h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form class="space-y-4" @submit.prevent="submit">

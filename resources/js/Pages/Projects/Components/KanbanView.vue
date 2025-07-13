@@ -8,7 +8,13 @@ import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
   project: Object,
-  filtersForm: Object,
+});
+
+const filtersForm = ref({
+  show_description: false,
+  show_status: true,
+  show_priority: true,
+  show_assigned_to: true,
 });
 
 const phases = ref(JSON.parse(JSON.stringify(props.project.phases)));
@@ -92,29 +98,16 @@ const tasksDragOptions = {
       v-bind="phasesDragOptions"
     >
       <template #item="{ element }">
-        <div
-          class="cursor-move bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md w-full sm:w-80"
-        >
+        <div class="cursor-move bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md w-full sm:w-80">
           <Link
-            :href="
-              route('phases.show', { project: project.slug, phase: element.id })
-            "
+            :href="route('phases.show', { project: project.slug, phase: element.id })"
             class="text-lg text-blue-500 dark:text-blue-400 hover:underline"
           >
             {{ element.name }}
           </Link>
-          <Draggable
-            v-model="element.tasks"
-            group="tasks"
-            item-key="id"
-            v-bind="tasksDragOptions"
-          >
+          <Draggable v-model="element.tasks" group="tasks" item-key="id" v-bind="tasksDragOptions">
             <template #item="{ element: task }">
-              <KanbanTask
-                :task="task"
-                :project="project"
-                :filtersForm="filtersForm"
-              />
+              <KanbanTask :task="task" :project="project" :filtersForm="filtersForm" />
             </template>
           </Draggable>
         </div>

@@ -11,16 +11,8 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::table('projects', function (Blueprint $table) {
-      $table
-        ->foreignId('status_id')
-        ->nullable()
-        ->constrained('project_statuses')
-        ->nullOnDelete();
-      $table
-        ->foreignId('priority_id')
-        ->nullable()
-        ->constrained('project_priorities')
-        ->nullOnDelete();
+      $table->foreignId('status_id')->nullable()->constrained('project_statuses')->nullOnDelete();
+      $table->foreignId('priority_id')->nullable()->constrained('project_priorities')->nullOnDelete();
     });
   }
 

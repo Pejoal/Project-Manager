@@ -32,9 +32,8 @@ const deleteTeam = () => {
 
     <template #content>
       <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-        Once a team is deleted, all of its resources and data will be
-        permanently deleted. Before deleting this team, please download any data
-        or information regarding this team that you wish to retain.
+        Once a team is deleted, all of its resources and data will be permanently deleted. Before deleting this team,
+        please download any data or information regarding this team that you wish to retain.
       </div>
 
       <div class="mt-5">
@@ -42,21 +41,16 @@ const deleteTeam = () => {
       </div>
 
       <!-- Delete Team Confirmation Modal -->
-      <ConfirmationModal
-        :show="confirmingTeamDeletion"
-        @close="confirmingTeamDeletion = false"
-      >
+      <ConfirmationModal :show="confirmingTeamDeletion" @close="confirmingTeamDeletion = false">
         <template #title> Delete Team </template>
 
         <template #content>
-          Are you sure you want to delete this team? Once a team is deleted, all
-          of its resources and data will be permanently deleted.
+          Are you sure you want to delete this team? Once a team is deleted, all of its resources and data will be
+          permanently deleted.
         </template>
 
         <template #footer>
-          <SecondaryButton @click="confirmingTeamDeletion = false">
-            Cancel
-          </SecondaryButton>
+          <SecondaryButton @click="confirmingTeamDeletion = false"> Cancel </SecondaryButton>
 
           <DangerButton
             class="ms-3"

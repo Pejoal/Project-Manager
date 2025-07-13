@@ -30,14 +30,7 @@ class TaskStatusController extends Controller
     }
 
     $taskStatus = TaskStatus::create($request->all());
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'created_task_status',
-        'Created a task status',
-        $taskStatus
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'created_task_status', 'Created a task status', $taskStatus));
     return redirect()->route('task-statuses.index');
   }
 
@@ -56,28 +49,14 @@ class TaskStatusController extends Controller
     }
 
     $taskStatus->update($request->all());
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'updated_task_status',
-        'Updated a task status',
-        $taskStatus
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'updated_task_status', 'Updated a task status', $taskStatus));
     return redirect()->route('task-statuses.index');
   }
 
   public function destroy(TaskStatus $taskStatus)
   {
     $taskStatus->delete();
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'deleted_task_status',
-        'Deleted a task status',
-        $taskStatus
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'deleted_task_status', 'Deleted a task status', $taskStatus));
     return redirect()->route('task-statuses.index');
   }
 

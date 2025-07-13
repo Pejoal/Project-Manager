@@ -23,18 +23,12 @@ class ProjectController extends Controller
 
     $statuses = ProjectStatus::orderBy('id', 'desc')->get();
     $priorities = ProjectPriority::orderBy('id', 'desc')->get();
-    return Inertia::render(
-      'Projects/Index',
-      compact('projects', 'statuses', 'priorities')
-    );
+    return Inertia::render('Projects/Index', compact('projects', 'statuses', 'priorities'));
   }
 
   public function single(Project $project)
   {
-    return $project->load([
-      'phases:id,name,project_id',
-      'phases.milestones:id,name,phase_id',
-    ]);
+    return $project->load(['phases:id,name,project_id', 'phases.milestones:id,name,phase_id']);
   }
 
   public function create()
@@ -62,14 +56,7 @@ class ProjectController extends Controller
     $project->clients()->sync($request->clients);
 
     // Log the activity
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'created_project',
-        'Created a new project',
-        $project
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'created_project', 'Created a new project', $project));
 
     return redirect()->route('projects.index');
   }
@@ -127,10 +114,7 @@ class ProjectController extends Controller
     $statuses = ProjectStatus::all();
     $priorities = ProjectPriority::all();
 
-    return Inertia::render(
-      'Projects/Edit',
-      compact(['project', 'clients', 'statuses', 'priorities'])
-    );
+    return Inertia::render('Projects/Edit', compact(['project', 'clients', 'statuses', 'priorities']));
   }
 
   public function update(Request $request, Project $project)
@@ -151,14 +135,7 @@ class ProjectController extends Controller
 
     $project->update($data);
     $project->clients()->sync($request->clients);
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'updated_project',
-        'Updated a project',
-        $project
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'updated_project', 'Updated a project', $project));
 
     return redirect()->route('projects.index');
   }
@@ -166,14 +143,7 @@ class ProjectController extends Controller
   public function destroy(Project $project)
   {
     $project->delete();
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'deleted_project',
-        'Deleted a project',
-        $project
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'deleted_project', 'Deleted a project', $project));
 
     return redirect()->route('projects.index');
   }

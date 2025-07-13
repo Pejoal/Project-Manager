@@ -10,7 +10,5 @@ test('profile information can be updated', function () {
     'email' => 'test@example.com',
   ]);
 
-  expect($user->fresh())
-    ->name->toEqual('Test Name')
-    ->email->toEqual('test@example.com');
+  expect($user->fresh())->name->toEqual('Test Name')->email->toEqual('test@example.com');
 });

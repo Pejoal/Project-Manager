@@ -41,16 +41,13 @@ const submit = () => {
 
 const endDateError = ref('');
 
-watch(
-  [() => form.start_date, () => form.end_date],
-  ([newStartDate, newEndDate]) => {
-    if (newEndDate && newStartDate && newEndDate < newStartDate) {
-      endDateError.value = 'End date must be after start date';
-    } else {
-      endDateError.value = '';
-    }
+watch([() => form.start_date, () => form.end_date], ([newStartDate, newEndDate]) => {
+  if (newEndDate && newStartDate && newEndDate < newStartDate) {
+    endDateError.value = 'End date must be after start date';
+  } else {
+    endDateError.value = '';
   }
-);
+});
 </script>
 
 <template>
@@ -97,10 +94,7 @@ watch(
             type="date"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
-          <InputError
-            class="mt-2"
-            :message="form.errors.end_date || endDateError"
-          />
+          <InputError class="mt-2" :message="form.errors.end_date || endDateError" />
         </div>
         <div>
           <InputLabel for="status" value="Status" />
@@ -115,12 +109,7 @@ watch(
             placeholder="Select an option"
           >
             <template #search="{ attributes, events }">
-              <input
-                class="vs__search"
-                :required="!form.status_id"
-                v-bind="attributes"
-                v-on="events"
-              />
+              <input class="vs__search" :required="!form.status_id" v-bind="attributes" v-on="events" />
             </template>
           </vSelect>
           <InputError class="mt-2" :message="form.errors.status_id" />
@@ -138,12 +127,7 @@ watch(
             placeholder="Select an option"
           >
             <template #search="{ attributes, events }">
-              <input
-                class="vs__search"
-                :required="!form.priority_id"
-                v-bind="attributes"
-                v-on="events"
-              />
+              <input class="vs__search" :required="!form.priority_id" v-bind="attributes" v-on="events" />
             </template>
           </vSelect>
           <InputError class="mt-2" :message="form.errors.priority_id" />

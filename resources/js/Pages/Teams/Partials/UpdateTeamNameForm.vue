@@ -36,11 +36,7 @@ const updateTeamName = () => {
         <InputLabel value="Team Owner" />
 
         <div class="flex items-center mt-2">
-          <img
-            class="size-12 rounded-full object-cover"
-            :src="team.owner.profile_photo_url"
-            :alt="team.owner.name"
-          />
+          <img class="size-12 rounded-full object-cover" :src="team.owner.profile_photo_url" :alt="team.owner.name" />
 
           <div class="ms-4 leading-tight">
             <div class="text-gray-900 dark:text-white">
@@ -70,16 +66,9 @@ const updateTeamName = () => {
     </template>
 
     <template v-if="permissions.canUpdateTeam" #actions>
-      <ActionMessage :on="form.recentlySuccessful" class="me-3">
-        Saved.
-      </ActionMessage>
+      <ActionMessage :on="form.recentlySuccessful" class="me-3"> Saved. </ActionMessage>
 
-      <PrimaryButton
-        :class="{ 'opacity-25': form.processing }"
-        :disabled="form.processing"
-      >
-        Save
-      </PrimaryButton>
+      <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Save </PrimaryButton>
     </template>
   </FormSection>
 </template>

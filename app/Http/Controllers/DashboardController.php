@@ -28,13 +28,8 @@ class DashboardController extends Controller
       ->reverse()
       ->values(); // Reverse to get chronological order
 
-    $clientsData = Client::selectRaw(
-      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year'
-    )
-      ->whereBetween('created_at', [
-        $today->copy()->subMonths(11)->startOfMonth(),
-        $today->copy()->endOfMonth(),
-      ])
+    $clientsData = Client::selectRaw('count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year')
+      ->whereBetween('created_at', [$today->copy()->subMonths(11)->startOfMonth(), $today->copy()->endOfMonth()])
       ->groupBy('year', 'month')
       ->get()
       ->keyBy(function ($item) {
@@ -45,13 +40,8 @@ class DashboardController extends Controller
       return $clientsData->has($month) ? $clientsData->get($month)->count : 0;
     });
 
-    $projectsData = Project::selectRaw(
-      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year'
-    )
-      ->whereBetween('created_at', [
-        $today->copy()->subMonths(11)->startOfMonth(),
-        $today->copy()->endOfMonth(),
-      ])
+    $projectsData = Project::selectRaw('count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year')
+      ->whereBetween('created_at', [$today->copy()->subMonths(11)->startOfMonth(), $today->copy()->endOfMonth()])
       ->groupBy('year', 'month')
       ->get()
       ->keyBy(function ($item) {
@@ -62,13 +52,8 @@ class DashboardController extends Controller
       return $projectsData->has($month) ? $projectsData->get($month)->count : 0;
     });
 
-    $tasksData = Task::selectRaw(
-      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year'
-    )
-      ->whereBetween('created_at', [
-        $today->copy()->subMonths(11)->startOfMonth(),
-        $today->copy()->endOfMonth(),
-      ])
+    $tasksData = Task::selectRaw('count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year')
+      ->whereBetween('created_at', [$today->copy()->subMonths(11)->startOfMonth(), $today->copy()->endOfMonth()])
       ->groupBy('year', 'month')
       ->get()
       ->keyBy(function ($item) {
@@ -103,13 +88,8 @@ class DashboardController extends Controller
       ],
     ];
 
-    $tasksData = Task::selectRaw(
-      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year, status_id'
-    )
-      ->whereBetween('created_at', [
-        $today->copy()->subMonths(11)->startOfMonth(),
-        $today->copy()->endOfMonth(),
-      ])
+    $tasksData = Task::selectRaw('count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year, status_id')
+      ->whereBetween('created_at', [$today->copy()->subMonths(11)->startOfMonth(), $today->copy()->endOfMonth()])
       ->groupBy('year', 'month', 'status_id')
       ->get()
       ->groupBy(function ($item) {
@@ -117,13 +97,9 @@ class DashboardController extends Controller
       });
 
     $taskStatuses = TaskStatus::all();
-    $datasets = $taskStatuses->map(function ($status) use (
-      $months,
-      $tasksData
-    ) {
+    $datasets = $taskStatuses->map(function ($status) use ($months, $tasksData) {
       $data = $months->map(function ($month) use ($tasksData, $status) {
-        return $tasksData->has($month) &&
-          $tasksData[$month]->where('status_id', $status->id)->first()
+        return $tasksData->has($month) && $tasksData[$month]->where('status_id', $status->id)->first()
           ? $tasksData[$month]->where('status_id', $status->id)->first()->count
           : 0;
       });
@@ -141,13 +117,8 @@ class DashboardController extends Controller
       'datasets' => $datasets,
     ];
 
-    $tasksData = Task::selectRaw(
-      'count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year, priority_id'
-    )
-      ->whereBetween('created_at', [
-        $today->copy()->subMonths(11)->startOfMonth(),
-        $today->copy()->endOfMonth(),
-      ])
+    $tasksData = Task::selectRaw('count(*) as count, MONTH(created_at) as month, YEAR(created_at) as year, priority_id')
+      ->whereBetween('created_at', [$today->copy()->subMonths(11)->startOfMonth(), $today->copy()->endOfMonth()])
       ->groupBy('year', 'month', 'priority_id')
       ->get()
       ->groupBy(function ($item) {
@@ -155,15 +126,10 @@ class DashboardController extends Controller
       });
 
     $taskPriorities = TaskPriority::all();
-    $datasets = $taskPriorities->map(function ($priority) use (
-      $months,
-      $tasksData
-    ) {
+    $datasets = $taskPriorities->map(function ($priority) use ($months, $tasksData) {
       $data = $months->map(function ($month) use ($tasksData, $priority) {
-        return $tasksData->has($month) &&
-          $tasksData[$month]->where('priority_id', $priority->id)->first()
-          ? $tasksData[$month]->where('priority_id', $priority->id)->first()
-            ->count
+        return $tasksData->has($month) && $tasksData[$month]->where('priority_id', $priority->id)->first()
+          ? $tasksData[$month]->where('priority_id', $priority->id)->first()->count
           : 0;
       });
 
@@ -190,11 +156,7 @@ class DashboardController extends Controller
         'datasets' => [
           [
             'data' => [$clientsCount, $projectsCount, $tasksCount],
-            'backgroundColor' => [
-              $settings->clients_color,
-              $settings->projects_color,
-              $settings->tasks_color,
-            ],
+            'backgroundColor' => [$settings->clients_color, $settings->projects_color, $settings->tasks_color],
           ],
         ],
       ],

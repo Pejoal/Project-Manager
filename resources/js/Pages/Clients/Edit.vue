@@ -17,9 +17,7 @@ const form = useForm({
   name: props.client.name,
   email: props.client.email,
   phone: props.client.phone,
-  projects: props.client.projects
-    ? props.client.projects.map((project) => project.id)
-    : [],
+  projects: props.client.projects ? props.client.projects.map((project) => project.id) : [],
 });
 
 const submit = () => {
@@ -31,9 +29,7 @@ const submit = () => {
   <Head :title="`Edit Client - ${client.name}`" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Edit Client
-      </h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Edit Client</h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form @submit.prevent="submit">

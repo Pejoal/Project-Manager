@@ -11,16 +11,8 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::table('tasks', function (Blueprint $table) {
-      $table
-        ->foreignId('status_id')
-        ->nullable()
-        ->constrained('task_statuses')
-        ->nullOnDelete();
-      $table
-        ->foreignId('priority_id')
-        ->nullable()
-        ->constrained('task_priorities')
-        ->nullOnDelete();
+      $table->foreignId('status_id')->nullable()->constrained('task_statuses')->nullOnDelete();
+      $table->foreignId('priority_id')->nullable()->constrained('task_priorities')->nullOnDelete();
     });
   }
 

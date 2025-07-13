@@ -48,20 +48,13 @@ const form = useForm({
 
 const endDateTimeError = ref('');
 
-watch(
-  [() => form.start_datetime, () => form.end_datetime],
-  ([newStartDateTime, newEndDateTime]) => {
-    if (
-      newEndDateTime &&
-      newStartDateTime &&
-      newEndDateTime < newStartDateTime
-    ) {
-      endDateTimeError.value = 'End datetime must be after start datetime';
-    } else {
-      endDateTimeError.value = '';
-    }
+watch([() => form.start_datetime, () => form.end_datetime], ([newStartDateTime, newEndDateTime]) => {
+  if (newEndDateTime && newStartDateTime && newEndDateTime < newStartDateTime) {
+    endDateTimeError.value = 'End datetime must be after start datetime';
+  } else {
+    endDateTimeError.value = '';
   }
-);
+});
 
 const project = ref(JSON.parse(JSON.stringify(props.project)));
 
@@ -70,9 +63,7 @@ watch(
   async (newProjectSlug) => {
     if (newProjectSlug) {
       try {
-        const response = await axios.get(
-          route('projects.single', { project: newProjectSlug })
-        );
+        const response = await axios.get(route('projects.single', { project: newProjectSlug }));
         project.value = response.data;
         form.phase_id = null;
         form.milestone_id = null;
@@ -85,9 +76,7 @@ watch(
 
 const milestones = computed(() => {
   if (form.phase_id) {
-    const selectedPhase = project.value.phases.find(
-      (phase) => phase.id === form.phase_id
-    );
+    const selectedPhase = project.value.phases.find((phase) => phase.id === form.phase_id);
     return selectedPhase ? selectedPhase.milestones : [];
   }
   return [];
@@ -221,10 +210,7 @@ const submit = () => {
             type="datetime-local"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
-          <InputError
-            class="mt-2"
-            :message="form.errors.end_datetime || endDateTimeError"
-          />
+          <InputError class="mt-2" :message="form.errors.end_datetime || endDateTimeError" />
         </div>
         <div>
           <InputLabel for="status" value="Status" />
@@ -239,12 +225,7 @@ const submit = () => {
             placeholder="Select an option"
           >
             <template #search="{ attributes, events }">
-              <input
-                class="vs__search"
-                :required="!form.status_id"
-                v-bind="attributes"
-                v-on="events"
-              />
+              <input class="vs__search" :required="!form.status_id" v-bind="attributes" v-on="events" />
             </template>
           </vSelect>
           <InputError class="mt-2" :message="form.errors.status_id" />
@@ -262,12 +243,7 @@ const submit = () => {
             placeholder="Select an option"
           >
             <template #search="{ attributes, events }">
-              <input
-                class="vs__search"
-                :required="!form.priority_id"
-                v-bind="attributes"
-                v-on="events"
-              />
+              <input class="vs__search" :required="!form.priority_id" v-bind="attributes" v-on="events" />
             </template>
           </vSelect>
           <InputError class="mt-2" :message="form.errors.priority_id" />

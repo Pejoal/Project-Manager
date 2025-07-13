@@ -4,8 +4,7 @@ return [
   'welcome' => 'Welcome',
   'profile' => 'Profile',
   'two_factor_authentication' => 'Two Factor Authentication',
-  'two_factor_authentication_description' =>
-    'Add additional security to your account using two factor authentication.',
+  'two_factor_authentication_description' => 'Add additional security to your account using two factor authentication.',
   'enabled' => 'You have enabled two factor authentication.',
   'not_enabled' => 'You have not enabled two factor authentication.',
   'finish_enabling' => 'Finish enabling two factor authentication.',
@@ -25,27 +24,21 @@ return [
   'cancel' => 'Cancel',
   'disable' => 'Disable',
   'profile_update' => 'Profile Update',
-  'profile_update_description' =>
-    'Update your account\'s profile information and email address.',
+  'profile_update_description' => 'Update your account\'s profile information and email address.',
   'password_update' => 'Password Update',
-  'password_update_description' =>
-    'Ensure your account is using a long, random password to stay secure.',
+  'password_update_description' => 'Ensure your account is using a long, random password to stay secure.',
   'profile_information' => 'Profile Information',
-  'profile_information_description' =>
-    'Update your account\'s profile information and email address.',
+  'profile_information_description' => 'Update your account\'s profile information and email address.',
   'update_password' => 'Update Password',
-  'update_password_description' =>
-    'Ensure your account is using a long, random password to stay secure.',
+  'update_password_description' => 'Ensure your account is using a long, random password to stay secure.',
   'browser_sessions' => 'Browser Sessions',
-  'browser_sessions_description' =>
-    'Manage and log out your active sessions on other browsers and devices.',
+  'browser_sessions_description' => 'Manage and log out your active sessions on other browsers and devices.',
   'delete_account' => 'Delete Account',
   'delete_account_description' => 'Permanently delete your account.',
   'current_password' => 'Current Password',
   'new_password' => 'New Password',
   'confirm_password' => 'Confirm Password',
-  'please_confirm_your_password' =>
-    'For your security, please confirm your password to continue.',
+  'please_confirm_your_password' => 'For your security, please confirm your password to continue.',
   'log_out_other_browser_sessions' => 'Log Out Other Browser Sessions',
   'log_out_other_browser_sessions_description' =>
     'Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.',
@@ -60,8 +53,7 @@ return [
   'email' => 'Email',
   'email_unverified' => 'Your email address is unverified.',
   'click_to_resend' => 'Click here to re-send the verification email.',
-  'verification_link_sent' =>
-    'A new verification link has been sent to your email address.',
+  'verification_link_sent' => 'A new verification link has been sent to your email address.',
   'save' => 'Save.',
   'saved' => 'Saved.',
 ];

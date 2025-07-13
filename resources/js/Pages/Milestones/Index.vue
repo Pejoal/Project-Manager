@@ -50,21 +50,9 @@ const pagination = computed(() => {
         </section>
       </h1>
     </template>
-    <div
-      class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md"
-    >
-      <CreateMilestoneModal
-        :show="showModal"
-        :project="project"
-        :phases="phases"
-        @close="closeModal"
-      />
-      <button
-        @click="openModal"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
-        Create Milestone
-      </button>
+    <div class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <CreateMilestoneModal :show="showModal" :project="project" :phases="phases" @close="closeModal" />
+      <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">Create Milestone</button>
 
       <ul class="my-2 space-y-4">
         <li
@@ -104,9 +92,7 @@ const pagination = computed(() => {
               Created at: {{ new Date(milestone.created_at).toLocaleString() }}
             </div>
           </div>
-          <div class="text-gray-500 dark:text-gray-400 text-sm">
-            Milestone ID: {{ milestone.id }}
-          </div>
+          <div class="text-gray-500 dark:text-gray-400 text-sm">Milestone ID: {{ milestone.id }}</div>
         </li>
       </ul>
 

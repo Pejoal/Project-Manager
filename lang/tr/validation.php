@@ -13,22 +13,17 @@ return [
     */
 
   'accepted' => ':attribute alanı kabul edilmelidir.',
-  'accepted_if' =>
-    ':attribute alanı, :other :value olduğunda kabul edilmelidir.',
+  'accepted_if' => ':attribute alanı, :other :value olduğunda kabul edilmelidir.',
   'active_url' => ':attribute geçerli bir URL olmalıdır.',
   'after' => ':attribute, :date tarihinden sonra bir tarih olmalıdır.',
-  'after_or_equal' =>
-    ':attribute, :date tarihinden sonra veya bu tarihe eşit bir tarih olmalıdır.',
+  'after_or_equal' => ':attribute, :date tarihinden sonra veya bu tarihe eşit bir tarih olmalıdır.',
   'alpha' => ':attribute sadece harflerden oluşmalıdır.',
-  'alpha_dash' =>
-    ':attribute sadece harfler, sayılar, tire ve alt çizgi içerebilir.',
+  'alpha_dash' => ':attribute sadece harfler, sayılar, tire ve alt çizgi içerebilir.',
   'alpha_num' => ':attribute sadece harfler ve sayılardan oluşmalıdır.',
   'array' => ':attribute bir dizi olmalıdır.',
-  'ascii' =>
-    ':attribute sadece tek baytlık alfasayısal karakterler ve semboller içermelidir.',
+  'ascii' => ':attribute sadece tek baytlık alfasayısal karakterler ve semboller içermelidir.',
   'before' => ':attribute, :date tarihinden önce bir tarih olmalıdır.',
-  'before_or_equal' =>
-    ':attribute, :date tarihinden önce veya bu tarihe eşit bir tarih olmalıdır.',
+  'before_or_equal' => ':attribute, :date tarihinden önce veya bu tarihe eşit bir tarih olmalıdır.',
   'between' => [
     'array' => ':attribute, :min ile :max arasında öğe içermelidir.',
     'file' => ':attribute, :min ile :max kilobayt arasında olmalıdır.',
@@ -52,8 +47,7 @@ return [
   'dimensions' => ':attribute geçersiz resim boyutlarına sahip.',
   'distinct' => ':attribute alanı yinelenen bir değere sahip.',
   'doesnt_end_with' => ':attribute, şunlardan biriyle bitmemelidir: :values.',
-  'doesnt_start_with' =>
-    ':attribute, şunlardan biriyle başlamamalıdır: :values.',
+  'doesnt_start_with' => ':attribute, şunlardan biriyle başlamamalıdır: :values.',
   'email' => ':attribute geçerli bir e-posta adresi olmalıdır.',
   'username' => 'Sağlanan e-posta veya kullanıcı adı yanlış.',
   'ends_with' => ':attribute, şunlardan biriyle bitmelidir: :values.',
@@ -116,12 +110,9 @@ return [
   'min_digits' => ':attribute, en az :min basamak olmalıdır.',
   'missing' => ':attribute alanı eksik olmalıdır.',
   'missing_if' => ':attribute alanı, :other :value olduğunda eksik olmalıdır.',
-  'missing_unless' =>
-    ':attribute alanı, :other :value olmadıkça eksik olmalıdır.',
-  'missing_with' =>
-    ':attribute alanı, :values mevcut olduğunda eksik olmalıdır.',
-  'missing_with_all' =>
-    ':attribute alanı, :values mevcut olduğunda eksik olmalıdır.',
+  'missing_unless' => ':attribute alanı, :other :value olmadıkça eksik olmalıdır.',
+  'missing_with' => ':attribute alanı, :values mevcut olduğunda eksik olmalıdır.',
+  'missing_with_all' => ':attribute alanı, :values mevcut olduğunda eksik olmalıdır.',
   'multiple_of' => ':attribute, :value katı olmalıdır.',
   'not_in' => 'Seçilen :attribute geçersiz.',
   'not_regex' => ':attribute formatı geçersiz.',
@@ -131,41 +122,28 @@ return [
     'mixed' => ':attribute en az bir büyük harf ve bir küçük harf içermelidir.',
     'numbers' => ':attribute en az bir sayı içermelidir.',
     'symbols' => ':attribute en az bir sembol içermelidir.',
-    'uncompromised' =>
-      'Verilen :attribute bir veri sızıntısında yer almış. Lütfen farklı bir :attribute seçin.',
+    'uncompromised' => 'Verilen :attribute bir veri sızıntısında yer almış. Lütfen farklı bir :attribute seçin.',
   ],
   'present' => ':attribute alanı mevcut olmalıdır.',
   'present_if' => ':attribute alanı, :other :value olduğunda mevcut olmalıdır.',
-  'present_unless' =>
-    ':attribute alanı, :other :value olmadıkça mevcut olmalıdır.',
-  'present_with' =>
-    ':attribute alanı, :values mevcut olduğunda mevcut olmalıdır.',
-  'present_with_all' =>
-    ':attribute alanı, :values mevcut olduğunda mevcut olmalıdır.',
+  'present_unless' => ':attribute alanı, :other :value olmadıkça mevcut olmalıdır.',
+  'present_with' => ':attribute alanı, :values mevcut olduğunda mevcut olmalıdır.',
+  'present_with_all' => ':attribute alanı, :values mevcut olduğunda mevcut olmalıdır.',
   'prohibited' => ':attribute alanı yasaklanmıştır.',
-  'prohibited_if' =>
-    ':attribute alanı, :other :value olduğunda yasaklanmıştır.',
-  'prohibited_unless' =>
-    ':attribute alanı, :other :values içinde olmadıkça yasaklanmıştır.',
+  'prohibited_if' => ':attribute alanı, :other :value olduğunda yasaklanmıştır.',
+  'prohibited_unless' => ':attribute alanı, :other :values içinde olmadıkça yasaklanmıştır.',
   'prohibits' => ':attribute alanı, :other alanının mevcut olmasını yasaklar.',
   'regex' => ':attribute formatı geçersiz.',
   'required' => ':attribute alanı gereklidir.',
-  'required_array_keys' =>
-    ':attribute alanı, şunlar için girişler içermelidir: :values.',
+  'required_array_keys' => ':attribute alanı, şunlar için girişler içermelidir: :values.',
   'required_if' => ':attribute alanı, :other :value olduğunda gereklidir.',
-  'required_if_accepted' =>
-    ':attribute alanı, :other kabul edildiğinde gereklidir.',
-  'required_if_declined' =>
-    ':attribute alanı, :other reddedildiğinde gereklidir.',
-  'required_unless' =>
-    ':attribute alanı, :other :values içinde olmadıkça gereklidir.',
+  'required_if_accepted' => ':attribute alanı, :other kabul edildiğinde gereklidir.',
+  'required_if_declined' => ':attribute alanı, :other reddedildiğinde gereklidir.',
+  'required_unless' => ':attribute alanı, :other :values içinde olmadıkça gereklidir.',
   'required_with' => ':attribute alanı, :values mevcut olduğunda gereklidir.',
-  'required_with_all' =>
-    ':attribute alanı, :values mevcut olduğunda gereklidir.',
-  'required_without' =>
-    ':attribute alanı, :values mevcut olmadığında gereklidir.',
-  'required_without_all' =>
-    ':attribute alanı, :values mevcut olmadığında gereklidir.',
+  'required_with_all' => ':attribute alanı, :values mevcut olduğunda gereklidir.',
+  'required_without' => ':attribute alanı, :values mevcut olmadığında gereklidir.',
+  'required_without_all' => ':attribute alanı, :values mevcut olmadığında gereklidir.',
   'same' => ':attribute ve :other eşleşmelidir.',
   'size' => [
     'array' => ':attribute, :size öğe içermelidir.',

@@ -190,6 +190,7 @@ sail artisan migrate:fresh --seed
 ```
 
 Start Reverb:
+
 ```shell
 sail artisan reverb:start
 ```

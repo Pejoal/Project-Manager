@@ -27,9 +27,7 @@ const confirmationForm = useForm({
   code: '',
 });
 
-const twoFactorEnabled = computed(
-  () => !enabling.value && page.props.auth.user?.two_factor_enabled
-);
+const twoFactorEnabled = computed(() => !enabling.value && page.props.auth.user?.two_factor_enabled);
 
 watch(twoFactorEnabled, () => {
   if (!twoFactorEnabled.value) {
@@ -46,8 +44,7 @@ const enableTwoFactorAuthentication = () => {
     {},
     {
       preserveScroll: true,
-      onSuccess: () =>
-        Promise.all([showQrCode(), showSetupKey(), showRecoveryCodes()]),
+      onSuccess: () => Promise.all([showQrCode(), showSetupKey(), showRecoveryCodes()]),
       onFinish: () => {
         enabling.value = false;
         confirming.value = props.requiresConfirmation;
@@ -88,9 +85,7 @@ const confirmTwoFactorAuthentication = () => {
 };
 
 const regenerateRecoveryCodes = () => {
-  axios
-    .post(route('two-factor.recovery-codes'))
-    .then(() => showRecoveryCodes());
+  axios.post(route('two-factor.recovery-codes')).then(() => showRecoveryCodes());
 };
 
 const disableTwoFactorAuthentication = () => {
@@ -115,17 +110,11 @@ const disableTwoFactorAuthentication = () => {
     </template>
 
     <template #content>
-      <h3
-        v-if="twoFactorEnabled && !confirming"
-        class="text-lg font-medium text-gray-900 dark:text-gray-100"
-      >
+      <h3 v-if="twoFactorEnabled && !confirming" class="text-lg font-medium text-gray-900 dark:text-gray-100">
         {{ translations.enabled }}
       </h3>
 
-      <h3
-        v-else-if="twoFactorEnabled && confirming"
-        class="text-lg font-medium text-gray-900 dark:text-gray-100"
-      >
+      <h3 v-else-if="twoFactorEnabled && confirming" class="text-lg font-medium text-gray-900 dark:text-gray-100">
         {{ translations.finish_enabling }}
       </h3>
 
@@ -153,13 +142,8 @@ const disableTwoFactorAuthentication = () => {
 
           <div class="mt-4 p-2 inline-block bg-white" v-html="qrCode" />
 
-          <div
-            v-if="setupKey"
-            class="mt-4 max-w-xl text-sm text-gray-600 dark:text-gray-400"
-          >
-            <p class="font-semibold">
-              {{ translations.setup_key }} <span v-html="setupKey"></span>
-            </p>
+          <div v-if="setupKey" class="mt-4 max-w-xl text-sm text-gray-600 dark:text-gray-400">
+            <p class="font-semibold">{{ translations.setup_key }} <span v-html="setupKey"></span></p>
           </div>
 
           <div v-if="confirming" class="mt-4">
@@ -200,25 +184,15 @@ const disableTwoFactorAuthentication = () => {
 
       <div class="mt-5">
         <div v-if="!twoFactorEnabled">
-          <ConfirmsPassword
-            :translations="translations"
-            @confirmed="enableTwoFactorAuthentication"
-          >
-            <PrimaryButton
-              type="button"
-              :class="{ 'opacity-25': enabling }"
-              :disabled="enabling"
-            >
+          <ConfirmsPassword :translations="translations" @confirmed="enableTwoFactorAuthentication">
+            <PrimaryButton type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
               {{ translations.enable }}
             </PrimaryButton>
           </ConfirmsPassword>
         </div>
 
         <div v-else>
-          <ConfirmsPassword
-            :translations="translations"
-            @confirmed="confirmTwoFactorAuthentication"
-          >
+          <ConfirmsPassword :translations="translations" @confirmed="confirmTwoFactorAuthentication">
             <PrimaryButton
               v-if="confirming"
               type="button"
@@ -230,52 +204,26 @@ const disableTwoFactorAuthentication = () => {
             </PrimaryButton>
           </ConfirmsPassword>
 
-          <ConfirmsPassword
-            :translations="translations"
-            @confirmed="regenerateRecoveryCodes"
-          >
-            <SecondaryButton
-              v-if="recoveryCodes.length > 0 && !confirming"
-              class="me-3"
-            >
+          <ConfirmsPassword :translations="translations" @confirmed="regenerateRecoveryCodes">
+            <SecondaryButton v-if="recoveryCodes.length > 0 && !confirming" class="me-3">
               {{ translations.regenerate_recovery_codes }}
             </SecondaryButton>
           </ConfirmsPassword>
 
-          <ConfirmsPassword
-            :translations="translations"
-            @confirmed="showRecoveryCodes"
-          >
-            <SecondaryButton
-              v-if="recoveryCodes.length === 0 && !confirming"
-              class="me-3"
-            >
+          <ConfirmsPassword :translations="translations" @confirmed="showRecoveryCodes">
+            <SecondaryButton v-if="recoveryCodes.length === 0 && !confirming" class="me-3">
               {{ translations.show_recovery_codes }}
             </SecondaryButton>
           </ConfirmsPassword>
 
-          <ConfirmsPassword
-            :translations="translations"
-            @confirmed="disableTwoFactorAuthentication"
-          >
-            <SecondaryButton
-              v-if="confirming"
-              :class="{ 'opacity-25': disabling }"
-              :disabled="disabling"
-            >
+          <ConfirmsPassword :translations="translations" @confirmed="disableTwoFactorAuthentication">
+            <SecondaryButton v-if="confirming" :class="{ 'opacity-25': disabling }" :disabled="disabling">
               {{ translations.cancel }}
             </SecondaryButton>
           </ConfirmsPassword>
 
-          <ConfirmsPassword
-            :translations="translations"
-            @confirmed="disableTwoFactorAuthentication"
-          >
-            <DangerButton
-              v-if="!confirming"
-              :class="{ 'opacity-25': disabling }"
-              :disabled="disabling"
-            >
+          <ConfirmsPassword :translations="translations" @confirmed="disableTwoFactorAuthentication">
+            <DangerButton v-if="!confirming" :class="{ 'opacity-25': disabling }" :disabled="disabling">
               {{ translations.disable }}
             </DangerButton>
           </ConfirmsPassword>

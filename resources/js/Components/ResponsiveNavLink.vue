@@ -21,12 +21,7 @@ const classes = computed(() => {
       <slot />
     </button>
 
-    <a
-      v-else-if="as == 'a'"
-      :class="classes"
-      class="w-full text-start"
-      :href="href"
-    >
+    <a v-else-if="as == 'a'" :class="classes" class="w-full text-start" :href="href">
       <slot />
     </a>
 

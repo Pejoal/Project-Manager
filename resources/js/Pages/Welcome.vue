@@ -27,14 +27,10 @@ defineProps({
           Welcome to Your Company Management System!
         </h1>
         <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">
-          Manage your company's resources efficiently and effectively with our
-          comprehensive management system.
+          Manage your company's resources efficiently and effectively with our comprehensive management system.
         </p>
 
-        <nav
-          v-if="canLogin"
-          class="flex flex-col sm:flex-row justify-center gap-4"
-        >
+        <nav v-if="canLogin" class="flex flex-col sm:flex-row justify-center gap-4">
           <Link
             v-if="$page.props.auth.user"
             :href="route('dashboard')"

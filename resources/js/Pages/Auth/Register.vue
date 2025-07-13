@@ -99,18 +99,10 @@ const submit = () => {
         <InputError class="mt-2" :message="form.errors.password_confirmation" />
       </div>
 
-      <div
-        v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature"
-        class="mt-4"
-      >
+      <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
         <InputLabel for="terms">
           <div class="flex items-center">
-            <Checkbox
-              id="terms"
-              v-model:checked="form.terms"
-              name="terms"
-              required
-            />
+            <Checkbox id="terms" v-model:checked="form.terms" name="terms" required />
 
             <div class="ms-2">
               I agree to the
@@ -141,11 +133,7 @@ const submit = () => {
           Already registered?
         </Link>
 
-        <PrimaryButton
-          class="ms-4"
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
+        <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
           Register
         </PrimaryButton>
       </div>

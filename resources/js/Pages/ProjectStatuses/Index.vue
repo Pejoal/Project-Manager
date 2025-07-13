@@ -2,22 +2,11 @@
   <Head title="Project Statuses" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Project Statuses
-      </h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Project Statuses</h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <CreateProjectStatusModal
-        :show="showModal"
-        @close="closeModal"
-        :status="selectedStatus"
-      />
-      <button
-        @click="openModal"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
-        Create Project Status
-      </button>
+      <CreateProjectStatusModal :show="showModal" @close="closeModal" :status="selectedStatus" />
+      <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">Create Project Status</button>
       <ul class="my-2 space-y-4">
         <li
           v-for="status in statuses"
@@ -26,23 +15,14 @@
         >
           <div class="flex items-center gap-2">
             <p class="text-white">{{ status.name }}</p>
-            <div
-              class="w-16 h-6"
-              :style="{ backgroundColor: status.color }"
-            ></div>
+            <div class="w-16 h-6" :style="{ backgroundColor: status.color }"></div>
           </div>
 
           <div>
-            <button
-              @click="() => openModal(status)"
-              class="ml-4 text-green-500 dark:text-green-400 hover:underline"
-            >
+            <button @click="() => openModal(status)" class="ml-4 text-green-500 dark:text-green-400 hover:underline">
               Update
             </button>
-            <button
-              @click="() => destroy(status.id)"
-              class="ml-4 text-red-500 dark:text-red-400 hover:underline"
-            >
+            <button @click="() => destroy(status.id)" class="ml-4 text-red-500 dark:text-red-400 hover:underline">
               Delete
             </button>
           </div>

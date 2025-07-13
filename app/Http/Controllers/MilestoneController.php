@@ -17,10 +17,7 @@ class MilestoneController extends Controller
 
     $phases = $project->phases;
 
-    return Inertia::render(
-      'Milestones/Index',
-      compact('milestones', 'project', 'phases')
-    );
+    return Inertia::render('Milestones/Index', compact('milestones', 'project', 'phases'));
   }
 
   public function store(Request $request, Project $project)
@@ -32,14 +29,7 @@ class MilestoneController extends Controller
     ]);
 
     $milestone = $project->milestones()->create($request->all());
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'created_milestone',
-        'Created a milestone',
-        $milestone
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'created_milestone', 'Created a milestone', $milestone));
     return redirect()->route('milestones.index', $project);
   }
 
@@ -49,13 +39,7 @@ class MilestoneController extends Controller
       abort(403, 'Milestone not found in this project');
     }
 
-    $milestone->load([
-      'project:id,name,slug',
-      'phase:id,name',
-      'tasks.status',
-      'tasks.priority',
-      'tasks.assignedTo',
-    ]);
+    $milestone->load(['project:id,name,slug', 'phase:id,name', 'tasks.status', 'tasks.priority', 'tasks.assignedTo']);
     return Inertia::render('Milestones/Show', compact('milestone'));
   }
 
@@ -67,17 +51,11 @@ class MilestoneController extends Controller
 
     $phases = $project->phases()->latest()->select('id', 'name')->get();
 
-    return Inertia::render(
-      'Milestones/Edit',
-      compact('milestone', 'project', 'phases')
-    );
+    return Inertia::render('Milestones/Edit', compact('milestone', 'project', 'phases'));
   }
 
-  public function update(
-    Request $request,
-    Project $project,
-    Milestone $milestone
-  ) {
+  public function update(Request $request, Project $project, Milestone $milestone)
+  {
     if ($milestone->project_id !== $project->id) {
       abort(403, 'Milestone not found in this project');
     }
@@ -88,14 +66,7 @@ class MilestoneController extends Controller
     ]);
 
     $milestone->update($request->all());
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'updated_milestone',
-        'Updated a milestone',
-        $milestone
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'updated_milestone', 'Updated a milestone', $milestone));
     return redirect()->route('milestones.index', $project);
   }
 
@@ -106,14 +77,7 @@ class MilestoneController extends Controller
     }
 
     $milestone->delete();
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'deleted_milestone',
-        'Deleted a milestone',
-        $milestone
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'deleted_milestone', 'Deleted a milestone', $milestone));
     return redirect()->route('milestones.index', $project);
   }
 
@@ -130,10 +94,7 @@ class MilestoneController extends Controller
       }
       foreach ($milestone['tasks'] as $i => $task) {
         $order = $i + 1;
-        if (
-          $task['milestone_id'] !== $milestone['id'] ||
-          $task['order'] !== $order
-        ) {
+        if ($task['milestone_id'] !== $milestone['id'] || $task['order'] !== $order) {
           Task::find($task['id'])->update([
             'milestone_id' => $milestone['id'],
             'order' => $order,

@@ -111,9 +111,7 @@ const pagination = computed(() => {
         <p v-else>All Tasks</p>
       </h1>
     </template>
-    <div
-      class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md"
-    >
+    <div class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <CreateTaskModal
         :show="showModal"
         :users="users"
@@ -123,21 +121,13 @@ const pagination = computed(() => {
         :priorities="priorities"
         @close="closeModal"
       />
-      <button
-        @click="openModal"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
-        Create Task
-      </button>
+      <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">Create Task</button>
 
       <section class="dark:bg-gray-900 bg-slate-200 p-2 rounded">
         <PrimaryButton @click="toggleFilters"> Toggle Filters </PrimaryButton>
 
         <transition name="slide-down">
-          <main
-            v-if="filtersVisible"
-            class="p-2 m-1 dark:bg-gray-700 bg-slate-100 rounded-lg space-y-2"
-          >
+          <main v-if="filtersVisible" class="p-2 m-1 dark:bg-gray-700 bg-slate-100 rounded-lg space-y-2">
             <!-- Search Filter -->
             <section>
               <input
@@ -151,12 +141,7 @@ const pagination = computed(() => {
 
             <!-- Per Page Filter -->
             <section class="flex items-center">
-              <select
-                v-model="form.perPage"
-                id="perPage"
-                @change="applyFilters"
-                class="rounded-lg text-black"
-              >
+              <select v-model="form.perPage" id="perPage" @change="applyFilters" class="rounded-lg text-black">
                 <option :value="5">5</option>
                 <option :value="10">10</option>
                 <option :value="20">20</option>
@@ -274,24 +259,16 @@ const pagination = computed(() => {
             <div class="space-y-1">
               <p>
                 Status:
-                <span :style="{ color: task.status?.color }">{{
-                  task.status?.name
-                }}</span>
+                <span :style="{ color: task.status?.color }">{{ task.status?.name }}</span>
               </p>
               <p>
                 Priority:
-                <span :style="{ color: task.priority.color }">{{
-                  task.priority.name
-                }}</span>
+                <span :style="{ color: task.priority.color }">{{ task.priority.name }}</span>
               </p>
               <p class="mb-2 text-gray-700 dark:text-gray-300">
                 assigned to:
-                <span
-                  v-for="(assigned_to_user, index) in task.assigned_to"
-                  :key="assigned_to_user.id"
-                >
-                  {{ assigned_to_user.name
-                  }}<span v-if="index < task.assigned_to.length - 1">, </span>
+                <span v-for="(assigned_to_user, index) in task.assigned_to" :key="assigned_to_user.id">
+                  {{ assigned_to_user.name }}<span v-if="index < task.assigned_to.length - 1">, </span>
                 </span>
               </p>
             </div>
@@ -299,9 +276,7 @@ const pagination = computed(() => {
               Created at: {{ new Date(task.created_at).toLocaleString() }}
             </div>
           </div>
-          <div class="text-gray-500 dark:text-gray-400 text-sm">
-            Task ID: {{ task.id }}
-          </div>
+          <div class="text-gray-500 dark:text-gray-400 text-sm">Task ID: {{ task.id }}</div>
         </li>
       </ul>
 

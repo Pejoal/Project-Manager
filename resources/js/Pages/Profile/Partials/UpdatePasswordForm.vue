@@ -51,10 +51,7 @@ const updatePassword = () => {
 
     <template #form>
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel
-          for="current_password"
-          :value="translations.current_password"
-        />
+        <InputLabel for="current_password" :value="translations.current_password" />
         <TextInput
           id="current_password"
           ref="currentPasswordInput"
@@ -80,10 +77,7 @@ const updatePassword = () => {
       </div>
 
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel
-          for="password_confirmation"
-          :value="translations.confirm_password"
-        />
+        <InputLabel for="password_confirmation" :value="translations.confirm_password" />
         <TextInput
           id="password_confirmation"
           v-model="form.password_confirmation"
@@ -100,10 +94,7 @@ const updatePassword = () => {
         {{ translations.saved }}
       </ActionMessage>
 
-      <PrimaryButton
-        :class="{ 'opacity-25': form.processing }"
-        :disabled="form.processing"
-      >
+      <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
         {{ translations.save }}
       </PrimaryButton>
     </template>

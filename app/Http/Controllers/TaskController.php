@@ -51,10 +51,7 @@ class TaskController extends Controller
       $query->whereIn('project_id', $request->projects);
     }
 
-    if (
-      $request->has('assigned_to_me') &&
-      $request->assigned_to_me === 'true'
-    ) {
+    if ($request->has('assigned_to_me') && $request->assigned_to_me === 'true') {
       $query->whereHas('assignedTo', function ($q) use ($request) {
         $q->where('user_id', auth()->user()->id);
       });
@@ -70,53 +67,32 @@ class TaskController extends Controller
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
-      $query = Task::search($search, function (
-        $meilisearch,
-        string $query,
-        array $options
-      ) {
+      $query = Task::search($search, function ($meilisearch, string $query, array $options) {
         $options['attributesToHighlight'] = ['name', 'description'];
         $options['highlightPreTag'] = '<mark><strong>';
         $options['highlightPostTag'] = '</strong></mark>';
 
         return $meilisearch->search($query, $options);
       })->query(function (Builder $query) use ($request) {
-        $query->with(
-          'status',
-          'priority',
-          'assignedTo',
-          'project:id,slug,name'
-        );
+        $query->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
         $this->applyFilters($query, $request);
       });
     } else {
-      $query = Task::with(
-        'status',
-        'priority',
-        'assignedTo',
-        'project:id,slug,name'
-      );
+      $query = Task::with('status', 'priority', 'assignedTo', 'project:id,slug,name');
       $this->applyFilters($query, $request);
     }
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query
-      ->latest()
-      ->paginate($perPage)
-      ->appends($request->except('page'));
+    $tasks = $query->latest()->paginate($perPage)->appends($request->except('page'));
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
       $task->name = $metadata['_formatted']['name'] ?? $task->name;
-      $task->description =
-        $metadata['_formatted']['description'] ?? $task->description;
+      $task->description = $metadata['_formatted']['description'] ?? $task->description;
       return $task;
     });
 
-    return Inertia::render(
-      'Tasks/Index',
-      compact('tasks', 'projects', 'users', 'statuses', 'priorities')
-    );
+    return Inertia::render('Tasks/Index', compact('tasks', 'projects', 'users', 'statuses', 'priorities'));
   }
 
   public function index(Project $project, Request $request)
@@ -127,51 +103,33 @@ class TaskController extends Controller
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
-      $query = Task::search($search, function (
-        $meilisearch,
-        string $query,
-        array $options
-      ) {
+      $query = Task::search($search, function ($meilisearch, string $query, array $options) {
         $options['attributesToHighlight'] = ['name', 'description'];
         $options['highlightPreTag'] = '<mark><strong>';
         $options['highlightPostTag'] = '</strong></mark>';
 
         return $meilisearch->search($query, $options);
       })->query(function (Builder $query) use ($project, $request) {
-        $query
-          ->where('project_id', $project->id)
-          ->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
+        $query->where('project_id', $project->id)->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
         $this->applyFilters($query, $request);
       });
     } else {
-      $query = $project
-        ->tasks()
-        ->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
+      $query = $project->tasks()->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
       $this->applyFilters($query, $request);
     }
 
     $perPage = $request->input('perPage', 10);
-    $tasks = $query
-      ->latest()
-      ->paginate($perPage)
-      ->appends($request->except('page'));
+    $tasks = $query->latest()->paginate($perPage)->appends($request->except('page'));
 
     $tasks->getCollection()->transform(function ($task) {
       $metadata = $task->scoutMetadata();
       $task->name = $metadata['_formatted']['name'] ?? $task->name;
-      $task->description =
-        $metadata['_formatted']['description'] ?? $task->description;
+      $task->description = $metadata['_formatted']['description'] ?? $task->description;
       return $task;
     });
 
-    $project->load([
-      'phases:id,name,project_id',
-      'phases.milestones:id,name,phase_id',
-    ]);
-    return Inertia::render(
-      'Tasks/Index',
-      compact('tasks', 'project', 'users', 'statuses', 'priorities')
-    );
+    $project->load(['phases:id,name,project_id', 'phases.milestones:id,name,phase_id']);
+    return Inertia::render('Tasks/Index', compact('tasks', 'project', 'users', 'statuses', 'priorities'));
   }
 
   public function store(Request $request, Project $project)
@@ -189,18 +147,9 @@ class TaskController extends Controller
       'end_datetime' => 'required|date|after:start_datetime',
     ]);
 
-    $task = $project
-      ->tasks()
-      ->create($request->except(['assigned_to', 'project_slug']));
+    $task = $project->tasks()->create($request->except(['assigned_to', 'project_slug']));
     $task->assignedTo()->sync($request->assigned_to);
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'created_task',
-        'Created a task',
-        $task
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'created_task', 'Created a task', $task));
 
     // Send email notifications
     // if ($request->has('assigned_to')) {
@@ -238,16 +187,10 @@ class TaskController extends Controller
 
     $users = User::latest()->select('id', 'name')->get();
     $task->load('assignedTo');
-    $project->load(
-      'phases:id,name,project_id',
-      'phases.milestones:id,name,phase_id'
-    );
+    $project->load('phases:id,name,project_id', 'phases.milestones:id,name,phase_id');
     $statuses = TaskStatus::latest()->get();
     $priorities = TaskPriority::latest()->get();
-    return Inertia::render(
-      'Tasks/Edit',
-      compact('task', 'project', 'users', 'statuses', 'priorities')
-    );
+    return Inertia::render('Tasks/Edit', compact('task', 'project', 'users', 'statuses', 'priorities'));
   }
 
   public function update(Request $request, Project $project, Task $task)
@@ -271,14 +214,7 @@ class TaskController extends Controller
 
     $task->update($request->except('assigned_to'));
     $task->assignedTo()->sync($request->assigned_to);
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'updated_task',
-        'Updated a task',
-        $task
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'updated_task', 'Updated a task', $task));
 
     // Send email notifications
     // if ($request->has('assigned_to')) {
@@ -298,14 +234,7 @@ class TaskController extends Controller
     }
 
     $task->delete();
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'deleted_task',
-        'Deleted a task',
-        $task
-      )
-    );
+    event(new ActivityLogged(auth()->user(), 'deleted_task', 'Deleted a task', $task));
     return redirect()->route('tasks.index', $project);
   }
 }

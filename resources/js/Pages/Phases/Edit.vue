@@ -34,9 +34,7 @@ const submit = () => {
   <Head :title="`Edit phase - ${phase.name}`" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Edit Phase
-      </h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Edit Phase</h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form @submit.prevent="submit">
@@ -80,9 +78,7 @@ const submit = () => {
           Update
         </button>
         <Link
-          :href="
-            route('phases.show', { project: project.slug, phase: phase.id })
-          "
+          :href="route('phases.show', { project: project.slug, phase: phase.id })"
           class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
         >
           Show phase

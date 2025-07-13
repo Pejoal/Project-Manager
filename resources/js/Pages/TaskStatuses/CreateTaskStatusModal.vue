@@ -58,9 +58,7 @@ const submit = () => {
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title
-      >{{ status?.name ? 'Edit' : 'Create' }} Task Status</template
-    >
+    <template #title>{{ status?.name ? 'Edit' : 'Create' }} Task Status</template>
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
         <div>
@@ -86,16 +84,8 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.color" />
         </div>
         <div class="flex items-center gap-2">
-          <InputLabel
-            class="inline-block"
-            for="completed_field"
-            value="Is Completed Field"
-          />
-          <Checkbox
-            id="completed_field"
-            v-model:checked="form.completed_field"
-            class="mt-1"
-          />
+          <InputLabel class="inline-block" for="completed_field" value="Is Completed Field" />
+          <Checkbox id="completed_field" v-model:checked="form.completed_field" class="mt-1" />
           <InputError class="mt-2" :message="form.errors.completed_field" />
         </div>
       </form>

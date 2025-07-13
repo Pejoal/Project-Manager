@@ -22,9 +22,7 @@ const createTeam = () => {
   <FormSection @submitted="createTeam">
     <template #title> Team Details </template>
 
-    <template #description>
-      Create a new team to collaborate with others on projects.
-    </template>
+    <template #description> Create a new team to collaborate with others on projects. </template>
 
     <template #form>
       <div class="col-span-6">
@@ -50,24 +48,13 @@ const createTeam = () => {
 
       <div class="col-span-6 sm:col-span-4">
         <InputLabel for="name" value="Team Name" />
-        <TextInput
-          id="name"
-          v-model="form.name"
-          type="text"
-          class="block w-full mt-1"
-          autofocus
-        />
+        <TextInput id="name" v-model="form.name" type="text" class="block w-full mt-1" autofocus />
         <InputError :message="form.errors.name" class="mt-2" />
       </div>
     </template>
 
     <template #actions>
-      <PrimaryButton
-        :class="{ 'opacity-25': form.processing }"
-        :disabled="form.processing"
-      >
-        Create
-      </PrimaryButton>
+      <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Create </PrimaryButton>
     </template>
   </FormSection>
 </template>

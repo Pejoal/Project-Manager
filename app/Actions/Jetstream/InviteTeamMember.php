@@ -21,12 +21,8 @@ class InviteTeamMember implements InvitesTeamMembers
   /**
    * Invite a new team member to the given team.
    */
-  public function invite(
-    User $user,
-    Team $team,
-    string $email,
-    ?string $role = null
-  ): void {
+  public function invite(User $user, Team $team, string $email, ?string $role = null): void
+  {
     Gate::forUser($user)->authorize('addTeamMember', $team);
 
     $this->validate($team, $email, $role);
@@ -71,33 +67,23 @@ class InviteTeamMember implements InvitesTeamMembers
       'email' => [
         'required',
         'email',
-        Rule::unique(Jetstream::teamInvitationModel())->where(function (
-          Builder $query
-        ) use ($team) {
+        Rule::unique(Jetstream::teamInvitationModel())->where(function (Builder $query) use ($team) {
           $query->where('team_id', $team->id);
         }),
       ],
-      'role' => Jetstream::hasRoles()
-        ? ['required', 'string', new Role()]
-        : null,
+      'role' => Jetstream::hasRoles() ? ['required', 'string', new Role()] : null,
     ]);
   }
 
   /**
    * Ensure that the user is not already on the team.
    */
-  protected function ensureUserIsNotAlreadyOnTeam(
-    Team $team,
-    string $email
-  ): Closure {
+  protected function ensureUserIsNotAlreadyOnTeam(Team $team, string $email): Closure
+  {
     return function ($validator) use ($team, $email) {
       $validator
         ->errors()
-        ->addIf(
-          $team->hasUserWithEmail($email),
-          'email',
-          __('This user already belongs to the team.')
-        );
+        ->addIf($team->hasUserWithEmail($email), 'email', __('This user already belongs to the team.'));
     };
   }
 }

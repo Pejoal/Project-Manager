@@ -17,9 +17,7 @@ const props = defineProps({
 <template>
   <AppLayout :title="translations.profile">
     <template #header>
-      <h2
-        class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
-      >
+      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
         {{ translations.profile }}
       </h2>
     </template>
@@ -27,19 +25,13 @@ const props = defineProps({
     <div>
       <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
         <div v-if="$page.props.jetstream.canUpdateProfileInformation">
-          <UpdateProfileInformationForm
-            :user="$page.props.auth.user"
-            :translations="translations"
-          />
+          <UpdateProfileInformationForm :user="$page.props.auth.user" :translations="translations" />
 
           <SectionBorder />
         </div>
 
         <div v-if="$page.props.jetstream.canUpdatePassword">
-          <UpdatePasswordForm
-            class="mt-10 sm:mt-0"
-            :translations="translations"
-          />
+          <UpdatePasswordForm class="mt-10 sm:mt-0" :translations="translations" />
 
           <SectionBorder />
         </div>
@@ -54,11 +46,7 @@ const props = defineProps({
           <SectionBorder />
         </div>
 
-        <LogoutOtherBrowserSessionsForm
-          :sessions="sessions"
-          class="mt-10 sm:mt-0"
-          :translations="translations"
-        />
+        <LogoutOtherBrowserSessionsForm :sessions="sessions" class="mt-10 sm:mt-0" :translations="translations" />
 
         <template v-if="$page.props.jetstream.hasAccountDeletionFeatures">
           <SectionBorder />

@@ -11,11 +11,7 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::table('tasks', function (Blueprint $table) {
-      $table
-        ->foreignId('milestone_id')
-        ->nullable()
-        ->constrained()
-        ->onDelete('cascade');
+      $table->foreignId('milestone_id')->nullable()->constrained()->onDelete('cascade');
     });
   }
 

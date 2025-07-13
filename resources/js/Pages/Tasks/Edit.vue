@@ -20,9 +20,7 @@ const props = defineProps({
 const form = useForm({
   name: props.task.name,
   description: props.task.description,
-  assigned_to: props.task.assigned_to
-    ? props.task.assigned_to.map((user) => user.id)
-    : [],
+  assigned_to: props.task.assigned_to ? props.task.assigned_to.map((user) => user.id) : [],
   status_id: props.task.status_id,
   priority_id: props.task.priority_id,
   phase_id: props.task.phase_id,
@@ -33,25 +31,16 @@ const form = useForm({
 
 const endDateTimeError = ref('');
 
-watch(
-  [() => form.start_datetime, () => form.end_datetime],
-  ([newStartDateTime, newEndDateTime]) => {
-    if (
-      newEndDateTime &&
-      newStartDateTime &&
-      newEndDateTime < newStartDateTime
-    ) {
-      endDateTimeError.value = 'End datetime must be after start datetime';
-    } else {
-      endDateTimeError.value = '';
-    }
+watch([() => form.start_datetime, () => form.end_datetime], ([newStartDateTime, newEndDateTime]) => {
+  if (newEndDateTime && newStartDateTime && newEndDateTime < newStartDateTime) {
+    endDateTimeError.value = 'End datetime must be after start datetime';
+  } else {
+    endDateTimeError.value = '';
   }
-);
+});
 const milestones = computed(() => {
   if (form.phase_id) {
-    const selectedPhase = props.project.phases.find(
-      (phase) => phase.id === form.phase_id
-    );
+    const selectedPhase = props.project.phases.find((phase) => phase.id === form.phase_id);
     return selectedPhase ? selectedPhase.milestones : [];
   }
   return [];
@@ -65,12 +54,9 @@ watch(
 );
 
 const submit = () => {
-  form.put(
-    route('tasks.update', { project: props.project.slug, task: props.task.id }),
-    {
-      preserveScroll: true,
-    }
-  );
+  form.put(route('tasks.update', { project: props.project.slug, task: props.task.id }), {
+    preserveScroll: true,
+  });
 };
 </script>
 
@@ -78,9 +64,7 @@ const submit = () => {
   <Head :title="`Edit Task - ${task.name}`" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Edit Task
-      </h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Edit Task</h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form @submit.prevent="submit">
@@ -209,10 +193,7 @@ const submit = () => {
             type="datetime-local"
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
           />
-          <InputError
-            class="mt-2"
-            :message="form.errors.end_datetime || endDateTimeError"
-          />
+          <InputError class="mt-2" :message="form.errors.end_datetime || endDateTimeError" />
         </div>
         <button
           type="submit"

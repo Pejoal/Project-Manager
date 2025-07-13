@@ -97,9 +97,7 @@ return [
       'schema' => 'public',
       'sslmode' => env('DB_SSL_MODE', 'prefer'),
       'options' => [
-        PDO::MYSQL_ATTR_SSL_CA => base_path(
-          'path/to/rds-combined-ca-bundle.pem'
-        ),
+        PDO::MYSQL_ATTR_SSL_CA => base_path('path/to/rds-combined-ca-bundle.pem'),
       ],
     ],
 
@@ -151,10 +149,7 @@ return [
 
     'options' => [
       'cluster' => env('REDIS_CLUSTER', 'redis'),
-      'prefix' => env(
-        'REDIS_PREFIX',
-        Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'
-      ),
+      'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
     ],
 
     'default' => [

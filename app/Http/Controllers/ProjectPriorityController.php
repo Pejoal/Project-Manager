@@ -21,12 +21,7 @@ class ProjectPriorityController extends Controller
     ]);
     $projectPriority = ProjectPriority::create($request->all());
     event(
-      new ActivityLogged(
-        auth()->user(),
-        'created_project_priority',
-        'Created a project priority',
-        $projectPriority
-      )
+      new ActivityLogged(auth()->user(), 'created_project_priority', 'Created a project priority', $projectPriority)
     );
     return redirect()->route('project-priorities.index');
   }
@@ -39,12 +34,7 @@ class ProjectPriorityController extends Controller
     ]);
     $projectPriority->update($request->all());
     event(
-      new ActivityLogged(
-        auth()->user(),
-        'updated_project_priority',
-        'Updated a project priority',
-        $projectPriority
-      )
+      new ActivityLogged(auth()->user(), 'updated_project_priority', 'Updated a project priority', $projectPriority)
     );
     return redirect()->route('project-priorities.index');
   }
@@ -53,21 +43,13 @@ class ProjectPriorityController extends Controller
   {
     $projectPriority->delete();
     event(
-      new ActivityLogged(
-        auth()->user(),
-        'deleted_project_priority',
-        'Deleted a project priority',
-        $projectPriority
-      )
+      new ActivityLogged(auth()->user(), 'deleted_project_priority', 'Deleted a project priority', $projectPriority)
     );
     return redirect()->route('project-priorities.index');
   }
 
   public function edit(ProjectPriority $projectPriority)
   {
-    return Inertia::render(
-      'ProjectPriorities/Edit',
-      compact('projectPriority')
-    );
+    return Inertia::render('ProjectPriorities/Edit', compact('projectPriority'));
   }
 }

@@ -55,9 +55,7 @@ const submit = () => {
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title
-      >{{ priority?.name ? 'Edit' : 'Create' }} Task Priority</template
-    >
+    <template #title>{{ priority?.name ? 'Edit' : 'Create' }} Task Priority</template>
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
         <div>

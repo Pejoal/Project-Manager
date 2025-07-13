@@ -2,20 +2,11 @@
   <Head title="Project Priorities" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        Project Priorities
-      </h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Project Priorities</h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <CreateProjectPriorityModal
-        :show="showModal"
-        @close="closeModal"
-        :priority="selectedPriority"
-      />
-      <button
-        @click="openModal"
-        class="text-blue-500 dark:text-blue-400 hover:underline"
-      >
+      <CreateProjectPriorityModal :show="showModal" @close="closeModal" :priority="selectedPriority" />
+      <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">
         Create Project Priority
       </button>
       <ul class="my-2 space-y-4">
@@ -26,23 +17,14 @@
         >
           <div class="flex items-center gap-2">
             <p class="text-white">{{ priority.name }}</p>
-            <div
-              class="w-16 h-6"
-              :style="{ backgroundColor: priority.color }"
-            ></div>
+            <div class="w-16 h-6" :style="{ backgroundColor: priority.color }"></div>
           </div>
 
           <div>
-            <button
-              @click="() => openModal(priority)"
-              class="ml-4 text-green-500 dark:text-green-400 hover:underline"
-            >
+            <button @click="() => openModal(priority)" class="ml-4 text-green-500 dark:text-green-400 hover:underline">
               Update
             </button>
-            <button
-              @click="() => destroy(priority.id)"
-              class="ml-4 text-red-500 dark:text-red-400 hover:underline"
-            >
+            <button @click="() => destroy(priority.id)" class="ml-4 text-red-500 dark:text-red-400 hover:underline">
               Delete
             </button>
           </div>

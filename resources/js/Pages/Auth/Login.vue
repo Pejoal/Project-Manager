@@ -39,10 +39,7 @@ const submit = () => {
       <AuthenticationCardLogo />
     </template>
 
-    <div
-      v-if="status"
-      class="mb-4 font-medium text-sm text-green-600 dark:text-green-400"
-    >
+    <div v-if="status" class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
       {{ status }}
     </div>
 
@@ -77,9 +74,7 @@ const submit = () => {
       <div class="block mt-4">
         <label class="flex items-center">
           <Checkbox v-model:checked="form.remember" name="remember" />
-          <span class="ms-2 text-sm text-gray-600 dark:text-gray-400"
-            >Remember me</span
-          >
+          <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
         </label>
       </div>
 
@@ -99,11 +94,7 @@ const submit = () => {
           Register
         </Link>
 
-        <PrimaryButton
-          class="ms-4"
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
+        <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
           Log in
         </PrimaryButton>
       </div>

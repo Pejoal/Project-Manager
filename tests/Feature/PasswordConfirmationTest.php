@@ -4,9 +4,7 @@ use App\Models\User;
 use Laravel\Jetstream\Features;
 
 test('confirm password screen can be rendered', function () {
-  $user = Features::hasTeamFeatures()
-    ? User::factory()->withPersonalTeam()->create()
-    : User::factory()->create();
+  $user = Features::hasTeamFeatures() ? User::factory()->withPersonalTeam()->create() : User::factory()->create();
 
   $response = $this->actingAs($user)->get('/user/confirm-password');
 

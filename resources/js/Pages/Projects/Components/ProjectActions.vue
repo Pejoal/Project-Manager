@@ -25,10 +25,7 @@ const closeModal = () => {
 
 <template>
   <section class="flex flex-wrap gap-2 m-2">
-    <Link
-      :href="route('projects.index')"
-      class="text-blue-500 dark:text-blue-400 hover:underline"
-    >
+    <Link :href="route('projects.index')" class="text-blue-500 dark:text-blue-400 hover:underline">
       View All Projects
     </Link>
 
@@ -65,18 +62,8 @@ const closeModal = () => {
       :priorities="taskPriorities"
       @close="closeModal"
     />
-    <button
-      @click="openModal"
-      class="text-blue-500 dark:text-blue-400 hover:underline"
-    >
-      Create Task
-    </button>
+    <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">Create Task</button>
 
-    <button
-      @click="$emit('destroy')"
-      class="ml-4 text-red-500 dark:text-red-400 hover:underline"
-    >
-      Delete
-    </button>
+    <button @click="$emit('destroy')" class="ml-4 text-red-500 dark:text-red-400 hover:underline">Delete</button>
   </section>
 </template>

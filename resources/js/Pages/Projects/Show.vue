@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps } from 'vue';
 import { useForm, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ProjectDetails from './Components/ProjectDetails.vue';
@@ -18,13 +18,6 @@ const props = defineProps({
 });
 
 const form = useForm({});
-
-const filtersForm = ref({
-  show_description: false,
-  show_status: true,
-  show_priority: true,
-  show_assigned_to: true,
-});
 
 const destroy = () => {
   if (confirm('Are you sure?')) {
@@ -55,7 +48,7 @@ const destroy = () => {
         :project="project"
         @destroy="destroy"
       />
-      <KanbanView :project="project" :filtersForm="filtersForm" />
+      <KanbanView :project="project" />
     </div>
   </AppLayout>
 </template>

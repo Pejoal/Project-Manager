@@ -28,9 +28,7 @@ const fetchPage = (url) => {
     >
       Previous
     </button>
-    <span class="mx-2 dark:text-white"
-      >{{ pagination.current_page }} / {{ pagination.last_page }}</span
-    >
+    <span class="mx-2 dark:text-white">{{ pagination.current_page }} / {{ pagination.last_page }}</span>
     <span class="mx-2 dark:text-white">Total: {{ pagination.total }}</span>
     <button
       v-if="pagination.next_page_url"

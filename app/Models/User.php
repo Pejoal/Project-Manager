@@ -34,12 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail
    *
    * @var array<int, string>
    */
-  protected $hidden = [
-    'password',
-    'remember_token',
-    'two_factor_recovery_codes',
-    'two_factor_secret',
-  ];
+  protected $hidden = ['password', 'remember_token', 'two_factor_recovery_codes', 'two_factor_secret'];
 
   /**
    * The accessors to append to the model's array form.
