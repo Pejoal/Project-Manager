@@ -376,7 +376,7 @@ const toggleDarkMode = () => {
             block: showingNavigationDropdown,
             hidden: !showingNavigationDropdown,
           }"
-          class="sm:hidden"
+          class="md:hidden"
         >
           <div class="pt-2 pb-3 space-y-1">
             <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
