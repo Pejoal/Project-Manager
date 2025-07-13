@@ -81,9 +81,13 @@ class TimeReport extends Model
         'by_work_type' => $workLogs->groupBy('work_type')->map(function ($logs) {
           return $logs->sum('hours_worked');
         }),
-        'by_date' => $workLogs->groupBy('date')->map(function ($logs) {
-          return $logs->sum('hours_worked');
-        }),
+        'by_date' => $workLogs
+          ->groupBy(function ($workLog) {
+            return $workLog->date->format('Y-m-d');
+          })
+          ->map(function ($logs) {
+            return $logs->sum('hours_worked');
+          }),
       ],
       'time_entries' => [
         'total_hours' => $totalTimeEntryHours,
