@@ -23,6 +23,9 @@ class ProjectStatusController extends Controller
     ]);
     $projectStatus = ProjectStatus::create($request->all());
     event(new ActivityLogged(auth()->user(), 'created_project_status', 'Created a project status', $projectStatus));
+
+    session()->flash('flash.banner', 'Project status created successfully!');
+    session()->flash('flash.bannerStyle', 'success');
     return redirect()->route('project-statuses.index');
   }
 
@@ -34,6 +37,9 @@ class ProjectStatusController extends Controller
     ]);
     $projectStatus->update($request->all());
     event(new ActivityLogged(auth()->user(), 'updated_project_status', 'Updated a project status', $projectStatus));
+
+    session()->flash('flash.banner', 'Project status updated successfully!');
+    session()->flash('flash.bannerStyle', 'success');
     return redirect()->route('project-statuses.index');
   }
 
@@ -41,6 +47,9 @@ class ProjectStatusController extends Controller
   {
     $projectStatus->delete();
     event(new ActivityLogged(auth()->user(), 'deleted_project_status', 'Deleted a project status', $projectStatus));
+
+    session()->flash('flash.banner', 'Project status deleted successfully!');
+    session()->flash('flash.bannerStyle', 'success');
     return redirect()->route('project-statuses.index');
   }
 

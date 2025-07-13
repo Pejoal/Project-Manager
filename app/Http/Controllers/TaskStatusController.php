@@ -31,7 +31,10 @@ class TaskStatusController extends Controller
 
     $taskStatus = TaskStatus::create($request->all());
     event(new ActivityLogged(auth()->user(), 'created_task_status', 'Created a task status', $taskStatus));
-    return redirect()->route('task-statuses.index')->with('success', 'Task status created successfully!');
+
+    session()->flash('flash.banner', 'Task status created successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+    return redirect()->route('task-statuses.index');
   }
 
   public function update(Request $request, TaskStatus $taskStatus)
@@ -50,14 +53,20 @@ class TaskStatusController extends Controller
 
     $taskStatus->update($request->all());
     event(new ActivityLogged(auth()->user(), 'updated_task_status', 'Updated a task status', $taskStatus));
-    return redirect()->route('task-statuses.index')->with('success', 'Task status updated successfully!');
+
+    session()->flash('flash.banner', 'Task status updated successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+    return redirect()->route('task-statuses.index');
   }
 
   public function destroy(TaskStatus $taskStatus)
   {
     $taskStatus->delete();
     event(new ActivityLogged(auth()->user(), 'deleted_task_status', 'Deleted a task status', $taskStatus));
-    return redirect()->route('task-statuses.index')->with('success', 'Task status deleted successfully!');
+
+    session()->flash('flash.banner', 'Task status deleted successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+    return redirect()->route('task-statuses.index');
   }
 
   public function edit(TaskStatus $taskStatus)
