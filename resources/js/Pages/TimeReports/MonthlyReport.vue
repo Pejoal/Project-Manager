@@ -37,13 +37,13 @@
               <div class="flex space-x-2">
                 <button
                   @click="navigateMonth(-1)"
-                  class="p-2 text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  class="p-2 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   ← Previous Month
                 </button>
                 <button
                   @click="navigateMonth(1)"
-                  class="p-2 text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  class="p-2 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   Next Month →
                 </button>
@@ -107,8 +107,8 @@
                 :class="[
                   'p-2 text-center border rounded-lg',
                   day.isCurrentMonth
-                    ? 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600'
-                    : 'bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500',
+                    ? 'bg-white dark:bg-gray-700 dark:text-white border-gray-200 dark:border-gray-600'
+                    : 'bg-gray-50 dark:bg-gray-800  border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500',
                   day.hours > 0 ? 'ring-2 ring-blue-500' : '',
                 ]"
               >
