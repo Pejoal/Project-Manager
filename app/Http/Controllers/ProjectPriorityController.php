@@ -23,7 +23,10 @@ class ProjectPriorityController extends Controller
     event(
       new ActivityLogged(auth()->user(), 'created_project_priority', 'Created a project priority', $projectPriority)
     );
-    return redirect()->route('project-priorities.index')->with('success', 'Project priority created successfully!');
+
+    session()->flash('flash.banner', 'Project priority created successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+    return redirect()->route('project-priorities.index');
   }
 
   public function update(Request $request, ProjectPriority $projectPriority)
@@ -36,7 +39,11 @@ class ProjectPriorityController extends Controller
     event(
       new ActivityLogged(auth()->user(), 'updated_project_priority', 'Updated a project priority', $projectPriority)
     );
-    return redirect()->route('project-priorities.index')->with('success', 'Project priority updated successfully!');
+
+    
+    session()->flash('flash.banner', 'Project priority updated successfully!');
+    session()->flash('flash.bannerStyle', 'success');   
+    return redirect()->route('project-priorities.index');
   }
 
   public function destroy(ProjectPriority $projectPriority)
@@ -45,7 +52,11 @@ class ProjectPriorityController extends Controller
     event(
       new ActivityLogged(auth()->user(), 'deleted_project_priority', 'Deleted a project priority', $projectPriority)
     );
-    return redirect()->route('project-priorities.index')->with('success', 'Project priority deleted successfully!');
+
+    
+    session()->flash('flash.banner', 'Project priority deleted successfully!');
+    session()->flash('flash.bannerStyle', 'success');   
+    return redirect()->route('project-priorities.index');
   }
 
   public function edit(ProjectPriority $projectPriority)

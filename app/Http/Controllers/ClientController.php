@@ -69,6 +69,9 @@ class ClientController extends Controller
     $client->delete();
     event(new ActivityLogged(auth()->user(), 'deleted_client', 'Deleted a client', $client));
 
-    return redirect()->route('clients.index')->with('success', 'Client deleted successfully!');
+    
+    session()->flash('flash.banner', 'Client deleted successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+    return redirect()->route('clients.index');
   }
 }
