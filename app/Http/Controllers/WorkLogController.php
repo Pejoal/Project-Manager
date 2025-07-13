@@ -95,12 +95,9 @@ class WorkLogController extends Controller
       ->first();
 
     if ($existingLog) {
-      return response()->json(
-        [
-          'error' => 'Work log already exists for this task and date. Please update the existing entry.',
-        ],
-        422
-      );
+      return back()->withErrors([
+        'task_id' => 'Work log already exists for this task and date. Please update the existing entry.',
+      ]);
     }
 
     $workLog = WorkLog::create([
@@ -122,16 +119,14 @@ class WorkLogController extends Controller
       )
     );
 
-    return response()->json([
-      'message' => 'Work log created successfully',
-      'workLog' => $workLog->load(['task', 'project']),
-    ]);
+    session()->flash('flash.banner', 'Work log created successfully!');
+    session()->flash('flash.bannerStyle', 'success');
   }
 
   public function update(Request $request, WorkLog $workLog)
   {
     if ($workLog->user_id !== auth()->id()) {
-      return response()->json(['error' => 'Unauthorized'], 403);
+      abort(403, 'Unauthorized');
     }
 
     $request->validate([
@@ -155,16 +150,13 @@ class WorkLogController extends Controller
       )
     );
 
-    return response()->json([
-      'message' => 'Work log updated successfully',
-      'workLog' => $workLog->load(['task', 'project']),
-    ]);
+    return redirect()->route('work-logs.index')->with('success', 'Work log updated successfully');
   }
 
   public function destroy(WorkLog $workLog)
   {
     if ($workLog->user_id !== auth()->id()) {
-      return response()->json(['error' => 'Unauthorized'], 403);
+      abort(403, 'Unauthorized');
     }
 
     $taskName = $workLog->task->name;
@@ -172,7 +164,7 @@ class WorkLogController extends Controller
 
     event(new ActivityLogged(auth()->user(), 'deleted_work_log', 'Deleted work log for task: ' . $taskName, $workLog));
 
-    return response()->json(['message' => 'Work log deleted successfully']);
+    return redirect()->route('work-logs.index')->with('success', 'Work log deleted successfully');
   }
 
   public function getWorkLogsByDate(Request $request)

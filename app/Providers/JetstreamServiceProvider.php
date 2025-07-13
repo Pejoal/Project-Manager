@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Fortify;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 class JetstreamServiceProvider extends ServiceProvider
 {

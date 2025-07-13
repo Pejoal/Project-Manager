@@ -58,7 +58,7 @@ class ProjectController extends Controller
     // Log the activity
     event(new ActivityLogged(auth()->user(), 'created_project', 'Created a new project', $project));
 
-    return redirect()->route('projects.index');
+    return redirect()->route('projects.index')->with('success', 'Project created successfully!');
   }
 
   public function show(Project $project)
@@ -137,7 +137,7 @@ class ProjectController extends Controller
     $project->clients()->sync($request->clients);
     event(new ActivityLogged(auth()->user(), 'updated_project', 'Updated a project', $project));
 
-    return redirect()->route('projects.index');
+    return redirect()->route('projects.index')->with('success', 'Project updated successfully!');
   }
 
   public function destroy(Project $project)
@@ -145,6 +145,6 @@ class ProjectController extends Controller
     $project->delete();
     event(new ActivityLogged(auth()->user(), 'deleted_project', 'Deleted a project', $project));
 
-    return redirect()->route('projects.index');
+    return redirect()->route('projects.index')->with('success', 'Project deleted successfully!');
   }
 }

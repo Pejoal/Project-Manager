@@ -30,7 +30,8 @@ class MilestoneController extends Controller
 
     $milestone = $project->milestones()->create($request->all());
     event(new ActivityLogged(auth()->user(), 'created_milestone', 'Created a milestone', $milestone));
-    return redirect()->route('milestones.index', $project);
+
+    return redirect()->route('milestones.index', $project)->with('success', 'Milestone created successfully!');
   }
 
   public function show(Project $project, Milestone $milestone)
@@ -67,7 +68,7 @@ class MilestoneController extends Controller
 
     $milestone->update($request->all());
     event(new ActivityLogged(auth()->user(), 'updated_milestone', 'Updated a milestone', $milestone));
-    return redirect()->route('milestones.index', $project);
+    return redirect()->route('milestones.index', $project)->with('success', 'Milestone updated successfully!');
   }
 
   public function destroy(Project $project, Milestone $milestone)
@@ -78,7 +79,7 @@ class MilestoneController extends Controller
 
     $milestone->delete();
     event(new ActivityLogged(auth()->user(), 'deleted_milestone', 'Deleted a milestone', $milestone));
-    return redirect()->route('milestones.index', $project);
+    return redirect()->route('milestones.index', $project)->with('success', 'Milestone deleted successfully!');
   }
 
   public function sync(Request $request)

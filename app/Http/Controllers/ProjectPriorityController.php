@@ -23,7 +23,7 @@ class ProjectPriorityController extends Controller
     event(
       new ActivityLogged(auth()->user(), 'created_project_priority', 'Created a project priority', $projectPriority)
     );
-    return redirect()->route('project-priorities.index');
+    return redirect()->route('project-priorities.index')->with('success', 'Project priority created successfully!');
   }
 
   public function update(Request $request, ProjectPriority $projectPriority)
@@ -36,7 +36,7 @@ class ProjectPriorityController extends Controller
     event(
       new ActivityLogged(auth()->user(), 'updated_project_priority', 'Updated a project priority', $projectPriority)
     );
-    return redirect()->route('project-priorities.index');
+    return redirect()->route('project-priorities.index')->with('success', 'Project priority updated successfully!');
   }
 
   public function destroy(ProjectPriority $projectPriority)
@@ -45,7 +45,7 @@ class ProjectPriorityController extends Controller
     event(
       new ActivityLogged(auth()->user(), 'deleted_project_priority', 'Deleted a project priority', $projectPriority)
     );
-    return redirect()->route('project-priorities.index');
+    return redirect()->route('project-priorities.index')->with('success', 'Project priority deleted successfully!');
   }
 
   public function edit(ProjectPriority $projectPriority)
