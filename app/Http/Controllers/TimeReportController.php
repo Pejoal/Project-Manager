@@ -118,35 +118,36 @@ class TimeReportController extends Controller
       )
     );
 
-    return response()->json(['message' => 'Time report deleted successfully']);
+    session()->flash('flash.banner', 'Time report deleted successfully!');
+    session()->flash('flash.bannerStyle', 'success');
   }
 
   public function getWeeklyReport(Request $request)
   {
-    $request->validate([
-      'project_id' => 'required|exists:projects,id',
-      'week_start' => 'nullable|date',
-    ]);
+    $userId = Auth::id();
+    $projectId = $request->get('project_id');
+    $weekStart = $request->get('week_start');
 
-    $report = TimeReport::getWeeklyReport(auth()->id(), $request->project_id, $request->week_start);
+    $report = TimeReport::getWeeklyReport($userId, $projectId, $weekStart);
 
-    return response()->json([
-      'report' => $report->load(['project']),
+    return Inertia::render('TimeReports/WeeklyReport', [
+      'report' => $report,
+      'projects' => Project::all(),
     ]);
   }
 
   public function getMonthlyReport(Request $request)
   {
-    $request->validate([
-      'project_id' => 'required|exists:projects,id',
-      'month' => 'nullable|integer|min:1|max:12',
-      'year' => 'nullable|integer|min:2020|max:2030',
-    ]);
+    $userId = Auth::id();
+    $projectId = $request->get('project_id');
+    $month = $request->get('month');
+    $year = $request->get('year');
 
-    $report = TimeReport::getMonthlyReport(auth()->id(), $request->project_id, $request->month, $request->year);
+    $report = TimeReport::getMonthlyReport($userId, $projectId, $month, $year);
 
-    return response()->json([
-      'report' => $report->load(['project']),
+    return Inertia::render('TimeReports/MonthlyReport', [
+      'report' => $report,
+      'projects' => Project::all(),
     ]);
   }
 
@@ -226,7 +227,7 @@ class TimeReportController extends Controller
       ->limit(5)
       ->get();
 
-    return response()->json([
+    return Inertia::render('TimeReports/Dashboard', [
       'summary' => [
         'total_hours' => round($totalHours, 2),
         'work_log_hours' => round($totalWorkLogHours, 2),

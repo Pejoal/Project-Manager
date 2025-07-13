@@ -417,13 +417,13 @@ const generateReport = () => {
 };
 
 const generateWeeklyReport = () => {
-  // Implementation for quick weekly report
-  console.log('Generate weekly report');
+  // Navigate to weekly report page
+  router.get(route('time-reports.weekly-report'));
 };
 
 const generateMonthlyReport = () => {
-  // Implementation for quick monthly report
-  console.log('Generate monthly report');
+  // Navigate to monthly report page
+  router.get(route('time-reports.monthly-report'));
 };
 
 const getDashboardSummary = () => {
