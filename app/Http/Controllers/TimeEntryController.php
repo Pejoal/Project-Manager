@@ -91,20 +91,22 @@ class TimeEntryController extends Controller
 
     event(new ActivityLogged(auth()->user(), 'started_timer', 'Started timer for task: ' . $task->name, $timeEntry));
 
-    return response()->json([
-      'message' => 'Timer started successfully',
-      'timeEntry' => $timeEntry->load(['task', 'project']),
-    ]);
+    session()->flash('flash.banner', 'Timer started successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+
+    return redirect()->back();
   }
 
   public function stop(Request $request, TimeEntry $timeEntry)
   {
     if ($timeEntry->user_id !== auth()->id()) {
-      return response()->json(['error' => 'Unauthorized'], 403);
+      abort(403, 'Unauthorized');
     }
 
     if (!$timeEntry->is_running) {
-      return response()->json(['error' => 'Timer is not running'], 400);
+      session()->flash('flash.banner', 'Timer is not running!');
+      session()->flash('flash.bannerStyle', 'danger');
+      return redirect()->back();
     }
 
     $timeEntry->stop();
@@ -118,16 +120,16 @@ class TimeEntryController extends Controller
       )
     );
 
-    return response()->json([
-      'message' => 'Timer stopped successfully',
-      'timeEntry' => $timeEntry->load(['task', 'project']),
-    ]);
+    session()->flash('flash.banner', 'Timer stopped successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+
+    return redirect()->back();
   }
 
   public function update(Request $request, TimeEntry $timeEntry)
   {
     if ($timeEntry->user_id !== auth()->id()) {
-      return response()->json(['error' => 'Unauthorized'], 403);
+      abort(403, 'Unauthorized');
     }
 
     $request->validate([
@@ -152,16 +154,16 @@ class TimeEntryController extends Controller
       )
     );
 
-    return response()->json([
-      'message' => 'Time entry updated successfully',
-      'timeEntry' => $timeEntry->load(['task', 'project']),
-    ]);
+    session()->flash('flash.banner', 'Time entry updated successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+
+    return redirect()->back();
   }
 
   public function destroy(TimeEntry $timeEntry)
   {
     if ($timeEntry->user_id !== auth()->id()) {
-      return response()->json(['error' => 'Unauthorized'], 403);
+      abort(403, 'Unauthorized');
     }
 
     $taskName = $timeEntry->task->name;
@@ -171,7 +173,10 @@ class TimeEntryController extends Controller
       new ActivityLogged(auth()->user(), 'deleted_time_entry', 'Deleted time entry for task: ' . $taskName, $timeEntry)
     );
 
-    return response()->json(['message' => 'Time entry deleted successfully']);
+    session()->flash('flash.banner', 'Time entry deleted successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+
+    return redirect()->back();
   }
 
   public function getRunningTimer()
@@ -208,9 +213,11 @@ class TimeEntryController extends Controller
       'is_running' => true,
     ]);
 
-    return response()->json([
-      'message' => 'Timer started',
-      'timeEntry' => $timeEntry->load(['task', 'project']),
-    ]);
+    event(new ActivityLogged(auth()->user(), 'started_timer', 'Started timer for task: ' . $task->name, $timeEntry));
+
+    session()->flash('flash.banner', 'Timer started successfully!');
+    session()->flash('flash.bannerStyle', 'success');
+
+    return redirect()->back();
   }
 }
