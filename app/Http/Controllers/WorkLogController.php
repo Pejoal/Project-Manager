@@ -95,9 +95,9 @@ class WorkLogController extends Controller
       ->first();
 
     if ($existingLog) {
-      return back()->withErrors([
-        'task_id' => 'Work log already exists for this task and date. Please update the existing entry.',
-      ]);
+      session()->flash('flash.banner', 'Work log already exists for this task and date. Please update the existing entry.');
+      session()->flash('flash.bannerStyle', 'danger');
+      return;
     }
 
     $workLog = WorkLog::create([
