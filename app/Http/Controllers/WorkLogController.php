@@ -120,7 +120,7 @@ class WorkLogController extends Controller
     );
 
     session()->flash('flash.banner', 'Work log created successfully!');
-    session()->flash('flash.bannerStyle', 'success');
+    session()->flash('flash.bannerStyle', 'success'); // Possible values: 'success', 'danger', 'warning', 'info'
   }
 
   public function update(Request $request, WorkLog $workLog)
