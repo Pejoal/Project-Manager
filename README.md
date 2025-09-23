@@ -1,240 +1,113 @@
-# Company Management System App
+# 🏢 Company Management System App
 
-[Watch the demo video](https://github.com/Pejoal/Project-Manager/raw/refs/heads/main/public/docs/videos/demo.mp4)
+[🎥 Watch the Demo Video](https://github.com/Pejoal/Project-Manager/raw/refs/heads/main/public/docs/videos/demo.mp4)
 
-## Description
+## About The Project
 
-The Company Management System App is a comprehensive solution designed to streamline and manage various aspects of a company's operations. This application provides tools for managing clients, projects, and tasks efficiently, ensuring smooth workflow and enhanced productivity.
-
----
-
-## Features
-
-- **Client Management**
-
-  - View, add, edit, and delete clients
-  - View client details
-
-- **Project Management**
-
-  - View, create, edit, and delete projects
-  - View project details
-
-- **Task Management**
-
-  - View, add, edit, and delete tasks within a project
-  - View task details
-  - Update task status
-  - Update task priority
-
-- **Localization**
-
-  - Multi-language support
-  - Locale-based URL generation
-  - Session-based locale management
-
-- **User Authentication**
-
-  - Secure login and registration
-  - Email verification
-  - Session management
-  - Two-Factor Authentication
-
-- **Dashboard**
-
-  - Overview of key metrics and information
-  - Access to translations and localized content
-  - Analytics and Reports: Display key metrics and reports such as employee performance, project progress, and financial summaries
-  - Customizable Widgets: Allow users to customize their dashboard with widgets that display relevant information
-
-- **Settings Management**
-
-  - Update application settings
-  - Manage user preferences
-
-- **Notifications**
-
-  - Real-time notifications
-  - Email notifications
-
-- **Role-Based Access Control**
-
-  - Define roles and permissions
-  - Restrict access to certain features based on user roles
-
-- **API Integration**
-
-  - RESTful API endpoints
-  - API authentication and authorization
-
-- **Responsive Design**
-
-  - Mobile-friendly interface
-  - Adaptive layout for different screen sizes
-
-- **Team Management**
-
-  - Create and manage teams
-  - Invite users to teams
-  - Assign roles within teams
-
-- **Profile Management**
-
-  - Update profile information
-  - Upload profile photos
-
-- **Security Features**
-
-  - Password reset functionality
-  - Password confirmation for sensitive actions
-  - CSRF protection
-
-- **Phase Management**
-
-  - View, add, edit, and delete phases within a project
-  - View phase details
-
-- **Milestone Management**
-
-  - View, add, edit, and delete milestones within a project
-  - View milestone details
-
-- **Project Status Management**
-
-  - View, add, edit, and delete project statuses
-
-- **Project Priority Management**
-
-  - View, add, edit, and delete project priorities
-
-- **Task Status Management**
-
-  - View, add, edit, and delete task statuses
-
-- **Task Priority Management**
-
-  - View, add, edit, and delete task priorities
+The Company Management System is a comprehensive solution designed to streamline and manage various aspects of a company's operations. This application provides tools for managing clients, projects, and tasks efficiently, ensuring a smooth workflow and enhanced productivity.
 
 ---
 
-## Authors
+## ✨ Features
 
-- [@Pejoal](https://www.github.com/Pejoal)
-
----
-
-## Installation
-
-Clone the repository:
-
-```shell
-git clone git@github.com:Pejoal/manager.git
-```
-
-Navigate to the project directory:
-
-```shell
-cd manager
-```
-
-Copy the example environment file and configure the environment variables:
-
-```shell
-cp .env.example .env
-```
+-   **Client, Project & Task Management**: Full CRUD operations for clients, projects, tasks, phases, and milestones.
+-   **Full-Text Search**: Fast, typo-tolerant search powered by **Meilisearch**.
+-   **Real-time Notifications**: Instant updates using **Laravel Reverb**.
+-   **User Authentication**: Secure login, registration, email verification, and Two-Factor Authentication via Laravel Jetstream.
+-   **Team Management**: Create teams, invite users, and assign roles.
+-   **Role-Based Access Control**: Granular permissions to restrict access based on user roles.
+-   **Customizable Dashboard**: An overview of key metrics with customizable widgets.
+-   **Localization**: Multi-language support with session-based locale management.
+-   **Responsive Design**: A mobile-friendly interface that adapts to different screen sizes.
+-   **API Integration**: RESTful API endpoints with authentication via Laravel Sanctum.
+-   **Profile & Settings Management**: Users can update their profile, preferences, and application settings.
 
 ---
 
-### Back-End
+## 🛠️ Tech Stack
 
-Install Laravel Sail as a development dependency:
+-   **Backend**: Laravel, Meilisearch
+-   **Frontend**: Inertia.js, Vue.js
+-   **Real-time**: Laravel Reverb
+-   **Authentication**: Laravel Sanctum, Jetstream
+-   **Localization**: Mcamara Laravel Localization
 
-```shell
-composer require laravel/sail --dev --ignore-platform-reqs
-```
+---
 
-Create a Sail alias:
+## 🚀 Getting Started
 
-```shell
-alias sail="./vendor/bin/sail"
-```
-
-Start the Sail environment:
-
-```shell
-sail up -d
-```
-
-Install PHP dependencies:
-
-```shell
-sail composer install --ignore-platform-reqs
-```
-
-Create a symbolic link for storage:
-
-```shell
-sail artisan storage:link
-```
-
-Generate the application key:
-
-```shell
-sail artisan key:generate
-```
-
-Run database migrations and seed the database:
-
-```shell
-sail artisan migrate:fresh --seed
-```
-
-Start Reverb:
-
-```shell
-sail artisan reverb:start
-```
-
-### Front-End
-
-Install Node.js dependencies:
-
-```shell
-sail npm install
-```
-
-Compile the front-end assets:
-
-```shell
-sail npm run dev
-```
-
-```shell
-sail npm run build
-```
-
-### Database
-
-- Username: pejoal
-- Password: pejoal
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
-- Composer ( V 2 )
-- Node js ( V 19.1.0 )
-- Docker ( Compose )
+-   Composer v2+
+-   Node.js v19.1.0+
+-   Docker & Docker Compose
+
+### Installation
+
+1.  **Clone the repository:**
+    ```shell
+    git clone git@github.com:Pejoal/manager.git
+    cd manager
+    ```
+2.  **Set up the environment:**
+    ```shell
+    cp .env.example .env
+    ```
+    > Make sure to configure your database and application variables in the `.env` file.
+3.  **Install Laravel Sail:**
+    ```shell
+    composer require laravel/sail --dev --ignore-platform-reqs
+    ```
+4.  **Create a shell alias for convenience:**
+    ```shell
+    alias sail="./vendor/bin/sail"
+    ```
+5.  **Start the Docker containers:**
+    This command starts the web server, database, and search engine in the background.
+    ```shell
+    sail up -d
+    ```
+6.  **Install backend dependencies:**
+    ```shell
+    sail composer install --ignore-platform-reqs
+    ```
+7.  **Run initial setup commands:**
+    ```shell
+    sail artisan key:generate
+    sail artisan migrate:fresh --seed
+    sail artisan storage:link
+    ```
+8.  **Sync search index settings:**
+    This command is crucial for configuring your Meilisearch indexes.
+    ```shell
+    sail artisan scout:sync-settings
+    ```
+9.  **Install frontend dependencies:**
+    ```shell
+    sail npm install
+    ```
+10. **Compile assets and start services:**
+    Open two separate terminal tabs for these commands.
+
+    -   In the first tab, compile frontend assets and watch for changes:
+        ```shell
+        sail npm run dev
+        ```
+    -   In the second tab, start the Reverb WebSocket server:
+        ```shell
+        sail artisan reverb:start
+        ```
 
 ---
 
-### Technologies Used
+## 👤 Author
 
-- **Backend**: Laravel
-- **Frontend**: Inertia.js, Vue.js
-- **Localization**: Mcamara Laravel Localization
-- **Authentication**: Laravel Sanctum, Jetstream
+-   **Pejoal** - [GitHub](https://www.github.com/Pejoal)
 
 ---
 
-## For Support..
+## 🤝 Support
 
-- [My Email](pejoal.official@gmail.com)
+For support, please email me at [pejoal.official@gmail.com](mailto:pejoal.official@gmail.com).
