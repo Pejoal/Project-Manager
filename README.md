@@ -1,6 +1,6 @@
 # 🏢 Company Management System App
 
-[🎥 Watch the Demo Video](https://github.com/Pejoal/Project-Manager/raw/refs/heads/main/public/docs/videos/demo.mp4)
+[🎥 Watch the Demo Video](https://github.com/user-attachments/assets/785440b8-69a3-4e4d-85de-5fb0ebd78125)
 
 ## About The Project
 
