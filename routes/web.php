@@ -12,6 +12,10 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskPriorityController;
 use App\Http\Controllers\TaskStatusController;
+use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\EmployeeProfileController;
+use App\Http\Controllers\PayslipController;
+use App\Http\Controllers\TimeEntryController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -124,6 +128,60 @@ Route::group(
           'project-statuses.destroy'
         );
       });
+
+      // Payroll Management Routes (Admin Only)
+      Route::middleware('role:admin')->group(function () {
+        // Payroll Dashboard
+        Route::prefix('payroll')->group(function () {
+          Route::get('/', [PayrollController::class, 'index'])->name('payroll.index');
+          Route::get('/dashboard', [PayrollController::class, 'dashboard'])->name('payroll.dashboard');
+          Route::get('/reports', [PayrollController::class, 'reports'])->name('payroll.reports');
+          Route::get('/settings', [PayrollController::class, 'settings'])->name('payroll.settings');
+          Route::put('/settings', [PayrollController::class, 'updateSettings'])->name('payroll.settings.update');
+          Route::post('/generate-time-entries', [PayrollController::class, 'generateTimeEntries'])->name(
+            'payroll.generate-time-entries'
+          );
+        });
+
+        // Employee Profiles Management
+        Route::resource('employee-profiles', EmployeeProfileController::class);
+        Route::patch('employee-profiles/{employeeProfile}/activate', [
+          EmployeeProfileController::class,
+          'activate',
+        ])->name('employee-profiles.activate');
+        Route::patch('employee-profiles/{employeeProfile}/deactivate', [
+          EmployeeProfileController::class,
+          'deactivate',
+        ])->name('employee-profiles.deactivate');
+        Route::post('employee-profiles/bulk-update', [EmployeeProfileController::class, 'bulkUpdate'])->name(
+          'employee-profiles.bulk-update'
+        );
+
+        // Payslips Management
+        Route::resource('payslips', PayslipController::class)->except(['create', 'edit', 'update']);
+        Route::get('payslips/generate-bulk', [PayslipController::class, 'generateBulk'])->name(
+          'payslips.generate-bulk'
+        );
+        Route::post('payslips/generate', [PayslipController::class, 'generate'])->name('payslips.generate');
+        Route::patch('payslips/{payslip}/approve', [PayslipController::class, 'approve'])->name('payslips.approve');
+        Route::patch('payslips/{payslip}/mark-paid', [PayslipController::class, 'markAsPaid'])->name(
+          'payslips.mark-paid'
+        );
+        Route::post('payslips/bulk-approve', [PayslipController::class, 'bulkApprove'])->name('payslips.bulk-approve');
+        Route::get('payslips/{payslip}/pdf', [PayslipController::class, 'downloadPdf'])->name('payslips.download-pdf');
+      });
+
+      // Time Entries Management (Users can manage their own, Admins can manage all)
+      Route::resource('time-entries', TimeEntryController::class);
+      Route::patch('time-entries/{timeEntry}/approve', [TimeEntryController::class, 'approve'])->name(
+        'time-entries.approve'
+      );
+      Route::post('time-entries/bulk-approve', [TimeEntryController::class, 'bulkApprove'])->name(
+        'time-entries.bulk-approve'
+      );
+      Route::get('projects/{project}/tasks', [TimeEntryController::class, 'getTasksForProject'])->name(
+        'projects.tasks'
+      );
 
       // Project Priority Management Routes
       Route::prefix('project-priorities')->group(function () {

@@ -42,6 +42,12 @@ class Task extends Model
     return $this->belongsTo(TaskPriority::class);
   }
 
+  // Payroll relationships
+  public function timeEntries()
+  {
+    return $this->hasMany(TimeEntry::class);
+  }
+
   public function toSearchableArray()
   {
     return [

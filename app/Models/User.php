@@ -10,10 +10,12 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
   use HasApiTokens;
+  use HasRoles;
 
   /** @use HasFactory<\Database\Factories\UserFactory> */
   use HasFactory;
@@ -59,5 +61,36 @@ class User extends Authenticatable implements MustVerifyEmail
   public function tasks()
   {
     return $this->belongsToMany(Task::class, 'task_user');
+  }
+
+  // Payroll relationships
+  public function employeeProfile()
+  {
+    return $this->hasOne(EmployeeProfile::class);
+  }
+
+  public function timeEntries()
+  {
+    return $this->hasMany(TimeEntry::class);
+  }
+
+  public function payslips()
+  {
+    return $this->hasMany(Payslip::class);
+  }
+
+  public function generatedPayslips()
+  {
+    return $this->hasMany(Payslip::class, 'generated_by');
+  }
+
+  public function approvedPayslips()
+  {
+    return $this->hasMany(Payslip::class, 'approved_by');
+  }
+
+  public function approvedTimeEntries()
+  {
+    return $this->hasMany(TimeEntry::class, 'approved_by');
   }
 }
