@@ -11,6 +11,7 @@ The Company Management System is a comprehensive solution designed to streamline
 ## ✨ Features
 
 ### Core Management Features
+
 - **Client, Project & Task Management**: Full CRUD operations for clients, projects, tasks, phases, and milestones.
 - **Full-Text Search**: Fast, typo-tolerant search powered by **Meilisearch**.
 - **Real-time Notifications**: Instant updates using **Laravel Reverb**.
@@ -23,6 +24,7 @@ The Company Management System is a comprehensive solution designed to streamline
 - **API Integration**: RESTful API endpoints with authentication via Laravel Sanctum.
 
 ### 💰 Payroll Management Features
+
 - **Time Tracking**: Automatic time entry generation from task start/end datetime
 - **Employee Profiles**: Comprehensive employee information with hourly rates and tax settings
 - **Salary Calculations**: Automatic calculation with overtime, regular hours, and tax deductions
@@ -35,8 +37,9 @@ The Company Management System is a comprehensive solution designed to streamline
 - **Overtime Calculations**: Automatic overtime detection and rate multiplication
 
 #### Payroll System Components
+
 1. **Time Entries**: Track worked hours based on task assignments
-2. **Employee Profiles**: Manage hourly rates, tax exemptions, and payment methods  
+2. **Employee Profiles**: Manage hourly rates, tax exemptions, and payment methods
 3. **Payroll Settings**: Configure company-wide payroll parameters
 4. **Tax Configurations**: Set up federal, state, Social Security, Medicare, and other taxes
 5. **Payslips**: Generate detailed pay statements with gross pay, deductions, and net pay
@@ -71,39 +74,47 @@ Follow these instructions to get a copy of the project up and running on your lo
 ### Installation
 
 1.  **Clone the repository:**
+
     ```shell
     git clone git@github.com/Pejoal/manager.git
     cd manager
     ```
 
 2.  **Set up the environment:**
+
     ```shell
     cp .env.example .env
     ```
+
     > Make sure to configure your database and application variables in the `.env` file.
 
 3.  **Install Laravel Sail:**
+
     ```shell
     composer require laravel/sail --dev --ignore-platform-reqs
     ```
 
 4.  **Create a shell alias for convenience:**
+
     ```shell
     alias sail="./vendor/bin/sail"
     ```
 
 5.  **Start the Docker containers:**
     This command starts the web server, database, and search engine in the background.
+
     ```shell
     sail up -d
     ```
 
 6.  **Install backend dependencies:**
+
     ```shell
     sail composer install --ignore-platform-reqs
     ```
 
 7.  **Run initial setup commands:**
+
     ```shell
     sail artisan key:generate
     sail artisan migrate:fresh --seed
@@ -111,17 +122,20 @@ Follow these instructions to get a copy of the project up and running on your lo
     ```
 
 8.  **Set up payroll system:**
+
     ```shell
     sail artisan db:seed --class=PayrollSeeder
     ```
 
 9.  **Sync search index settings:**
     This command is crucial for configuring your Meilisearch indexes.
+
     ```shell
     sail artisan scout:sync-index-settings
     ```
 
 10. **Install frontend dependencies:**
+
     ```shell
     sail npm install
     ```
@@ -144,6 +158,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 The system includes three main roles with specific permissions:
 
 ### 🔑 Admin Role
+
 - Full access to all system features
 - Payroll management (view, create, edit, approve)
 - Employee profile management
@@ -151,13 +166,15 @@ The system includes three main roles with specific permissions:
 - Tax configuration management
 - System settings and reports
 
-### 👔 Manager Role  
+### 👔 Manager Role
+
 - View payroll reports
 - View employee profiles (read-only)
 - Manage assigned projects and tasks
 - View time entries for their projects
 
 ### 👤 Employee Role
+
 - Create and manage own time entries
 - View own payslips and time tracking data
 - Update personal profile information
@@ -167,11 +184,13 @@ The system includes three main roles with specific permissions:
 ## 💼 Payroll System Usage
 
 ### For Employees:
+
 1. **Time Tracking**: Log worked hours by creating time entries linked to assigned tasks
 2. **View Payslips**: Access generated payslips and payment history
 3. **Profile Management**: Update personal information and tax exemptions
 
 ### For Administrators:
+
 1. **Employee Setup**: Create employee profiles with hourly rates and tax settings
 2. **Time Approval**: Review and approve employee time entries
 3. **Payroll Processing**: Generate payslips for pay periods with automatic calculations
@@ -179,6 +198,7 @@ The system includes three main roles with specific permissions:
 5. **Reports**: Generate comprehensive payroll reports and analytics
 
 ### Key Features:
+
 - **Automatic Calculations**: Hours worked calculated from task start/end times
 - **Overtime Detection**: Automatic identification of overtime hours based on daily/weekly limits
 - **Tax Deductions**: Progressive, flat, and percentage-based tax calculations
@@ -190,6 +210,7 @@ The system includes three main roles with specific permissions:
 ## 🗂️ Database Schema
 
 The payroll system adds the following key tables:
+
 - `employee_profiles` - Employee payroll information
 - `time_entries` - Tracked work hours with task linkage
 - `payslips` - Generated pay statements
@@ -201,12 +222,14 @@ The payroll system adds the following key tables:
 ## 🌐 Localization
 
 The application supports multiple languages with comprehensive translation coverage:
+
 - All user interface text is translatable
 - Payroll-specific translations included
 - Session-based locale management
 - Easy addition of new languages
 
 ### Adding New Locales:
+
 1. Add locale to `config/laravellocalization.php`
 2. Create language files in `lang/{locale}/`
 3. Clear cache:
@@ -220,7 +243,9 @@ The application supports multiple languages with comprehensive translation cover
 ## 🔧 Configuration
 
 ### Payroll Settings:
+
 Configure company payroll parameters in the admin panel:
+
 - Company information and tax ID
 - Pay periods (weekly, bi-weekly, monthly)
 - Standard working hours and overtime rules
@@ -228,7 +253,9 @@ Configure company payroll parameters in the admin panel:
 - Automatic time entry generation settings
 
 ### Tax Configuration:
+
 Set up multiple tax types:
+
 - **Progressive**: Income tax with multiple brackets
 - **Percentage**: Fixed percentage taxes (Social Security, Medicare)
 - **Flat**: Fixed amount deductions
@@ -239,6 +266,7 @@ Set up multiple tax types:
 ## 📊 Reports & Analytics
 
 The payroll system provides comprehensive reporting:
+
 - Employee time tracking summaries
 - Payroll cost analysis by period
 - Tax deduction breakdowns
