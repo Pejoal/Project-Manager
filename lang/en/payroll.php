@@ -4,9 +4,6 @@ return [
   // General
   'payroll' => 'Payroll',
   'payroll_system' => 'Payroll System',
-  'dashboard' => 'Dashboard',
-  'reports' => 'Reports',
-  'settings' => 'Settings',
 
   // Time Entries
   'time_entries' => [
@@ -244,5 +241,70 @@ return [
     'import' => 'Import',
     'select_all' => 'Select All',
     'deselect_all' => 'Deselect All',
+  ],
+
+  // Reports (Reports.vue)
+  'reports' => [
+    'title' => 'Payroll Reports',
+    'export_pdf' => 'Export PDF',
+    'export_excel' => 'Export Excel',
+    'filters' => 'Filters',
+    'generate' => 'Generate Report',
+    'report_type' => 'Report Type',
+    'summary' => 'Summary',
+    'detailed' => 'Detailed',
+    'by_employee' => 'By Employee',
+    'by_project' => 'By Project',
+    'period' => 'Period',
+    'weekly' => 'Weekly',
+    'monthly' => 'Monthly',
+    'quarterly' => 'Quarterly',
+    'yearly' => 'Yearly',
+    'custom' => 'Custom',
+    'start_date' => 'Start Date',
+    'end_date' => 'End Date',
+    'employees' => 'Employees',
+    'projects' => 'Projects',
+    'total_hours' => 'Total Hours',
+    'total_payroll' => 'Total Payroll',
+    'average_rate' => 'Avg. Rate',
+    'charts' => 'Charts',
+    'hours_chart' => 'Hours',
+    'payroll_chart' => 'Payroll',
+    'chart_placeholder' => 'Chart will be displayed here',
+    'detailed_data' => 'Detailed Data',
+    'employee' => 'Employee',
+    'project' => 'Project',
+    'hours' => 'Hours',
+    'gross_pay' => 'Gross Pay',
+    'deductions' => 'Deductions',
+    'net_pay' => 'Net Pay',
+    'no_data' => 'No Data to Display',
+    'no_data_description' => 'Adjust your filters and generate a new report to see data.',
+  ],
+
+  // Dashboard (Dashboard.vue)
+  'dashboard' => [
+    'title' => 'Payroll Dashboard',
+    'total_hours_month' => 'Hours This Month',
+    'pending_approvals' => 'Pending Approvals',
+    'total_payroll_month' => 'Payroll This Month',
+    'active_employees' => 'Active Employees',
+    'overview' => 'Overview',
+    'recent_activity' => 'Recent Activity',
+    'quick_actions' => 'Quick Actions',
+    'manage_time_entries' => 'View and manage time entries.',
+    'manage_employees' => 'Administer employee profiles.',
+    'manage_payslips' => 'Process and review payslips.',
+    'view_reports' => 'Generate and view payroll reports.',
+    'upcoming_payslips' => 'Upcoming Payslips',
+    'recent_time_entries' => 'Recent Time Entries',
+  ],
+
+  // Add these to the root of your language file
+  'words' => [
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    // ... any other general words
   ],
 ];
