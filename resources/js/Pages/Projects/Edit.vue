@@ -1,10 +1,10 @@
 <script setup>
-import { useForm, Head, Link } from '@inertiajs/vue3';
-import { defineProps, ref, watch } from 'vue';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { defineProps, ref, watch } from 'vue';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 
@@ -43,15 +43,17 @@ const submit = () => {
 </script>
 
 <template>
-  <Head :title="`Edit Project - ${project.name}`" />
+  <Head :title="`${trans('words.edit')} ${trans('words.project')} - ${project.name}`" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Edit Project</h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+        {{ trans('words.edit') }} {{ trans('words.project') }}
+      </h1>
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form @submit.prevent="submit">
         <div class="mb-4">
-          <InputLabel for="id" value="ID" />
+          <InputLabel for="id" :value="trans('words.id')" />
           <TextInput
             id="id"
             :value="project.id"
@@ -61,7 +63,7 @@ const submit = () => {
           />
         </div>
         <div class="mb-4">
-          <InputLabel for="name" value="Name" />
+          <InputLabel for="name" :value="trans('words.name')" />
           <TextInput
             id="name"
             required
@@ -72,7 +74,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
         <div class="mb-4">
-          <InputLabel for="description" value="Description" />
+          <InputLabel for="description" :value="trans('words.description')" />
           <TextInput
             id="description"
             v-model="form.description"
@@ -82,7 +84,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.description" />
         </div>
         <div class="mb-4">
-          <InputLabel for="clients" value="Clients" />
+          <InputLabel for="clients" :value="trans('words.clients')" />
           <vSelect
             id="clients"
             v-model="form.clients"
@@ -91,13 +93,13 @@ const submit = () => {
             label="name"
             multiple
             class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
+            :placeholder="trans('words.select_option')"
           >
           </vSelect>
           <InputError class="mt-2" :message="form.errors.clients" />
         </div>
         <div class="mb-4">
-          <InputLabel for="start_date" value="Start Date" />
+          <InputLabel for="start_date" :value="trans('words.start_date')" />
           <TextInput
             id="start_date"
             v-model="form.start_date"
@@ -107,7 +109,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.start_date" />
         </div>
         <div class="mb-4">
-          <InputLabel for="end_date" value="End Date" />
+          <InputLabel for="end_date" :value="trans('words.end_date')" />
           <TextInput
             id="end_date"
             v-model="form.end_date"
@@ -117,7 +119,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.end_date || endDateError" />
         </div>
         <div>
-          <InputLabel for="status" value="Status" />
+          <InputLabel for="status" :value="trans('words.status')" />
           <vSelect
             v-if="props.statuses.length > 0"
             id="status"
@@ -126,12 +128,12 @@ const submit = () => {
             :reduce="(status) => status.id"
             label="name"
             class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
+            :placeholder="trans('words.select_option')"
           >
           </vSelect>
         </div>
         <div>
-          <InputLabel for="priority" value="Priority" />
+          <InputLabel for="priority" :value="trans('words.priority')" />
           <vSelect
             v-if="props.priorities.length > 0"
             id="priority"
@@ -140,7 +142,7 @@ const submit = () => {
             :reduce="(priority) => priority.id"
             label="name"
             class="single-select text-gray-700 mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-            placeholder="Select an option"
+            :placeholder="trans('words.select_option')"
           >
           </vSelect>
         </div>
@@ -149,13 +151,13 @@ const submit = () => {
           :disabled="form.processing"
           class="px-4 py-2 mt-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
         >
-          Update
+          {{ trans('words.update') }}
         </button>
         <Link
           :href="route('projects.show', { project: project.slug })"
           class="ml-4 text-blue-500 dark:text-blue-400 hover:underline"
         >
-          Show Project
+          {{ trans('words.show') }} {{ trans('words.project') }}
         </Link>
       </form>
     </div>
