@@ -165,7 +165,12 @@ const pagination = computed(() => {
 
   <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <CreateTimeEntryModal :show="showModal" @close="closeModal" />
+      <CreateTimeEntryModal 
+        :show="showModal" 
+        :projects="projects"
+        @close="closeModal" 
+      />
+
 
       <!-- Filters Section -->
       <div class="bg-white dark:bg-gray-800 shadow rounded-lg mb-6">
