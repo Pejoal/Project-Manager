@@ -42,35 +42,6 @@ class Task extends Model
     return $this->belongsTo(TaskPriority::class);
   }
 
-  // Time tracking relationships
-  public function timeEntries()
-  {
-    return $this->hasMany(TimeEntry::class);
-  }
-
-  public function workLogs()
-  {
-    return $this->hasMany(WorkLog::class);
-  }
-
-  // Time tracking methods
-  public function getTotalTrackedHours()
-  {
-    $timeEntryHours = $this->timeEntries()->sum('duration_minutes') / 60;
-    $workLogHours = $this->workLogs()->sum('hours_worked');
-    return $timeEntryHours + $workLogHours;
-  }
-
-  public function getRunningTimeEntry()
-  {
-    return $this->timeEntries()->running()->first();
-  }
-
-  public function hasRunningTimer()
-  {
-    return $this->timeEntries()->running()->exists();
-  }
-
   public function toSearchableArray()
   {
     return [
