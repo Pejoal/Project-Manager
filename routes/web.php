@@ -179,8 +179,10 @@ Route::group(
       Route::post('time-entries/bulk-approve', [TimeEntryController::class, 'bulkApprove'])->name(
         'time-entries.bulk-approve'
       );
-      Route::get('projects/{project}/tasks', [TimeEntryController::class, 'getTasksForProject'])->name(
-        'projects.tasks'
+
+      // Add this route, preferably near your other time entry routes
+      Route::get('/projects/{project}/tasks', [TimeEntryController::class, 'getTasksForProject'])->name(
+        'time-entries.tasks-for-project'
       );
 
       // Project Priority Management Routes

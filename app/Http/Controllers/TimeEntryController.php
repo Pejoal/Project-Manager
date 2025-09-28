@@ -354,12 +354,21 @@ class TimeEntryController extends Controller
       ->with('flash.banner', __('payroll.time_entries.bulk_approved_successfully', ['count' => $approvedCount]));
   }
 
+  /**
+   * Get tasks for a specific project, filtered by user assignment.
+   *
+   * @param  \App\Models\Project  $project
+   * @return \Illuminate\Http\JsonResponse
+   */
   public function getTasksForProject(Project $project)
   {
     $tasks = $project
       ->tasks()
+      // Select only the columns needed by the frontend
       ->select('id', 'name', 'start_datetime', 'end_datetime')
+      // If the user is NOT an admin, apply an additional filter
       ->when(!auth()->user()->hasRole('admin'), function ($query) {
+        // This ensures users only see tasks they are assigned to
         return $query->whereHas('assignedTo', function ($q) {
           $q->where('user_id', auth()->id());
         });
