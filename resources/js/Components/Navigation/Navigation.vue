@@ -1,5 +1,6 @@
 <script setup>
 import NavLink from '@/Components/NavLink.vue';
+import Locales from '@/Components/Locales.vue';
 
 defineProps({
   isDarkMode: Boolean,
@@ -33,5 +34,7 @@ defineEmits(['toggle-dark-mode']);
         <span v-else>{{ trans('words.dark_mode') }}</span>
       </button>
     </div>
+
+    <Locales />
   </div>
 </template>

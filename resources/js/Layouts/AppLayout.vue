@@ -1,7 +1,6 @@
 <script setup>
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
-import Locales from '@/Components/Locales.vue';
 import Navigation from '@/Components/Navigation/Navigation.vue';
 import ResponsiveNavigation from '@/Components/Navigation/ResponsiveNavigation.vue';
 import SettingsDropdown from '@/Components/Navigation/SettingsDropdown.vue';
@@ -41,7 +40,6 @@ const toggleDarkMode = () => {
 
               <!-- Navigation Links -->
               <Navigation :is-dark-mode="isDarkMode" @toggle-dark-mode="toggleDarkMode" />
-              <Locales />
             </div>
 
             <!-- Teams & Settings Dropdowns -->
