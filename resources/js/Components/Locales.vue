@@ -1,7 +1,7 @@
 <script setup>
+import { router, usePage } from '@inertiajs/vue3';
+import { loadLanguageAsync } from 'laravel-vue-i18n';
 import { ref } from 'vue';
-import { loadLanguageAsync } from "laravel-vue-i18n";
-import { usePage } from "@inertiajs/vue3";
 
 const isOpen = ref(false);
 
@@ -15,7 +15,8 @@ if (page.active_locale_code) {
 }
 
 const active_locale = (locale, url) => {
-  location.href = url;
+  router.visit(url);
+  // location.href = url;
 };
 </script>
 

@@ -6,7 +6,6 @@ import { onMounted, ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
-  translations: Object,
   tasksStatusesData: Object,
   tasksPrioritiesData: Object,
   doughnutData: Object,
@@ -47,7 +46,7 @@ const updateSettings = () => {
   <AppLayout title="Dashboard">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ translations.welcome }} {{ $page.props.auth.user.name }}
+        {{ trans('words.welcome') }} {{ $page.props.auth.user.name }}
       </h2>
     </template>
 

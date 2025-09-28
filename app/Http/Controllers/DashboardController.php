@@ -146,9 +146,6 @@ class DashboardController extends Controller
     ];
 
     return Inertia::render('Dashboard', [
-      'translations' => [
-        'welcome' => __('messages.welcome'),
-      ],
       'tasksStatusesData' => $tasksStatusesData,
       'tasksPrioritiesData' => $tasksPrioritiesData,
       'doughnutData' => [
