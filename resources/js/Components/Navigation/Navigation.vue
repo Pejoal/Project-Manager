@@ -1,6 +1,6 @@
 <script setup>
-import NavLink from '@/Components/NavLink.vue';
 import Locales from '@/Components/Locales.vue';
+import NavLink from '@/Components/NavLink.vue';
 
 defineProps({
   isDarkMode: Boolean,

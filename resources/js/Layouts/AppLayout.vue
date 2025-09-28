@@ -19,6 +19,8 @@ const toggleDarkMode = () => {
   document.documentElement.classList.toggle('dark', isDarkMode.value);
   localStorage.setItem('theme', theme);
 };
+
+// console.log(route().current());
 </script>
 
 <template>

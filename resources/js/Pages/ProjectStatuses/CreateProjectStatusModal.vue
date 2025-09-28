@@ -1,13 +1,12 @@
 <script setup>
-import DialogModal from '@/Components/DialogModal.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
+import DialogModal from '@/Components/DialogModal.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import InputError from '@/Components/InputError.vue';
+import TextInput from '@/Components/TextInput.vue';
 import { ref, watch } from 'vue';
 
+const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
   status: {
@@ -16,14 +15,11 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['close']);
-
 const status = ref(props.status);
 
 const form = useForm({
   name: status.value ? status.value.name : '',
   color: status.value ? status.value.color : '#000000',
-  order: status.value ? status.value.order : '',
 });
 
 watch(
@@ -33,47 +29,37 @@ watch(
       status.value = newStatus;
       form.name = newStatus.name;
       form.color = newStatus.color;
-      form.order = newStatus.order;
     }
   }
 );
 
-const createStatus = () => {
-  form.post(route('project-statuses.store'), {
-    preserveScroll: true,
-    onSuccess: () => {
-      form.reset();
-      emit('close');
-    },
-  });
-};
-
-const updateStatus = () => {
-  form.put(route('project-statuses.update', status.value.id), {
-    onSuccess: () => {
-      form.reset();
-      status.value = null;
-      emit('close');
-    },
-  });
-};
-
-const closeModal = () => {
-  form.reset();
-  emit('close');
+const submit = () => {
+  if (status.value?.name) {
+    form.put(route('project-statuses.update', status.value.id), {
+      onSuccess: () => {
+        form.reset();
+        status.value = null;
+        emit('close');
+      },
+    });
+  } else {
+    form.post(route('project-statuses.store'), {
+      onSuccess: () => {
+        form.reset();
+        emit('close');
+      },
+    });
+  }
 };
 </script>
 
 <template>
-  <DialogModal :show="props.show" @close="closeModal">
-    <template #title>
-      {{ status?.name ? trans('words.edit_status') : trans('words.create_status') }}
-    </template>
-
+  <DialogModal :show="props.show" @close="emit('close')">
+    <template #title>{{ status?.name ? 'Edit' : 'Create' }} Project Status</template>
     <template #content>
-      <form id="form" @submit.prevent="status?.name ? updateStatus : createStatus" class="space-y-4">
+      <form id="form" @submit.prevent="submit" class="space-y-4">
         <div>
-          <InputLabel for="name" :value="trans('words.name')" />
+          <InputLabel for="name" value="Name" />
           <TextInput
             id="name"
             required
@@ -84,7 +70,7 @@ const closeModal = () => {
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
         <div>
-          <InputLabel for="color" :value="trans('words.color')" />
+          <InputLabel for="color" value="Color" />
           <TextInput
             id="color"
             required
@@ -94,26 +80,23 @@ const closeModal = () => {
           />
           <InputError class="mt-2" :message="form.errors.color" />
         </div>
-        <div>
-          <InputLabel for="order" :value="trans('words.order')" />
-          <TextInput
-            id="order"
-            required
-            v-model="form.order"
-            type="number"
-            class="mt-1 block w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm"
-          />
-          <InputError class="mt-2" :message="form.errors.order" />
-        </div>
       </form>
     </template>
     <template #footer>
-      <SecondaryButton @click="closeModal">
-        {{ trans('words.cancel') }}
-      </SecondaryButton>
-      <PrimaryButton form="form" :disabled="form.processing" type="submit" class="ms-3">
-        {{ status?.name ? trans('words.edit') : trans('words.create') }}
-      </PrimaryButton>
+      <button
+        @click="emit('close')"
+        class="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-md hover:bg-gray-600 dark:hover:bg-gray-700"
+      >
+        Cancel
+      </button>
+      <button
+        form="form"
+        :disabled="form.processing"
+        type="submit"
+        class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
+      >
+        {{ status?.name ? 'Edit' : 'Create' }}
+      </button>
     </template>
   </DialogModal>
 </template>
