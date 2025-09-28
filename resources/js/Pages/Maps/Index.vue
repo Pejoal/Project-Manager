@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import 'maplibre-gl/dist/maplibre-gl.css';
-import maplibregl from 'maplibre-gl';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { computed, onMounted, ref } from 'vue';
 
 const mapContainer = ref(null);
 const map = ref(null);
@@ -428,7 +428,7 @@ const toggleAddingPolygon = () => {
 };
 
 const deleteFeatures = () => {
-  if (confirm('Are you sure you want to delete all features?')) {
+  if (confirm(trans('words.are_you_sure_delete_all_features'))) {
     features.value = [];
     selectedFeature.value = null;
 
@@ -449,7 +449,7 @@ const deleteFeatures = () => {
 };
 
 const deleteFeature = (feature) => {
-  if (confirm('Are you sure you want to delete this feature?')) {
+  if (confirm(trans('words.are_you_sure_delete_feature'))) {
     features.value = features.value.filter((f) => f !== feature);
     selectedFeature.value = null;
 
@@ -528,7 +528,7 @@ const toggleControls = () => {
 </script>
 
 <template>
-  <Head title="Maplibre Example" />
+  <Head :title="trans('words.maplibre_example')" />
   <AppLayout>
     <main>
       <div class="p-4">
@@ -537,17 +537,17 @@ const toggleControls = () => {
           :class="{ 'bg-green-500': isControlsOpen, 'bg-gray-500': !isControlsOpen }"
           class="px-4 py-2 text-white rounded-md hover:bg-green-600"
         >
-          {{ isControlsOpen ? 'Hide' : 'Show' }} Controls
+          {{ isControlsOpen ? trans('words.hide_controls') : trans('words.show_controls') }}
         </button>
       </div>
       <section
         class="fixed overflow-y-auto h-96 md:h-4/5 max-w-xl bottom-3 right-2 dark:bg-zinc-700 bg-white rounded-lg shadow-lg p-4 z-40"
         v-if="isControlsOpen"
       >
-        <h2 class="text-2xl text-white font-black">Settings</h2>
+        <h2 class="text-2xl text-white font-black">{{ trans('words.settings') }}</h2>
         <div class="m-2">
           <label for="mapStyle" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >Select Map Style:</label
+            >{{ trans('words.select_map_style') }}:</label
           >
           <select
             id="mapStyle"
@@ -560,10 +560,10 @@ const toggleControls = () => {
         </div>
         <div class="flex flex-wrap gap-2 m-2">
           <button @click="resetView" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-            Reset View
+            {{ trans('words.reset_view') }}
           </button>
           <button @click="enableSelectMode" class="px-4 py-2 bg-lime-500 text-white rounded-md hover:bg-lime-600">
-            Select Mode
+            {{ trans('words.select_mode') }}
           </button>
         </div>
         <div class="flex flex-wrap gap-2 m-2">
@@ -572,24 +572,24 @@ const toggleControls = () => {
             :class="{ 'bg-green-500': addingPoints, 'bg-gray-500': !addingPoints }"
             class="px-4 py-2 text-white rounded-md hover:bg-green-600"
           >
-            {{ addingPoints ? 'Disable' : 'Enable' }} Adding Points
+            {{ addingPoints ? trans('words.disable_adding_points') : trans('words.enable_adding_points') }}
           </button>
           <button
             @click="toggleAddingLineString"
             :class="{ 'bg-green-500': addingLineString, 'bg-gray-500': !addingLineString }"
             class="px-4 py-2 text-white rounded-md hover:bg-green-600"
           >
-            {{ addingLineString ? 'Disable' : 'Enable' }} Adding LineString
+            {{ addingLineString ? trans('words.disable_adding_linestring') : trans('words.enable_adding_linestring') }}
           </button>
           <button
             @click="toggleAddingPolygon"
             :class="{ 'bg-green-500': addingPolygon, 'bg-gray-500': !addingPolygon }"
             class="px-4 py-2 text-white rounded-md hover:bg-green-600"
           >
-            {{ addingPolygon ? 'Disable' : 'Enable' }} Adding Polygon
+            {{ addingPolygon ? trans('words.disable_adding_polygon') : trans('words.enable_adding_polygon') }}
           </button>
           <button @click="deleteFeatures" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-            Delete All Features
+            {{ trans('words.delete_all_features') }}
           </button>
         </div>
         <div class="m-2">
@@ -598,14 +598,14 @@ const toggleControls = () => {
             :class="{ 'bg-green-500': isFeaturesListOpen, 'bg-gray-500': !isFeaturesListOpen }"
             class="px-4 py-2 text-white rounded-md hover:bg-green-600"
           >
-            {{ isFeaturesListOpen ? 'Hide' : 'Show' }} Features List
+            {{ isFeaturesListOpen ? trans('words.hide_features_list') : trans('words.show_features_list') }}
           </button>
         </div>
         <div v-if="isFeaturesListOpen" class="m-2">
           <input
             type="text"
             v-model="filterText"
-            placeholder="Filter features"
+            :placeholder="trans('words.filter_features')"
             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           />
           <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-4">
@@ -615,19 +615,19 @@ const toggleControls = () => {
                   scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
-                  Name
+                  {{ trans('words.name_column') }}
                 </th>
                 <th
                   scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
-                  Type
+                  {{ trans('words.type_column') }}
                 </th>
                 <th
                   scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
-                  Actions
+                  {{ trans('words.actions_column') }}
                 </th>
               </tr>
             </thead>
@@ -644,13 +644,13 @@ const toggleControls = () => {
                     @click="selectFeature(feature)"
                     class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-600"
                   >
-                    Edit
+                    {{ trans('words.edit_action') }}
                   </button>
                   <button
                     @click="deleteFeature(feature)"
                     class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-600 ml-2"
                   >
-                    Delete
+                    {{ trans('words.delete_action') }}
                   </button>
                 </td>
               </tr>
@@ -659,10 +659,10 @@ const toggleControls = () => {
         </div>
         <div v-if="selectedFeature" class="m-2">
           <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            Edit Feature: {{ selectedFeature.properties.name }}
+            {{ trans('words.edit_feature') }}: {{ selectedFeature.properties.name }}
           </h2>
           <div class="mt-2">
-            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">Properties:</h3>
+            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">{{ trans('words.properties') }}:</h3>
             <ul class="list-disc pl-5">
               <li
                 v-for="(value, key) in selectedFeature.properties"
@@ -674,9 +674,9 @@ const toggleControls = () => {
             </ul>
           </div>
           <div class="mt-2">
-            <label for="newPropertyKey" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >Property Key</label
-            >
+            <label for="newPropertyKey" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{
+              trans('words.property_key')
+            }}</label>
             <input
               type="text"
               id="newPropertyKey"
@@ -685,9 +685,9 @@ const toggleControls = () => {
             />
           </div>
           <div class="mt-2">
-            <label for="newPropertyValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >Property Value</label
-            >
+            <label for="newPropertyValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{
+              trans('words.property_value')
+            }}</label>
             <input
               type="text"
               id="newPropertyValue"
@@ -697,7 +697,7 @@ const toggleControls = () => {
           </div>
           <div class="mt-4">
             <button @click="addPropertyToFeature" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-              Add Property
+              {{ trans('words.add_property') }}
             </button>
           </div>
         </div>

@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <template>
-  <Head title="Welcome" />
+  <Head :title="trans('words.welcome')" />
   <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
     <img
       id="background"
@@ -24,10 +24,10 @@ defineProps({
     >
       <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl text-center">
         <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Welcome to Your Company Management System!
+          {{ trans('words.welcome_title') }}
         </h1>
         <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">
-          Manage your company's resources efficiently and effectively with our comprehensive management system.
+          {{ trans('words.welcome_description') }}
         </p>
 
         <nav v-if="canLogin" class="flex flex-col sm:flex-row justify-center gap-4">
@@ -36,7 +36,7 @@ defineProps({
             :href="route('dashboard')"
             class="rounded-md px-6 py-3 bg-[#FF2D20] text-white ring-1 ring-transparent transition hover:bg-[#e0261c] focus:outline-none focus-visible:ring-[#FF2D20] dark:bg-[#FF2D20] dark:hover:bg-[#e0261c] dark:focus-visible:ring-white"
           >
-            Dashboard
+            {{ trans('words.dashboard') }}
           </Link>
 
           <template v-else>
@@ -44,7 +44,7 @@ defineProps({
               :href="route('login')"
               class="rounded-md px-6 py-3 bg-[#FF2D20] text-white ring-1 ring-transparent transition hover:bg-[#e0261c] focus:outline-none focus-visible:ring-[#FF2D20] dark:bg-[#FF2D20] dark:hover:bg-[#e0261c] dark:focus-visible:ring-white"
             >
-              Log in
+              {{ trans('words.login') }}
             </Link>
 
             <Link
@@ -52,7 +52,7 @@ defineProps({
               :href="route('register')"
               class="rounded-md px-6 py-3 bg-gray-900 text-white ring-1 ring-transparent transition hover:bg-gray-700 focus:outline-none focus-visible:ring-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus-visible:ring-white"
             >
-              Register
+              {{ trans('words.register') }}
             </Link>
           </template>
         </nav>

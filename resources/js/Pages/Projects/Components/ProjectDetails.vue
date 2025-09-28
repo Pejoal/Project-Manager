@@ -5,24 +5,28 @@ const props = defineProps({
 </script>
 
 <template>
-  <h2 class="text-xl font-bold dark:text-gray-100">Basic Data</h2>
+  <h2 class="text-xl font-bold dark:text-gray-100">{{ trans('words.basic_data') }}</h2>
   <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-    <p class="mb-2 text-gray-700 dark:text-gray-300">Project ID: {{ project.id }}</p>
-    <p class="mb-2 text-gray-700 dark:text-gray-300">Description: {{ project.description }}</p>
+    <p class="mb-2 text-gray-700 dark:text-gray-300">{{ trans('words.project_id') }}: {{ project.id }}</p>
+    <p class="mb-2 text-gray-700 dark:text-gray-300">{{ trans('words.description') }}: {{ project.description }}</p>
     <p class="mb-2 text-gray-700 dark:text-gray-300">
-      Clients:
+      {{ trans('words.clients') }}:
       <span v-for="(client, index) in project.clients" :key="client.id">
         {{ client.name }}<span v-if="index < project.clients.length - 1">, </span>
       </span>
     </p>
-    <p class="mb-2 text-gray-700 dark:text-gray-300">Status: {{ project.status?.name }}</p>
-    <p class="mb-2 text-gray-700 dark:text-gray-300">Priority: {{ project.priority?.name }}</p>
+    <p class="mb-2 text-gray-700 dark:text-gray-300">{{ trans('words.status') }}: {{ project.status?.name }}</p>
+    <p class="mb-2 text-gray-700 dark:text-gray-300">{{ trans('words.priority') }}: {{ project.priority?.name }}</p>
     <div class="mb-2">
       <p class="text-gray-700 dark:text-gray-300">
-        Start Date: {{ new Date(project.start_date).toLocaleDateString() }}
+        {{ trans('words.start_date') }}: {{ new Date(project.start_date).toLocaleDateString() }}
       </p>
-      <p class="text-gray-700 dark:text-gray-300">End Date: {{ new Date(project.end_date).toLocaleDateString() }}</p>
+      <p class="text-gray-700 dark:text-gray-300">
+        {{ trans('words.end_date') }}: {{ new Date(project.end_date).toLocaleDateString() }}
+      </p>
     </div>
-    <p class="mb-2 text-gray-700 dark:text-gray-300">Created at: {{ new Date(project.created_at).toLocaleString() }}</p>
+    <p class="mb-2 text-gray-700 dark:text-gray-300">
+      {{ trans('words.created_at') }}: {{ new Date(project.created_at).toLocaleString() }}
+    </p>
   </div>
 </template>

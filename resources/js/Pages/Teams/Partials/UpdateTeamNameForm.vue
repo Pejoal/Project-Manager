@@ -1,11 +1,11 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   team: Object,
@@ -26,14 +26,14 @@ const updateTeamName = () => {
 
 <template>
   <FormSection @submitted="updateTeamName">
-    <template #title> Team Name </template>
+    <template #title>{{ trans('words.team_name') }}</template>
 
-    <template #description> The team's name and owner information. </template>
+    <template #description>{{ trans('words.team_name_description') }}</template>
 
     <template #form>
       <!-- Team Owner Information -->
       <div class="col-span-6">
-        <InputLabel value="Team Owner" />
+        <InputLabel :value="trans('words.team_owner')" />
 
         <div class="flex items-center mt-2">
           <img class="size-12 rounded-full object-cover" :src="team.owner.profile_photo_url" :alt="team.owner.name" />
@@ -51,7 +51,7 @@ const updateTeamName = () => {
 
       <!-- Team Name -->
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="name" value="Team Name" />
+        <InputLabel for="name" :value="trans('words.team_name')" />
 
         <TextInput
           id="name"
@@ -66,9 +66,13 @@ const updateTeamName = () => {
     </template>
 
     <template v-if="permissions.canUpdateTeam" #actions>
-      <ActionMessage :on="form.recentlySuccessful" class="me-3"> Saved. </ActionMessage>
+      <ActionMessage :on="form.recentlySuccessful" class="me-3">
+        {{ trans('words.saved') }}
+      </ActionMessage>
 
-      <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Save </PrimaryButton>
+      <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+        {{ trans('words.save') }}
+      </PrimaryButton>
     </template>
   </FormSection>
 </template>

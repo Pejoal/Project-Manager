@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, computed } from 'vue';
+import { computed, defineProps } from 'vue';
 
 const props = defineProps({
   totalTasks: Number,
@@ -25,8 +25,8 @@ const progress = computed(() => {
       ></div>
     </div>
     <div class="text-sm flex items-center justify-between dark:text-gray-300">
-      <p>{{ completedTasks }} / {{ totalTasks }} tasks completed</p>
-      <p>Progress: {{ progress.toFixed(2) }}%</p>
+      <p>{{ completedTasks }} / {{ totalTasks }} {{ trans('words.tasks_completed') }}</p>
+      <p>{{ trans('words.progress') }}: {{ progress.toFixed(2) }}%</p>
     </div>
   </div>
 </template>

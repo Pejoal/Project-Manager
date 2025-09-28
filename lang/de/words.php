@@ -16,4 +16,161 @@ return [
   'welcome' => 'Willkommen',
   'language' => 'Sprache',
 
+  // Navigation
+  'dashboard' => 'Dashboard',
+  'clients' => 'Kunden',
+  'projects' => 'Projekte',
+  'tasks' => 'Aufgaben',
+  'profile' => 'Profil',
+  'map' => 'Karte',
+  'activities' => 'Aktivitäten',
+  'logout' => 'Abmelden',
+  'login' => 'Anmelden',
+  'register' => 'Registrieren',
+
+  // Theme
+  'light_mode' => '☀️ Heller Modus',
+  'dark_mode' => '🌙 Dunkler Modus',
+
+  // Team Management
+  'manage_team' => 'Team verwalten',
+  'team_settings' => 'Team-Einstellungen',
+  'create_new_team' => 'Neues Team erstellen',
+  'switch_teams' => 'Teams wechseln',
+
+  // Account Management
+  'manage_account' => 'Konto verwalten',
+  'project_statuses' => 'Projekt-Status',
+  'project_priorities' => 'Projekt-Prioritäten',
+  'task_statuses' => 'Aufgaben-Status',
+  'task_priorities' => 'Aufgaben-Prioritäten',
+  'api_tokens' => 'API-Token',
+  'terms_of_service' => 'Nutzungsbedingungen',
+  'privacy_policy' => 'Datenschutzrichtlinie',
+
+  // Profile
+  'profile_information' => 'Profil-Informationen',
+  'profile_information_description' => 'Aktualisieren Sie die Profil-Informationen und E-Mail-Adresse Ihres Kontos.',
+  'photo' => 'Foto',
+  'select_new_photo' => 'Neues Foto auswählen',
+  'remove_photo' => 'Foto entfernen',
+  'name' => 'Name',
+  'username' => 'Benutzername',
+  'email' => 'E-Mail',
+  'email_unverified' => 'Ihre E-Mail-Adresse ist nicht verifiziert.',
+  'resend_verification_email' => 'Klicken Sie hier, um die Verifizierungs-E-Mail erneut zu senden.',
+  'verification_link_sent' => 'Ein neuer Verifizierungslink wurde an Ihre E-Mail-Adresse gesendet.',
+  'password' => 'Passwort',
+  'confirm_password' => 'Passwort bestätigen',
+  'current_password' => 'Aktuelles Passwort',
+  'new_password' => 'Neues Passwort',
+  'user_name' => 'Benutzername',
+
+  // Password Update
+  'update_password' => 'Passwort aktualisieren',
+  'update_password_description' =>
+    'Stellen Sie sicher, dass Ihr Konto ein langes, zufälliges Passwort verwendet, um sicher zu bleiben.',
+  'saved' => 'Gespeichert.',
+  'save' => 'Speichern',
+
+  // Two Factor Authentication
+  'two_factor_authentication' => 'Zwei-Faktor-Authentifizierung',
+  'two_factor_authentication_description' =>
+    'Fügen Sie zusätzliche Sicherheit zu Ihrem Konto mit Zwei-Faktor-Authentifizierung hinzu.',
+  'enabled' => 'Sie haben die Zwei-Faktor-Authentifizierung aktiviert.',
+  'finish_enabling' => 'Aktivierung der Zwei-Faktor-Authentifizierung abschließen.',
+  'not_enabled' => 'Sie haben die Zwei-Faktor-Authentifizierung nicht aktiviert.',
+  'secure_random_token' =>
+    'Wenn die Zwei-Faktor-Authentifizierung aktiviert ist, werden Sie während der Authentifizierung zu einem sicheren, zufälligen Token aufgefordert. Sie können diesen Token aus der Google Authenticator-App Ihres Telefons abrufen.',
+  'qr_code_instructions' =>
+    'Um die Aktivierung der Zwei-Faktor-Authentifizierung abzuschließen, scannen Sie den folgenden QR-Code mit der Authenticator-App Ihres Telefons oder geben Sie den Setup-Schlüssel ein und geben Sie den generierten OTP-Code an.',
+  'enabled_qr_code_instructions' =>
+    'Die Zwei-Faktor-Authentifizierung ist jetzt aktiviert. Scannen Sie den folgenden QR-Code mit der Authenticator-App Ihres Telefons oder geben Sie den Setup-Schlüssel ein.',
+  'setup_key' => 'Setup-Schlüssel:',
+  'code' => 'Code',
+  'recovery_codes_instructions' =>
+    'Bewahren Sie diese Wiederherstellungscodes in einem sicheren Passwort-Manager auf. Sie können verwendet werden, um den Zugang zu Ihrem Konto wiederherzustellen, wenn Ihr Zwei-Faktor-Authentifizierungsgerät verloren geht.',
+  'regenerate_recovery_codes' => 'Wiederherstellungscodes neu generieren',
+  'show_recovery_codes' => 'Wiederherstellungscodes anzeigen',
+  'enable' => 'Aktivieren',
+  'confirm' => 'Bestätigen',
+  'cancel' => 'Abbrechen',
+  'disable' => 'Deaktivieren',
+
+  // Delete Account
+  'delete_account' => 'Konto löschen',
+  'delete_account_description' => 'Ihr Konto dauerhaft löschen.',
+  'delete_account_confirmation' =>
+    'Sobald Ihr Konto gelöscht wird, werden alle seine Ressourcen und Daten dauerhaft gelöscht. Bevor Sie Ihr Konto löschen, laden Sie bitte alle Daten oder Informationen herunter, die Sie behalten möchten.',
+
+  // Password Confirmation
+  'please_confirm_your_password' => 'Zu Ihrer Sicherheit bestätigen Sie bitte Ihr Passwort, um fortzufahren.',
+
+  // Pagination
+  'previous' => 'Vorherige',
+  'next' => 'Nächste',
+  'total' => 'Gesamt',
+
+  // Maps
+  'maplibre_example' => 'Maplibre Beispiel',
+  'show_controls' => 'Steuerelemente anzeigen',
+  'hide_controls' => 'Steuerelemente ausblenden',
+  'settings' => 'Einstellungen',
+  'select_map_style' => 'Kartenstil auswählen',
+  'reset_view' => 'Ansicht zurücksetzen',
+  'select_mode' => 'Auswahlmodus',
+  'enable_adding_points' => 'Punkte hinzufügen aktivieren',
+  'disable_adding_points' => 'Punkte hinzufügen deaktivieren',
+  'enable_adding_linestring' => 'Linien hinzufügen aktivieren',
+  'disable_adding_linestring' => 'Linien hinzufügen deaktivieren',
+  'enable_adding_polygon' => 'Polygone hinzufügen aktivieren',
+  'disable_adding_polygon' => 'Polygone hinzufügen deaktivieren',
+  'delete_all_features' => 'Alle Features löschen',
+  'show_features_list' => 'Features-Liste anzeigen',
+  'hide_features_list' => 'Features-Liste ausblenden',
+  'filter_features' => 'Features filtern',
+  'name_column' => 'Name',
+  'type_column' => 'Typ',
+  'actions_column' => 'Aktionen',
+  'edit_action' => 'Bearbeiten',
+  'delete_action' => 'Löschen',
+  'edit_feature' => 'Feature bearbeiten',
+  'properties' => 'Eigenschaften',
+  'property_key' => 'Eigenschafts-Schlüssel',
+  'property_value' => 'Eigenschafts-Wert',
+  'add_property' => 'Eigenschaft hinzufügen',
+  'are_you_sure_delete_all_features' => 'Sind Sie sicher, dass Sie alle Features löschen möchten?',
+  'are_you_sure_delete_feature' => 'Sind Sie sicher, dass Sie dieses Feature löschen möchten?',
+
+  // Dashboard
+  'update_chart_colors' => 'Diagrammfarben aktualisieren',
+  'clients_color' => 'Kundenfarbe',
+  'projects_color' => 'Projektfarbe',
+  'tasks_color' => 'Aufgabenfarbe',
+  'overview' => 'Übersicht',
+  'tasks_statuses' => 'Aufgaben-Status',
+  'tasks_priorities' => 'Aufgaben-Prioritäten',
+  'clients_projects_tasks' => 'Kunden, Projekte und Aufgaben',
+
+  // Welcome Page
+  'welcome_title' => 'Willkommen bei Ihrem Unternehmensverwaltungssystem!',
+  'welcome_description' =>
+    'Verwalten Sie die Ressourcen Ihres Unternehmens effizient und effektiv mit unserem umfassenden Verwaltungssystem.',
+
+  // Team Name Form
+  'team_name' => 'Team-Name',
+  'team_name_description' => 'Der Name des Teams und Eigentümer-Informationen.',
+  'team_owner' => 'Team-Eigentümer',
+
+  // Project Components
+  'basic_data' => 'Basisdaten',
+  'project_id' => 'Projekt-ID',
+  'description' => 'Beschreibung',
+  'status' => 'Status',
+  'priority' => 'Priorität',
+  'start_date' => 'Startdatum',
+  'end_date' => 'Enddatum',
+  'created_at' => 'Erstellt am',
+  'tasks_completed' => 'Aufgaben abgeschlossen',
+  'progress' => 'Fortschritt',
 ];
