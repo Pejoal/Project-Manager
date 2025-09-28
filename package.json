@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "chart.js": "^3.9.1",
+    "laravel-vue-i18n": "^2.8.0",
     "maplibre-gl": "^5.1.0",
     "vue-chart-3": "^3.1.8",
     "vue-maplibre-gl": "^5.3.8",
