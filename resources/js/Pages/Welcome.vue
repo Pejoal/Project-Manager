@@ -95,12 +95,7 @@ defineProps({
                   <div
                     class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16"
                   >
-                    <svg
-                      class="size-5 sm:size-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <path
                         fill="#FF2D20"
                         d="M23 4a1 1 0 0 0-1.447-.894L12.224 7.77a.5.5 0 0 1-.448 0L2.447 3.106A1 1 0 0 0 1 4v13.382a1.99 1.99 0 0 0 1.105 1.79l9.448 4.728c.14.065.293.1.447.1.154-.005.306-.04.447-.105l9.453-4.724a1.99 1.99 0 0 0 1.1-1.789V4Z"
@@ -124,7 +119,11 @@ defineProps({
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                 >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
+                  />
                 </svg>
               </div>
             </a>
@@ -134,19 +133,10 @@ defineProps({
                 href="https://laracasts.com"
                 class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
               >
-                <div
-                  class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16"
-                >
-                  <svg
-                    class="size-5 sm:size-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
+                <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
+                  <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <g fill="#FF2D20">
-                      <path
-                        d="m4 6 8-4 8 4-8 4-8-4ZM2 8l10 5 10-5-10 5L2 8ZM2 16l10 5 10-5-10 5-10-5Z"
-                      />
+                      <path d="m4 6 8-4 8 4-8 4-8-4ZM2 8l10 5 10-5-10 5L2 8ZM2 16l10 5 10-5-10 5-10-5Z" />
                     </g>
                   </svg>
                 </div>
@@ -166,7 +156,11 @@ defineProps({
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                 >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
+                  />
                 </svg>
               </a>
 
@@ -174,15 +168,8 @@ defineProps({
                 href="https://laravel-news.com"
                 class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
               >
-                <div
-                  class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16"
-                >
-                  <svg
-                    class="size-5 sm:size-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
+                <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
+                  <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <g fill="#FF2D20">
                       <path
                         d="M8.75 2.75C9.99264 2.75 11 3.75736 11 5V8.25C11 9.49264 9.99264 10.5 8.75 10.5H5C3.75736 10.5 2.75 9.49264 2.75 8.25V5C2.75 3.75736 3.75736 2.75 5 2.75H8.75Z"
@@ -215,7 +202,11 @@ defineProps({
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                 >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
+                  />
                 </svg>
               </a>
             </div>

@@ -1,9 +1,11 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
 import DialogModal from '@/Components/DialogModal.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 
 const emit = defineEmits(['close']);
@@ -51,15 +53,20 @@ const submit = () => {
     });
   }
 };
+
+const closeModal = () => {
+  form.reset();
+  emit('close');
+};
 </script>
 
 <template>
-  <DialogModal :show="props.show" @close="emit('close')">
-    <template #title>{{ priority?.name ? 'Edit' : 'Create' }} Project Priority</template>
+  <DialogModal :show="props.show" @close="closeModal">
+    <template #title>{{ priority?.name ? trans('words.edit_priority') : trans('words.create_priority') }}</template>
     <template #content>
       <form id="form" @submit.prevent="submit" class="space-y-4">
         <div>
-          <InputLabel for="name" value="Name" />
+          <InputLabel for="name" :value="trans('words.name')" />
           <TextInput
             id="name"
             required
@@ -70,7 +77,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
         <div>
-          <InputLabel for="color" value="Color" />
+          <InputLabel for="color" :value="trans('words.color')" />
           <TextInput
             id="color"
             required
@@ -83,20 +90,12 @@ const submit = () => {
       </form>
     </template>
     <template #footer>
-      <button
-        @click="emit('close')"
-        class="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-md hover:bg-gray-600 dark:hover:bg-gray-700"
-      >
-        Cancel
-      </button>
-      <button
-        form="form"
-        :disabled="form.processing"
-        type="submit"
-        class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
-      >
-        {{ priority?.name ? 'Edit' : 'Create' }}
-      </button>
+      <SecondaryButton @click="closeModal">
+        {{ trans('words.cancel') }}
+      </SecondaryButton>
+      <PrimaryButton form="form" :disabled="form.processing" type="submit" class="ms-3">
+        {{ priority?.name ? trans('words.edit') : trans('words.create') }}
+      </PrimaryButton>
     </template>
   </DialogModal>
 </template>

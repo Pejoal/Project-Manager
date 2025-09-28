@@ -1,10 +1,10 @@
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
 import ActionSection from '@/Components/ActionSection.vue';
 import ConfirmationModal from '@/Components/ConfirmationModal.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const props = defineProps({
   team: Object,
@@ -26,31 +26,39 @@ const deleteTeam = () => {
 
 <template>
   <ActionSection>
-    <template #title> Delete Team </template>
+    <template #title>
+      {{ trans('words.delete_team') }}
+    </template>
 
-    <template #description> Permanently delete this team. </template>
+    <template #description>
+      {{ trans('words.delete_team_desc') }}
+    </template>
 
     <template #content>
       <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-        Once a team is deleted, all of its resources and data will be permanently deleted. Before deleting this team,
-        please download any data or information regarding this team that you wish to retain.
+        {{ trans('words.delete_team_warning') }}
       </div>
 
       <div class="mt-5">
-        <DangerButton @click="confirmTeamDeletion"> Delete Team </DangerButton>
+        <DangerButton @click="confirmTeamDeletion">
+          {{ trans('words.delete_team') }}
+        </DangerButton>
       </div>
 
       <!-- Delete Team Confirmation Modal -->
       <ConfirmationModal :show="confirmingTeamDeletion" @close="confirmingTeamDeletion = false">
-        <template #title> Delete Team </template>
+        <template #title>
+          {{ trans('words.delete_team') }}
+        </template>
 
         <template #content>
-          Are you sure you want to delete this team? Once a team is deleted, all of its resources and data will be
-          permanently deleted.
+          {{ trans('words.delete_team_confirmation') }}
         </template>
 
         <template #footer>
-          <SecondaryButton @click="confirmingTeamDeletion = false"> Cancel </SecondaryButton>
+          <SecondaryButton @click="confirmingTeamDeletion = false">
+            {{ trans('words.cancel') }}
+          </SecondaryButton>
 
           <DangerButton
             class="ms-3"
@@ -58,7 +66,7 @@ const deleteTeam = () => {
             :disabled="form.processing"
             @click="deleteTeam"
           >
-            Delete Team
+            {{ trans('words.delete_team') }}
           </DangerButton>
         </template>
       </ConfirmationModal>

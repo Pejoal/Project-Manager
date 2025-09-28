@@ -26,9 +26,13 @@ const updateTeamName = () => {
 
 <template>
   <FormSection @submitted="updateTeamName">
-    <template #title>{{ trans('words.team_name') }}</template>
+    <template #title>
+      {{ trans('words.team_name') }}
+    </template>
 
-    <template #description>{{ trans('words.team_name_description') }}</template>
+    <template #description>
+      {{ trans('words.team_name_desc') }}
+    </template>
 
     <template #form>
       <!-- Team Owner Information -->
@@ -66,9 +70,7 @@ const updateTeamName = () => {
     </template>
 
     <template v-if="permissions.canUpdateTeam" #actions>
-      <ActionMessage :on="form.recentlySuccessful" class="me-3">
-        {{ trans('words.saved') }}
-      </ActionMessage>
+      <ActionMessage :on="form.recentlySuccessful" class="me-3"> {{ trans('words.saved') }}. </ActionMessage>
 
       <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
         {{ trans('words.save') }}

@@ -1,12 +1,12 @@
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const props = defineProps({
   translations: Object,
@@ -43,15 +43,17 @@ const updatePassword = () => {
 
 <template>
   <FormSection @submitted="updatePassword">
-    <template #title> {{ translations.update_password }} </template>
+    <template #title>
+      {{ trans('words.update_password') }}
+    </template>
 
     <template #description>
-      {{ translations.update_password_description }}
+      {{ trans('words.ensure_secure_password') }}
     </template>
 
     <template #form>
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="current_password" :value="translations.current_password" />
+        <InputLabel for="current_password" :value="trans('words.current_password')" />
         <TextInput
           id="current_password"
           ref="currentPasswordInput"
@@ -64,7 +66,7 @@ const updatePassword = () => {
       </div>
 
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="password" :value="translations.new_password" />
+        <InputLabel for="password" :value="trans('words.new_password')" />
         <TextInput
           id="password"
           ref="passwordInput"
@@ -77,7 +79,7 @@ const updatePassword = () => {
       </div>
 
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="password_confirmation" :value="translations.confirm_password" />
+        <InputLabel for="password_confirmation" :value="trans('words.confirm_password')" />
         <TextInput
           id="password_confirmation"
           v-model="form.password_confirmation"
@@ -90,12 +92,10 @@ const updatePassword = () => {
     </template>
 
     <template #actions>
-      <ActionMessage :on="form.recentlySuccessful" class="me-3">
-        {{ translations.saved }}
-      </ActionMessage>
+      <ActionMessage :on="form.recentlySuccessful" class="me-3"> {{ trans('words.saved') }}. </ActionMessage>
 
       <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-        {{ translations.save }}
+        {{ trans('words.save') }}
       </PrimaryButton>
     </template>
   </FormSection>
