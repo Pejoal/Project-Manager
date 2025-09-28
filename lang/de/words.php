@@ -189,7 +189,6 @@ return [
   'status' => 'Status',
   'priority' => 'Priorität',
   'start_date' => 'Startdatum',
-  'end_date' => 'Enddatum',
   'created_at' => 'Erstellt am',
   'tasks_completed' => 'Aufgaben abgeschlossen',
   'progress' => 'Fortschritt',

@@ -264,7 +264,6 @@ return [
   'phase_id' => 'Phase ID',
   'projects_for_client' => 'Projects for client',
   'number_of_tasks' => 'Number of Tasks',
-  'end_date' => 'End Date',
   'are_you_sure_delete' => 'Are you sure you want to delete this?',
   'create_project_status' => 'Create Project Status',
   'create_project_priority' => 'Create Project Priority',
