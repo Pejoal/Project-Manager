@@ -6,12 +6,8 @@ import Navigation from '@/Components/Navigation/Navigation.vue';
 import ResponsiveNavigation from '@/Components/Navigation/ResponsiveNavigation.vue';
 import SettingsDropdown from '@/Components/Navigation/SettingsDropdown.vue';
 import TeamsDropdown from '@/Components/Navigation/TeamsDropdown.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
-
-defineProps({
-  title: String,
-});
 
 const showingNavigationDropdown = ref(false);
 
@@ -28,7 +24,6 @@ const toggleDarkMode = () => {
 
 <template>
   <div>
-    <Head :title="title" />
 
     <Banner />
 
