@@ -10,27 +10,27 @@ The Company Management System is a comprehensive solution designed to streamline
 
 ## ✨ Features
 
--   **Client, Project & Task Management**: Full CRUD operations for clients, projects, tasks, phases, and milestones.
--   **Full-Text Search**: Fast, typo-tolerant search powered by **Meilisearch**.
--   **Real-time Notifications**: Instant updates using **Laravel Reverb**.
--   **User Authentication**: Secure login, registration, email verification, and Two-Factor Authentication via Laravel Jetstream.
--   **Team Management**: Create teams, invite users, and assign roles.
--   **Role-Based Access Control**: Granular permissions to restrict access based on user roles.
--   **Customizable Dashboard**: An overview of key metrics with customizable widgets.
--   **Localization**: Multi-language support with session-based locale management.
--   **Responsive Design**: A mobile-friendly interface that adapts to different screen sizes.
--   **API Integration**: RESTful API endpoints with authentication via Laravel Sanctum.
--   **Profile & Settings Management**: Users can update their profile, preferences, and application settings.
+- **Client, Project & Task Management**: Full CRUD operations for clients, projects, tasks, phases, and milestones.
+- **Full-Text Search**: Fast, typo-tolerant search powered by **Meilisearch**.
+- **Real-time Notifications**: Instant updates using **Laravel Reverb**.
+- **User Authentication**: Secure login, registration, email verification, and Two-Factor Authentication via Laravel Jetstream.
+- **Team Management**: Create teams, invite users, and assign roles.
+- **Role-Based Access Control**: Granular permissions to restrict access based on user roles.
+- **Customizable Dashboard**: An overview of key metrics with customizable widgets.
+- **Localization**: Multi-language support with session-based locale management.
+- **Responsive Design**: A mobile-friendly interface that adapts to different screen sizes.
+- **API Integration**: RESTful API endpoints with authentication via Laravel Sanctum.
+- **Profile & Settings Management**: Users can update their profile, preferences, and application settings.
 
 ---
 
 ## 🛠️ Tech Stack
 
--   **Backend**: Laravel, Meilisearch
--   **Frontend**: Inertia.js, Vue.js
--   **Real-time**: Laravel Reverb
--   **Authentication**: Laravel Sanctum, Jetstream
--   **Localization**: Mcamara Laravel Localization
+- **Backend**: Laravel, Meilisearch
+- **Frontend**: Inertia.js, Vue.js
+- **Real-time**: Laravel Reverb
+- **Authentication**: Laravel Sanctum, Jetstream
+- **Localization**: Mcamara Laravel Localization
 
 ---
 
@@ -40,9 +40,9 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 ### Prerequisites
 
--   Composer v2+
--   Node.js v19.1.0+
--   Docker & Docker Compose
+- Composer v2+
+- Node.js v19.1.0+
+- Docker & Docker Compose
 
 ### Installation
 
@@ -82,7 +82,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 8.  **Sync search index settings:**
     This command is crucial for configuring your Meilisearch indexes.
     ```shell
-    sail artisan scout:sync-settings
+    sail artisan scout:sync-index-settings
     ```
 9.  **Install frontend dependencies:**
     ```shell
@@ -90,21 +90,29 @@ Follow these instructions to get a copy of the project up and running on your lo
     ```
 10. **Compile assets and start services:**
     Open two separate terminal tabs for these commands.
-
-    -   In the first tab, compile frontend assets and watch for changes:
-        ```shell
-        sail npm run dev
-        ```
-    -   In the second tab, start the Reverb WebSocket server:
-        ```shell
-        sail artisan reverb:start
-        ```
+    - In the first tab, compile frontend assets and watch for changes:
+      ```shell
+      sail npm run dev
+      ```
+    - In the second tab, start the Reverb WebSocket server:
+      ```shell
+      sail artisan reverb:start
+      ```
 
 ---
 
+## Notes
+
+after adding new / removing locales to `config/laravellocalization.php`, run:
+
+```shell
+sail artisan cache:clear
+ail artisan config:clear
+```
+
 ## 👤 Author
 
--   **Pejoal** - [GitHub](https://www.github.com/Pejoal)
+- **Pejoal** - [GitHub](https://www.github.com/Pejoal)
 
 ---
 

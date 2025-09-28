@@ -47,7 +47,7 @@ Route::group(
           'code' => $localeCode,
           'native' => $properties['native'],
           'url' => LaravelLocalization::getLocalizedURL($localeCode, null, [], true),
-          'emoji' => $properties['emoji'],
+          'flag' => $properties['flag'],
         ];
       });
       Inertia::share([
