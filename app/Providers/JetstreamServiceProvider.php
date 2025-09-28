@@ -51,22 +51,6 @@ class JetstreamServiceProvider extends ServiceProvider
         return $user;
       }
     });
-
-    Route::group(
-      [
-        'prefix' => LaravelLocalization::setLocale(),
-        'middleware' => ['web', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
-      ],
-      function () {
-        // Register Jetstream routes within the localization group
-        Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-          Route::get('/user/profile', [
-            \Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController::class,
-            'show',
-          ])->name('profile.show');
-        });
-      }
-    );
   }
 
   /**
