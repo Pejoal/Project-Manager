@@ -22,6 +22,7 @@
   --vs-selected-color: #fff;
   --vs-border-color: #d1d5db; /* gray-300 */
   --vs-border-focus-color: #3b82f6; /* blue-500 */
+  --vs-actions-bg: #e5e7eb; /* gray-200 */
 }
 
 html.dark {
@@ -34,6 +35,7 @@ html.dark {
   --vs-selected-color: #fff;
   --vs-border-color: #4b5563; /* gray-600 */
   --vs-border-focus-color: #60a5fa; /* blue-400 */
+  --vs-actions-bg: #b5bdcb; /* gray-700 */
 }
 
 /* Apply the variables to vue-select classes */
@@ -43,8 +45,7 @@ html.dark {
 }
 
 .vs__search,
-.vs__selected,
-.vs__open-indicator {
+.vs__selected {
   color: var(--vs-text-color) !important;
   background: var(--vs-bg) !important;
   border: none;
@@ -72,4 +73,14 @@ html.dark {
 .vs--open .vs__dropdown-toggle {
   border-color: var(--vs-border-focus-color);
   box-shadow: 0 0 0 1px var(--vs-border-focus-color);
+}
+
+.vs__dropdown-menu {
+  border-radius: 8px;
+  box-shadow: 0 0 3px 3px rgba(255, 255, 255, 0.8);
+  background: var(--vs-dropdown-option-bg) !important;
+}
+
+.vs__actions {
+  background: var(--vs-actions-bg) !important;
 }
