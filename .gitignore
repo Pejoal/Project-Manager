@@ -23,3 +23,5 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+lang/php_*.json

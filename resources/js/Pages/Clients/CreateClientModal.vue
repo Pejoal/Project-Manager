@@ -1,9 +1,9 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
 import DialogModal from '@/Components/DialogModal.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { useForm } from '@inertiajs/vue3';
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 
@@ -35,11 +35,11 @@ const submit = () => {
 
 <template>
   <DialogModal :show="props.show" @close="emit('close')">
-    <template #title>Create Client</template>
+    <template #title>{{ trans('words.create_client') }}</template>
     <template #content>
       <form id="form" @submit.prevent="submit">
         <div class="mb-4">
-          <InputLabel for="name" value="Name" />
+          <InputLabel for="name" :value="trans('words.name')" />
           <TextInput
             id="name"
             required
@@ -50,7 +50,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
         <div class="mb-4">
-          <InputLabel for="email" value="Email" />
+          <InputLabel for="email" :value="trans('words.email')" />
           <TextInput
             id="email"
             required
@@ -61,7 +61,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.email" />
         </div>
         <div class="mb-4">
-          <InputLabel for="phone" value="Phone" />
+          <InputLabel for="phone" :value="trans('words.phone')" />
           <TextInput
             id="phone"
             v-model="form.phone"
@@ -71,7 +71,7 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.phone" />
         </div>
         <div>
-          <InputLabel for="projects" value="Projects" />
+          <InputLabel for="projects" :value="trans('words.projects')" />
           <vSelect
             id="projects"
             v-model="form.projects"
@@ -92,14 +92,14 @@ const submit = () => {
         @click="emit('close')"
         class="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-md hover:bg-gray-600 dark:hover:bg-gray-700"
       >
-        Cancel
+        {{ trans('words.cancel') }}
       </button>
       <button
         form="form"
         :disabled="form.processing"
         class="ms-3 px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded-md hover:bg-blue-600 dark:hover:bg-blue-700"
       >
-        Create
+        {{ trans('words.create') }}
       </button>
     </template>
   </DialogModal>

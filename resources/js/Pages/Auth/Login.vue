@@ -1,5 +1,4 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
 import Checkbox from '@/Components/Checkbox.vue';
@@ -7,6 +6,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
   canResetPassword: Boolean,
@@ -32,7 +32,7 @@ const submit = () => {
 </script>
 
 <template>
-  <Head title="Log in" />
+  <Head :title="trans('words.login')" />
 
   <AuthenticationCard>
     <template #logo>
@@ -45,7 +45,7 @@ const submit = () => {
 
     <form @submit.prevent="submit">
       <div>
-        <InputLabel for="username" value="Email / User Name" />
+        <InputLabel for="username" :value="trans('words.email') + ' / ' + trans('words.user_name')" />
         <TextInput
           id="username"
           v-model="form.username"
@@ -59,7 +59,7 @@ const submit = () => {
       </div>
 
       <div class="mt-4">
-        <InputLabel for="password" value="Password" />
+        <InputLabel for="password" :value="trans('words.password')" />
         <TextInput
           id="password"
           v-model="form.password"
@@ -91,11 +91,11 @@ const submit = () => {
           :href="route('register')"
           class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 ms-4"
         >
-          Register
+          {{ trans('words.register') }}
         </Link>
 
         <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-          Log in
+          {{ trans('words.login') }}
         </PrimaryButton>
       </div>
     </form>

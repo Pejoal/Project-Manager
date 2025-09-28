@@ -1,12 +1,12 @@
 <script setup>
-import { ref } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { Head, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const form = useForm({
   password: '',
@@ -26,7 +26,7 @@ const submit = () => {
 </script>
 
 <template>
-  <Head title="Secure Area" />
+  <Head :title="trans('words.secure_area')" />
 
   <AuthenticationCard>
     <template #logo>
@@ -34,12 +34,12 @@ const submit = () => {
     </template>
 
     <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-      This is a secure area of the application. Please confirm your password before continuing.
+      {{ trans('words.confirm_password_secure') }}
     </div>
 
     <form @submit.prevent="submit">
       <div>
-        <InputLabel for="password" value="Password" />
+        <InputLabel for="password" :value="trans('words.password')" />
         <TextInput
           id="password"
           ref="passwordInput"
@@ -55,7 +55,7 @@ const submit = () => {
 
       <div class="flex justify-end mt-4">
         <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-          Confirm
+          {{ trans('words.confirm') }}
         </PrimaryButton>
       </div>
     </form>

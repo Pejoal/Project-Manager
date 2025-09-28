@@ -1,12 +1,12 @@
 <script setup>
-import { nextTick, ref } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { Head, useForm } from '@inertiajs/vue3';
+import { nextTick, ref } from 'vue';
 
 const recovery = ref(false);
 
@@ -38,7 +38,7 @@ const submit = () => {
 </script>
 
 <template>
-  <Head title="Two-factor Confirmation" />
+  <Head :title="trans('words.two_factor_confirmation')" />
 
   <AuthenticationCard>
     <template #logo>
@@ -58,7 +58,7 @@ const submit = () => {
 
     <form @submit.prevent="submit">
       <div v-if="!recovery">
-        <InputLabel for="code" value="Code" />
+        <InputLabel for="code" :value="trans('words.code')" />
         <TextInput
           id="code"
           ref="codeInput"
@@ -73,7 +73,7 @@ const submit = () => {
       </div>
 
       <div v-else>
-        <InputLabel for="recovery_code" value="Recovery Code" />
+        <InputLabel for="recovery_code" :value="trans('words.recovery_code')" />
         <TextInput
           id="recovery_code"
           ref="recoveryCodeInput"
@@ -91,13 +91,13 @@ const submit = () => {
           class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 underline cursor-pointer"
           @click.prevent="toggleRecovery"
         >
-          <template v-if="!recovery"> Use a recovery code </template>
+          <template v-if="!recovery">{{ trans('words.use_recovery_code') }}</template>
 
-          <template v-else> Use an authentication code </template>
+          <template v-else>{{ trans('words.use_authentication_code') }}</template>
         </button>
 
         <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-          Log in
+          {{ trans('words.login') }}
         </PrimaryButton>
       </div>
     </form>

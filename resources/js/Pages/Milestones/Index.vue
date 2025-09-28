@@ -1,9 +1,9 @@
 <script setup>
-import { defineProps, ref, computed } from 'vue';
-import { Link, Head, useForm } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import CreateMilestoneModal from './CreateMilestoneModal.vue';
 import Pagination from '@/Components/Pagination.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { Head, Link } from '@inertiajs/vue3';
+import { computed, defineProps, ref } from 'vue';
+import CreateMilestoneModal from './CreateMilestoneModal.vue';
 
 const props = defineProps({
   milestones: Object,
@@ -24,23 +24,21 @@ const closeModal = () => {
 const pagination = computed(() => {
   return {
     prev_page_url: props.milestones.prev_page_url,
-    prev_page_url: props.milestones.prev_page_url,
     current_page: props.milestones.current_page,
     last_page: props.milestones.last_page,
     total: props.milestones.total,
-    next_page_url: props.milestones.next_page_url,
     next_page_url: props.milestones.next_page_url,
   };
 });
 </script>
 
 <template>
-  <Head :title="`Milestones for ${project.name}`" />
+  <Head :title="`${trans('words.milestones')} for ${project.name}`" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
         <section>
-          Milestones for
+          {{ trans('words.milestones') }} for
           <Link
             :href="route('projects.show', { project: project.slug })"
             class="text-blue-500 dark:text-blue-400 hover:underline"
@@ -52,7 +50,9 @@ const pagination = computed(() => {
     </template>
     <div class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <CreateMilestoneModal :show="showModal" :project="project" :phases="phases" @close="closeModal" />
-      <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">Create Milestone</button>
+      <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">
+        {{ trans('words.create_milestone') }}
+      </button>
 
       <ul class="my-2 space-y-4">
         <li
@@ -62,7 +62,7 @@ const pagination = computed(() => {
         >
           <div>
             <p>
-              Milestone:
+              {{ trans('words.milestone') }}:
               <Link
                 :href="
                   route('milestones.show', {
@@ -76,7 +76,7 @@ const pagination = computed(() => {
               </Link>
             </p>
             <p>
-              Project:
+              {{ trans('words.project') }}:
               <Link
                 :href="
                   route('projects.show', {
@@ -89,10 +89,12 @@ const pagination = computed(() => {
               </Link>
             </p>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
-              Created at: {{ new Date(milestone.created_at).toLocaleString() }}
+              {{ trans('words.created_at') }}: {{ new Date(milestone.created_at).toLocaleString() }}
             </div>
           </div>
-          <div class="text-gray-500 dark:text-gray-400 text-sm">Milestone ID: {{ milestone.id }}</div>
+          <div class="text-gray-500 dark:text-gray-400 text-sm">
+            {{ trans('words.milestone_id') }}: {{ milestone.id }}
+          </div>
         </li>
       </ul>
 

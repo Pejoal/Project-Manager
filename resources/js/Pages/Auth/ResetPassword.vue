@@ -1,11 +1,11 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   email: String,
@@ -36,7 +36,7 @@ const submit = () => {
 
     <form @submit.prevent="submit">
       <div>
-        <InputLabel for="email" value="Email" />
+        <InputLabel for="email" :value="trans('words.email')" />
         <TextInput
           id="email"
           v-model="form.email"
@@ -50,7 +50,7 @@ const submit = () => {
       </div>
 
       <div class="mt-4">
-        <InputLabel for="password" value="Password" />
+        <InputLabel for="password" :value="trans('words.password')" />
         <TextInput
           id="password"
           v-model="form.password"
@@ -63,7 +63,7 @@ const submit = () => {
       </div>
 
       <div class="mt-4">
-        <InputLabel for="password_confirmation" value="Confirm Password" />
+        <InputLabel for="password_confirmation" :value="trans('words.confirm_password')" />
         <TextInput
           id="password_confirmation"
           v-model="form.password_confirmation"

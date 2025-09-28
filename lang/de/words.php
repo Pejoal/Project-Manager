@@ -173,4 +173,52 @@ return [
   'created_at' => 'Erstellt am',
   'tasks_completed' => 'Aufgaben abgeschlossen',
   'progress' => 'Fortschritt',
+
+  // Common Actions
+  'create' => 'Erstellen',
+  'update' => 'Aktualisieren',
+  'edit' => 'Bearbeiten',
+  'delete' => 'Löschen',
+  'show' => 'Anzeigen',
+  'view' => 'Ansehen',
+  'back' => 'Zurück',
+  'close' => 'Schließen',
+
+  // Milestones
+  'milestones' => 'Meilensteine',
+  'milestone' => 'Meilenstein',
+  'create_milestone' => 'Meilenstein erstellen',
+  'milestone_id' => 'Meilenstein-ID',
+  'phase' => 'Phase',
+  'phases' => 'Phasen',
+
+  // Clients
+  'client' => 'Kunde',
+  'client_id' => 'Kunden-ID',
+  'phone' => 'Telefon',
+  'add_new_client' => 'Neuen Kunden hinzufügen',
+  'create_client' => 'Kunde erstellen',
+  'edit_client' => 'Kunde bearbeiten',
+  'show_client' => 'Kunde anzeigen',
+
+  // General
+  'id' => 'ID',
+  'project' => 'Projekt',
+  'are_you_sure' => 'Sind Sie sicher?',
+  'already_registered' => 'Bereits registriert?',
+  'remember_me' => 'Angemeldet bleiben',
+  'forgot_password' => 'Passwort vergessen?',
+  'reset_password' => 'Passwort zurücksetzen',
+  'email_password_reset_link' => 'Passwort-Reset-Link per E-Mail senden',
+  'activity_log' => 'Aktivitätsprotokoll',
+  'api_tokens_title' => 'API-Token',
+  'email_verification' => 'E-Mail-Verifizierung',
+  'resend_verification_email_button' => 'Verifizierungs-E-Mail erneut senden',
+  'two_factor_confirmation' => 'Zwei-Faktor-Bestätigung',
+  'secure_area' => 'Sicherer Bereich',
+  'confirm_password_secure' =>
+    'Dies ist ein sicherer Bereich der Anwendung. Bitte bestätigen Sie Ihr Passwort, um fortzufahren.',
+  'use_recovery_code' => 'Wiederherstellungscode verwenden',
+  'use_authentication_code' => 'Authentifizierungscode verwenden',
+  'recovery_code' => 'Wiederherstellungscode',
 ];

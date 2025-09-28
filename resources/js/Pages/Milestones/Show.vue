@@ -1,6 +1,6 @@
 <script setup>
-import { useForm, Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   milestone: Object,
@@ -9,7 +9,7 @@ const props = defineProps({
 const form = useForm({});
 
 const destroy = () => {
-  if (confirm('Are you sure?')) {
+  if (confirm(trans('words.are_you_sure'))) {
     form.delete(
       route('milestones.destroy', {
         project: props.milestone.project.slug,
@@ -21,7 +21,7 @@ const destroy = () => {
 </script>
 
 <template>
-  <Head :title="`Milestone - ${milestone.name}`" />
+  <Head :title="`${trans('words.milestone')} - ${milestone.name}`" />
   <AppLayout>
     <template #header>
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -30,11 +30,13 @@ const destroy = () => {
     </template>
     <div class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-        <p class="mb-2 text-gray-700 dark:text-gray-300">Milestone ID: {{ milestone.id }}</p>
-        <p class="mb-2 text-gray-700 dark:text-gray-300">Description: {{ milestone.description }}</p>
-        <p class="mb-2 text-gray-700 dark:text-gray-300">Project ID: {{ milestone.project.id }}</p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">{{ trans('words.milestone_id') }}: {{ milestone.id }}</p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Project:
+          {{ trans('words.description') }}: {{ milestone.description }}
+        </p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">{{ trans('words.project_id') }}: {{ milestone.project.id }}</p>
+        <p class="mb-2 text-gray-700 dark:text-gray-300">
+          {{ trans('words.project') }}:
           <Link
             :href="route('projects.show', { project: milestone.project.slug })"
             class="text-blue-500 dark:text-blue-400 hover:underline"
@@ -43,7 +45,7 @@ const destroy = () => {
           </Link>
         </p>
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Phase:
+          {{ trans('words.phase') }}:
           <Link
             :href="
               route('phases.show', {
@@ -58,11 +60,11 @@ const destroy = () => {
         </p>
 
         <p class="mb-2 text-gray-700 dark:text-gray-300">
-          Created at: {{ new Date(milestone.created_at).toLocaleString() }}
+          {{ trans('words.created_at') }}: {{ new Date(milestone.created_at).toLocaleString() }}
         </p>
       </div>
       <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Tasks</h2>
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ trans('words.tasks') }}</h2>
         <ul class="list-disc list-inside">
           <li v-for="task in milestone.tasks" :key="task.id" class="mb-2 text-gray-700 dark:text-gray-300">
             <Link
@@ -83,11 +85,11 @@ const destroy = () => {
               </span>
             </p>
             <p class="text-sm text-gray-600 dark:text-gray-400">
-              Status:
+              {{ trans('words.status') }}:
               <span :style="{ color: task.status?.color }">{{ task.status?.name }}</span>
             </p>
             <p class="text-sm text-gray-600 dark:text-gray-400">
-              Priority:
+              {{ trans('words.priority') }}:
               <span :style="{ color: task.priority?.color }"> {{ task.priority?.name }}</span>
             </p>
           </li>
@@ -102,9 +104,11 @@ const destroy = () => {
         "
         class="text-blue-500 dark:text-blue-400 hover:underline"
       >
-        Edit
+        {{ trans('words.edit') }}
       </Link>
-      <button @click="destroy" class="ml-4 text-red-500 dark:text-red-400 hover:underline">Delete</button>
+      <button @click="destroy" class="ml-4 text-red-500 dark:text-red-400 hover:underline">
+        {{ trans('words.delete') }}
+      </button>
     </div>
   </AppLayout>
 </template>

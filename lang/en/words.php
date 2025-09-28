@@ -171,4 +171,52 @@ return [
   'created_at' => 'Created at',
   'tasks_completed' => 'tasks completed',
   'progress' => 'Progress',
+
+  // Common Actions
+  'create' => 'Create',
+  'update' => 'Update',
+  'edit' => 'Edit',
+  'delete' => 'Delete',
+  'show' => 'Show',
+  'view' => 'View',
+  'back' => 'Back',
+  'close' => 'Close',
+
+  // Milestones
+  'milestones' => 'Milestones',
+  'milestone' => 'Milestone',
+  'create_milestone' => 'Create Milestone',
+  'milestone_id' => 'Milestone ID',
+  'phase' => 'Phase',
+  'phases' => 'Phases',
+
+  // Clients
+  'client' => 'Client',
+  'client_id' => 'Client ID',
+  'phone' => 'Phone',
+  'add_new_client' => 'Add New Client',
+  'create_client' => 'Create Client',
+  'edit_client' => 'Edit Client',
+  'show_client' => 'Show Client',
+
+  // General
+  'id' => 'ID',
+  'project' => 'Project',
+  'are_you_sure' => 'Are you sure?',
+  'already_registered' => 'Already registered?',
+  'remember_me' => 'Remember me',
+  'forgot_password' => 'Forgot your password?',
+  'reset_password' => 'Reset Password',
+  'email_password_reset_link' => 'Email Password Reset Link',
+  'activity_log' => 'Activity Log',
+  'api_tokens_title' => 'API Tokens',
+  'email_verification' => 'Email Verification',
+  'resend_verification_email_button' => 'Resend Verification Email',
+  'two_factor_confirmation' => 'Two-factor Confirmation',
+  'secure_area' => 'Secure Area',
+  'confirm_password_secure' =>
+    'This is a secure area of the application. Please confirm your password before continuing.',
+  'use_recovery_code' => 'Use a recovery code',
+  'use_authentication_code' => 'Use an authentication code',
+  'recovery_code' => 'Recovery Code',
 ];
