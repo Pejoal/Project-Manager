@@ -1,18 +1,30 @@
 <script setup>
 import Locales from '@/Components/Locales.vue';
 import NavLink from '@/Components/NavLink.vue';
+import { usePage } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
 
 defineProps({
   isDarkMode: Boolean,
 });
 
 defineEmits(['toggle-dark-mode']);
+
+const page = usePage();
+const current = ref(route().current());
+
+watch(
+  () => page.props.ziggy.location,
+  (newLocation) => {
+    current.value = newLocation;
+  }
+);
 </script>
 
 <template>
   <!-- Navigation Links -->
   <div class="hidden space-x-2 sm:-my-px sm:ms-4 md:flex">
-    <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+    <NavLink :href="route('dashboard')" :active="current.endsWith('dashboard')">
       {{ trans('words.dashboard') }}
     </NavLink>
     <NavLink :href="route('clients.index')" :active="route().current('clients.*')">
