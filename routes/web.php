@@ -155,44 +155,6 @@ Route::group(
         Route::put('/{taskPriority}', [TaskPriorityController::class, 'update'])->name('task-priorities.update');
         Route::delete('/{taskPriority}', [TaskPriorityController::class, 'destroy'])->name('task-priorities.destroy');
       });
-
-      // Time Tracking & Productivity Routes
-      Route::prefix('time-tracking')->group(function () {
-        // Time Entries
-        Route::get('/', [TimeEntryController::class, 'index'])->name('time-tracking.index');
-        Route::post('/start', [TimeEntryController::class, 'start'])->name('time-tracking.start');
-        Route::post('/quick-start', [TimeEntryController::class, 'quickStart'])->name('time-tracking.quick-start');
-        Route::post('/{timeEntry}/stop', [TimeEntryController::class, 'stop'])->name('time-tracking.stop');
-        Route::put('/{timeEntry}', [TimeEntryController::class, 'update'])->name('time-tracking.update');
-        Route::delete('/{timeEntry}', [TimeEntryController::class, 'destroy'])->name('time-tracking.destroy');
-        Route::get('/running-timer', [TimeEntryController::class, 'getRunningTimer'])->name(
-          'time-tracking.running-timer'
-        );
-      });
-
-      // Work Logs Routes
-      Route::prefix('work-logs')->group(function () {
-        Route::get('/', [WorkLogController::class, 'index'])->name('work-logs.index');
-        Route::post('/', [WorkLogController::class, 'store'])->name('work-logs.store');
-        Route::put('/{workLog}', [WorkLogController::class, 'update'])->name('work-logs.update');
-        Route::delete('/{workLog}', [WorkLogController::class, 'destroy'])->name('work-logs.destroy');
-        Route::get('/by-date', [WorkLogController::class, 'getWorkLogsByDate'])->name('work-logs.by-date');
-        Route::get('/weekly-summary', [WorkLogController::class, 'getWeeklySummary'])->name('work-logs.weekly-summary');
-      });
-
-      // Time Reports Routes
-      Route::prefix('time-reports')->group(function () {
-        Route::get('/', [TimeReportController::class, 'index'])->name('time-reports.index');
-        Route::post('/generate', [TimeReportController::class, 'generate'])->name('time-reports.generate');
-        Route::get('/weekly', [TimeReportController::class, 'getWeeklyReport'])->name('time-reports.weekly');
-        Route::get('/monthly', [TimeReportController::class, 'getMonthlyReport'])->name('time-reports.monthly');
-        Route::get('/dashboard-summary', [TimeReportController::class, 'getDashboardSummary'])->name(
-          'time-reports.dashboard-summary'
-        );
-        Route::get('/{timeReport}', [TimeReportController::class, 'show'])->name('time-reports.show');
-        Route::delete('/{timeReport}', [TimeReportController::class, 'destroy'])->name('time-reports.destroy');
-        Route::post('/{timeReport}/export', [TimeReportController::class, 'exportReport'])->name('time-reports.export');
-      });
     });
   }
 );
