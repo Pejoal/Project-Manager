@@ -1,5 +1,4 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -529,183 +528,181 @@ const toggleControls = () => {
 
 <template>
   <Head :title="trans('words.maplibre_example')" />
-  <AppLayout>
-    <main>
-      <div class="p-4">
-        <button
-          @click="toggleControls"
-          :class="{ 'bg-green-500': isControlsOpen, 'bg-gray-500': !isControlsOpen }"
-          class="px-4 py-2 text-white rounded-md hover:bg-green-600"
+  <main>
+    <div class="p-4">
+      <button
+        @click="toggleControls"
+        :class="{ 'bg-green-500': isControlsOpen, 'bg-gray-500': !isControlsOpen }"
+        class="px-4 py-2 text-white rounded-md hover:bg-green-600"
+      >
+        {{ isControlsOpen ? trans('words.hide_controls') : trans('words.show_controls') }}
+      </button>
+    </div>
+    <section
+      class="fixed overflow-y-auto h-96 md:h-4/5 max-w-xl bottom-3 right-2 dark:bg-zinc-700 bg-white rounded-lg shadow-lg p-4 z-40"
+      v-if="isControlsOpen"
+    >
+      <h2 class="text-2xl text-white font-black">{{ trans('words.settings') }}</h2>
+      <div class="m-2">
+        <label for="mapStyle" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >{{ trans('words.select_map_style') }}:</label
         >
-          {{ isControlsOpen ? trans('words.hide_controls') : trans('words.show_controls') }}
+        <select
+          id="mapStyle"
+          v-model="selectedStyle"
+          @change="changeStyle(selectedStyle)"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        >
+          <option v-for="style in styles" :key="style.url" :value="style.url">{{ style.name }}</option>
+        </select>
+      </div>
+      <div class="flex flex-wrap gap-2 m-2">
+        <button @click="resetView" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+          {{ trans('words.reset_view') }}
+        </button>
+        <button @click="enableSelectMode" class="px-4 py-2 bg-lime-500 text-white rounded-md hover:bg-lime-600">
+          {{ trans('words.select_mode') }}
         </button>
       </div>
-      <section
-        class="fixed overflow-y-auto h-96 md:h-4/5 max-w-xl bottom-3 right-2 dark:bg-zinc-700 bg-white rounded-lg shadow-lg p-4 z-40"
-        v-if="isControlsOpen"
-      >
-        <h2 class="text-2xl text-white font-black">{{ trans('words.settings') }}</h2>
-        <div class="m-2">
-          <label for="mapStyle" class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >{{ trans('words.select_map_style') }}:</label
-          >
-          <select
-            id="mapStyle"
-            v-model="selectedStyle"
-            @change="changeStyle(selectedStyle)"
-            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-          >
-            <option v-for="style in styles" :key="style.url" :value="style.url">{{ style.name }}</option>
-          </select>
+      <div class="flex flex-wrap gap-2 m-2">
+        <button
+          @click="toggleAddingPoints"
+          :class="{ 'bg-green-500': addingPoints, 'bg-gray-500': !addingPoints }"
+          class="px-4 py-2 text-white rounded-md hover:bg-green-600"
+        >
+          {{ addingPoints ? trans('words.disable_adding_points') : trans('words.enable_adding_points') }}
+        </button>
+        <button
+          @click="toggleAddingLineString"
+          :class="{ 'bg-green-500': addingLineString, 'bg-gray-500': !addingLineString }"
+          class="px-4 py-2 text-white rounded-md hover:bg-green-600"
+        >
+          {{ addingLineString ? trans('words.disable_adding_linestring') : trans('words.enable_adding_linestring') }}
+        </button>
+        <button
+          @click="toggleAddingPolygon"
+          :class="{ 'bg-green-500': addingPolygon, 'bg-gray-500': !addingPolygon }"
+          class="px-4 py-2 text-white rounded-md hover:bg-green-600"
+        >
+          {{ addingPolygon ? trans('words.disable_adding_polygon') : trans('words.enable_adding_polygon') }}
+        </button>
+        <button @click="deleteFeatures" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+          {{ trans('words.delete_all_features') }}
+        </button>
+      </div>
+      <div class="m-2">
+        <button
+          @click="toggleFeaturesList"
+          :class="{ 'bg-green-500': isFeaturesListOpen, 'bg-gray-500': !isFeaturesListOpen }"
+          class="px-4 py-2 text-white rounded-md hover:bg-green-600"
+        >
+          {{ isFeaturesListOpen ? trans('words.hide_features_list') : trans('words.show_features_list') }}
+        </button>
+      </div>
+      <div v-if="isFeaturesListOpen" class="m-2">
+        <input
+          type="text"
+          v-model="filterText"
+          :placeholder="trans('words.filter_features')"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        />
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-4">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
+                {{ trans('words.name_column') }}
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
+                {{ trans('words.type_column') }}
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
+                {{ trans('words.actions_column') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr v-for="feature in filteredFeatures" :key="feature.properties.name">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                {{ feature.properties.name }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                {{ feature.geometry.type }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button
+                  @click="selectFeature(feature)"
+                  class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-600"
+                >
+                  {{ trans('words.edit_action') }}
+                </button>
+                <button
+                  @click="deleteFeature(feature)"
+                  class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-600 ml-2"
+                >
+                  {{ trans('words.delete_action') }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-if="selectedFeature" class="m-2">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          {{ trans('words.edit_feature') }}: {{ selectedFeature.properties.name }}
+        </h2>
+        <div class="mt-2">
+          <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">{{ trans('words.properties') }}:</h3>
+          <ul class="list-disc pl-5">
+            <li
+              v-for="(value, key) in selectedFeature.properties"
+              :key="key"
+              class="text-sm text-gray-700 dark:text-gray-300"
+            >
+              {{ key }}: {{ value }}
+            </li>
+          </ul>
         </div>
-        <div class="flex flex-wrap gap-2 m-2">
-          <button @click="resetView" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-            {{ trans('words.reset_view') }}
-          </button>
-          <button @click="enableSelectMode" class="px-4 py-2 bg-lime-500 text-white rounded-md hover:bg-lime-600">
-            {{ trans('words.select_mode') }}
-          </button>
-        </div>
-        <div class="flex flex-wrap gap-2 m-2">
-          <button
-            @click="toggleAddingPoints"
-            :class="{ 'bg-green-500': addingPoints, 'bg-gray-500': !addingPoints }"
-            class="px-4 py-2 text-white rounded-md hover:bg-green-600"
-          >
-            {{ addingPoints ? trans('words.disable_adding_points') : trans('words.enable_adding_points') }}
-          </button>
-          <button
-            @click="toggleAddingLineString"
-            :class="{ 'bg-green-500': addingLineString, 'bg-gray-500': !addingLineString }"
-            class="px-4 py-2 text-white rounded-md hover:bg-green-600"
-          >
-            {{ addingLineString ? trans('words.disable_adding_linestring') : trans('words.enable_adding_linestring') }}
-          </button>
-          <button
-            @click="toggleAddingPolygon"
-            :class="{ 'bg-green-500': addingPolygon, 'bg-gray-500': !addingPolygon }"
-            class="px-4 py-2 text-white rounded-md hover:bg-green-600"
-          >
-            {{ addingPolygon ? trans('words.disable_adding_polygon') : trans('words.enable_adding_polygon') }}
-          </button>
-          <button @click="deleteFeatures" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-            {{ trans('words.delete_all_features') }}
-          </button>
-        </div>
-        <div class="m-2">
-          <button
-            @click="toggleFeaturesList"
-            :class="{ 'bg-green-500': isFeaturesListOpen, 'bg-gray-500': !isFeaturesListOpen }"
-            class="px-4 py-2 text-white rounded-md hover:bg-green-600"
-          >
-            {{ isFeaturesListOpen ? trans('words.hide_features_list') : trans('words.show_features_list') }}
-          </button>
-        </div>
-        <div v-if="isFeaturesListOpen" class="m-2">
+        <div class="mt-2">
+          <label for="newPropertyKey" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{
+            trans('words.property_key')
+          }}</label>
           <input
             type="text"
-            v-model="filterText"
-            :placeholder="trans('words.filter_features')"
+            id="newPropertyKey"
+            v-model="newPropertyKey"
             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           />
-          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 mt-4">
-            <thead class="bg-gray-50 dark:bg-gray-800">
-              <tr>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                >
-                  {{ trans('words.name_column') }}
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                >
-                  {{ trans('words.type_column') }}
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                >
-                  {{ trans('words.actions_column') }}
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-              <tr v-for="feature in filteredFeatures" :key="feature.properties.name">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                  {{ feature.properties.name }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                  {{ feature.geometry.type }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button
-                    @click="selectFeature(feature)"
-                    class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-600"
-                  >
-                    {{ trans('words.edit_action') }}
-                  </button>
-                  <button
-                    @click="deleteFeature(feature)"
-                    class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-600 ml-2"
-                  >
-                    {{ trans('words.delete_action') }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
-        <div v-if="selectedFeature" class="m-2">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            {{ trans('words.edit_feature') }}: {{ selectedFeature.properties.name }}
-          </h2>
-          <div class="mt-2">
-            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">{{ trans('words.properties') }}:</h3>
-            <ul class="list-disc pl-5">
-              <li
-                v-for="(value, key) in selectedFeature.properties"
-                :key="key"
-                class="text-sm text-gray-700 dark:text-gray-300"
-              >
-                {{ key }}: {{ value }}
-              </li>
-            </ul>
-          </div>
-          <div class="mt-2">
-            <label for="newPropertyKey" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{
-              trans('words.property_key')
-            }}</label>
-            <input
-              type="text"
-              id="newPropertyKey"
-              v-model="newPropertyKey"
-              class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-            />
-          </div>
-          <div class="mt-2">
-            <label for="newPropertyValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{
-              trans('words.property_value')
-            }}</label>
-            <input
-              type="text"
-              id="newPropertyValue"
-              v-model="newPropertyValue"
-              class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-            />
-          </div>
-          <div class="mt-4">
-            <button @click="addPropertyToFeature" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-              {{ trans('words.add_property') }}
-            </button>
-          </div>
+        <div class="mt-2">
+          <label for="newPropertyValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{
+            trans('words.property_value')
+          }}</label>
+          <input
+            type="text"
+            id="newPropertyValue"
+            v-model="newPropertyValue"
+            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          />
         </div>
-      </section>
+        <div class="mt-4">
+          <button @click="addPropertyToFeature" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+            {{ trans('words.add_property') }}
+          </button>
+        </div>
+      </div>
+    </section>
 
-      <section ref="mapContainer" class="map-container"></section>
-    </main>
-  </AppLayout>
+    <section ref="mapContainer" class="map-container"></section>
+  </main>
 </template>
 
 <style scoped>

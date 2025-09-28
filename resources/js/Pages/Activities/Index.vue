@@ -1,6 +1,5 @@
 <script setup>
 import Pagination from '@/Components/Pagination.vue';
-import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 
