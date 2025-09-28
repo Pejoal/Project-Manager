@@ -1,23 +1,23 @@
 <script setup>
-import { router, usePage } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 import { loadLanguageAsync } from 'laravel-vue-i18n';
 import { ref } from 'vue';
 
+const page = usePage().props;
 const isOpen = ref(false);
+const active_locale_code = ref(page.active_locale_code);
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
 };
 
-const page = usePage().props;
-if (page.active_locale_code) {
-  loadLanguageAsync(page.active_locale_code);
+if (active_locale_code.value) {
+  loadLanguageAsync(active_locale_code.value);
 }
 
 const active_locale = (locale, url) => {
-  // router.visit(url);
-  // router.reload();
-  location.href = url;
+  active_locale_code.value = locale;
+  loadLanguageAsync(locale);
 };
 </script>
 
@@ -60,7 +60,7 @@ const active_locale = (locale, url) => {
         <button
           v-for="(locale, code) in $page.props.locales"
           class="flex justify-between items-center w-full p-2 bg-white hover:bg-zinc-900"
-          :class="code === $page.props.active_locale_code ? 'bg-zinc-900 text-white' : 'text-gray-900 hover:text-white'"
+          :class="code === active_locale_code ? 'bg-zinc-900 text-white' : 'text-gray-900 hover:text-white'"
           @click="active_locale(code, locale.url)"
           :key="code"
         >
