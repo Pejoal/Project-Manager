@@ -1,4 +1,5 @@
 <script setup>
+import WelcomeLayout from '@/Layouts/WelcomeLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
@@ -8,6 +9,10 @@ defineProps({
   canRegister: {
     type: Boolean,
   },
+});
+
+defineOptions({
+  layout: WelcomeLayout,
 });
 </script>
 
