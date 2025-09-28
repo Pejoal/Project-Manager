@@ -15,8 +15,9 @@ if (page.active_locale_code) {
 }
 
 const active_locale = (locale, url) => {
-  router.visit(url);
-  // location.href = url;
+  // router.visit(url);
+  // router.reload();
+  location.href = url;
 };
 </script>
 
