@@ -104,7 +104,7 @@ const pagination = computed(() => {
             :href="route('projects.show', { project: project.slug })"
             class="text-blue-500 dark:text-blue-400 hover:underline"
           >
-            {{ project.name }}
+            {{ project?.name }}
           </Link>
         </section>
         <p v-else>All Tasks</p>
@@ -236,7 +236,7 @@ const pagination = computed(() => {
                 })
               "
               class="text-blue-500 dark:text-blue-400 hover:underline"
-              v-html="task.name"
+              v-html="task?.name"
             >
             </Link>
           </p>
@@ -254,7 +254,7 @@ const pagination = computed(() => {
               "
               class="text-blue-500 dark:text-blue-400 hover:underline"
             >
-              {{ project ? project.name : task.project.name }}
+              {{ project ? project?.name : task.project?.name }}
             </Link>
           </p>
           <div class="space-y-1">
@@ -264,12 +264,12 @@ const pagination = computed(() => {
             </p>
             <p>
               Priority:
-              <span :style="{ color: task.priority.color }">{{ task.priority.name }}</span>
+              <span :style="{ color: task.priority?.color }">{{ task.priority?.name }}</span>
             </p>
             <p class="mb-2 text-gray-700 dark:text-gray-300">
               assigned to:
               <span v-for="(assigned_to_user, index) in task.assigned_to" :key="assigned_to_user.id">
-                {{ assigned_to_user.name }}<span v-if="index < task.assigned_to.length - 1">, </span>
+                {{ assigned_to_user?.name }}<span v-if="index < task.assigned_to.length - 1">, </span>
               </span>
             </p>
           </div>
