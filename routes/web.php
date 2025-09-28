@@ -39,7 +39,7 @@ Route::group(
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
       ]);
-    });
+    })->name('welcome');
 
     Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
       $locales = collect(LaravelLocalization::getSupportedLocales())->map(function ($properties, $localeCode) {
