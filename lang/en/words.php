@@ -274,4 +274,17 @@ return [
   'select_assigned_to' => 'Select Assigned to',
   'start_datetime' => 'Start Date/Time',
   'end_datetime' => 'End Date/Time',
+
+  // Profile Additional Translations
+  'click_to_resend' => 'Click here to re-send the verification email.',
+  'ensure_secure_password' => 'Ensure your account is using a long, random password to stay secure.',
+  'browser_sessions' => 'Browser Sessions',
+  'browser_sessions_description' => 'Manage and log out your active sessions on other browsers and devices.',
+  'log_out_other_browser_sessions' => 'Log Out Other Browser Sessions',
+  'log_out_other_browser_sessions_description' =>
+    'Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.',
+  'done' => 'Done.',
+  'this_device' => 'This device',
+  'last_active' => 'Last active',
+  'unknown' => 'Unknown',
 ];

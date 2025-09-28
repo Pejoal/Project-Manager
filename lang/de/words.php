@@ -278,4 +278,19 @@ return [
   'select_assigned_to' => 'Zugewiesene auswählen',
   'start_datetime' => 'Start Datum/Zeit',
   'end_datetime' => 'End Datum/Zeit',
+
+  // Profile Additional Translations
+  'click_to_resend' => 'Klicken Sie hier, um die Verifizierungs-E-Mail erneut zu senden.',
+  'ensure_secure_password' =>
+    'Stellen Sie sicher, dass Ihr Konto ein langes, zufälliges Passwort verwendet, um sicher zu bleiben.',
+  'browser_sessions' => 'Browser-Sitzungen',
+  'browser_sessions_description' =>
+    'Verwalten und beenden Sie Ihre aktiven Sitzungen auf anderen Browsern und Geräten.',
+  'log_out_other_browser_sessions' => 'Andere Browser-Sitzungen abmelden',
+  'log_out_other_browser_sessions_description' =>
+    'Bitte geben Sie Ihr Passwort ein, um zu bestätigen, dass Sie sich von Ihren anderen Browser-Sitzungen auf allen Ihren Geräten abmelden möchten.',
+  'done' => 'Fertig.',
+  'this_device' => 'Dieses Gerät',
+  'last_active' => 'Zuletzt aktiv',
+  'unknown' => 'Unbekannt',
 ];

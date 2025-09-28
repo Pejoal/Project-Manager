@@ -1,6 +1,4 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { router, useForm, usePage } from '@inertiajs/vue3';
 import ActionSection from '@/Components/ActionSection.vue';
 import ConfirmsPassword from '@/Components/ConfirmsPassword.vue';
 import DangerButton from '@/Components/DangerButton.vue';
@@ -9,10 +7,11 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { router, useForm, usePage } from '@inertiajs/vue3';
+import { computed, ref, watch } from 'vue';
 
 const props = defineProps({
   requiresConfirmation: Boolean,
-  translations: Object,
 });
 
 const page = usePage();
@@ -103,28 +102,28 @@ const disableTwoFactorAuthentication = () => {
 
 <template>
   <ActionSection>
-    <template #title> {{ translations.two_factor_authentication }} </template>
+    <template #title> {{ trans('words.two_factor_authentication') }} </template>
 
     <template #description>
-      {{ translations.two_factor_authentication_description }}
+      {{ trans('words.two_factor_authentication_description') }}
     </template>
 
     <template #content>
       <h3 v-if="twoFactorEnabled && !confirming" class="text-lg font-medium text-gray-900 dark:text-gray-100">
-        {{ translations.enabled }}
+        {{ trans('words.enabled') }}
       </h3>
 
       <h3 v-else-if="twoFactorEnabled && confirming" class="text-lg font-medium text-gray-900 dark:text-gray-100">
-        {{ translations.finish_enabling }}
+        {{ trans('words.finish_enabling') }}
       </h3>
 
       <h3 v-else class="text-lg font-medium text-gray-900 dark:text-gray-100">
-        {{ translations.not_enabled }}
+        {{ trans('words.not_enabled') }}
       </h3>
 
       <div class="mt-3 max-w-xl text-sm text-gray-600 dark:text-gray-400">
         <p>
-          {{ translations.secure_random_token }}
+          {{ trans('words.secure_random_token') }}
         </p>
       </div>
 
@@ -132,22 +131,22 @@ const disableTwoFactorAuthentication = () => {
         <div v-if="qrCode">
           <div class="mt-4 max-w-xl text-sm text-gray-600 dark:text-gray-400">
             <p v-if="confirming" class="font-semibold">
-              {{ translations.qr_code_instructions }}
+              {{ trans('words.qr_code_instructions') }}
             </p>
 
             <p v-else>
-              {{ translations.enabled_qr_code_instructions }}
+              {{ trans('words.enabled_qr_code_instructions') }}
             </p>
           </div>
 
           <div class="mt-4 p-2 inline-block bg-white" v-html="qrCode" />
 
           <div v-if="setupKey" class="mt-4 max-w-xl text-sm text-gray-600 dark:text-gray-400">
-            <p class="font-semibold">{{ translations.setup_key }} <span v-html="setupKey"></span></p>
+            <p class="font-semibold">{{ trans('words.setup_key') }} <span v-html="setupKey"></span></p>
           </div>
 
           <div v-if="confirming" class="mt-4">
-            <InputLabel for="code" :value="translations.code" />
+            <InputLabel for="code" :value="trans('words.code')" />
 
             <TextInput
               id="code"
@@ -168,7 +167,7 @@ const disableTwoFactorAuthentication = () => {
         <div v-if="recoveryCodes.length > 0 && !confirming">
           <div class="mt-4 max-w-xl text-sm text-gray-600 dark:text-gray-400">
             <p class="font-semibold">
-              {{ translations.recovery_codes_instructions }}
+              {{ trans('words.recovery_codes_instructions') }}
             </p>
           </div>
 
@@ -184,15 +183,15 @@ const disableTwoFactorAuthentication = () => {
 
       <div class="mt-5">
         <div v-if="!twoFactorEnabled">
-          <ConfirmsPassword :translations="translations" @confirmed="enableTwoFactorAuthentication">
+          <ConfirmsPassword @confirmed="enableTwoFactorAuthentication">
             <PrimaryButton type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
-              {{ translations.enable }}
+              {{ trans('words.enable') }}
             </PrimaryButton>
           </ConfirmsPassword>
         </div>
 
         <div v-else>
-          <ConfirmsPassword :translations="translations" @confirmed="confirmTwoFactorAuthentication">
+          <ConfirmsPassword @confirmed="confirmTwoFactorAuthentication">
             <PrimaryButton
               v-if="confirming"
               type="button"
@@ -200,31 +199,31 @@ const disableTwoFactorAuthentication = () => {
               :class="{ 'opacity-25': enabling }"
               :disabled="enabling"
             >
-              {{ translations.confirm }}
+              {{ trans('words.confirm') }}
             </PrimaryButton>
           </ConfirmsPassword>
 
-          <ConfirmsPassword :translations="translations" @confirmed="regenerateRecoveryCodes">
+          <ConfirmsPassword @confirmed="regenerateRecoveryCodes">
             <SecondaryButton v-if="recoveryCodes.length > 0 && !confirming" class="me-3">
-              {{ translations.regenerate_recovery_codes }}
+              {{ trans('words.regenerate_recovery_codes') }}
             </SecondaryButton>
           </ConfirmsPassword>
 
-          <ConfirmsPassword :translations="translations" @confirmed="showRecoveryCodes">
+          <ConfirmsPassword @confirmed="showRecoveryCodes">
             <SecondaryButton v-if="recoveryCodes.length === 0 && !confirming" class="me-3">
-              {{ translations.show_recovery_codes }}
+              {{ trans('words.show_recovery_codes') }}
             </SecondaryButton>
           </ConfirmsPassword>
 
-          <ConfirmsPassword :translations="translations" @confirmed="disableTwoFactorAuthentication">
+          <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
             <SecondaryButton v-if="confirming" :class="{ 'opacity-25': disabling }" :disabled="disabling">
-              {{ translations.cancel }}
+              {{ trans('words.cancel') }}
             </SecondaryButton>
           </ConfirmsPassword>
 
-          <ConfirmsPassword :translations="translations" @confirmed="disableTwoFactorAuthentication">
+          <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
             <DangerButton v-if="!confirming" :class="{ 'opacity-25': disabling }" :disabled="disabling">
-              {{ translations.disable }}
+              {{ trans('words.disable') }}
             </DangerButton>
           </ConfirmsPassword>
         </div>

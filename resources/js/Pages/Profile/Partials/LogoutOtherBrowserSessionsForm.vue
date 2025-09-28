@@ -1,6 +1,4 @@
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import ActionSection from '@/Components/ActionSection.vue';
 import DialogModal from '@/Components/DialogModal.vue';
@@ -8,10 +6,11 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
   sessions: Array,
-  translations: Object,
 });
 
 const confirmingLogout = ref(false);
@@ -45,15 +44,15 @@ const closeModal = () => {
 
 <template>
   <ActionSection>
-    <template #title> {{ translations.browser_sessions }} </template>
+    <template #title> {{ trans('words.browser_sessions') }} </template>
 
     <template #description>
-      {{ translations.browser_sessions_description }}
+      {{ trans('words.browser_sessions_description') }}
     </template>
 
     <template #content>
       <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-        {{ translations.log_out_other_browser_sessions_description }}
+        {{ trans('words.log_out_other_browser_sessions_description') }}
       </div>
 
       <!-- Other Browser Sessions -->
@@ -95,16 +94,18 @@ const closeModal = () => {
 
           <div class="ms-3">
             <div class="text-sm text-gray-600 dark:text-gray-400">
-              {{ session.agent.platform ? session.agent.platform : 'Unknown' }}
-              - {{ session.agent.browser ? session.agent.browser : 'Unknown' }}
+              {{ session.agent.platform ? session.agent.platform : trans('words.unknown') }}
+              - {{ session.agent.browser ? session.agent.browser : trans('words.unknown') }}
             </div>
 
             <div>
               <div class="text-xs text-gray-500">
                 {{ session.ip_address }},
 
-                <span v-if="session.is_current_device" class="text-green-500 font-semibold">This device</span>
-                <span v-else>Last active {{ session.last_active }}</span>
+                <span v-if="session.is_current_device" class="text-green-500 font-semibold">{{
+                  trans('words.this_device')
+                }}</span>
+                <span v-else>{{ trans('words.last_active') }} {{ session.last_active }}</span>
               </div>
             </div>
           </div>
@@ -113,22 +114,22 @@ const closeModal = () => {
 
       <div class="flex items-center mt-5">
         <PrimaryButton @click="confirmLogout">
-          {{ translations.log_out_other_browser_sessions }}
+          {{ trans('words.log_out_other_browser_sessions') }}
         </PrimaryButton>
 
         <ActionMessage :on="form.recentlySuccessful" class="ms-3">
-          {{ translations.done }}
+          {{ trans('words.done') }}
         </ActionMessage>
       </div>
 
       <!-- Log Out Other Devices Confirmation Modal -->
       <DialogModal :show="confirmingLogout" @close="closeModal">
         <template #title>
-          {{ translations.log_out_other_browser_sessions }}
+          {{ trans('words.log_out_other_browser_sessions') }}
         </template>
 
         <template #content>
-          {{ translations.log_out_other_browser_sessions_description }}
+          {{ trans('words.log_out_other_browser_sessions_description') }}
 
           <div class="mt-4">
             <TextInput
@@ -136,7 +137,7 @@ const closeModal = () => {
               v-model="form.password"
               type="password"
               class="mt-1 block w-3/4"
-              placeholder="Password"
+              :placeholder="trans('words.password')"
               autocomplete="current-password"
               @keyup.enter="logoutOtherBrowserSessions"
             />
@@ -147,7 +148,7 @@ const closeModal = () => {
 
         <template #footer>
           <SecondaryButton @click="closeModal">
-            {{ translations.cancel }}
+            {{ trans('words.cancel') }}
           </SecondaryButton>
 
           <PrimaryButton
@@ -156,7 +157,7 @@ const closeModal = () => {
             :disabled="form.processing"
             @click="logoutOtherBrowserSessions"
           >
-            {{ translations.log_out_other_browser_sessions }}
+            {{ trans('words.log_out_other_browser_sessions') }}
           </PrimaryButton>
         </template>
       </DialogModal>

@@ -1,6 +1,4 @@
 <script setup>
-import { ref } from 'vue';
-import { Link, router, useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
@@ -8,10 +6,11 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { Link, router, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const props = defineProps({
   user: Object,
-  translations: Object,
 });
 
 const form = useForm({
@@ -79,10 +78,10 @@ const clearPhotoFileInput = () => {
 
 <template>
   <FormSection @submitted="updateProfileInformation">
-    <template #title> {{ translations.profile_information }} </template>
+    <template #title> {{ trans('words.profile_information') }} </template>
 
     <template #description>
-      {{ translations.profile_information_description }}
+      {{ trans('words.profile_information_description') }}
     </template>
 
     <template #form>
@@ -91,7 +90,7 @@ const clearPhotoFileInput = () => {
         <!-- Profile Photo File Input -->
         <input id="photo" ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview" />
 
-        <InputLabel for="photo" :value="translations.photo" />
+        <InputLabel for="photo" :value="trans('words.photo')" />
 
         <!-- Current Profile Photo -->
         <div v-show="!photoPreview" class="mt-2">
@@ -107,11 +106,11 @@ const clearPhotoFileInput = () => {
         </div>
 
         <SecondaryButton class="mt-2 me-2" type="button" @click.prevent="selectNewPhoto">
-          {{ translations.select_new_photo }}
+          {{ trans('words.select_new_photo') }}
         </SecondaryButton>
 
         <SecondaryButton v-if="user.profile_photo_path" type="button" class="mt-2" @click.prevent="deletePhoto">
-          {{ translations.remove_photo }}
+          {{ trans('words.remove_photo') }}
         </SecondaryButton>
 
         <InputError :message="form.errors.photo" class="mt-2" />
@@ -119,14 +118,14 @@ const clearPhotoFileInput = () => {
 
       <!-- Name -->
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="name" :value="translations.name" />
+        <InputLabel for="name" :value="trans('words.name')" />
         <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required autocomplete="name" />
         <InputError :message="form.errors.name" class="mt-2" />
       </div>
 
       <!-- User Name -->
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="username" :value="translations.username" />
+        <InputLabel for="username" :value="trans('words.username')" />
         <TextInput
           id="username"
           v-model="form.username"
@@ -140,7 +139,7 @@ const clearPhotoFileInput = () => {
 
       <!-- Email -->
       <div class="col-span-6 sm:col-span-4">
-        <InputLabel for="email" :value="translations.email" />
+        <InputLabel for="email" :value="trans('words.email')" />
         <TextInput
           id="email"
           v-model="form.email"
@@ -153,7 +152,7 @@ const clearPhotoFileInput = () => {
 
         <div v-if="$page.props.jetstream.hasEmailVerification && user.email_verified_at === null">
           <p class="text-sm mt-2 dark:text-white">
-            {{ translations.email_unverified }}
+            {{ trans('words.email_unverified') }}
             <Link
               :href="route('verification.send')"
               method="post"
@@ -161,12 +160,12 @@ const clearPhotoFileInput = () => {
               class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
               @click.prevent="sendEmailVerification"
             >
-              {{ translations.click_to_resend }}
+              {{ trans('words.click_to_resend') }}
             </Link>
           </p>
 
           <div v-show="verificationLinkSent" class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ translations.verification_link_sent }}
+            {{ trans('words.verification_link_sent') }}
           </div>
         </div>
       </div>
@@ -174,11 +173,11 @@ const clearPhotoFileInput = () => {
 
     <template #actions>
       <ActionMessage :on="form.recentlySuccessful" class="me-3">
-        {{ translations.saved }}
+        {{ trans('words.saved') }}
       </ActionMessage>
 
       <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-        {{ translations.save }}
+        {{ trans('words.save') }}
       </PrimaryButton>
     </template>
   </FormSection>
