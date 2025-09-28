@@ -24,7 +24,6 @@ const toggleDarkMode = () => {
 
 <template>
   <div>
-
     <Banner />
 
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -111,20 +110,3 @@ const toggleDarkMode = () => {
     </div>
   </div>
 </template>
-<style>
-@media (prefers-color-scheme: dark) {
-  .vs__actions {
-    background: white;
-  }
-  .vs__dropdown-toggle,
-  .vs__search,
-  .vs__selected {
-    color: white !important;
-  }
-
-  .vs__dropdown-menu,
-  .vs--multiple .vs__selected {
-    color: black !important;
-  }
-}
-</style>

@@ -1,7 +1,75 @@
+@import 'vue-select/dist/vue-select.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 [x-cloak] {
-    display: none;
+  display: none;
+}
+
+/* Import the default stylesheet in your main app.css */
+/* @import 'vue-select/dist/vue-select.css'; */
+
+/* Define custom properties for theming vue-select */
+:root {
+  --vs-bg: #fff;
+  --vs-text-color: #333;
+  --vs-dropdown-bg: #fff;
+  --vs-dropdown-option-color: #333;
+  --vs-dropdown-option-bg: #f3f4f6; /* gray-100 */
+  --vs-selected-bg: #2563eb; /* blue-600 */
+  --vs-selected-color: #fff;
+  --vs-border-color: #d1d5db; /* gray-300 */
+  --vs-border-focus-color: #3b82f6; /* blue-500 */
+}
+
+html.dark {
+  --vs-bg: #1f2937; /* gray-800 */
+  --vs-text-color: #d1d5db; /* gray-300 */
+  --vs-dropdown-bg: #374151; /* gray-700 */
+  --vs-dropdown-option-color: #d1d5db; /* gray-300 */
+  --vs-dropdown-option-bg: #4b5563; /* gray-600 */
+  --vs-selected-bg: #3b82f6; /* blue-500 */
+  --vs-selected-color: #fff;
+  --vs-border-color: #4b5563; /* gray-600 */
+  --vs-border-focus-color: #60a5fa; /* blue-400 */
+}
+
+/* Apply the variables to vue-select classes */
+.vs__dropdown-toggle {
+  background: var(--vs-bg);
+  border-color: var(--vs-border-color);
+}
+
+.vs__search,
+.vs__selected,
+.vs__open-indicator {
+  color: var(--vs-text-color) !important;
+  background: var(--vs-bg) !important;
+  border: none;
+}
+
+.vs__dropdown-menu {
+  background: var(--vs-dropdown-bg) !important;
+  border-color: var(--vs-border-color) !important;
+}
+
+.vs__dropdown-option {
+  color: var(--vs-dropdown-option-color) !important;
+}
+
+.vs__dropdown-option--highlight {
+  background: var(--vs-dropdown-option-bg) !important;
+}
+
+.vs--multiple .vs__selected {
+  background: var(--vs-selected-bg) !important;
+  color: var(--vs-selected-color) !important;
+}
+
+/* Optional: Adjust focus ring to match Tailwind's style */
+.vs--open .vs__dropdown-toggle {
+  border-color: var(--vs-border-focus-color);
+  box-shadow: 0 0 0 1px var(--vs-border-focus-color);
 }

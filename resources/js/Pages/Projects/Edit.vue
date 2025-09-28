@@ -6,7 +6,6 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { defineProps, ref, watch } from 'vue';
 import vSelect from 'vue-select';
-import 'vue-select/dist/vue-select.css';
 
 const props = defineProps({
   project: Object,

@@ -5,7 +5,6 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import vSelect from 'vue-select';
-import 'vue-select/dist/vue-select.css';
 
 const emit = defineEmits(['close']);
 const props = defineProps({

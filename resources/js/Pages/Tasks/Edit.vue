@@ -6,7 +6,6 @@ import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import vSelect from 'vue-select';
-import 'vue-select/dist/vue-select.css';
 
 const props = defineProps({
   task: Object,

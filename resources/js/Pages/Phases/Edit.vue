@@ -4,7 +4,6 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import 'vue-select/dist/vue-select.css';
 
 const props = defineProps({
   project: Object,

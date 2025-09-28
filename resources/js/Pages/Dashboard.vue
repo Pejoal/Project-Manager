@@ -43,6 +43,7 @@ const updateSettings = () => {
 
 <template>
   <Head :title="trans('words.dashboard')" />
+  
   <slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
       {{ trans('words.welcome') }} {{ $page.props.auth.user.name }}
