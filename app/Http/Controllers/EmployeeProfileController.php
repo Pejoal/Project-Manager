@@ -10,11 +10,6 @@ use App\Events\ActivityLogged;
 
 class EmployeeProfileController extends Controller
 {
-  public function __construct()
-  {
-    $this->middleware(['auth', 'role:admin']);
-  }
-
   public function index(Request $request)
   {
     $query = EmployeeProfile::with('user');
@@ -36,10 +31,10 @@ class EmployeeProfileController extends Controller
       }
     }
 
-    $profiles = $query->latest()->paginate(15);
+    $employeeProfiles = $query->latest()->paginate(15);
 
     return Inertia::render('EmployeeProfiles/Index', [
-      'profiles' => $profiles,
+      'employeeProfiles' => $employeeProfiles,
       'filters' => $request->only(['search', 'status']),
     ]);
   }

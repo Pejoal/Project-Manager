@@ -16,12 +16,6 @@ use App\Events\ActivityLogged;
 
 class PayrollController extends Controller
 {
-  public function __construct()
-  {
-    // Only admins can access payroll features
-    $this->middleware(['auth', 'role:admin']);
-  }
-
   public function index()
   {
     $employees = User::with([

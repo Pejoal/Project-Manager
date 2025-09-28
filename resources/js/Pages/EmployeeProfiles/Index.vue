@@ -84,10 +84,10 @@ const toggleProfileSelection = (profileId) => {
 };
 
 const toggleSelectAll = () => {
-  if (selectedProfiles.value.length === props.employeeProfiles.data.length) {
+  if (selectedProfiles.value.length === props.employeeProfiles?.data.length) {
     selectedProfiles.value = [];
   } else {
-    selectedProfiles.value = props.employeeProfiles.data.map((profile) => profile.id);
+    selectedProfiles.value = props.employeeProfiles?.data?.map((profile) => profile.id);
   }
 };
 
@@ -291,7 +291,7 @@ const pagination = computed(() => {
                 >
                   <Checkbox
                     :checked="
-                      selectedProfiles.length === employeeProfiles.data.length && employeeProfiles.data.length > 0
+                      selectedProfiles.length === employeeProfiles?.data?.length && employeeProfiles?.data?.length > 0
                     "
                     @change="toggleSelectAll"
                   />
@@ -335,7 +335,7 @@ const pagination = computed(() => {
             </thead>
             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               <tr
-                v-for="profile in employeeProfiles.data"
+                v-for="profile in employeeProfiles?.data"
                 :key="profile.id"
                 class="hover:bg-gray-50 dark:hover:bg-gray-700"
               >
@@ -425,7 +425,7 @@ const pagination = computed(() => {
                   </div>
                 </td>
               </tr>
-              <tr v-if="employeeProfiles.data.length === 0">
+              <tr v-if="employeeProfiles?.data?.length === 0">
                 <td :colspan="showBulkActions ? 8 : 7" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                   No employee profiles found.
                 </td>

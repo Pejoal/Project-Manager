@@ -14,11 +14,6 @@ use App\Events\ActivityLogged;
 
 class PayslipController extends Controller
 {
-  public function __construct()
-  {
-    $this->middleware(['auth', 'role:admin']);
-  }
-
   public function index(Request $request)
   {
     $query = Payslip::with(['user', 'generatedBy', 'approvedBy']);
