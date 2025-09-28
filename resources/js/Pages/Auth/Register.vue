@@ -8,10 +8,13 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
+defineProps({
+  hasTermsAndPrivacyPolicyFeature: Boolean,
+});
+
 const form = useForm({
   name: '',
   email: '',
-  username: '',
   password: '',
   password_confirmation: '',
   terms: false,
@@ -55,22 +58,9 @@ const submit = () => {
           type="email"
           class="mt-1 block w-full"
           required
-          autocomplete="email"
-        />
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="username" :value="trans('words.user_name')" />
-        <TextInput
-          id="username"
-          v-model="form.username"
-          type="text"
-          class="mt-1 block w-full"
-          required
           autocomplete="username"
         />
-        <InputError class="mt-2" :message="form.errors.username" />
+        <InputError class="mt-2" :message="form.errors.email" />
       </div>
 
       <div class="mt-4">
@@ -99,7 +89,7 @@ const submit = () => {
         <InputError class="mt-2" :message="form.errors.password_confirmation" />
       </div>
 
-      <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
+      <div v-if="hasTermsAndPrivacyPolicyFeature" class="mt-4">
         <InputLabel for="terms">
           <div class="flex items-center">
             <Checkbox id="terms" v-model:checked="form.terms" name="terms" required />
@@ -110,15 +100,17 @@ const submit = () => {
                 target="_blank"
                 :href="route('terms.show')"
                 class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                >{{ trans('words.terms_of_service') }}</a
               >
+                {{ trans('words.terms_of_service') }}
+              </a>
               and
               <a
                 target="_blank"
                 :href="route('policy.show')"
                 class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                >{{ trans('words.privacy_policy') }}</a
               >
+                {{ trans('words.privacy_policy') }}
+              </a>
             </div>
           </div>
           <InputError class="mt-2" :message="form.errors.terms" />
@@ -130,7 +122,7 @@ const submit = () => {
           :href="route('login')"
           class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
         >
-          Already registered?
+          {{ trans('words.already_registered') }}
         </Link>
 
         <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">

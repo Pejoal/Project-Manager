@@ -32,6 +32,19 @@ Route::group(
     ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
   ],
   function () {
+    $locales = collect(LaravelLocalization::getSupportedLocales())->map(function ($properties, $localeCode) {
+      return [
+        'code' => $localeCode,
+        'native' => $properties['native'],
+        'url' => LaravelLocalization::getLocalizedURL($localeCode, null, [], true),
+        'flag' => $properties['flag'],
+      ];
+    });
+    Inertia::share([
+      'locales' => $locales,
+      'active_locale_code' => LaravelLocalization::getCurrentLocale(),
+    ]);
+
     Route::get('/', function () {
       return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -42,19 +55,6 @@ Route::group(
     })->name('welcome');
 
     Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-      $locales = collect(LaravelLocalization::getSupportedLocales())->map(function ($properties, $localeCode) {
-        return [
-          'code' => $localeCode,
-          'native' => $properties['native'],
-          'url' => LaravelLocalization::getLocalizedURL($localeCode, null, [], true),
-          'flag' => $properties['flag'],
-        ];
-      });
-      Inertia::share([
-        'locales' => $locales,
-        'active_locale_code' => LaravelLocalization::getCurrentLocale(),
-      ]);
-
       Route::put('/api/settings', [SettingsController::class, 'updateSettings']);
 
       Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');

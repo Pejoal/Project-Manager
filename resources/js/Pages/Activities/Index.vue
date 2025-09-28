@@ -1,8 +1,8 @@
 <script setup>
-import { Link, Head, useForm } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref } from 'vue';
 import Pagination from '@/Components/Pagination.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { Head } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const props = defineProps({
   activities: Object,
@@ -17,10 +17,10 @@ const setActiveTab = (tab) => {
 </script>
 
 <template>
-  <Head title="Activities" />
+  <Head :title="trans('words.activities')" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Activity Log</h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ trans('words.activity_log') }}</h1>
     </template>
 
     <main class="bg-zinc-900 shadow-md rounded-lg p-4">
@@ -45,7 +45,11 @@ const setActiveTab = (tab) => {
         <div v-for="activity in activities[activeTab]" :key="activity.id" class="border-b border-gray-200 py-2">
           <div class="flex items-center space-x-4">
             <div class="flex-shrink-0">
-              <img :src="activity.user.profile_photo_url" alt="User Avatar" class="h-10 w-10 rounded-full" />
+              <img
+                :src="activity.user.profile_photo_url"
+                :alt="trans('words.user_name')"
+                class="h-10 w-10 rounded-full"
+              />
             </div>
             <div>
               <section class="flex gap-2 text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -59,7 +63,7 @@ const setActiveTab = (tab) => {
               <p class="text-sm text-gray-500 dark:text-gray-300">
                 {{ activity.description }}
               </p>
-              <p class="text-sm text-gray-500 dark:text-gray-400">ID: {{ activity.subject_id }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{{ trans('words.id') }}: {{ activity.subject_id }}</p>
               <p class="text-sm text-gray-400 dark:text-gray-500">
                 {{ new Date(activity.created_at).toLocaleString() }}
               </p>

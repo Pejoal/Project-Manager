@@ -1,8 +1,8 @@
 <script setup>
-import { Link, Head } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import CreateClientModal from './CreateClientModal.vue';
+import { Head, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import CreateClientModal from './CreateClientModal.vue';
 
 const showModal = ref(false);
 
@@ -21,13 +21,15 @@ defineProps({
 </script>
 
 <template>
-  <Head title="Clients" />
+  <Head :title="trans('words.clients')" />
   <AppLayout>
     <template #header>
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Clients</h1>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">{{ trans('words.clients') }}</h1>
     </template>
     <section class="p-2 my-1 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">Add New Client</button>
+      <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">
+        {{ trans('words.add_new_client') }}
+      </button>
       <CreateClientModal :show="showModal" @close="closeModal" :projects="projects" />
       <ul class="my-2 space-y-4">
         <li
@@ -40,16 +42,16 @@ defineProps({
               {{ client.name }}
             </Link>
             <p class="mb-2 text-gray-700 dark:text-gray-300">
-              Projects:
+              {{ trans('words.projects') }}:
               <span v-for="(project, index) in client.projects" :key="project.id">
                 {{ project.name }}<span v-if="index < client.projects.length - 1">, </span>
               </span>
             </p>
             <div class="text-gray-500 dark:text-gray-400 text-sm">
-              Created At: {{ new Date(client.created_at).toLocaleString() }}
+              {{ trans('words.created_at') }}: {{ new Date(client.created_at).toLocaleString() }}
             </div>
           </div>
-          <div class="text-gray-500 dark:text-gray-400 text-sm">ID: {{ client.id }}</div>
+          <div class="text-gray-500 dark:text-gray-400 text-sm">{{ trans('words.id') }}: {{ client.id }}</div>
         </li>
       </ul>
     </section>
