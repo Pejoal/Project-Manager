@@ -255,7 +255,7 @@ const formatHours = (hours) => {
                 <th
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
-                  {{ $t('payroll.employee') }}
+                  {{ $t('payroll.reports.employee') }}
                 </th>
                 <th
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
