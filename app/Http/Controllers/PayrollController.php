@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use App\Models\User;
 use App\Models\TimeEntry;
 use App\Models\EmployeeProfile;
@@ -166,56 +167,121 @@ class PayrollController extends Controller
 
   public function reports(Request $request)
   {
-    $period = $request->get('period', 'monthly');
-    $startDate = $request->get('start_date', now()->startOfMonth()->format('Y-m-d'));
-    $endDate = $request->get('end_date', now()->endOfMonth()->format('Y-m-d'));
+    // Validate filters
+    $request->validate([
+      'period' => 'sometimes|in:weekly,monthly,quarterly,yearly,custom',
+      'start_date' => 'nullable|date',
+      'end_date' => 'nullable|date|after_or_equal:start_date',
+      'user_ids' => 'nullable|array',
+      'user_ids.*' => 'exists:users,id',
+      'project_ids' => 'nullable|array',
+      'project_ids.*' => 'exists:projects,id',
+      'report_type' => 'sometimes|in:summary,detailed,by_employee,by_project',
+    ]);
 
-    $timeEntries = TimeEntry::with(['user', 'project', 'task'])
-      ->forPeriod($startDate, $endDate)
-      ->approved()
-      ->get()
-      ->groupBy('user_id');
+    // Determine date range from period
+    $period = $request->input('period', 'monthly');
+    $startDate = $request->filled('start_date') ? Carbon::parse($request->start_date) : now()->startOfMonth();
+    $endDate = $request->filled('end_date') ? Carbon::parse($request->end_date) : now()->endOfMonth();
 
-    $payslips = Payslip::with('user')->forPeriod($startDate, $endDate)->get()->groupBy('user_id');
-
-    $reportData = [];
-    foreach ($timeEntries as $userId => $entries) {
-      $user = $entries->first()->user;
-      $totalHours = $entries->sum('hours_worked');
-      $totalEarnings = $entries->sum('gross_amount');
-      $userPayslips = $payslips->get($userId, collect());
-
-      $reportData[] = [
-        'user' => $user->only(['id', 'name', 'email']),
-        'total_hours' => $totalHours,
-        'total_earnings' => $totalEarnings,
-        'entries_count' => $entries->count(),
-        'payslips_count' => $userPayslips->count(),
-        'total_net_pay' => $userPayslips->sum('net_pay'),
-      ];
+    if ($period !== 'custom') {
+      switch ($period) {
+        case 'weekly':
+          $startDate = now()->startOfWeek();
+          $endDate = now()->endOfWeek();
+          break;
+        case 'quarterly':
+          $startDate = now()->startOfQuarter();
+          $endDate = now()->endOfQuarter();
+          break;
+        case 'yearly':
+          $startDate = now()->startOfYear();
+          $endDate = now()->endOfYear();
+          break;
+        case 'monthly':
+        default:
+          $startDate = now()->startOfMonth();
+          $endDate = now()->endOfMonth();
+          break;
+      }
     }
 
-    $users = User::with([
-      'employeeProfile',
-      'timeEntries' => function ($query) {
-        $query->where('created_at', '>=', now()->startOfMonth());
-      },
-    ])
-      ->whereHas('employeeProfile')
-      ->get();
+    // Base query for payslips, applying all filters
+    $query = Payslip::query()
+      ->with(['user', 'project'])
+      ->whereBetween('pay_date', [$startDate, $endDate])
+      ->when($request->filled('user_ids'), function ($q) use ($request) {
+        $q->whereIn('user_id', $request->user_ids);
+      })
+      ->when($request->filled('project_ids'), function ($q) use ($request) {
+        $q->whereIn('project_id', $request->project_ids);
+      });
+
+    // Determine how to group the data based on report type
+    $reportType = $request->input('report_type', 'summary');
+    $reportData = [];
+
+    switch ($reportType) {
+      case 'by_employee':
+        $reportData = $query
+          ->selectRaw(
+            'user_id, SUM(regular_hours + overtime_hours) as total_hours, SUM(gross_total_pay) as gross_pay, SUM(total_tax_deductions) as total_deductions, SUM(net_pay) as net_pay'
+          )
+          ->groupBy('user_id')
+          ->get()
+          ->map(function ($item) {
+            $item->employee_name = $item->user->name;
+            return $item;
+          });
+        break;
+      case 'by_project':
+        $reportData = $query
+          ->selectRaw(
+            'project_id, SUM(regular_hours + overtime_hours) as total_hours, SUM(gross_total_pay) as gross_pay, SUM(total_tax_deductions) as total_deductions, SUM(net_pay) as net_pay'
+          )
+          ->groupBy('project_id')
+          ->get()
+          ->map(function ($item) {
+            $item->project_name = $item->project->name ?? 'N/A';
+            return $item;
+          });
+        break;
+      case 'detailed':
+        $reportData = $query->get();
+        break;
+      case 'summary':
+      default:
+        // For summary, we only need totals, which are calculated below.
+        break;
+    }
+
+    // Always calculate overall summary totals
+    $summaryTotalsQuery = clone $query;
+    $summary = [
+      'total_hours' => $summaryTotalsQuery->sum(\DB::raw('regular_hours + overtime_hours')),
+      'total_payroll' => $summaryTotalsQuery->sum('gross_total_pay'),
+    ];
+
+    // Data for dropdown filters
+    $users = User::whereHas('employeeProfile')->select('id', 'name')->get();
+    $projects = Project::select('id', 'name')->get();
+
     return Inertia::render('Payroll/Reports', [
       'users' => $users,
-      'reportData' => $reportData,
+      'projects' => $projects,
+      'reportData' => [
+        'summary' => $summary,
+        'data' => $reportData,
+      ],
       'filters' => [
         'period' => $period,
-        'start_date' => $startDate,
-        'end_date' => $endDate,
+        'start_date' => $startDate->toDateString(),
+        'end_date' => $endDate->toDateString(),
+        'user_ids' => $request->input('user_ids', []),
+        'project_ids' => $request->input('project_ids', []),
+        'report_type' => $reportType,
       ],
-      'totals' => [
-        'total_hours' => collect($reportData)->sum('total_hours'),
-        'total_earnings' => collect($reportData)->sum('total_earnings'),
-        'total_net_pay' => collect($reportData)->sum('total_net_pay'),
-      ],
+      'canExport' => true, // Determine this based on permissions if needed
     ]);
   }
 
