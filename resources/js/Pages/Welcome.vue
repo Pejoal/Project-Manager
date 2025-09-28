@@ -1,5 +1,5 @@
 <script setup>
-import WelcomeLayout from '@/Layouts/WelcomeLayout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
@@ -12,7 +12,7 @@ defineProps({
 });
 
 defineOptions({
-  layout: WelcomeLayout,
+  layout: Layout,
 });
 </script>
 

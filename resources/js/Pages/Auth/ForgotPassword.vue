@@ -5,6 +5,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Layout from '@/Layouts/Layout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -18,6 +19,11 @@ const form = useForm({
 const submit = () => {
   form.post(route('password.email'));
 };
+
+
+defineOptions({
+  layout: Layout,
+});
 </script>
 
 <template>
@@ -29,7 +35,7 @@ const submit = () => {
     </template>
 
     <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-      {{ trans('words.forgot_password') }}? {{ trans('words.email_password_reset_link') }}
+      {{ trans('words.forgot_password') }} {{ trans('words.email_password_reset_link') }}
     </div>
 
     <div v-if="status" class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">

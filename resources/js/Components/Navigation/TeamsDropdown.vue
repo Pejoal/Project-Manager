@@ -25,7 +25,7 @@ const switchToTeam = (team) => {
           type="button"
           class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
         >
-          {{ $page.props.auth.user.current_team.name }}
+          {{ $page.props.auth.user?.current_team?.name }}
 
           <svg
             class="ms-2 -me-0.5 size-4"
@@ -51,7 +51,7 @@ const switchToTeam = (team) => {
         <div class="block px-4 py-2 text-xs text-gray-400">{{ trans('words.manage_team') }}</div>
 
         <!-- Team Settings -->
-        <DropdownLink :href="route('teams.show', $page.props.auth.user.current_team)">
+        <DropdownLink :href="route('teams.show', $page.props.auth.user?.current_team)">
           {{ trans('words.team_settings') }}
         </DropdownLink>
 
@@ -60,17 +60,17 @@ const switchToTeam = (team) => {
         </DropdownLink>
 
         <!-- Team Switcher -->
-        <template v-if="$page.props.auth.user.all_teams.length > 1">
+        <template v-if="$page.props.auth.user?.all_teams?.length > 1">
           <div class="border-t border-gray-200 dark:border-gray-600" />
 
           <div class="block px-4 py-2 text-xs text-gray-400">{{ trans('words.switch_teams') }}</div>
 
-          <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
+          <template v-for="team in $page.props.auth.user?.all_teams" :key="team.id">
             <form @submit.prevent="switchToTeam(team)">
               <DropdownLink as="button">
                 <div class="flex items-center">
                   <svg
-                    v-if="team.id == $page.props.auth.user.current_team_id"
+                    v-if="team.id == $page.props.auth.user?.current_team_id"
                     class="me-2 size-5 text-green-400"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

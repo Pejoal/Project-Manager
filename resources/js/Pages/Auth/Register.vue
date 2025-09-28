@@ -6,6 +6,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Layout from '@/Layouts/Layout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -22,6 +23,11 @@ const submit = () => {
     onFinish: () => form.reset('password', 'password_confirmation'),
   });
 };
+
+
+defineOptions({
+  layout: Layout,
+});
 </script>
 
 <template>
