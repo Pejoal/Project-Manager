@@ -14,6 +14,8 @@ use App\Models\User;
 use App\Models\TaskStatus;
 use App\Models\TaskPriority;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -131,5 +133,17 @@ class DatabaseSeeder extends Seeder
     });
 
     $this->call(DataSeeder::class);
+    $this->call(PayrollSeeder::class);
+
+    // Create a role
+    // $role = Role::create(['name' => 'admin']);
+    // Role::create(['name' => 'developer']);
+    // Role::create(['name' => 'employee']);
+
+    // // Create a permission
+    // $permission = Permission::create(['name' => 'Everything !']);
+
+    // // Give a permission to a role
+    // $role->givePermissionTo($permission);
   }
 }
