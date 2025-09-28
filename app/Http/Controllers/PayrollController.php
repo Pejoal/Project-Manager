@@ -195,7 +195,16 @@ class PayrollController extends Controller
       ];
     }
 
+    $users = User::with([
+      'employeeProfile',
+      'timeEntries' => function ($query) {
+        $query->where('created_at', '>=', now()->startOfMonth());
+      },
+    ])
+      ->whereHas('employeeProfile')
+      ->get();
     return Inertia::render('Payroll/Reports', [
+      'users' => $users,
       'reportData' => $reportData,
       'filters' => [
         'period' => $period,
