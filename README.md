@@ -1448,4 +1448,4 @@ sail artisan optimize:clear
 
 ---
 
-_Last Updated: January 2025_
+_Last Updated: Oktober 2025_
