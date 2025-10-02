@@ -4,7 +4,9 @@
 
 ## About The Project
 
-The Company Management System is a comprehensive solution designed to streamline and manage various aspects of a company's operations. This application provides tools for managing clients, projects, tasks, and now includes a complete **payroll management system** with time tracking, salary calculations, and tax management.
+The Company Management System is a comprehensive Laravel-based solution designed to streamline and manage various aspects of a company's operations. This application provides advanced tools for managing clients, projects, tasks, phases, milestones, and includes a complete **payroll management system** with automated time tracking, intelligent salary calculations, progressive tax management, and comprehensive reporting.
+
+Built with modern web technologies, the system offers real-time updates, full-text search capabilities, role-based access control, and multi-language support, making it suitable for companies of various sizes and industries.
 
 ---
 
@@ -12,52 +14,208 @@ The Company Management System is a comprehensive solution designed to streamline
 
 ### Core Management Features
 
-- **Client, Project & Task Management**: Full CRUD operations for clients, projects, tasks, phases, and milestones.
-- **Full-Text Search**: Fast, typo-tolerant search powered by **Meilisearch**.
-- **Real-time Notifications**: Instant updates using **Laravel Reverb**.
-- **User Authentication**: Secure login, registration, email verification, and Two-Factor Authentication via Laravel Jetstream.
-- **Team Management**: Create teams, invite users, and assign roles.
-- **Role-Based Access Control**: Granular permissions using **Spatie Laravel Permission**.
-- **Customizable Dashboard**: An overview of key metrics with customizable widgets.
-- **Localization**: Multi-language support with session-based locale management.
-- **Responsive Design**: A mobile-friendly interface that adapts to different screen sizes.
-- **API Integration**: RESTful API endpoints with authentication via Laravel Sanctum.
+- **Client Management**: Complete CRUD operations with client-project associations
+- **Project Management**: Full project lifecycle management with phases and milestones
+- **Task Management**: Advanced task tracking with assignments, priorities, and statuses
+- **Phase & Milestone Tracking**: Organize projects with structured phases and milestones
+- **Full-Text Search**: Lightning-fast, typo-tolerant search powered by **Meilisearch**
+- **Real-time Notifications**: Instant updates and notifications using **Laravel Reverb** WebSockets
+- **User Authentication**: Comprehensive security with Laravel Jetstream including:
+  - Email verification
+  - Two-Factor Authentication (2FA)
+  - Password reset
+  - Session management
+- **Team Management**: Create teams, invite members, and manage team roles
+- **Role-Based Access Control**: Granular permissions system using **Spatie Laravel Permission**
+- **Activity Logging**: Complete audit trail of all system activities
+- **Customizable Dashboard**: Real-time metrics and analytics with customizable widgets
+- **Multi-language Support**: Full internationalization with session-based locale management
+- **Responsive Design**: Mobile-first, fully responsive interface built with **Tailwind CSS**
+- **RESTful API**: Complete API with authentication via **Laravel Sanctum**
+- **Map Integration**: Location-based features with MapLibre GL integration
 
 ### 💰 Payroll Management Features
 
-- **Time Tracking**: Automatic time entry generation from task start/end datetime
-- **Employee Profiles**: Comprehensive employee information with hourly rates and tax settings
-- **Salary Calculations**: Automatic calculation with overtime, regular hours, and tax deductions
-- **Tax Management**: Flexible tax configuration system supporting flat, percentage, and progressive taxes
-- **Payslip Generation**: Automated payslip creation with detailed breakdowns
-- **Admin-Only Access**: Secure payroll management restricted to administrators
-- **Approval Workflows**: Time entry and payslip approval processes
-- **Comprehensive Reports**: Daily, weekly, monthly payroll analytics and reports
+#### Core Payroll Capabilities
+
+- **Automated Time Tracking**: Automatic time entry generation from task start/end datetime
+- **Smart Time Entry Management**:
+  - Overlap detection and prevention
+  - Approval workflows
+  - Manual entry and editing
+  - Bulk approval capabilities
+- **Employee Profile Management**:
+  - Comprehensive employee information
+  - Customizable hourly rates per employee
+  - Overtime rate multipliers
+  - Standard working hours configuration
+  - Tax exemptions and deductions
+  - Payment method preferences (bank transfer, cash, check)
+  - Hire and termination date tracking
+  - Active/inactive status management
+- **Intelligent Salary Calculations**:
+  - Automatic hourly rate application
+  - Regular vs. overtime hour differentiation
+  - Daily overtime detection
+  - Configurable standard working hours
+  - Automatic gross pay calculation
+- **Advanced Tax Management**:
+  - Multiple tax configuration support
+  - Three tax types: **Progressive** (bracket-based), **Percentage** (fixed rate), **Flat** (fixed amount)
+  - Pre-configured US tax system:
+    - Federal Income Tax (progressive brackets)
+    - Social Security Tax (6.2% up to wage base)
+    - Medicare Tax (1.45%)
+    - Additional Medicare Tax (0.9% for high earners)
+    - State Income Tax (configurable)
+    - Unemployment Insurance
+  - Priority-based tax calculation order
+  - Tax bracket configuration
+  - Minimum/maximum income thresholds
+  - Employee type targeting (all, employees, contractors)
+- **Automated Payslip Generation**:
+  - Single or bulk payslip creation
+  - Detailed earnings breakdown
+  - Comprehensive deductions listing
+  - Unique payslip numbering system
+  - Draft, approved, and paid statuses
+  - Approval workflows
+  - Pay period management (weekly, bi-weekly, monthly)
+- **Admin-Only Access**: Secure payroll features restricted to administrators
+- **Approval Workflows**:
+  - Time entry approval process
+  - Payslip approval system
+  - Bulk approval capabilities
+  - Audit trail for all approvals
+- **Comprehensive Reports & Analytics**:
+  - Daily, weekly, monthly, quarterly, and yearly reports
+  - Employee-wise analysis
+  - Project-wise payroll breakdown
+  - Summary and detailed views
+  - Payroll cost trends
+  - Hours tracking statistics
+  - Tax deduction summaries
 - **Multiple Payment Methods**: Support for bank transfer, cash, and check payments
-- **Overtime Calculations**: Automatic overtime detection and rate multiplication
+- **Overtime Management**:
+  - Automatic overtime detection based on daily hours
+  - Configurable overtime rate multipliers
+  - Standard hours per day/week settings
+  - Overtime vs. regular hours tracking
 
 #### Payroll System Components
 
-1. **Time Entries**: Track worked hours based on task assignments
-2. **Employee Profiles**: Manage hourly rates, tax exemptions, and payment methods
-3. **Payroll Settings**: Configure company-wide payroll parameters
-4. **Tax Configurations**: Set up federal, state, Social Security, Medicare, and other taxes
-5. **Payslips**: Generate detailed pay statements with gross pay, deductions, and net pay
-6. **Reports & Analytics**: Comprehensive payroll reporting and statistics
+1. **Time Entries Module**:
+   - Tracks worked hours linked to tasks and projects
+   - Automatic calculation from task start/end times
+   - Manual entry creation and editing
+   - Overlap prevention
+   - Approval workflows
+   - User and admin access levels
+
+2. **Employee Profiles Module**:
+   - Hourly rate management
+   - Tax exemption configuration
+   - Payment method setup
+   - Standard hours configuration
+   - Employment period tracking
+   - Active/inactive status
+
+3. **Payroll Settings Module**:
+   - Company information (name, address, tax ID)
+   - Pay period configuration (weekly, bi-weekly, monthly)
+   - Pay day settings
+   - Default hourly rates
+   - Working days selection
+   - Standard work hours (start time, end time)
+   - Break duration settings
+   - Automatic overtime calculation toggle
+   - Overtime approval requirements
+   - Auto time entry generation
+   - Currency and timezone settings
+
+4. **Tax Configurations Module**:
+   - Federal, state, and local tax setup
+   - Social Security and Medicare taxes
+   - Progressive tax brackets
+   - Percentage-based taxes
+   - Flat rate taxes
+   - Tax priority ordering
+   - Income thresholds
+   - Tax descriptions and documentation
+
+5. **Payslips Module**:
+   - Detailed pay statements
+   - Regular and overtime hours breakdown
+   - Gross pay calculation
+   - Tax deduction itemization
+   - Other deductions tracking
+   - Net pay computation
+   - Bonus inclusion
+   - Status management (draft, approved, paid)
+   - PDF export (coming soon)
+   - Bulk operations
+
+6. **Reports & Analytics Module**:
+   - Payroll dashboard with real-time statistics
+   - Period-based reporting (weekly, monthly, quarterly, yearly)
+   - Employee-wise reports
+   - Project-wise payroll analysis
+   - Summary and detailed views
+   - Export capabilities
+   - Visual charts and graphs
+   - Trend analysis
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Laravel 11, PHP 8.2+
-- **Frontend**: Vue.js 3, Inertia.js, Tailwind CSS
-- **Database**: MySQL/PostgreSQL with comprehensive indexing
-- **Search**: Meilisearch with Laravel Scout
-- **Real-time**: Laravel Reverb for WebSocket connections
-- **Authentication**: Laravel Sanctum, Jetstream with 2FA
-- **Permissions**: Spatie Laravel Permission package
-- **Localization**: Mcamara Laravel Localization
-- **Development**: Laravel Sail (Docker-based development environment)
+### Backend
+
+- **PHP**: 8.4
+- **Laravel Framework**: 11.37.0
+- **Database**: MariaDB 10 (MySQL-compatible)
+- **ORM**: Eloquent with comprehensive relationships
+- **Authentication**: Laravel Sanctum + Jetstream
+- **Authorization**: Spatie Laravel Permission package v6.21
+- **Search Engine**: Meilisearch with Laravel Scout v10.12
+- **Real-time**: Laravel Reverb v1.0 (WebSocket server)
+- **Localization**: Mcamara Laravel Localization v2.2
+
+### Frontend
+
+- **JavaScript Framework**: Vue.js 3.3.13
+- **SPA Framework**: Inertia.js v2.0.3
+- **CSS Framework**: Tailwind CSS v3.4
+- **Build Tool**: Vite v6.0
+- **Server-Side Rendering**: Vue SSR with @vue/server-renderer
+- **UI Components**:
+  - Headless UI for accessible components
+  - vue-select for advanced dropdowns
+  - vue-chart-3 + Chart.js for data visualization
+  - vuedraggable for drag-and-drop
+- **Maps**: MapLibre GL for location features
+- **Internationalization**: laravel-vue-i18n v2.8
+
+### Development Environment
+
+- **Laravel Sail**: Docker-based development environment
+- **Docker Services**:
+  - PHP 8.4 application container
+  - MariaDB 10 database
+  - Meilisearch search engine
+  - phpMyAdmin for database management
+- **Testing**: Pest PHP v3.7 with Laravel plugin
+- **Code Quality**: Laravel Pint for code styling
+- **Package Manager**: Composer v2+, npm/yarn
+
+### Additional Packages & Tools
+
+- **Real-time Broadcasting**: Laravel Echo + Pusher.js
+- **API Documentation**: Ziggy v2.0 for route generation
+- **Form Validation**: Laravel Form Requests
+- **Queue Processing**: Laravel Queue with database driver
+- **Logging**: Laravel Pail for real-time log viewing
+- **Development**: Concurrently for parallel command execution
 
 ---
 
@@ -67,121 +225,223 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 ### Prerequisites
 
-- Composer v2+
-- Node.js v19.1.0+
-- Docker & Docker Compose
+Before you begin, ensure you have the following installed:
+
+- **Docker & Docker Compose**: For running the containerized environment
+- **PHP**: 8.2 or higher (for Composer)
+- **Composer**: v2 or higher
+- **Node.js**: v19.1.0 or higher
+- **npm**: Latest version
+- **Git**: For version control
 
 ### Installation
 
-1.  **Clone the repository:**
+1. **Clone the repository:**
 
-    ```shell
-    git clone git@github.com/Pejoal/manager.git
-    cd manager
-    ```
+   ```bash
+   git clone https://github.com/Pejoal/manager.git
+   cd manager
+   ```
 
-2.  **Set up the environment:**
+2. **Set up environment variables:**
 
-    ```shell
-    cp .env.example .env
-    ```
+   ```bash
+   cp .env.example .env
+   ```
 
-    > Make sure to configure your database and application variables in the `.env` file.
+   **Important**: Edit the `.env` file and configure:
+   - Database credentials (DB_DATABASE, DB_USERNAME, DB_PASSWORD)
+   - Application URL (APP_URL)
+   - Meilisearch master key (MEILISEARCH_KEY)
+   - Mail configuration (for notifications)
+   - Reverb configuration (for real-time features)
 
-3.  **Install Laravel Sail:**
+3. **Install Laravel Sail (if not already installed):**
 
-    ```shell
-    composer require laravel/sail --dev --ignore-platform-reqs
-    ```
+   ```bash
+   composer require laravel/sail --dev --ignore-platform-reqs
+   ```
 
-4.  **Create a shell alias for convenience:**
+4. **Create a convenient shell alias:**
 
-    ```shell
-    alias sail="./vendor/bin/sail"
-    ```
+   ```bash
+   alias sail="./vendor/bin/sail"
+   ```
 
-5.  **Start the Docker containers:**
-    This command starts the web server, database, and search engine in the background.
+   Add this to your `~/.bashrc` or `~/.zshrc` for persistence.
 
-    ```shell
-    sail up -d
-    ```
+5. **Start the Docker containers:**
 
-6.  **Install backend dependencies:**
+   ```bash
+   sail up -d
+   ```
 
-    ```shell
-    sail composer install --ignore-platform-reqs
-    ```
+   This starts:
+   - Laravel application (http://localhost)
+   - MariaDB database (port 3306)
+   - Meilisearch (http://localhost:7700)
+   - phpMyAdmin (http://localhost:81)
 
-7.  **Run initial setup commands:**
+6. **Install PHP dependencies:**
 
-    ```shell
-    sail artisan key:generate
-    sail artisan migrate:fresh --seed
+   ```bash
+   sail composer install --ignore-platform-reqs
+   ```
+
+7. **Generate application key:**
+
+   ```bash
+   sail artisan key:generate
+   ```
+
+8. **Run database migrations and seeders:**
+
+   ```bash
+   sail artisan migrate:fresh --seed
+   ```
+
+9. **Set up the payroll system:**
+
+   ```bash
+   sail artisan db:seed --class=PayrollSeeder
+   ```
+
+   This creates:
+   - Admin, Manager, and Employee roles
+   - Payroll permissions
+   - Default payroll settings
+   - US tax configurations (Federal, Social Security, Medicare, etc.)
+
+10. **Create storage symlink:**
+
+    ```bash
     sail artisan storage:link
     ```
 
-8.  **Set up payroll system:**
+11. **Configure Meilisearch indexes:**
 
-    ```shell
-    sail artisan db:seed --class=PayrollSeeder
-    ```
-
-9.  **Sync search index settings:**
-    This command is crucial for configuring your Meilisearch indexes.
-
-    ```shell
+    ```bash
     sail artisan scout:sync-index-settings
     ```
 
-10. **Install frontend dependencies:**
+    This is crucial for search functionality to work properly.
 
-    ```shell
+12. **Install frontend dependencies:**
+
+    ```bash
     sail npm install
     ```
 
-11. **Compile assets and start services:**
-    Open two separate terminal tabs for these commands.
-    - In the first tab, compile frontend assets and watch for changes:
-      ```shell
-      sail npm run dev
-      ```
-    - In the second tab, start the Reverb WebSocket server:
-      ```shell
-      sail artisan reverb:start
-      ```
+13. **Start development servers:**
 
-### Sharing Your Local Development Environment
+    Open **two separate terminal windows/tabs**:
+
+    **Terminal 1 - Vite development server:**
+
+    ```bash
+    sail npm run dev
+    ```
+
+    **Terminal 2 - Laravel Reverb WebSocket server:**
+
+    ```bash
+    sail artisan reverb:start
+    ```
+
+14. **Access the application:**
+    - Main application: http://localhost
+    - phpMyAdmin: http://localhost:81
+    - Meilisearch: http://localhost:7700
+
+### Default Login Credentials
+
+After seeding, you can log in with:
+
+- **Email**: Your configured admin email (check `PayrollSeeder.php`)
+- **Password**: The password you set during user creation
+
+### Optional: Share Your Local Development
+
+To share your local development environment:
 
 ```bash
-sail share --subdomain="pejoal"
+sail share --subdomain="your-subdomain"
 ```
+
+---
 
 ## 👥 User Roles & Permissions
 
-The system includes three main roles with specific permissions:
+The system includes three main roles with specific permissions managed by Spatie Laravel Permission:
 
 ### 🔑 Admin Role
 
-- Full access to all system features
-- Payroll management (view, create, edit, approve)
-- Employee profile management
-- Payslip generation and approval
-- Tax configuration management
-- System settings and reports
+**Full System Access:**
+
+- Complete CRUD operations on all entities
+- User management and role assignment
+- System settings configuration
+
+**Payroll Management:**
+
+- View, create, edit, and delete employee profiles
+- Activate/deactivate employee accounts
+- View and approve all time entries
+- Generate payslips (single and bulk)
+- Approve and mark payslips as paid
+- Configure payroll settings
+- Manage tax configurations
+- Access all payroll reports
+- Generate time entries automatically from tasks
+- Bulk operations on time entries and payslips
+
+**Reporting:**
+
+- Full access to all reports and analytics
+- Export capabilities
+- Custom report generation
 
 ### 👔 Manager Role
 
-- View payroll reports
-- View employee profiles (read-only)
+**Project Management:**
+
 - Manage assigned projects and tasks
-- View time entries for their projects
+- View project-related time entries
+- Monitor team member activities
+
+**Limited Payroll Access:**
+
+- View payroll reports (read-only)
+- View employee profiles (read-only)
+- View time entries for managed projects
+- Create own time entries
+
+**Reporting:**
+
+- View summary reports
+- Access to project-specific analytics
 
 ### 👤 Employee Role
 
-- Create and manage own time entries
-- View own payslips and time tracking data
-- Update personal profile information
+**Personal Management:**
+
+- View and update personal profile
+- Manage own time entries (create, edit, delete)
+- View own time tracking history
+
+**Payroll Access:**
+
+- View own payslips
+- View own payment history
+- View personal earnings and deductions
+- Update tax exemptions
+
+**Restrictions:**
+
+- Cannot view other employees' data
+- Cannot approve time entries
+- Cannot generate payslips
+- Cannot access system settings
 
 ---
 
@@ -189,37 +449,131 @@ The system includes three main roles with specific permissions:
 
 ### For Employees:
 
-1. **Time Tracking**: Log worked hours by creating time entries linked to assigned tasks
-2. **View Payslips**: Access generated payslips and payment history
-3. **Profile Management**: Update personal information and tax exemptions
+1. **Time Tracking**:
+   - Log worked hours by creating time entries linked to assigned tasks
+   - View the "Time Entries" page from the navigation
+   - Click "Create Time Entry"
+   - Select task, enter start/end datetime
+   - Add optional description
+   - Submit for approval
+
+2. **View Payslips**:
+   - Access generated payslips from the Payroll menu
+   - View detailed breakdown of earnings and deductions
+   - Download payslips (PDF feature coming soon)
+   - Check payment history
+
+3. **Profile Management**:
+   - Update personal information
+   - View hourly rate and overtime rate
+   - Check standard working hours
 
 ### For Administrators:
 
-1. **Employee Setup**: Create employee profiles with hourly rates and tax settings
-2. **Time Approval**: Review and approve employee time entries
-3. **Payroll Processing**: Generate payslips for pay periods with automatic calculations
-4. **Tax Management**: Configure tax rates and brackets for accurate deductions
-5. **Reports**: Generate comprehensive payroll reports and analytics
+1. **Employee Setup**:
+   - Navigate to Payroll → Employee Profiles
+   - Click "Create Employee Profile"
+   - Enter employee details, hourly rates, tax settings
+   - Set standard working hours and overtime multiplier
+   - Configure payment method
+   - Activate the profile
+
+2. **Time Entry Management**:
+   - Review pending time entries
+   - Approve or reject submitted entries
+   - Use bulk approve for multiple entries
+   - Monitor for overlapping time entries
+   - Generate automatic time entries from completed tasks
+
+3. **Payroll Processing**:
+   - Navigate to Payroll → Payslips
+   - Choose "Generate Payslips" or "Generate Bulk"
+   - Select pay period (start and end dates)
+   - Choose employees
+   - System automatically:
+     - Calculates regular vs. overtime hours
+     - Applies appropriate hourly rates
+     - Computes tax deductions
+     - Calculates net pay
+   - Review draft payslips
+   - Approve payslips
+   - Mark as paid when payment is completed
+
+4. **Tax Configuration**:
+   - Access Payroll → Settings → Tax Configurations
+   - Create tax configurations for different tax types
+   - Set up progressive tax brackets
+   - Configure minimum/maximum income thresholds
+   - Set priority for calculation order
+   - Activate/deactivate taxes as needed
+
+5. **Payroll Settings**:
+   - Configure company information
+   - Set pay period (weekly, bi-weekly, monthly)
+   - Define standard working hours
+   - Set default hourly rates
+   - Choose working days
+   - Configure overtime settings
+   - Enable/disable automatic features
+
+6. **Reports & Analytics**:
+   - Access Payroll → Reports
+   - Select report type (summary, detailed, by employee, by project)
+   - Choose time period
+   - Filter by employees or projects
+   - View charts and statistics
+   - Export data for accounting software
 
 ### Key Features:
 
-- **Automatic Calculations**: Hours worked calculated from task start/end times
-- **Overtime Detection**: Automatic identification of overtime hours based on daily/weekly limits
-- **Tax Deductions**: Progressive, flat, and percentage-based tax calculations
+- **Automatic Calculations**: Hours worked automatically calculated from task start/end times
+- **Overtime Detection**: System identifies overtime hours based on daily/weekly configured limits
+- **Progressive Tax Calculations**: Support for bracket-based federal income tax
+- **Multi-Tax Support**: Apply multiple taxes (federal, state, Social Security, Medicare) with priority ordering
 - **Approval Workflows**: Multi-level approval process for time entries and payslips
-- **Audit Trail**: Complete activity logging for all payroll-related actions
+- **Audit Trail**: Complete activity logging for all payroll-related actions with timestamps
+- **Overlap Prevention**: System prevents overlapping time entries for the same employee
+- **Bulk Operations**: Approve multiple time entries or payslips simultaneously
+- **Real-time Updates**: Dashboard statistics update in real-time
 
 ---
 
 ## 🗂️ Database Schema
 
-The payroll system adds the following key tables:
+### Core Tables
 
-- `employee_profiles` - Employee payroll information
-- `time_entries` - Tracked work hours with task linkage
-- `payslips` - Generated pay statements
-- `payroll_settings` - Company-wide payroll configuration
-- `tax_configurations` - Flexible tax calculation rules
+- `users` - User accounts with authentication
+- `teams` - Team management
+- `team_user` - Team membership
+- `team_invitations` - Team invitations
+- `clients` - Client information
+- `projects` - Project details with status and priority
+- `client_project` - Client-project associations
+- `phases` - Project phases with ordering
+- `milestones` - Project milestones with ordering
+- `tasks` - Tasks with assignments, status, and priority
+- `task_user` - Task assignments to users
+- `task_statuses` - Customizable task statuses
+- `task_priorities` - Customizable task priorities
+- `project_statuses` - Customizable project statuses
+- `project_priorities` - Customizable project priorities
+- `activities` - Activity logging for audit trail
+
+### Payroll Tables
+
+- `employee_profiles` - Employee payroll information with rates and settings
+- `time_entries` - Tracked work hours linked to tasks and projects
+- `payslips` - Generated pay statements with detailed breakdowns
+- `payroll_settings` - Company-wide payroll configuration (singleton)
+- `tax_configurations` - Flexible tax calculation rules with brackets
+
+### Permission Tables (Spatie)
+
+- `roles` - User roles (admin, manager, employee)
+- `permissions` - Granular permissions
+- `role_has_permissions` - Role-permission associations
+- `model_has_roles` - User-role associations
+- `model_has_permissions` - Direct user permissions
 
 ---
 
@@ -227,66 +581,334 @@ The payroll system adds the following key tables:
 
 The application supports multiple languages with comprehensive translation coverage:
 
+### Supported Languages
+
+- English (en) - Default
+- German (de)
+- Easily extensible for additional languages
+
+### Features
+
 - All user interface text is translatable
-- Payroll-specific translations included
+- Payroll-specific translations included (`payroll.php`)
 - Session-based locale management
-- Easy addition of new languages
+- Automatic locale detection from URL
+- Language switcher in navigation
+- RTL support ready
 
-### Adding New Locales:
+### Translation Files Location
 
-1. Add locale to `config/laravellocalization.php`
-2. Create language files in `lang/{locale}/`
-3. Clear cache:
-   ```shell
+- PHP translations: `lang/{locale}/` (e.g., `lang/en/`, `lang/de/`)
+- JSON translations: `lang/{locale}.json` (e.g., `lang/php_en.json`)
+
+### Adding New Locales
+
+1. **Add locale to configuration:**
+   Edit `config/laravellocalization.php` and add your locale to the `supportedLocales` array.
+
+2. **Create language files:**
+
+   ```bash
+   mkdir -p lang/fr  # Example for French
+   cp -r lang/en/* lang/fr/
+   # Translate the files
+   ```
+
+3. **Add JSON translations:**
+
+   ```bash
+   cp lang/php_en.json lang/php_fr.json
+   # Translate the JSON file
+   ```
+
+4. **Clear cache:**
+   ```bash
    sail artisan cache:clear
    sail artisan config:clear
+   sail artisan view:clear
    ```
 
 ---
 
 ## 🔧 Configuration
 
-### Payroll Settings:
+### Payroll Settings
 
-Configure company payroll parameters in the admin panel:
+Configure company payroll parameters through the admin panel (Payroll → Settings):
 
-- Company information and tax ID
-- Pay periods (weekly, bi-weekly, monthly)
-- Standard working hours and overtime rules
-- Default hourly rates and currencies
-- Automatic time entry generation settings
+**Company Information:**
 
-### Tax Configuration:
+- Company name, address, and tax ID
+- Currency (USD, EUR, etc.)
+- Timezone for accurate time tracking
 
-Set up multiple tax types:
+**Pay Period Configuration:**
 
-- **Progressive**: Income tax with multiple brackets
-- **Percentage**: Fixed percentage taxes (Social Security, Medicare)
-- **Flat**: Fixed amount deductions
-- Priority-based calculation order
+- Weekly: Pay day (0-6, 0=Sunday)
+- Bi-weekly: Every two weeks
+- Monthly: Pay day (1-31)
+
+**Working Hours:**
+
+- Standard start time (e.g., 09:00)
+- Standard end time (e.g., 17:00)
+- Break duration in minutes
+- Working days selection (Monday-Sunday)
+
+**Overtime Rules:**
+
+- Auto-calculate overtime toggle
+- Require approval for overtime toggle
+- Standard hours per day/week for overtime calculation
+
+**Automation:**
+
+- Auto-generate time entries from completed tasks
+- Default hourly rate for new employees
+
+### Tax Configuration
+
+Set up multiple tax types through Settings → Tax Configurations:
+
+**Progressive Taxes** (Income Tax with brackets):
+
+```php
+'brackets' => [
+    ['min' => 0, 'max' => 10275, 'rate' => 10],
+    ['min' => 10276, 'max' => 41775, 'rate' => 12],
+    ['min' => 41776, 'max' => 89450, 'rate' => 22],
+    // ... more brackets
+]
+```
+
+**Percentage Taxes** (Fixed rate):
+
+- Social Security: 6.2% (up to wage base)
+- Medicare: 1.45% (all wages)
+- State Tax: Configurable percentage
+
+**Flat Taxes** (Fixed amount):
+
+- Local taxes with fixed amount deductions
+
+**Configuration Options:**
+
+- Priority (calculation order)
+- Minimum income threshold
+- Maximum income cap
+- Applies to (all employees, employees only, contractors only)
+- Active/inactive status
+
+### Environment Variables
+
+Key environment variables in `.env`:
+
+```env
+# Application
+APP_NAME="Project Manager"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=mariadb
+DB_PORT=3306
+DB_DATABASE=project_manager
+DB_USERNAME=sail
+DB_PASSWORD=password
+
+# Meilisearch
+MEILISEARCH_HOST=http://meilisearch:7700
+MEILISEARCH_KEY=your-master-key
+SCOUT_DRIVER=meilisearch
+
+# Reverb (WebSockets)
+REVERB_APP_ID=your-app-id
+REVERB_APP_KEY=your-app-key
+REVERB_APP_SECRET=your-app-secret
+REVERB_SERVER_HOST=0.0.0.0
+REVERB_SERVER_PORT=8080
+
+# Mail (for notifications)
+MAIL_MAILER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+```
 
 ---
 
 ## 📊 Reports & Analytics
 
-The payroll system provides comprehensive reporting:
+The payroll system provides comprehensive reporting through the Reports module:
 
-- Employee time tracking summaries
-- Payroll cost analysis by period
-- Tax deduction breakdowns
-- Overtime analysis and trends
-- Export capabilities for accounting software integration
+### Report Types
+
+**Summary Report:**
+
+- Total hours worked
+- Total payroll cost
+- Average hourly rate
+- Number of employees
+- Time period overview
+
+**Detailed Report:**
+
+- Individual payslip details
+- Employee-wise breakdown
+- Project-wise breakdown
+- Line-by-line entries
+
+**By Employee Report:**
+
+- Employee payroll history
+- Hours worked per employee
+- Earnings per employee
+- Tax deductions per employee
+
+**By Project Report:**
+
+- Project payroll costs
+- Hours allocated to each project
+- Project profitability insights
+
+### Time Periods
+
+- Weekly
+- Monthly (default)
+- Quarterly
+- Yearly
+- Custom date range
+
+### Filters
+
+- Select specific employees
+- Choose specific projects
+- Filter by pay period
+- Filter by approval status
+
+### Export Capabilities
+
+- PDF export (coming soon)
+- Excel export (coming soon)
+- CSV data export
+- Print-friendly format
+
+### Dashboard Statistics
+
+- Current month hours
+- Current month payroll
+- Pending approvals count
+- Active employees count
+- Month-over-month comparisons
+- Upcoming payslips
+- Recent time entries
+- Recent payslips
 
 ---
 
 ## 🔒 Security Features
 
-- **Role-based access control** with granular permissions
-- **Admin-only payroll access** to sensitive financial data
-- **Audit logging** for all payroll activities
-- **Data validation** and sanitization
-- **CSRF protection** and secure headers
-- **Rate limiting** on sensitive operations
+The application implements multiple layers of security:
+
+### Authentication & Authorization
+
+- **Laravel Sanctum**: API token authentication
+- **Laravel Jetstream**: Feature-rich authentication scaffolding
+- **Two-Factor Authentication**: Optional 2FA for enhanced security
+- **Email Verification**: Required before account activation
+- **Password Reset**: Secure password recovery
+- **Session Management**: Active session viewing and termination
+- **Role-based Access Control**: Granular permissions with Spatie Permission package
+
+### Data Protection
+
+- **Input Validation**: Laravel Form Requests for all inputs
+- **XSS Prevention**: Automatic output sanitization
+- **SQL Injection Protection**: Eloquent ORM with parameter binding
+- **CSRF Protection**: Token-based CSRF protection on all forms
+- **Mass Assignment Protection**: Fillable/guarded model properties
+
+### Payroll Security
+
+- **Admin-only Access**: Sensitive financial data restricted to administrators
+- **Audit Logging**: Complete activity trail for all payroll operations
+- **Data Validation**: Strict validation on all payroll calculations
+- **Permission Checks**: Granular permission verification on every action
+- **Time Entry Validation**: Overlap prevention and logical checks
+
+### Additional Security
+
+- **Rate Limiting**: Throttling on sensitive operations
+- **Secure Headers**: Security headers configured
+- **HTTPS Ready**: SSL/TLS support
+- **Environment Variables**: Sensitive data in .env file
+- **Database Encryption**: Password hashing with bcrypt
+- **API Authentication**: Token-based API security
+
+---
+
+## 🧪 Testing
+
+The project uses Pest PHP for testing:
+
+```bash
+# Run all tests
+sail artisan test
+
+# Run specific test suite
+sail artisan test --testsuite=Feature
+
+# Run with coverage
+sail artisan test --coverage
+```
+
+### Test Structure
+
+- **Feature Tests**: End-to-end testing of features
+- **Unit Tests**: Individual component testing
+- **Database**: Factory-based test data generation
+
+---
+
+## 🛠️ Development Commands
+
+### Useful Artisan Commands
+
+```bash
+# Clear all caches
+sail artisan optimize:clear
+
+# Run queue worker
+sail artisan queue:work
+
+# View logs in real-time
+sail artisan pail
+
+# Generate IDE helper files
+sail artisan ide-helper:generate
+
+# Run code style fixer
+sail artisan pint
+
+# Import time entries from tasks
+sail artisan payroll:generate-time-entries
+```
+
+### Running All Services Together
+
+The `composer dev` command runs all services concurrently:
+
+```bash
+sail composer dev
+```
+
+This starts:
+
+- Laravel development server
+- Queue worker
+- Log viewer (Pail)
+- Vite development server
 
 ---
 
@@ -298,10 +920,110 @@ For support, please email me at [pejoal.official@gmail.com](mailto:pejoal.offici
 
 ## 👤 Author
 
-- **Pejoal** - [GitHub](https://www.github.com/Pejoal)
+**Pejoal**
+
+- GitHub: [@Pejoal](https://www.github.com/Pejoal)
+- Email: pejoal.official@gmail.com
 
 ---
 
 ## 📄 License
 
 This project is proprietary software. All rights reserved.
+
+---
+
+## 🙏 Acknowledgments
+
+- Laravel Team for the amazing framework
+- Spatie for the permission package
+- Meilisearch for the search engine
+- All open-source contributors
+
+---
+
+## 📝 Changelog
+
+### Version 1.0.0 (Current)
+
+- Initial release with full payroll system
+- Complete project management features
+- Real-time notifications
+- Multi-language support
+- Comprehensive reporting
+
+---
+
+## 🗺️ Roadmap
+
+### Upcoming Features
+
+- PDF payslip generation
+- Excel report exports
+- Email notifications for payroll events
+- Mobile application
+- Advanced analytics and charts
+- Expense tracking integration
+- Invoice generation
+- Client portal
+- Time tracking mobile app
+- Biometric time tracking integration
+
+---
+
+## 💡 Tips & Best Practices
+
+### For Administrators
+
+1. Configure payroll settings before creating employee profiles
+2. Set up tax configurations based on your jurisdiction
+3. Run `payroll:generate-time-entries` periodically to auto-create entries from tasks
+4. Regularly backup the database
+5. Review and approve time entries before generating payslips
+6. Keep tax rates updated annually
+
+### For Developers
+
+1. Always use Form Requests for validation
+2. Follow the repository pattern for data access
+3. Use events for decoupled business logic
+4. Write tests for critical payroll calculations
+5. Document complex tax calculation logic
+6. Use database transactions for payroll operations
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Search not working:**
+
+```bash
+sail artisan scout:sync-index-settings
+sail artisan scout:import "App\Models\Task"
+```
+
+**Reverb not connecting:**
+
+- Check REVERB_SERVER_PORT in .env
+- Ensure Reverb is running: `sail artisan reverb:start`
+- Check firewall settings
+
+**Payroll calculations incorrect:**
+
+- Verify employee profile hourly rates
+- Check tax configuration priorities
+- Ensure time entries are approved
+- Review standard hours settings
+
+**Permission errors:**
+
+```bash
+sail artisan permission:cache-reset
+sail artisan optimize:clear
+```
+
+---
+
+_Last Updated: January 2025_
