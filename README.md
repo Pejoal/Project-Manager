@@ -538,6 +538,428 @@ The system includes three main roles with specific permissions managed by Spatie
 
 ---
 
+## 📐 Project Structure & Organization
+
+The system implements a sophisticated hierarchical structure for organizing work, providing flexibility and clarity in project management.
+
+### Hierarchical Structure
+
+```
+Client(s)
+    └── Project
+            ├── Phases (Optional organizational layer)
+            │   └── Milestones (Optional within phases)
+            │       └── Tasks (Can be assigned to phases, milestones, or directly to projects)
+            └── Milestones (Optional, can exist without phases)
+                └── Tasks
+```
+
+### Structure Components
+
+#### 🏢 Clients
+
+- Top-level entity representing customers or stakeholders
+- Multiple clients can be associated with a single project
+- Stores contact information (name, email, phone)
+- Can be linked to multiple projects
+
+#### 📁 Projects
+
+- Core organizational unit for all work
+- **Unique Features:**
+  - Slug-based URLs for SEO-friendly navigation
+  - Start and end date tracking
+  - Customizable status (from master settings)
+  - Customizable priority (from master settings)
+  - Multiple client associations
+- **Contains:**
+  - Phases (optional)
+  - Milestones (optional)
+  - Tasks (required)
+- **Relationships:**
+  - Belongs to multiple clients
+  - Has many phases
+  - Has many milestones
+  - Has many tasks
+
+#### 📊 Phases
+
+- Optional organizational layer within projects
+- Provides sequential structure to project workflow
+- **Features:**
+  - Customizable ordering (drag-and-drop support)
+  - Description for detailed phase information
+  - Can contain milestones and tasks
+- **Use Cases:**
+  - Breaking large projects into manageable segments
+  - Sequential workflow management (e.g., Design → Development → Testing → Deployment)
+  - Budget and timeline tracking per phase
+- **Relationships:**
+  - Belongs to one project
+  - Has many milestones (optional)
+  - Has many tasks
+
+#### 🎯 Milestones
+
+- Optional achievement markers within projects or phases
+- Represent significant checkpoints or deliverables
+- **Features:**
+  - Can belong to a phase or directly to a project
+  - Customizable ordering within parent
+  - Description for milestone details
+  - Can contain multiple tasks
+- **Use Cases:**
+  - Major deliverable completion
+  - Project phase completion markers
+  - Client approval points
+  - Release versions
+- **Relationships:**
+  - Belongs to one project
+  - Optionally belongs to one phase
+  - Has many tasks
+
+#### ✅ Tasks
+
+- Fundamental work unit in the system
+- Most granular level of work organization
+- **Features:**
+  - Can be assigned to:
+    - Project directly (no phase/milestone)
+    - Phase (within project)
+    - Milestone (within project or phase)
+  - Customizable ordering (drag-and-drop support)
+  - Multiple user assignments
+  - Customizable status (from master settings)
+  - Customizable priority (from master settings)
+  - Start and end datetime for time tracking
+  - Description for task details
+  - **Searchable** via Meilisearch (name and description)
+- **Payroll Integration:**
+  - Start/end datetime generates time entries automatically
+  - Links to time tracking system
+  - Used for employee hour calculation
+- **Relationships:**
+  - Belongs to one project (required)
+  - Optionally belongs to one phase
+  - Optionally belongs to one milestone
+  - Belongs to many users (assignees)
+  - Has one status
+  - Has one priority
+  - Has many time entries (payroll)
+
+### Organization Flexibility
+
+The system supports multiple organizational approaches:
+
+1. **Simple Structure:**
+
+   ```
+   Project → Tasks
+   ```
+
+   Direct task assignment to projects without phases or milestones.
+
+2. **Phase-Based Structure:**
+
+   ```
+   Project → Phases → Tasks
+   ```
+
+   Organize work into sequential phases with tasks under each phase.
+
+3. **Milestone-Based Structure:**
+
+   ```
+   Project → Milestones → Tasks
+   ```
+
+   Track major achievements with tasks grouped under milestones.
+
+4. **Complete Hierarchical Structure:**
+
+   ```
+   Project → Phases → Milestones → Tasks
+   ```
+
+   Full hierarchical organization with phases containing milestones, which contain tasks.
+
+5. **Hybrid Structure:**
+   ```
+   Project
+       ├── Phase 1 → Milestone A → Tasks
+       ├── Phase 2 → Tasks (no milestone)
+       └── Tasks (directly under project)
+   ```
+   Mix and match organizational structures within a single project.
+
+### Ordering & Organization
+
+- **Drag-and-Drop Ordering:**
+  - Phases can be reordered within projects
+  - Milestones can be reordered within projects or phases
+  - Tasks can be reordered within their container (project, phase, or milestone)
+
+- **Visual Organization:**
+  - Color-coded statuses for quick visual identification
+  - Priority indicators for urgency visibility
+  - Progress tracking at each level
+
+---
+
+## ⚙️ Master Settings & Customization
+
+The system provides comprehensive master settings for customizing the application to match your organization's workflow and terminology.
+
+### Customizable Master Settings
+
+#### 🎨 Visual Settings
+
+Located in the Settings table, these control the visual appearance:
+
+- **Client Color**: Default color for client-related items (`clients_color`)
+- **Project Color**: Default color for project-related items (`projects_color`)
+- **Task Color**: Default color for task-related items (`tasks_color`)
+
+Access via: `Settings` model (singleton pattern)
+
+#### 📊 Project Statuses
+
+Fully customizable project lifecycle statuses stored in `project_statuses` table.
+
+**Default Statuses:**
+
+- **Planned** (🔴 #FF5733) - Project in planning phase
+- **In Progress** (🔵 #36A2EB) - Active development
+- **Completed** (🟢 #4BC0C0) - Successfully finished
+- **On Hold** (🟠 #FFA500) - Temporarily paused
+- **Cancelled** (⚫ #808080) - Discontinued
+- **Deferred** (🔴 #C70039) - Postponed to future
+
+**Features:**
+
+- Create unlimited custom statuses
+- Assign custom colors (hex codes)
+- Edit existing status names and colors
+- Delete unused statuses (with safety checks)
+- Used across all projects system-wide
+
+**Management:**
+
+```
+Routes: /project-statuses
+Controller: ProjectStatusController
+Model: ProjectStatus
+```
+
+#### 🎯 Project Priorities
+
+Customizable priority levels for projects stored in `project_priorities` table.
+
+**Default Priorities:**
+
+- **Low** (🟡 #FFCE56) - Can be delayed if needed
+- **Medium** (🟢 #00FF00) - Normal priority
+- **High** (💗 #FF1493) - Important and urgent
+- **Urgent** (🔴 #FF1500) - Critical, needs immediate attention
+
+**Features:**
+
+- Create unlimited custom priorities
+- Assign custom colors for visual distinction
+- Edit existing priority names and colors
+- Delete unused priorities (with safety checks)
+- Applied to projects for resource allocation
+
+**Management:**
+
+```
+Routes: /project-priorities
+Controller: ProjectPriorityController
+Model: ProjectPriority
+```
+
+#### ✅ Task Statuses
+
+Customizable task lifecycle statuses stored in `task_statuses` table.
+
+**Default Statuses:**
+
+- **Pending** (🔴 #E70A1D) - Awaiting start, `completed_field: false`
+- **In Progress** (🔵 #36A2EB) - Currently being worked on, `completed_field: false`
+- **Completed** (🟢 #2BFF10) - Finished successfully, `completed_field: true` ✓
+- **On Hold** (🟠 #FFA500) - Temporarily paused, `completed_field: false`
+- **Cancelled** (⚫ #808080) - Discontinued, `completed_field: false`
+- **Review** (🟡 #FFD700) - Under review/approval, `completed_field: false`
+- **Testing** (🟣 #8A2BE2) - In testing phase, `completed_field: false`
+
+**Special Features:**
+
+- **Completed Field**: Boolean flag indicating task completion status
+- Statuses with `completed_field: true` mark tasks as finished
+- Used for progress calculations and reporting
+- Affects time entry generation (completed tasks can generate entries)
+
+**Features:**
+
+- Create unlimited custom statuses
+- Assign custom colors
+- Set completion flag for each status
+- Edit existing statuses
+- Delete unused statuses (with safety checks)
+- Used across all tasks system-wide
+
+**Management:**
+
+```
+Routes: /task-statuses
+Controller: TaskStatusController
+Model: TaskStatus
+Fields: name, color, completed_field (boolean)
+```
+
+#### 🎯 Task Priorities
+
+Customizable priority levels for tasks stored in `task_priorities` table.
+
+**Default Priorities:**
+
+- **Low** (🟡 #FFCE56) - Can be done later
+- **Medium** (🟢 #00FF00) - Normal priority
+- **High** (💗 #FF1493) - Important task
+- **Urgent** (🔴 #FF1500) - Critical, needs immediate attention
+
+**Features:**
+
+- Create unlimited custom priorities
+- Assign custom colors for visual distinction
+- Edit existing priority names and colors
+- Delete unused priorities (with safety checks)
+- Used for task sorting and filtering
+- Affects work queue organization
+
+**Management:**
+
+```
+Routes: /task-priorities
+Controller: TaskPriorityController
+Model: TaskPriority
+```
+
+### Master Settings Management
+
+#### Access Control
+
+- All master settings require **authentication**
+- Admin users have full CRUD access
+- Settings are shared across the entire application
+- Changes apply immediately system-wide
+
+#### API Endpoints
+
+**Project Statuses:**
+
+```
+GET    /project-statuses          - List all statuses
+POST   /project-statuses          - Create new status
+PUT    /project-statuses/{id}     - Update status
+DELETE /project-statuses/{id}     - Delete status
+```
+
+**Project Priorities:**
+
+```
+GET    /project-priorities        - List all priorities
+POST   /project-priorities        - Create new priority
+PUT    /project-priorities/{id}   - Update priority
+DELETE /project-priorities/{id}   - Delete priority
+```
+
+**Task Statuses:**
+
+```
+GET    /task-statuses             - List all statuses
+POST   /task-statuses             - Create new status
+PUT    /task-statuses/{id}        - Update status
+DELETE /task-statuses/{id}        - Delete status
+```
+
+**Task Priorities:**
+
+```
+GET    /task-priorities           - List all priorities
+POST   /task-priorities           - Create new priority
+PUT    /task-priorities/{id}      - Update priority
+DELETE /task-priorities/{id}      - Delete priority
+```
+
+#### Usage in Application
+
+**Assigning to Projects:**
+
+```php
+$project->status_id = $projectStatus->id;
+$project->priority_id = $projectPriority->id;
+$project->save();
+```
+
+**Assigning to Tasks:**
+
+```php
+$task->status_id = $taskStatus->id;
+$task->priority_id = $taskPriority->id;
+$task->save();
+```
+
+**Checking Task Completion:**
+
+```php
+if ($task->status->completed_field) {
+  // Task is completed, can generate time entry
+  // Can trigger payroll calculations
+}
+```
+
+### Customization Best Practices
+
+1. **Plan Your Workflow:**
+   - Map your organization's workflow before customizing
+   - Consider existing processes and terminology
+   - Ensure status names are clear and unambiguous
+
+2. **Color Coding:**
+   - Use consistent color schemes across related items
+   - Red typically indicates urgency or issues
+   - Green typically indicates completion or success
+   - Blue typically indicates active work
+   - Yellow/Orange typically indicates caution or pending states
+
+3. **Status Progression:**
+   - Design statuses to follow logical progression
+   - Consider which statuses can transition to others
+   - Mark appropriate statuses as "completed" for accurate tracking
+
+4. **Priority Levels:**
+   - Don't create too many priority levels (3-5 is optimal)
+   - Ensure clear distinction between priority levels
+   - Define criteria for each priority level
+
+5. **Regular Review:**
+   - Periodically review unused statuses/priorities
+   - Archive or delete obsolete configurations
+   - Update colors and names as workflow evolves
+
+### System Settings
+
+Additional system-wide settings include:
+
+- **Payroll Settings**: Company information, pay periods, working hours (see Payroll section)
+- **Tax Configurations**: Tax rates, brackets, and deductions (see Payroll section)
+- **Localization**: Language preferences, date formats, timezones
+- **Search Configuration**: Meilisearch index settings for full-text search
+- **Notification Settings**: Real-time notification preferences
+
+---
+
 ## 🗂️ Database Schema
 
 ### Core Tables
