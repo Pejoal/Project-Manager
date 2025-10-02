@@ -151,7 +151,11 @@ Follow these instructions to get a copy of the project up and running on your lo
       sail artisan reverb:start
       ```
 
----
+### Sharing Your Local Development Environment
+
+```bash
+sail share --subdomain="pejoal"
+```
 
 ## 👥 User Roles & Permissions
 

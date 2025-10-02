@@ -15,6 +15,8 @@ return [
   'home' => 'Home',
   'welcome' => 'Welcome',
   'language' => 'Language',
+  'active' => 'Active',
+  'inactive' => 'Inactive',
 
   // Navigation
   'dashboard' => 'Dashboard',
