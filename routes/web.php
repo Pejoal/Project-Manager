@@ -181,7 +181,7 @@ Route::group(
       );
 
       // Add this route, preferably near your other time entry routes
-      Route::get('/projects/{project}/tasks', [TimeEntryController::class, 'getTasksForProject'])->name(
+      Route::get('/project/{project}/tasks', [TimeEntryController::class, 'getTasksForProject'])->name(
         'time-entries.tasks-for-project'
       );
 
