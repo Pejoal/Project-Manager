@@ -14,6 +14,11 @@ use App\Models\User;
 
 class ProjectController extends Controller
 {
+  public function getData()
+  {
+    return Project::orderBy('id', 'desc')->get();
+  }
+
   public function index()
   {
     $projects = Project::with(['clients', 'status', 'priority'])

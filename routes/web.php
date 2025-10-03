@@ -78,6 +78,7 @@ Route::group(
 
       // Project Management Routes
       Route::prefix('projects')->group(function () {
+        Route::get('/getData', [ProjectController::class, 'getData'])->name('projects.data');
         Route::get('/', [ProjectController::class, 'index'])->name('projects.index');
         Route::get('/single/{project:slug}', [ProjectController::class, 'single'])->name('projects.single');
         Route::get('/create', [ProjectController::class, 'create'])->name('projects.create');

@@ -42,7 +42,9 @@ const props = defineProps({
 });
 
 const tasks = ref([]);
+const projects = ref([...props.projects]);
 const isLoadingTasks = ref(false);
+const isLoadingProjects = ref(false);
 
 // Initialize form with provided data or defaults
 const initializeForm = () => {
@@ -64,6 +66,25 @@ const initializeForm = () => {
 };
 
 const form = useForm(initializeForm());
+
+// Lazy load projects if not provided
+const loadProjects = async () => {
+  if (projects.value.length > 0) return;
+
+  isLoadingProjects.value = true;
+  try {
+    const response = await axios.get(route('projects.data'), {
+      // params: { per_page: 1000 }, // Get all projects
+    });
+    // Extract projects from paginated response
+    projects.value = response.data || [];
+  } catch (error) {
+    console.error('Error loading projects:', error);
+    projects.value = [];
+  } finally {
+    isLoadingProjects.value = false;
+  }
+};
 
 // Watch for project selection to fetch its tasks
 watch(
@@ -91,11 +112,14 @@ watch(
   }
 );
 
-// Watch for modal opening to load tasks and reset form
+// Watch for modal opening to load data and reset form
 watch(
   () => props.show,
   async (isShowing) => {
     if (isShowing) {
+      // Load projects if not available
+      await loadProjects();
+
       // Reset form with current props
       Object.assign(form, initializeForm());
 
@@ -140,7 +164,7 @@ const submit = () => {
   }
 };
 
-const closeModal = () => {  
+const closeModal = () => {
   form.reset();
   form.clearErrors();
   tasks.value = [];
@@ -177,6 +201,7 @@ const calculateHours = () => {
             label="name"
             :placeholder="$t('words.select_project')"
             :disabled="!!task || !!timeEntry || !!projectId"
+            :loading="isLoadingProjects"
           />
           <InputError class="mt-2" :message="form.errors.project_id" />
         </div>
@@ -232,7 +257,7 @@ const calculateHours = () => {
     </template>
 
     <template #footer>
-      <button @click="closeModal" class="text-gray-900 dark:text-gray-200 mx-2">{{ $t('words.cancel') }}</button>
+      <button @click="closeModal" class="text-gray-900 dark:text-gray-100 mr-3">{{ $t('words.cancel') }}</button>
       <button
         :form="timeEntry ? 'edit-time-entry-form' : 'create-time-entry-form'"
         type="submit"
