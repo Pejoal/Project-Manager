@@ -12,7 +12,7 @@ return new class extends Migration {
       $table->id();
       $table->string('name');
       $table->enum('type', ['flat', 'percentage', 'progressive'])->default('percentage');
-      $table->decimal('rate', 8, 4)->nullable();
+      $table->decimal('rate', 8, 2)->nullable();
       $table->json('brackets')->nullable();
       $table->decimal('minimum_income', 10, 2)->default(0);
       $table->decimal('maximum_income', 10, 2)->nullable();
