@@ -245,6 +245,7 @@ return [
 
   // Reports (Reports.vue)
   'reports' => [
+    'hours_breakdown' => 'Hours Breakdown',
     'title' => 'Payroll Reports',
     'export_pdf' => 'Export PDF',
     'export_excel' => 'Export Excel',

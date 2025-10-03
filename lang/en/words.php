@@ -91,6 +91,7 @@ return [
   'update_password_description' => 'Ensure your account is using a long, random password to stay secure.',
   'saved' => 'Saved.',
   'save' => 'Save',
+  'clear' => 'Clear',
 
   // Two Factor Authentication
   'two_factor_authentication' => 'Two Factor Authentication',
