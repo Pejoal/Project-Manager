@@ -260,7 +260,7 @@ class EmployeeProfileController extends Controller
           ->withErrors(['action' => 'Invalid action']);
     }
 
-    event(new ActivityLogged(auth()->user(), 'bulk_updated_employee_profiles', $message, null));
+    // event(new ActivityLogged(auth()->user(), 'bulk_updated_employee_profiles', $message, null));
 
     return redirect()->back()->with('flash.banner', $message);
   }

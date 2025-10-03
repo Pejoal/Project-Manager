@@ -488,8 +488,8 @@ const getPercentageChange = (current, previous) => {
                 class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="all">{{ $t('payroll.filters.all') }}</option>
-                <option value="active">{{ $t('payroll.employees.active') }}</option>
-                <option value="inactive">{{ $t('payroll.employees.inactive') }}</option>
+                <option value="active">{{ $t('words.active') }}</option>
+                <option value="inactive">{{ $t('words.inactive') }}</option>
               </select>
             </div>
           </div>
@@ -616,7 +616,7 @@ const getPercentageChange = (current, previous) => {
                           : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
                       ]"
                     >
-                      {{ employee.is_active ? $t('payroll.employees.active') : $t('payroll.employees.inactive') }}
+                      {{ employee.is_active ? $t('words.active') : $t('words.inactive') }}
                     </span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

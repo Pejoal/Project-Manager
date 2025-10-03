@@ -120,6 +120,14 @@ return [
     'pdf_generation_not_implemented' => 'PDF generation not yet implemented.',
   ],
 
+  // Status
+  'status' => [
+    'pending' => 'Pending',
+    'approved' => 'Approved',
+    'paid' => 'Paid',
+    'draft' => 'Draft',
+  ],
+
   // Settings
   'settings' => [
     'title' => 'Payroll Settings',
