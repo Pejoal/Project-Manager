@@ -369,7 +369,6 @@ const displayFields = computed(() => {
               </div>
             </Link>
 
-            <!-- :href="route('time-entries.create', { task_id: null, user_id: profile.user_id })" -->
             <button
               @click="showCreateTimeEntryModal = true"
               class="flex items-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
@@ -389,7 +388,7 @@ const displayFields = computed(() => {
                 <p class="text-xs text-purple-600 dark:text-purple-400">Log new hours</p>
               </div>
             </button>
-            <CreateTimeEntryModal :show="showCreateTimeEntryModal" :user-id="profile.user_id" />
+            <CreateTimeEntryModal :show="showCreateTimeEntryModal" v-on:close="showCreateTimeEntryModal = false" :user-id="profile.user_id" />
 
             <button
               v-if="profile.is_active"
