@@ -30,8 +30,15 @@ class TaskController extends Controller
       'projects' => 'nullable|array',
       'projects.*' => 'integer|exists:projects,id',
       'assigned_to_me' => 'nullable|string',
-      'perPage' => 'nullable|integer|min:1|max:100',
+      'per_page' => 'nullable|integer|min:1|max:100',
+      'sort_by' => 'nullable|string|in:name,created_at,start_datetime,end_datetime',
+      'sort_direction' => 'nullable|string|in:asc,desc',
     ]);
+
+    // Apply sorting
+    $sortBy = $request->input('sort_by', 'created_at');
+    $sortDirection = $request->input('sort_direction', 'desc');
+    $query->orderBy($sortBy, $sortDirection);
 
     if ($request->has('status') && !empty($request->status)) {
       $query->whereIn('status_id', $request->status);
@@ -61,7 +68,7 @@ class TaskController extends Controller
   public function all(Request $request)
   {
     $users = User::latest()->select('id', 'name')->get();
-    $projects = Project::latest()->get();
+    $projects = Project::latest()->select('id', 'name', 'slug')->get();
     $statuses = TaskStatus::latest()->select('id', 'name', 'color')->get();
     $priorities = TaskPriority::latest()->select('id', 'name', 'color')->get();
 
@@ -74,32 +81,51 @@ class TaskController extends Controller
 
         return $meilisearch->search($query, $options);
       })->query(function (Builder $query) use ($request) {
-        $query->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
+        $query->with(['status', 'priority', 'assignedTo', 'project:id,slug,name']);
         $this->applyFilters($query, $request);
       });
     } else {
-      $query = Task::with('status', 'priority', 'assignedTo', 'project:id,slug,name');
+      $query = Task::with(['status', 'priority', 'assignedTo', 'project:id,slug,name']);
       $this->applyFilters($query, $request);
     }
 
-    $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest()->paginate($perPage)->appends($request->except('page'));
+    $perPage = $request->input('per_page', 10);
+    $tasks = $query->paginate($perPage)->appends($request->except('page'));
 
-    $tasks->getCollection()->transform(function ($task) {
-      $metadata = $task->scoutMetadata();
-      $task->name = $metadata['_formatted']['name'] ?? $task->name;
-      $task->description = $metadata['_formatted']['description'] ?? $task->description;
-      return $task;
-    });
+    if ($request->has('search') && !empty($request->search)) {
+      $tasks->getCollection()->transform(function ($task) {
+        $metadata = $task->scoutMetadata();
+        $task->name = $metadata['_formatted']['name'] ?? $task->name;
+        $task->description = $metadata['_formatted']['description'] ?? $task->description;
+        return $task;
+      });
+    }
 
-    return Inertia::render('Tasks/Index', compact('tasks', 'projects', 'users', 'statuses', 'priorities'));
+    return Inertia::render('Tasks/Index', [
+      'tasks' => $tasks,
+      'filters' => $request->only([
+        'search',
+        'status',
+        'priority',
+        'assigned_to',
+        'projects',
+        'assigned_to_me',
+        'per_page',
+        'sort_by',
+        'sort_direction',
+      ]),
+      'projects' => $projects,
+      'users' => $users,
+      'statuses' => $statuses,
+      'priorities' => $priorities,
+    ]);
   }
 
   public function index(Project $project, Request $request)
   {
     $users = User::latest()->select('id', 'name')->get();
-    $statuses = TaskStatus::orderBy('id', 'desc')->get();
-    $priorities = TaskPriority::orderBy('id', 'desc')->get();
+    $statuses = TaskStatus::orderBy('id', 'desc')->select('id', 'name', 'color')->get();
+    $priorities = TaskPriority::orderBy('id', 'desc')->select('id', 'name', 'color')->get();
 
     if ($request->has('search') && !empty($request->search)) {
       $search = $request->search;
@@ -110,26 +136,45 @@ class TaskController extends Controller
 
         return $meilisearch->search($query, $options);
       })->query(function (Builder $query) use ($project, $request) {
-        $query->where('project_id', $project->id)->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
+        $query->where('project_id', $project->id)->with(['status', 'priority', 'assignedTo', 'project:id,slug,name']);
         $this->applyFilters($query, $request);
       });
     } else {
-      $query = $project->tasks()->with('status', 'priority', 'assignedTo', 'project:id,slug,name');
+      $query = $project->tasks()->with(['status', 'priority', 'assignedTo', 'project:id,slug,name']);
       $this->applyFilters($query, $request);
     }
 
-    $perPage = $request->input('perPage', 10);
-    $tasks = $query->latest()->paginate($perPage)->appends($request->except('page'));
+    $perPage = $request->input('per_page', 15);
+    $tasks = $query->paginate($perPage)->appends($request->except('page'));
 
-    $tasks->getCollection()->transform(function ($task) {
-      $metadata = $task->scoutMetadata();
-      $task->name = $metadata['_formatted']['name'] ?? $task->name;
-      $task->description = $metadata['_formatted']['description'] ?? $task->description;
-      return $task;
-    });
+    if ($request->has('search') && !empty($request->search)) {
+      $tasks->getCollection()->transform(function ($task) {
+        $metadata = $task->scoutMetadata();
+        $task->name = $metadata['_formatted']['name'] ?? $task->name;
+        $task->description = $metadata['_formatted']['description'] ?? $task->description;
+        return $task;
+      });
+    }
 
     $project->load(['phases:id,name,project_id', 'phases.milestones:id,name,phase_id']);
-    return Inertia::render('Tasks/Index', compact('tasks', 'project', 'users', 'statuses', 'priorities'));
+
+    return Inertia::render('Tasks/Index', [
+      'tasks' => $tasks,
+      'filters' => $request->only([
+        'search',
+        'status',
+        'priority',
+        'assigned_to',
+        'assigned_to_me',
+        'per_page',
+        'sort_by',
+        'sort_direction',
+      ]),
+      'project' => $project,
+      'users' => $users,
+      'statuses' => $statuses,
+      'priorities' => $priorities,
+    ]);
   }
 
   public function store(Request $request, Project $project)
@@ -236,5 +281,67 @@ class TaskController extends Controller
     $task->delete();
     event(new ActivityLogged(auth()->user(), 'deleted_task', 'Deleted a task', $task));
     return redirect()->route('tasks.index', $project);
+  }
+
+  /**
+   * Handle bulk operations on tasks
+   */
+  public function bulkUpdate(Request $request)
+  {
+    $request->validate([
+      'task_ids' => 'required|array',
+      'task_ids.*' => 'exists:tasks,id',
+      'action' => 'required|in:update_status,update_priority,assign_users,delete',
+      'status_id' => 'required_if:action,update_status|exists:task_statuses,id',
+      'priority_id' => 'required_if:action,update_priority|exists:task_priorities,id',
+      'user_ids' => 'required_if:action,assign_users|array',
+      'user_ids.*' => 'exists:users,id',
+    ]);
+
+    $tasks = Task::whereIn('id', $request->task_ids)->get();
+    $message = '';
+
+    switch ($request->action) {
+      case 'update_status':
+        $status = TaskStatus::find($request->status_id);
+        $tasks->each(function ($task) use ($request) {
+          $task->update(['status_id' => $request->status_id]);
+        });
+        $message = trans('tasks.bulk_status_updated', ['count' => $tasks->count(), 'status' => $status->name]);
+        event(new ActivityLogged(auth()->user(), 'bulk_updated_task_status', $message, null));
+        break;
+
+      case 'update_priority':
+        $priority = TaskPriority::find($request->priority_id);
+        $tasks->each(function ($task) use ($request) {
+          $task->update(['priority_id' => $request->priority_id]);
+        });
+        $message = trans('tasks.bulk_priority_updated', ['count' => $tasks->count(), 'priority' => $priority->name]);
+        event(new ActivityLogged(auth()->user(), 'bulk_updated_task_priority', $message, null));
+        break;
+
+      case 'assign_users':
+        $tasks->each(function ($task) use ($request) {
+          $task->assignedTo()->sync($request->user_ids);
+        });
+        $message = trans('tasks.bulk_assigned', ['count' => $tasks->count()]);
+        event(new ActivityLogged(auth()->user(), 'bulk_assigned_tasks', $message, null));
+        break;
+
+      case 'delete':
+        $tasks->each(function ($task) {
+          $task->delete();
+        });
+        $message = trans('tasks.bulk_deleted', ['count' => $tasks->count()]);
+        event(new ActivityLogged(auth()->user(), 'bulk_deleted_tasks', $message, null));
+        break;
+
+      default:
+        return redirect()
+          ->back()
+          ->withErrors(['action' => 'Invalid action']);
+    }
+
+    return redirect()->back()->with('flash.banner', $message);
   }
 }

@@ -181,6 +181,9 @@ Route::group(
         'time-entries.bulk-approve'
       );
 
+      // Task bulk operations
+      Route::post('tasks/bulk-update', [TaskController::class, 'bulkUpdate'])->name('tasks.bulk-update');
+
       // Add this route, preferably near your other time entry routes
       Route::get('/project/{project}/tasks', [TimeEntryController::class, 'getTasksForProject'])->name(
         'time-entries.tasks-for-project'

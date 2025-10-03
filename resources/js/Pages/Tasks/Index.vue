@@ -1,11 +1,8 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Pagination from '@/Components/Pagination.vue';
+import DataTable from '@/Components/DataTable.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { computed, defineProps, ref, watch } from 'vue';
-import vSelect from 'vue-select';
+import { computed, ref } from 'vue';
 import CreateTaskModal from './CreateTaskModal.vue';
 
 const props = defineProps({
@@ -15,6 +12,7 @@ const props = defineProps({
   projects: Array,
   statuses: Array,
   priorities: Array,
+  filters: Object,
 });
 
 const showModal = ref(false);
@@ -27,69 +25,245 @@ const closeModal = () => {
   showModal.value = false;
 };
 
-const filtersVisible = ref(true);
-
-const toggleFilters = () => {
-  filtersVisible.value = !filtersVisible.value;
-};
-
-const form = useForm({
-  assigned_to_me: false,
-  search: '',
-  perPage: 10,
-  status: [],
-  priority: [],
-  assigned_to: [],
-  projects: [],
-});
-
-watch(
-  () => [form.status, form.priority, form.assigned_to, form.projects],
-  () => {
-    applyFilters();
+// Column configuration for DataTable
+const columns = [
+  {
+    key: 'name',
+    label: 'Task',
+    sortable: true,
+    component: (item) => `
+      <div>
+        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
+          ${item.name}
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          ID: ${item.id}
+        </div>
+      </div>
+    `,
   },
-  { deep: true }
-);
+  {
+    key: 'description',
+    label: 'Description',
+    component: (item) => `
+      <div class="text-sm text-gray-900 dark:text-gray-100 max-w-xs truncate">
+        ${item.description || 'No description'}
+      </div>
+    `,
+  },
+  {
+    key: 'project',
+    label: 'Project',
+    component: (item) => `
+      <div class="text-sm text-blue-600 dark:text-blue-400">
+        ${item.project?.name || 'N/A'}
+      </div>
+    `,
+  },
+  {
+    key: 'status',
+    label: 'Status',
+    component: (item) => `
+      <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" style="background-color: ${item.status?.color}20; color: ${item.status?.color}">
+        ${item.status?.name || 'No Status'}
+      </span>
+    `,
+  },
+  {
+    key: 'priority',
+    label: 'Priority',
+    component: (item) => `
+      <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" style="background-color: ${item.priority?.color}20; color: ${item.priority?.color}">
+        ${item.priority?.name || 'No Priority'}
+      </span>
+    `,
+  },
+  {
+    key: 'assigned_to',
+    label: 'Assigned To',
+    component: (item) => {
+      if (!item.assigned_to || item.assigned_to.length === 0) {
+        return '<span class="text-gray-500 dark:text-gray-400 text-sm">Unassigned</span>';
+      }
+      const names = item.assigned_to.map((user) => user.name).join(', ');
+      return `<div class="text-sm text-gray-900 dark:text-gray-100">${names}</div>`;
+    },
+  },
+  {
+    key: 'created_at',
+    label: 'Created',
+    sortable: true,
+    component: (item) => `
+      <div class="text-sm text-gray-500 dark:text-gray-400">
+        ${new Date(item.created_at).toLocaleDateString()}
+      </div>
+    `,
+  },
+  {
+    key: 'actions',
+    label: 'Actions',
+    component: () => '', // Will use slot
+  },
+];
 
-const applyFilters = () => {
-  const params = {
-    assigned_to_me: form.assigned_to_me,
-    search: form.search,
-    perPage: form.perPage,
-    status: form.status,
-    priority: form.priority,
-    assigned_to: form.assigned_to,
-    projects: form.projects,
-  };
+// Filter configuration
+const filterConfig = [
+  {
+    key: 'search',
+    label: 'Search',
+    type: 'text',
+    placeholder: 'Search by name or description...',
+  },
+  {
+    key: 'status',
+    label: 'Status',
+    type: 'vue-select',
+    options: props.statuses,
+    reduce: (status) => status.id,
+    optionLabel: 'name',
+    placeholder: 'Select Status',
+    multiple: true,
+  },
+  {
+    key: 'priority',
+    label: 'Priority',
+    type: 'vue-select',
+    options: props.priorities,
+    reduce: (priority) => priority.id,
+    optionLabel: 'name',
+    placeholder: 'Select Priority',
+    multiple: true,
+  },
+  {
+    key: 'assigned_to',
+    label: 'Assigned To',
+    type: 'vue-select',
+    options: props.users,
+    reduce: (user) => user.id,
+    optionLabel: 'name',
+    placeholder: 'Select Users',
+    multiple: true,
+  },
+  ...(props.project
+    ? []
+    : [
+        {
+          key: 'projects',
+          label: 'Projects',
+          type: 'vue-select',
+          options: props.projects,
+          reduce: (project) => project.id,
+          optionLabel: 'name',
+          placeholder: 'Select Projects',
+          multiple: true,
+        },
+      ]),
+  {
+    key: 'assigned_to_me',
+    label: 'Assigned to Me',
+    type: 'select',
+    options: [
+      { value: 'true', label: 'Yes' },
+      { value: 'false', label: 'No' },
+    ],
+    placeholder: 'All Tasks',
+  },
+];
 
-  if (props.project) {
-    form.get(route('tasks.index', props.project.slug), {
-      preserveState: true,
-      preserveScroll: true,
-      replace: true,
-      data: params,
-    });
-  } else {
-    form.get(route('tasks.all'), {
-      preserveState: true,
-      preserveScroll: true,
-      replace: true,
-      data: params,
-    });
-  }
+// Bulk actions configuration
+const bulkActions = [
+  {
+    value: 'update_status',
+    label: 'Update Status',
+    fields: [
+      {
+        name: 'status_id',
+        label: 'Status',
+        type: 'select',
+        options: props.statuses.map((status) => ({ value: status.id, label: status.name })),
+        required: true,
+      },
+    ],
+  },
+  {
+    value: 'update_priority',
+    label: 'Update Priority',
+    fields: [
+      {
+        name: 'priority_id',
+        label: 'Priority',
+        type: 'select',
+        options: props.priorities.map((priority) => ({ value: priority.id, label: priority.name })),
+        required: true,
+      },
+    ],
+  },
+  {
+    value: 'assign_users',
+    label: 'Assign Users',
+    fields: [
+      {
+        name: 'user_ids',
+        label: 'Users',
+        type: 'multiselect',
+        options: props.users.map((user) => ({ value: user.id, label: user.name })),
+        placeholder: 'Select users to assign',
+        required: true,
+      },
+    ],
+  },
+  {
+    value: 'delete',
+    label: 'Delete Tasks',
+  },
+];
+
+// Get appropriate route name based on context
+const routeName = computed(() => {
+  return props.project ? 'tasks.index' : 'tasks.all';
+});
+
+// Get route parameters
+const routeParams = computed(() => {
+  return props.project ? { project: props.project.slug } : {};
+});
+
+// Handle bulk actions
+const handleBulkAction = ({ action, items, data }) => {
+  const bulkForm = useForm({
+    task_ids: items,
+    action: action,
+    ...data,
+  });
+
+  bulkForm.post(route('tasks.bulk-update'), {
+    preserveState: true,
+    onSuccess: () => {
+      // Optionally show success notification
+    },
+  });
 };
 
-const pagination = computed(() => {
-  return {
-    prev_page_url: props.tasks.prev_page_url,
-    prev_page_url: props.tasks.prev_page_url,
-    current_page: props.tasks.current_page,
-    last_page: props.tasks.last_page,
-    total: props.tasks.total,
-    next_page_url: props.tasks.next_page_url,
-    next_page_url: props.tasks.next_page_url,
-  };
-});
+// Handle row clicks
+const handleRowClick = (task) => {
+  const project = props.project || task.project;
+  window.location.href = route('tasks.show', {
+    project: project.slug,
+    task: task.id,
+  });
+};
+
+// Format datetime for display
+const formatDateTime = (datetime) => {
+  if (!datetime) return 'Not set';
+  return new Date(datetime).toLocaleString('de-DE', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
 </script>
 
 <template>
@@ -97,209 +271,121 @@ const pagination = computed(() => {
 
   <header class="bg-white dark:bg-gray-800 shadow">
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-        <section v-if="project">
-          Tasks for
-          <Link
-            :href="route('projects.show', { project: project.slug })"
-            class="text-blue-500 dark:text-blue-400 hover:underline"
-          >
-            {{ project?.name }}
-          </Link>
-        </section>
-        <p v-else>All Tasks</p>
-      </h1>
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          <div v-if="project">
+            {{ $t('words.tasks') }} for
+            <Link
+              :href="route('projects.show', { project: project.slug })"
+              class="text-blue-500 dark:text-blue-400 hover:underline"
+            >
+              {{ project.name }}
+            </Link>
+          </div>
+          <div v-else>{{ $t('words.all_tasks') }}</div>
+        </h1>
+        <div class="flex space-x-3">
+          <PrimaryButton @click="openModal">
+            {{ $t('words.create_task') }}
+          </PrimaryButton>
+        </div>
+      </div>
     </div>
   </header>
 
-  <div class="p-2 my-1 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-    <CreateTaskModal
-      :show="showModal"
-      :users="users"
-      :project="project"
-      :projects="projects"
-      :statuses="statuses"
-      :priorities="priorities"
-      @close="closeModal"
-    />
-    <button @click="openModal" class="text-blue-500 dark:text-blue-400 hover:underline">Create Task</button>
+  <div class="py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Create Task Modal -->
+      <CreateTaskModal
+        :show="showModal"
+        :users="users"
+        :project="project"
+        :projects="projects"
+        :statuses="statuses"
+        :priorities="priorities"
+        @close="closeModal"
+      />
 
-    <section class="dark:bg-gray-900 bg-slate-200 p-2 rounded">
-      <PrimaryButton @click="toggleFilters"> Toggle Filters </PrimaryButton>
-
-      <transition name="slide-down">
-        <main v-if="filtersVisible" class="p-2 m-1 dark:bg-gray-700 bg-slate-100 rounded-lg space-y-2">
-          <!-- Search Filter -->
-          <section>
-            <input
-              v-model="form.search"
-              @input="applyFilters"
-              type="text"
-              placeholder="Search by name..."
-              class="w-full text-zinc-900 border rounded-lg p-2"
-            />
-          </section>
-
-          <!-- Per Page Filter -->
-          <section class="flex items-center">
-            <select v-model="form.perPage" id="perPage" @change="applyFilters" class="rounded-lg text-black">
-              <option :value="5">5</option>
-              <option :value="10">10</option>
-              <option :value="20">20</option>
-              <option :value="50">50</option>
-              <option :value="100">100</option>
-            </select>
-
-            <label for="perPage" class="font-bold"> Items Per Page </label>
-          </section>
-
-          <!-- Status Filter -->
-          <section>
-            <vSelect
-              v-model="form.status"
-              :options="props.statuses"
-              :reduce="(status) => status.id"
-              label="name"
-              multiple
-              placeholder="Select Status"
-              class="w-full text-zinc-900 border rounded-lg p-2"
-            />
-          </section>
-          <!-- Priority Filter -->
-          <section>
-            <vSelect
-              v-model="form.priority"
-              :options="props.priorities"
-              :reduce="(priority) => priority.id"
-              label="name"
-              multiple
-              placeholder="Select Priority"
-              class="w-full text-zinc-900 border rounded-lg p-2"
-            />
-          </section>
-
-          <!-- Assigned to Filter -->
-          <section>
-            <vSelect
-              v-model="form.assigned_to"
-              :options="props.users"
-              :reduce="(user) => user.id"
-              label="name"
-              multiple
-              placeholder="Select Assigned to"
-              class="w-full text-zinc-900 border rounded-lg p-2"
-            />
-          </section>
-
-          <!-- Projects Filter -->
-          <section v-if="!props.project">
-            <vSelect
-              v-model="form.projects"
-              :options="props.projects"
-              :reduce="(project) => project.id"
-              label="name"
-              multiple
-              placeholder="Select Projects"
-              class="w-full text-zinc-900 border rounded-lg p-2"
-            />
-          </section>
-
-          <!-- Assigned to me Filter -->
-          <section class="flex items-center">
-            <InputLabel for="assigned_to_me" value="Assigned to me" />
-
-            <Checkbox
-              class="ml-4 w-6 h-6 rounded-lg transition duration-150 ease-in-out"
-              @change="applyFilters"
-              id="assigned_to_me"
-              v-model:checked="form.assigned_to_me"
-              name="assigned_to_me"
-            />
-          </section>
-        </main>
-      </transition>
-    </section>
-    <ul class="my-2 space-y-4">
-      <li
-        v-for="task in tasks.data"
-        :key="task.id"
-        class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-between items-center"
+      <!-- Tasks DataTable -->
+      <DataTable
+        :data="tasks"
+        :columns="columns"
+        :filters="filters"
+        :filter-config="filterConfig"
+        :bulk-actions="bulkActions"
+        :can-bulk-action="true"
+        :route-name="routeName"
+        :route-params="routeParams"
+        :search-placeholder="$t('words.search_tasks')"
+        :empty-state-text="$t('words.no_tasks_found')"
+        @bulk-action="handleBulkAction"
+        @row-click="handleRowClick"
       >
-        <div>
-          <p>
-            Task:
+        <!-- Custom Task Name Cell with Description -->
+        <template #cell-name="{ item }">
+          <div>
             <Link
               :href="
                 route('tasks.show', {
-                  project: project ? project.slug : task.project.slug,
-                  task: task.id,
+                  project: project ? project.slug : item.project.slug,
+                  task: item.id,
                 })
               "
-              class="text-blue-500 dark:text-blue-400 hover:underline"
-              v-html="task?.name"
-            >
-            </Link>
-          </p>
-          <p>
-            Description:
-            <span v-html="task.description"></span>
-          </p>
-          <p>
-            Project:
+              class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+              v-html="item.name"
+            />
+            <div v-if="item.start_datetime || item.end_datetime" class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <span v-if="item.start_datetime">{{ $t('words.start') }}: {{ formatDateTime(item.start_datetime) }}</span>
+              <span v-if="item.start_datetime && item.end_datetime"> | </span>
+              <span v-if="item.end_datetime">{{ $t('words.end') }}: {{ formatDateTime(item.end_datetime) }}</span>
+            </div>
+          </div>
+        </template>
+
+        <!-- Custom Project Cell (only for all tasks view) -->
+        <template #cell-project="{ item }" v-if="!project">
+          <Link
+            :href="route('projects.show', { project: item.project.slug })"
+            class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+          >
+            {{ item.project.name }}
+          </Link>
+        </template>
+
+        <!-- Custom Actions Column -->
+        <template #cell-actions="{ item }">
+          <div class="flex space-x-2">
             <Link
               :href="
-                route('projects.show', {
-                  project: project ? project.slug : task.project.slug,
+                route('tasks.show', {
+                  project: project ? project.slug : item.project.slug,
+                  task: item.id,
                 })
               "
-              class="text-blue-500 dark:text-blue-400 hover:underline"
+              class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
             >
-              {{ project ? project?.name : task.project?.name }}
+              {{ $t('words.view') }}
             </Link>
-          </p>
-          <div class="space-y-1">
-            <p>
-              Status:
-              <span :style="{ color: task.status?.color }">{{ task.status?.name }}</span>
-            </p>
-            <p>
-              Priority:
-              <span :style="{ color: task.priority?.color }">{{ task.priority?.name }}</span>
-            </p>
-            <p class="mb-2 text-gray-700 dark:text-gray-300">
-              assigned to:
-              <span v-for="(assigned_to_user, index) in task.assigned_to" :key="assigned_to_user.id">
-                {{ assigned_to_user?.name }}<span v-if="index < task.assigned_to.length - 1">, </span>
-              </span>
-            </p>
+            <Link
+              :href="
+                route('tasks.edit', {
+                  project: project ? project.slug : item.project.slug,
+                  task: item.id,
+                })
+              "
+              class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300"
+            >
+              {{ $t('words.edit') }}
+            </Link>
+            <Link
+              :href="route('time-entries.create', { task_id: item.id })"
+              class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+            >
+              {{ $t('words.log_time') }}
+            </Link>
           </div>
-          <div class="text-gray-500 dark:text-gray-400 text-sm">
-            Created at: {{ new Date(task.created_at).toLocaleString() }}
-          </div>
-        </div>
-        <div class="text-gray-500 dark:text-gray-400 text-sm">Task ID: {{ task.id }}</div>
-      </li>
-    </ul>
-
-    <Pagination :pagination="pagination" />
+        </template>
+      </DataTable>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: max-height 0.3s ease-in-out;
-}
-
-.slide-down-enter-from,
-.slide-down-leave-to {
-  max-height: 0;
-  overflow: hidden;
-}
-
-.slide-down-enter-to,
-.slide-down-leave-from {
-  max-height: 50rem;
-  overflow: auto;
-}
-</style>
