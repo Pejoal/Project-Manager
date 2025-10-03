@@ -45,6 +45,7 @@ const columns = [
   {
     key: 'description',
     label: 'Description',
+    sortable: true,
     component: (item) => `
       <div class="text-sm text-gray-900 dark:text-gray-100 max-w-xs truncate">
         ${item.description || 'No description'}
@@ -54,6 +55,7 @@ const columns = [
   {
     key: 'project',
     label: 'Project',
+    sortable: true,
     component: (item) => `
       <div class="text-sm text-blue-600 dark:text-blue-400">
         ${item.project?.name || 'N/A'}
@@ -63,6 +65,7 @@ const columns = [
   {
     key: 'status',
     label: 'Status',
+    sortable: true,
     component: (item) => `
       <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" style="background-color: ${item.status?.color}20; color: ${item.status?.color}">
         ${item.status?.name || 'No Status'}
@@ -72,6 +75,7 @@ const columns = [
   {
     key: 'priority',
     label: 'Priority',
+    sortable: true,
     component: (item) => `
       <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" style="background-color: ${item.priority?.color}20; color: ${item.priority?.color}">
         ${item.priority?.name || 'No Priority'}
@@ -81,6 +85,7 @@ const columns = [
   {
     key: 'assigned_to',
     label: 'Assigned To',
+    sortable: true,
     component: (item) => {
       if (!item.assigned_to || item.assigned_to.length === 0) {
         return '<span class="text-gray-500 dark:text-gray-400 text-sm">Unassigned</span>';
@@ -161,12 +166,7 @@ const filterConfig = [
   {
     key: 'assigned_to_me',
     label: 'Assigned to Me',
-    type: 'select',
-    options: [
-      { value: 'true', label: 'Yes' },
-      { value: 'false', label: 'No' },
-    ],
-    placeholder: 'All Tasks',
+    type: 'checkbox',
   },
 ];
 

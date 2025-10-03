@@ -137,9 +137,14 @@ const initializeFormData = () => {
       // Use appropriate empty value based on field type
       if (filter.multiple || filter.type === 'multiselect') {
         formData[filter.key] = [];
+      } else if (filter.type === 'checkbox') {
+        formData[filter.key] = false;
       } else {
         formData[filter.key] = '';
       }
+    } else if (filter.type === 'checkbox') {
+      // Convert 'true'/'false' strings to boolean for checkbox
+      formData[filter.key] = formData[filter.key] === 'true' || formData[filter.key] === true;
     }
   });
 
@@ -165,18 +170,11 @@ const bulkForm = useForm({
 
 // Watch for filter changes with debounce
 let debounceTimer = null;
-let isInitialLoad = true;
 
 watch(
   () => form.data(),
   (newData, oldData) => {
-    // Skip initial load
-    if (isInitialLoad) {
-      isInitialLoad = false;
-      return;
-    }
-
-    // Don't trigger on initial load
+    // Only trigger if oldData exists (not initial load)
     if (oldData) {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
@@ -408,6 +406,8 @@ const clearFilters = () => {
         form[key] = '';
       } else if (filter && (filter.multiple || filter.type === 'multiselect')) {
         form[key] = [];
+      } else if (filter && filter.type === 'checkbox') {
+        form[key] = false;
       } else {
         form[key] = '';
       }
@@ -631,6 +631,12 @@ onMounted(() => {
               :multiple="filter.multiple"
               class="text-gray-700"
             />
+
+            <!-- Checkbox -->
+            <div v-else-if="filter.type === 'checkbox'" class="flex items-center space-x-2">
+              <Checkbox :id="filter.key" v-model="form[filter.key]" />
+              <label :for="filter.key" class="text-sm text-gray-700 dark:text-gray-300">{{ filter.label }}</label>
+            </div>
           </div>
         </div>
       </div>
@@ -748,7 +754,6 @@ onMounted(() => {
         {{ Math.min(data.current_page * form.per_page, data.total) }} of {{ data.total }} entries
       </div>
     </div>
-
   </div>
 </template>
 
