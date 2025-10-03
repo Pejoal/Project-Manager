@@ -302,7 +302,7 @@ const getCellValue = (item, column) => {
     if (value === undefined || value === null) break;
   }
 
-  return value;
+  // return value;
 };
 
 const getCellClasses = (column) => {

@@ -19,6 +19,9 @@ return [
   'inactive' => 'Inactive',
   'filters' => 'Filters',
   'apply_filters' => 'Apply Filters',
+  'no_tasks_found' => 'No tasks found.',
+  'start' => 'Start',
+  'end' => 'End',
 
   // Navigation
   'dashboard' => 'Dashboard',
