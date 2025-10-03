@@ -407,6 +407,9 @@ const onCellClick = (item, column) => {
 };
 
 const clearFilters = () => {
+  // Set flag to prevent watch from triggering
+  isApplyingSort = true;
+
   // Reset all filter fields to their initial empty state
   Object.keys(form.data()).forEach((key) => {
     if (!['per_page', 'sort_by', 'sort_direction'].includes(key)) {
@@ -425,6 +428,11 @@ const clearFilters = () => {
 
   // Trigger filter application
   applyFilters();
+
+  // Reset flag after a short delay
+  setTimeout(() => {
+    isApplyingSort = false;
+  }, 100);
 };
 
 // Initialize sorting from props

@@ -29,7 +29,7 @@ class TaskController extends Controller
       'assigned_to.*' => 'integer|exists:users,id',
       'projects' => 'nullable|array',
       'projects.*' => 'integer|exists:projects,id',
-      'assigned_to_me' => 'nullable|string',
+      'assigned_to_me' => 'nullable|string|in:true,false',
       'per_page' => 'nullable|integer|min:1|max:100',
       'sort_by' =>
         'nullable|string|in:name,description,created_at,start_datetime,end_datetime,status,priority,project,assigned_to',
@@ -42,25 +42,32 @@ class TaskController extends Controller
 
     // Handle special sorting for relationships
     if ($sortBy === 'assigned_to') {
+      // Use subquery to avoid GROUP BY issues
       $query
-        ->leftJoin('task_user', 'tasks.id', '=', 'task_user.task_id')
-        ->leftJoin('users', 'task_user.user_id', '=', 'users.id')
-        ->orderBy('users.name', $sortDirection)
-        ->select('tasks.*')
-        ->groupBy('tasks.id');
+        ->leftJoinSub(
+          \DB::table('task_user')
+            ->join('users', 'task_user.user_id', '=', 'users.id')
+            ->select('task_user.task_id', \DB::raw('MIN(users.name) as user_name'))
+            ->groupBy('task_user.task_id'),
+          'assigned_users',
+          'tasks.id',
+          '=',
+          'assigned_users.task_id'
+        )
+        ->orderBy('assigned_users.user_name', $sortDirection);
     } elseif ($sortBy === 'status') {
       $query
-        ->leftJoin('task_statuses', 'tasks.status_id', '=', 'task_statuses.id')
+        ->join('task_statuses', 'tasks.status_id', '=', 'task_statuses.id')
         ->orderBy('task_statuses.name', $sortDirection)
         ->select('tasks.*');
     } elseif ($sortBy === 'priority') {
       $query
-        ->leftJoin('task_priorities', 'tasks.priority_id', '=', 'task_priorities.id')
+        ->join('task_priorities', 'tasks.priority_id', '=', 'task_priorities.id')
         ->orderBy('task_priorities.name', $sortDirection)
         ->select('tasks.*');
     } elseif ($sortBy === 'project') {
       $query
-        ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+        ->join('projects', 'tasks.project_id', '=', 'projects.id')
         ->orderBy('projects.name', $sortDirection)
         ->select('tasks.*');
     } else {

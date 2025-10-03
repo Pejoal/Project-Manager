@@ -323,7 +323,7 @@ const formatDateTime = (datetime) => {
       >
         <!-- Custom Task Name Cell with Description -->
         <template #cell-name="{ item }">
-          <div>
+          <div @click.stop>
             <Link
               :href="
                 route('tasks.show', {
@@ -344,17 +344,19 @@ const formatDateTime = (datetime) => {
 
         <!-- Custom Project Cell (only for all tasks view) -->
         <template #cell-project="{ item }" v-if="!project">
-          <Link
-            :href="route('projects.show', { project: item.project.slug })"
-            class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-          >
-            {{ item.project.name }}
-          </Link>
+          <div @click.stop>
+            <Link
+              :href="route('projects.show', { project: item.project.slug })"
+              class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              {{ item.project.name }}
+            </Link>
+          </div>
         </template>
 
         <!-- Custom Actions Column -->
         <template #cell-actions="{ item }">
-          <div class="flex space-x-2">
+          <div class="flex space-x-2" @click.stop>
             <Link
               :href="
                 route('tasks.show', {
