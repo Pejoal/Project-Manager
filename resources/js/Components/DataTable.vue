@@ -4,9 +4,9 @@ import TextInput from '@/Components/TextInput.vue';
 import { router, useForm } from '@inertiajs/vue3';
 import { computed, onMounted, ref, watch } from 'vue';
 import vSelect from 'vue-select';
-import PrimaryButton from './PrimaryButton.vue';
-import Pagination from './Pagination.vue';
 import Checkbox from './Checkbox.vue';
+import Pagination from './Pagination.vue';
+import PrimaryButton from './PrimaryButton.vue';
 
 const props = defineProps({
   // Data props
@@ -111,7 +111,7 @@ const emit = defineEmits(['bulk-action', 'row-click', 'cell-click', 'sort-change
 
 // Local state
 const selectedItems = ref([]);
-const filtersVisible = ref(true);
+const filtersVisible = ref(false);
 const sortColumn = ref(props.filters.sort_by || '');
 const sortDirection = ref(props.filters.sort_direction || 'asc');
 
@@ -208,6 +208,20 @@ const selectedBulkAction = computed(() => {
   return props.bulkActions.find((action) => action.value === bulkForm.action);
 });
 
+const hasActiveFilters = computed(() => {
+  // Check if any filter has a non-empty value (excluding search, per_page, sort_by, sort_direction)
+  return Object.keys(form.data()).some((key) => {
+    if (['search', 'per_page', 'sort_by', 'sort_direction'].includes(key)) {
+      return false;
+    }
+    const value = form[key];
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+    return value !== '' && value !== null && value !== undefined;
+  });
+});
+
 // Methods
 const applyFilters = () => {
   const params = { ...form.data() };
@@ -215,6 +229,10 @@ const applyFilters = () => {
   // Remove empty values
   Object.keys(params).forEach((key) => {
     if (params[key] === '' || params[key] === null || params[key] === undefined) {
+      delete params[key];
+    }
+    // Remove empty arrays
+    if (Array.isArray(params[key]) && params[key].length === 0) {
       delete params[key];
     }
   });
@@ -381,6 +399,25 @@ const onCellClick = (item, column) => {
   emit('cell-click', { item, column });
 };
 
+const clearFilters = () => {
+  // Reset all filter fields to their initial empty state
+  Object.keys(form.data()).forEach((key) => {
+    if (!['per_page', 'sort_by', 'sort_direction'].includes(key)) {
+      const filter = props.filterConfig.find((f) => f.key === key);
+      if (key === 'search') {
+        form[key] = '';
+      } else if (filter && (filter.multiple || filter.type === 'multiselect')) {
+        form[key] = [];
+      } else {
+        form[key] = '';
+      }
+    }
+  });
+
+  // Trigger filter application
+  applyFilters();
+};
+
 // Initialize sorting from props
 onMounted(() => {
   if (props.filters.sort_by) {
@@ -400,7 +437,7 @@ onMounted(() => {
           v-model="form.search"
           type="text"
           :placeholder="searchPlaceholder"
-          class="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full sm:w-64 md:w-96 pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500"
         />
         <svg
           class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
@@ -417,19 +454,51 @@ onMounted(() => {
         </svg>
       </div>
 
-      <!-- Per Page -->
-      <div class="flex items-center space-x-2">
-        <InputLabel for="per_page" value="Show" class="text-sm" />
-        <select
-          id="per_page"
-          v-model="form.per_page"
-          class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-sm"
+      <!-- Actions -->
+      <div class="flex items-center gap-3 flex-wrap">
+        <!-- Toggle Filters Button -->
+        <button
+          v-if="filterConfig.length > 0"
+          @click="toggleFilters"
+          class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
         >
-          <option v-for="option in perPageOptions" :key="option" :value="option">
-            {{ option }}
-          </option>
-        </select>
-        <span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+          <svg class="inline-block w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+            />
+          </svg>
+          {{ filtersVisible ? 'Hide Filters' : 'Show Filters' }}
+        </button>
+
+        <!-- Clear Filters Button -->
+        <button
+          v-if="hasActiveFilters"
+          @click="clearFilters"
+          class="px-4 py-2 text-sm font-medium text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-800 rounded-md hover:bg-red-100 dark:hover:bg-red-900/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+        >
+          <svg class="inline-block w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Clear Filters
+        </button>
+
+        <!-- Per Page -->
+        <div class="flex items-center space-x-2">
+          <InputLabel for="per_page" value="Show" class="text-sm" />
+          <select
+            id="per_page"
+            v-model="form.per_page"
+            class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-sm"
+          >
+            <option v-for="option in perPageOptions" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </select>
+          <span class="text-sm text-gray-600 dark:text-gray-400">entries</span>
+        </div>
       </div>
     </div>
 
@@ -512,68 +581,60 @@ onMounted(() => {
     </div>
 
     <!-- Filters Section -->
-    <div v-if="filterConfig.length > 0" class="bg-white dark:bg-gray-800 shadow rounded-lg">
-      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-        <PrimaryButton @click="toggleFilters">
-          {{ filtersVisible ? 'Hide Filters' : 'Show Filters' }}
-        </PrimaryButton>
-      </div>
+    <transition name="slide-down">
+      <div v-if="filterConfig.length > 0 && filtersVisible" class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div v-for="filter in filterConfig" :key="filter.key">
+            <InputLabel :for="filter.key" :value="filter.label" />
 
-      <transition name="slide-down">
-        <div v-if="filtersVisible" class="p-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div v-for="filter in filterConfig" :key="filter.key">
-              <InputLabel :for="filter.key" :value="filter.label" />
+            <!-- Text Input -->
+            <TextInput
+              v-if="filter.type === 'text'"
+              :id="filter.key"
+              v-model="form[filter.key]"
+              type="text"
+              :placeholder="filter.placeholder"
+              class="w-full"
+            />
 
-              <!-- Text Input -->
-              <TextInput
-                v-if="filter.type === 'text'"
-                :id="filter.key"
-                v-model="form[filter.key]"
-                type="text"
-                :placeholder="filter.placeholder"
-                class="w-full"
-              />
+            <!-- Date Input -->
+            <input
+              v-else-if="filter.type === 'date'"
+              :id="filter.key"
+              v-model="form[filter.key]"
+              type="date"
+              class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+            />
 
-              <!-- Date Input -->
-              <input
-                v-else-if="filter.type === 'date'"
-                :id="filter.key"
-                v-model="form[filter.key]"
-                type="date"
-                class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-              />
+            <!-- Select -->
+            <select
+              v-else-if="filter.type === 'select'"
+              :id="filter.key"
+              v-model="form[filter.key]"
+              class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+            >
+              <option value="">{{ filter.placeholder || `All ${filter.label}` }}</option>
+              <option v-for="option in filter.options" :key="option.value" :value="option.value">
+                {{ option.label }}
+              </option>
+            </select>
 
-              <!-- Select -->
-              <select
-                v-else-if="filter.type === 'select'"
-                :id="filter.key"
-                v-model="form[filter.key]"
-                class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-              >
-                <option value="">{{ filter.placeholder || `All ${filter.label}` }}</option>
-                <option v-for="option in filter.options" :key="option.value" :value="option.value">
-                  {{ option.label }}
-                </option>
-              </select>
-
-              <!-- Vue Select -->
-              <vSelect
-                v-else-if="filter.type === 'vue-select'"
-                :id="filter.key"
-                v-model="form[filter.key]"
-                :options="filter.options"
-                :reduce="filter.reduce || ((option) => option.value)"
-                :label="filter.optionLabel || 'label'"
-                :placeholder="filter.placeholder"
-                :multiple="filter.multiple"
-                class="text-gray-700"
-              />
-            </div>
+            <!-- Vue Select -->
+            <vSelect
+              v-else-if="filter.type === 'vue-select'"
+              :id="filter.key"
+              v-model="form[filter.key]"
+              :options="filter.options"
+              :reduce="filter.reduce || ((option) => option.value)"
+              :label="filter.optionLabel || 'label'"
+              :placeholder="filter.placeholder"
+              :multiple="filter.multiple"
+              class="text-gray-700"
+            />
           </div>
         </div>
-      </transition>
-    </div>
+      </div>
+    </transition>
 
     <!-- Table -->
     <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg">
@@ -631,7 +692,7 @@ onMounted(() => {
                 <slot :name="`cell-${column.key}`" :item="item" :value="getCellValue(item, column)" :column="column">
                   <!-- Default cell content -->
                   <div v-if="column.component" v-html="column.component(item, getCellValue(item, column))" />
-                  <span :class="['text-sm', column.textClass || 'text-gray-900 dark:text-gray-100']">
+                  <span v-else :class="['text-sm', column.textClass || 'text-gray-900 dark:text-gray-100']">
                     {{ getCellValue(item, column) }}
                   </span>
                 </slot>
@@ -671,7 +732,7 @@ onMounted(() => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  <span class="ml-2">Loading...</span>
+                  <span class="ml-2">{{ trans('words.loading') }}</span>
                 </div>
               </td>
             </tr>
@@ -681,7 +742,6 @@ onMounted(() => {
 
       <!-- Pagination -->
       <Pagination :pagination="pagination" />
-      
       <!-- Table Info -->
       <div v-if="data.data && data.data.length > 0" class="mb-4 text-sm text-gray-600 dark:text-gray-400 text-center">
         Showing {{ (data.current_page - 1) * form.per_page + 1 }} to
@@ -695,18 +755,20 @@ onMounted(() => {
 <style scoped>
 .slide-down-enter-active,
 .slide-down-leave-active {
-  transition: max-height 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  max-height: 500px;
+  overflow: hidden;
 }
 
 .slide-down-enter-from,
 .slide-down-leave-to {
   max-height: 0;
-  overflow: hidden;
+  opacity: 0;
 }
 
 .slide-down-enter-to,
 .slide-down-leave-from {
-  max-height: 50rem;
-  overflow: auto;
+  max-height: 500px;
+  opacity: 1;
 }
 </style>

@@ -108,12 +108,12 @@ const columns = [
 
 // Filter configuration
 const filterConfig = [
-  {
-    key: 'search',
-    label: 'Search',
-    type: 'text',
-    placeholder: 'Search by name or description...',
-  },
+  // {
+  //   key: 'search',
+  //   label: 'Search',
+  //   type: 'text',
+  //   placeholder: 'Search by name or description...',
+  // },
   {
     key: 'status',
     label: 'Status',

@@ -23,6 +23,7 @@ return [
   'start' => 'Start',
   'end' => 'End',
   'log_time' => 'Log Time',
+  'search_tasks' => 'Search by name or description',
 
   // Navigation
   'dashboard' => 'Dashboard',
