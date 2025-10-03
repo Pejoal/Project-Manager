@@ -1,7 +1,7 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3';
 import { loadLanguageAsync } from 'laravel-vue-i18n';
-import { ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const page = usePage().props;
 const isOpen = ref(false);
@@ -19,10 +19,27 @@ const active_locale = (locale, url) => {
   active_locale_code.value = locale;
   loadLanguageAsync(locale);
 };
+
+// Click outside to close dropdown
+const dropdownRef = ref(null);
+
+const handleClickOutside = (event) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+    isOpen.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <template>
-  <div class="relative block self-center text-left z-50">
+  <div ref="dropdownRef" class="relative block self-center text-left z-50">
     <div>
       <button
         @click="toggleDropdown"
