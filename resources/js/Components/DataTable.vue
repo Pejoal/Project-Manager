@@ -681,13 +681,14 @@ onMounted(() => {
 
       <!-- Pagination -->
       <Pagination :pagination="pagination" />
+      
+      <!-- Table Info -->
+      <div v-if="data.data && data.data.length > 0" class="mb-4 text-sm text-gray-600 dark:text-gray-400 text-center">
+        Showing {{ (data.current_page - 1) * form.per_page + 1 }} to
+        {{ Math.min(data.current_page * form.per_page, data.total) }} of {{ data.total }} entries
+      </div>
     </div>
 
-    <!-- Table Info -->
-    <div v-if="data.data && data.data.length > 0" class="text-sm text-gray-600 dark:text-gray-400 text-center">
-      Showing {{ (data.current_page - 1) * form.per_page + 1 }} to
-      {{ Math.min(data.current_page * form.per_page, data.total) }} of {{ data.total }} entries
-    </div>
   </div>
 </template>
 
