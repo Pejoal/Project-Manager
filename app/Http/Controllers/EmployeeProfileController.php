@@ -10,10 +10,26 @@ use App\Events\ActivityLogged;
 
 class EmployeeProfileController extends Controller
 {
-  public function index(Request $request)
+  /**
+   * Apply filters to the query
+   */
+  private function applyFilters($query, Request $request)
   {
-    $query = EmployeeProfile::with('user');
+    $request->validate([
+      'search' => 'nullable|string|max:255',
+      'status' => 'nullable|string|in:active,inactive',
+      'payment_method' => 'nullable|string|in:bank_transfer,cash,check',
+      'per_page' => 'nullable|integer|min:1|max:100',
+      'sort_by' => 'nullable|string|in:created_at,hire_date,base_hourly_rate',
+      'sort_direction' => 'nullable|string|in:asc,desc',
+    ]);
 
+    // Apply sorting with default fallback
+    $sortBy = $request->input('sort_by', 'created_at');
+    $sortDirection = $request->input('sort_direction', 'desc');
+    $query->orderBy($sortBy, $sortDirection);
+
+    // Apply search
     if ($request->filled('search')) {
       $search = $request->search;
       $query
@@ -23,19 +39,36 @@ class EmployeeProfileController extends Controller
         ->orWhere('employee_id', 'like', "%{$search}%");
     }
 
+    // Apply status filter
     if ($request->filled('status')) {
-      if ($request->status === 'active') {
-        $query->active();
-      } elseif ($request->status === 'inactive') {
-        $query->inactive();
-      }
+      $isActive = $request->status === 'active';
+      $query->where('is_active', $isActive);
     }
 
-    $employeeProfiles = $query->latest()->paginate(15);
+    // Apply payment method filter
+    if ($request->filled('payment_method')) {
+      $query->where('payment_method', $request->payment_method);
+    }
+  }
+
+  public function index(Request $request)
+  {
+    $query = EmployeeProfile::with(['user']);
+
+    // Apply filters
+    $this->applyFilters($query, $request);
+
+    // Get pagination settings
+    $perPage = $request->input('per_page', 15);
+    $employeeProfiles = $query->paginate($perPage)->appends($request->except('page'));
+
+    // Get filter options
+    $users = User::doesntHave('employeeProfile')->select('id', 'name')->orderBy('name')->get();
 
     return Inertia::render('EmployeeProfiles/Index', [
       'employeeProfiles' => $employeeProfiles,
-      'filters' => $request->only(['search', 'status']),
+      'filters' => $request->only(['search', 'status', 'payment_method', 'per_page', 'sort_by', 'sort_direction']),
+      'users' => $users,
     ]);
   }
 
@@ -321,37 +354,47 @@ class EmployeeProfileController extends Controller
     return redirect()->back()->with('flash.banner', __('payroll.employee_profiles.deactivated_successfully'));
   }
 
+  /**
+   * Handle bulk operations on employee profiles
+   */
   public function bulkUpdate(Request $request)
   {
     $request->validate([
       'profile_ids' => 'required|array',
       'profile_ids.*' => 'exists:employee_profiles,id',
       'action' => 'required|in:activate,deactivate,update_rate',
-      'hourly_rate' => 'required_if:action,update_rate|numeric|min:0|max:999.99',
+      'hourly_rate' => 'required_if:action,update_rate|numeric|min:0',
     ]);
 
     $profiles = EmployeeProfile::whereIn('id', $request->profile_ids)->get();
+    $message = '';
 
     switch ($request->action) {
       case 'activate':
         $profiles->each(function ($profile) {
           $profile->update(['is_active' => true]);
         });
-        $message = __('payroll.employee_profiles.bulk_activated', ['count' => $profiles->count()]);
+        $message = trans('payroll.employee_profiles.bulk_activated', ['count' => $profiles->count()]);
+        event(new ActivityLogged(auth()->user(), 'bulk_activated_employee_profiles', $message, null));
         break;
 
       case 'deactivate':
         $profiles->each(function ($profile) {
           $profile->update(['is_active' => false]);
         });
-        $message = __('payroll.employee_profiles.bulk_deactivated', ['count' => $profiles->count()]);
+        $message = trans('payroll.employee_profiles.bulk_deactivated', ['count' => $profiles->count()]);
+        event(new ActivityLogged(auth()->user(), 'bulk_deactivated_employee_profiles', $message, null));
         break;
 
       case 'update_rate':
         $profiles->each(function ($profile) use ($request) {
           $profile->update(['base_hourly_rate' => $request->hourly_rate]);
         });
-        $message = __('payroll.employee_profiles.bulk_rate_updated', ['count' => $profiles->count()]);
+        $message = trans('payroll.employee_profiles.bulk_rate_updated', [
+          'count' => $profiles->count(),
+          'rate' => $request->hourly_rate,
+        ]);
+        event(new ActivityLogged(auth()->user(), 'bulk_updated_employee_profile_rates', $message, null));
         break;
 
       default:
@@ -359,8 +402,6 @@ class EmployeeProfileController extends Controller
           ->back()
           ->withErrors(['action' => 'Invalid action']);
     }
-
-    // event(new ActivityLogged(auth()->user(), 'bulk_updated_employee_profiles', $message, null));
 
     return redirect()->back()->with('flash.banner', $message);
   }

@@ -14,34 +14,83 @@ use App\Events\ActivityLogged;
 
 class PayslipController extends Controller
 {
-  public function index(Request $request)
+  /**
+   * Apply filters to the query
+   */
+  private function applyFilters($query, Request $request)
   {
-    $query = Payslip::with(['user', 'generatedBy', 'approvedBy']);
+    $request->validate([
+      'search' => 'nullable|string|max:255',
+      'user_id' => 'nullable|integer|exists:users,id',
+      'status' => 'nullable|string|in:draft,approved,paid',
+      'pay_period_start' => 'nullable|date',
+      'pay_period_end' => 'nullable|date|after_or_equal:pay_period_start',
+      'per_page' => 'nullable|integer|min:1|max:100',
+      'sort_by' => 'nullable|string|in:created_at,pay_period_start,pay_period_end,gross_pay,net_pay',
+      'sort_direction' => 'nullable|string|in:asc,desc',
+    ]);
 
+    // Apply sorting with default fallback
+    $sortBy = $request->input('sort_by', 'created_at');
+    $sortDirection = $request->input('sort_direction', 'desc');
+    $query->orderBy($sortBy, $sortDirection);
+
+    // Apply search
+    if ($request->filled('search')) {
+      $search = $request->search;
+      $query->whereHas('user', function ($q) use ($search) {
+        $q->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%");
+      });
+    }
+
+    // Apply user filter
     if ($request->filled('user_id')) {
       $query->where('user_id', $request->user_id);
     }
 
+    // Apply status filter
     if ($request->filled('status')) {
       $query->where('status', $request->status);
     }
 
-    if ($request->filled('period_start')) {
-      $query->whereDate('pay_period_start', '>=', $request->period_start);
+    // Apply pay period filters
+    if ($request->filled('pay_period_start')) {
+      $query->whereDate('pay_period_start', '>=', $request->pay_period_start);
     }
 
-    if ($request->filled('period_end')) {
-      $query->whereDate('pay_period_end', '<=', $request->period_end);
+    if ($request->filled('pay_period_end')) {
+      $query->whereDate('pay_period_end', '<=', $request->pay_period_end);
     }
+  }
 
-    $payslips = $query->latest('pay_period_start')->paginate(15);
+  public function index(Request $request)
+  {
+    $query = Payslip::with(['user', 'generatedBy', 'approvedBy']);
 
-    $users = User::whereHas('employeeProfile')->select('id', 'name')->get();
+    // Apply filters
+    $this->applyFilters($query, $request);
+
+    // Get pagination settings
+    $perPage = $request->input('per_page', 15);
+    $payslips = $query->paginate($perPage)->appends($request->except('page'));
+
+    // Get filter options
+    $users = User::select('id', 'name')->orderBy('name')->get();
 
     return Inertia::render('Payslips/Index', [
       'payslips' => $payslips,
-      'filters' => $request->only(['user_id', 'status', 'period_start', 'period_end']),
+      'filters' => $request->only([
+        'search',
+        'user_id',
+        'status',
+        'pay_period_start',
+        'pay_period_end',
+        'per_page',
+        'sort_by',
+        'sort_direction',
+      ]),
       'users' => $users,
+      'canGeneratePayslips' => auth()->user()->hasRole('admin'),
     ]);
   }
 
@@ -191,6 +240,57 @@ class PayslipController extends Controller
     return redirect()
       ->back()
       ->with('flash.banner', __('payroll.payslips.bulk_approved_successfully', ['count' => $approvedCount]));
+  }
+
+  /**
+   * Handle bulk operations on payslips
+   */
+  public function bulkUpdate(Request $request)
+  {
+    $request->validate([
+      'payslip_ids' => 'required|array',
+      'payslip_ids.*' => 'exists:payslips,id',
+      'action' => 'required|in:approve,mark_paid',
+    ]);
+
+    $payslips = Payslip::whereIn('id', $request->payslip_ids)->get();
+    $message = '';
+
+    switch ($request->action) {
+      case 'approve':
+        $payslips->each(function ($payslip) {
+          if ($payslip->status === 'draft') {
+            $payslip->update([
+              'status' => 'approved',
+              'approved_by' => auth()->id(),
+              'approved_at' => now(),
+            ]);
+          }
+        });
+        $message = trans('payroll.payslips.bulk_approved', ['count' => $payslips->count()]);
+        event(new ActivityLogged(auth()->user(), 'bulk_approved_payslips', $message, null));
+        break;
+
+      case 'mark_paid':
+        $payslips->each(function ($payslip) {
+          if ($payslip->status === 'approved') {
+            $payslip->update([
+              'status' => 'paid',
+              'paid_at' => now(),
+            ]);
+          }
+        });
+        $message = trans('payroll.payslips.bulk_marked_paid', ['count' => $payslips->count()]);
+        event(new ActivityLogged(auth()->user(), 'bulk_marked_payslips_paid', $message, null));
+        break;
+
+      default:
+        return redirect()
+          ->back()
+          ->withErrors(['action' => 'Invalid action']);
+    }
+
+    return redirect()->back()->with('flash.banner', $message);
   }
 
   public function destroy(Payslip $payslip)

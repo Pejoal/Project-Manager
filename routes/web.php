@@ -169,6 +169,7 @@ Route::group(
           'payslips.mark-paid'
         );
         Route::post('payslips/bulk-approve', [PayslipController::class, 'bulkApprove'])->name('payslips.bulk-approve');
+        Route::post('payslips/bulk-update', [PayslipController::class, 'bulkUpdate'])->name('payslips.bulk-update');
         Route::get('payslips/{payslip}/pdf', [PayslipController::class, 'downloadPdf'])->name('payslips.download-pdf');
       });
 
@@ -179,6 +180,9 @@ Route::group(
       );
       Route::post('time-entries/bulk-approve', [TimeEntryController::class, 'bulkApprove'])->name(
         'time-entries.bulk-approve'
+      );
+      Route::post('time-entries/bulk-update', [TimeEntryController::class, 'bulkUpdate'])->name(
+        'time-entries.bulk-update'
       );
 
       // Task bulk operations

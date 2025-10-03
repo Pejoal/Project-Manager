@@ -4,8 +4,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import Pagination from '@/Components/Pagination.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
-import { computed, ref, watch } from 'vue';
+import { router, useForm } from '@inertiajs/vue3';
+import { computed, onMounted, ref, watch } from 'vue';
 import vSelect from 'vue-select';
 
 const props = defineProps({
@@ -77,6 +77,12 @@ const props = defineProps({
     required: true,
   },
 
+  // Route parameters (for nested routes)
+  routeParams: {
+    type: Object,
+    default: () => ({}),
+  },
+
   // Loading state
   loading: {
     type: Boolean,
@@ -106,10 +112,8 @@ const emit = defineEmits(['bulk-action', 'row-click', 'cell-click', 'sort-change
 // Local state
 const selectedItems = ref([]);
 const filtersVisible = ref(true);
-const sortColumn = ref(null);
-const sortDirection = ref('asc');
-const currentPerPage = ref(props.perPageOptions[0]);
-const searchQuery = ref('');
+const sortColumn = ref(props.filters.sort_by || '');
+const sortDirection = ref(props.filters.sort_direction || 'asc');
 
 // Form for handling filters and pagination
 const form = useForm({
@@ -139,11 +143,18 @@ const bulkForm = useForm({
   }, {}),
 });
 
-// Watch for filter changes
+// Watch for filter changes with debounce
+let debounceTimer = null;
 watch(
   () => form.data(),
-  () => {
-    applyFilters();
+  (newData, oldData) => {
+    // Don't trigger on initial load
+    if (oldData) {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        applyFilters();
+      }, 300);
+    }
   },
   { deep: true }
 );
@@ -180,11 +191,13 @@ const applyFilters = () => {
     }
   });
 
-  form.get(route(props.routeName), {
+  // Use Inertia visit instead of form.get to handle route parameters properly
+  router.visit(route(props.routeName, props.routeParams), {
+    method: 'get',
+    data: params,
     preserveState: true,
     preserveScroll: true,
     replace: true,
-    data: params,
   });
 };
 
@@ -206,6 +219,9 @@ const sortBy = (column) => {
   form.sort_direction = sortDirection.value;
 
   emit('sort-change', { column: column.key, direction: sortDirection.value });
+
+  // Apply sorting immediately
+  applyFilters();
 };
 
 const getSortIcon = (column) => {
@@ -336,6 +352,14 @@ const onRowClick = (item) => {
 const onCellClick = (item, column) => {
   emit('cell-click', { item, column });
 };
+
+// Initialize sorting from props
+onMounted(() => {
+  if (props.filters.sort_by) {
+    sortColumn.value = props.filters.sort_by;
+    sortDirection.value = props.filters.sort_direction || 'asc';
+  }
+});
 </script>
 
 <template>
@@ -579,7 +603,7 @@ const onCellClick = (item, column) => {
                 <slot :name="`cell-${column.key}`" :item="item" :value="getCellValue(item, column)" :column="column">
                   <!-- Default cell content -->
                   <div v-if="column.component" v-html="column.component(item, getCellValue(item, column))" />
-                  <span v-else :class="['text-sm', column.textClass || 'text-gray-900 dark:text-gray-100']">
+                  <span :class="['text-sm', column.textClass || 'text-gray-900 dark:text-gray-100']">
                     {{ getCellValue(item, column) }}
                   </span>
                 </slot>

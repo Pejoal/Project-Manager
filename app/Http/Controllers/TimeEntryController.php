@@ -13,55 +13,113 @@ use Carbon\Carbon;
 
 class TimeEntryController extends Controller
 {
-  public function index(Request $request)
+  /**
+   * Apply filters to the query
+   */
+  private function applyFilters($query, Request $request)
   {
-    $query = TimeEntry::with(['user', 'task', 'project', 'approvedBy'])->when(
-      !auth()->user()->hasRole('admin'),
-      function ($q) {
-        return $q->where('user_id', auth()->id());
-      }
-    );
+    $request->validate([
+      'search' => 'nullable|string|max:255',
+      'user_id' => 'nullable|integer|exists:users,id',
+      'project_id' => 'nullable|integer|exists:projects,id',
+      'status' => 'nullable|string|in:pending,approved',
+      'date_from' => 'nullable|date',
+      'date_to' => 'nullable|date|after_or_equal:date_from',
+      'per_page' => 'nullable|integer|min:1|max:100',
+      'sort_by' => 'nullable|string|in:start_datetime,end_datetime,hours_worked,gross_amount,created_at',
+      'sort_direction' => 'nullable|string|in:asc,desc',
+    ]);
 
-    // Apply filters
-    if ($request->filled('user_id') && auth()->user()->hasRole('admin')) {
+    // Apply sorting - with default fallback
+    $sortBy = $request->input('sort_by', 'created_at');
+    $sortDirection = $request->input('sort_direction', 'desc');
+    $query->orderBy($sortBy, $sortDirection);
+
+    // Apply search
+    if ($request->filled('search')) {
+      $search = $request->search;
+      $query
+        ->whereHas('user', function ($q) use ($search) {
+          $q->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%");
+        })
+        ->orWhereHas('task', function ($q) use ($search) {
+          $q->where('name', 'like', "%{$search}%");
+        })
+        ->orWhereHas('project', function ($q) use ($search) {
+          $q->where('name', 'like', "%{$search}%");
+        })
+        ->orWhere('description', 'like', "%{$search}%");
+    }
+
+    // Apply user filter
+    if ($request->filled('user_id')) {
       $query->where('user_id', $request->user_id);
     }
 
+    // Apply project filter
     if ($request->filled('project_id')) {
       $query->where('project_id', $request->project_id);
     }
 
+    // Apply status filter
     if ($request->filled('status')) {
-      if ($request->status === 'pending') {
-        $query->where('is_approved', false);
-      } elseif ($request->status === 'approved') {
+      if ($request->status === 'approved') {
         $query->where('is_approved', true);
+      } elseif ($request->status === 'pending') {
+        $query->where('is_approved', false);
       }
     }
 
+    // Apply date range filter
     if ($request->filled('date_from')) {
       $query->whereDate('start_datetime', '>=', $request->date_from);
     }
 
     if ($request->filled('date_to')) {
-      $query->whereDate('end_datetime', '<=', $request->date_to);
+      $query->whereDate('start_datetime', '<=', $request->date_to);
+    }
+  }
+
+  public function index(Request $request)
+  {
+    $user = auth()->user();
+    $canManageAll = $user->hasRole('admin');
+
+    // Base query with relationships
+    $query = TimeEntry::with(['user', 'task', 'project', 'approvedBy']);
+
+    // If not admin, only show own entries
+    if (!$canManageAll) {
+      $query->where('user_id', $user->id);
     }
 
-    $timeEntries = $query->latest('start_datetime')->paginate(15);
+    // Apply filters
+    $this->applyFilters($query, $request);
 
-    // Get filter options for admin
-    $users = auth()->user()->hasRole('admin')
-      ? User::whereHas('employeeProfile')->select('id', 'name')->get()
-      : collect();
+    // Get pagination settings
+    $perPage = $request->input('per_page', 15);
+    $timeEntries = $query->paginate($perPage)->appends($request->except('page'));
 
-    $projects = Project::select('id', 'name')->get();
+    // Get filter options
+    $users = $canManageAll ? User::select('id', 'name')->orderBy('name')->get() : collect();
+    $projects = Project::select('id', 'name')->orderBy('name')->get();
 
     return Inertia::render('TimeEntries/Index', [
       'timeEntries' => $timeEntries,
-      'filters' => $request->only(['user_id', 'project_id', 'status', 'date_from', 'date_to']),
+      'filters' => $request->only([
+        'search',
+        'user_id',
+        'project_id',
+        'status',
+        'date_from',
+        'date_to',
+        'per_page',
+        'sort_by',
+        'sort_direction',
+      ]),
       'users' => $users,
       'projects' => $projects,
-      'canManageAll' => auth()->user()->hasRole('admin'),
+      'canManageAll' => $canManageAll,
     ]);
   }
 
@@ -338,14 +396,94 @@ class TimeEntryController extends Controller
         'approved_at' => now(),
       ]);
       $approvedCount++;
-      
+
       event(new ActivityLogged(auth()->user(), 'update_time_entry', '', $timeEntry));
     }
-
 
     return redirect()
       ->back()
       ->with('flash.banner', __('payroll.time_entries.bulk_approved_successfully', ['count' => $approvedCount]));
+  }
+
+  /**
+   * Handle bulk operations on time entries
+   */
+  public function bulkUpdate(Request $request)
+  {
+    $request->validate([
+      'time_entry_ids' => 'required|array',
+      'time_entry_ids.*' => 'exists:time_entries,id',
+      'action' => 'required|in:approve,reject,delete',
+    ]);
+
+    $timeEntries = TimeEntry::whereIn('id', $request->time_entry_ids)->get();
+    $message = '';
+
+    // Check permissions - admin can manage all, users can only manage their own pending entries
+    if (!auth()->user()->hasRole('admin')) {
+      $invalidEntries = $timeEntries->filter(function ($entry) {
+        return $entry->user_id !== auth()->id() || $entry->is_approved;
+      });
+
+      if ($invalidEntries->count() > 0) {
+        return redirect()
+          ->back()
+          ->withErrors(['unauthorized' => 'You can only manage your own pending time entries.']);
+      }
+    }
+
+    switch ($request->action) {
+      case 'approve':
+        if (!auth()->user()->hasRole('admin')) {
+          return redirect()
+            ->back()
+            ->withErrors(['unauthorized' => 'Only administrators can approve time entries.']);
+        }
+
+        $timeEntries->each(function ($entry) {
+          $entry->update([
+            'is_approved' => true,
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+          ]);
+        });
+        $message = trans('payroll.time_entries.bulk_approved', ['count' => $timeEntries->count()]);
+        event(new ActivityLogged(auth()->user(), 'bulk_approved_time_entries', $message, null));
+        break;
+
+      case 'reject':
+        if (!auth()->user()->hasRole('admin')) {
+          return redirect()
+            ->back()
+            ->withErrors(['unauthorized' => 'Only administrators can reject time entries.']);
+        }
+
+        $timeEntries->each(function ($entry) {
+          $entry->update([
+            'is_approved' => false,
+            'approved_by' => null,
+            'approved_at' => null,
+          ]);
+        });
+        $message = trans('payroll.time_entries.bulk_rejected', ['count' => $timeEntries->count()]);
+        event(new ActivityLogged(auth()->user(), 'bulk_rejected_time_entries', $message, null));
+        break;
+
+      case 'delete':
+        $timeEntries->each(function ($entry) {
+          $entry->delete();
+        });
+        $message = trans('payroll.time_entries.bulk_deleted', ['count' => $timeEntries->count()]);
+        event(new ActivityLogged(auth()->user(), 'bulk_deleted_time_entries', $message, null));
+        break;
+
+      default:
+        return redirect()
+          ->back()
+          ->withErrors(['action' => 'Invalid action']);
+    }
+
+    return redirect()->back()->with('flash.banner', $message);
   }
 
   /**
