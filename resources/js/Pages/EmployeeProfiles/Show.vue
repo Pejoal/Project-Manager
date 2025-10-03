@@ -28,18 +28,20 @@ const statusClass = computed(() => {
 
 <template>
   <Head :title="`Profile: ${profile.user.name}`" />
-  <header>
-    <div class="flex justify-between items-center">
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        Employee Profile: {{ profile.user.name }}
-      </h2>
-      <Link
-        :href="route('employee-profiles.edit', profile.id)"
-        class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Edit Profile
-      </Link>
-    </div>
+  <header class="bg-white dark:bg-gray-800 shadow">
+    <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+          Employee Profile: {{ profile.user.name }}
+        </h2>
+        <Link
+          :href="route('employee-profiles.edit', profile.id)"
+          class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Edit Profile
+        </Link>
+      </div>
+    </main>
   </header>
 
   <div class="py-12">
