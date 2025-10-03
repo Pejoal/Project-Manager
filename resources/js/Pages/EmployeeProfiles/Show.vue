@@ -1,11 +1,15 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import CreateTimeEntryModal from '../TimeEntries/CreateTimeEntryModal.vue';
+import { ref } from 'vue';
 
 const props = defineProps({
   profile: Object,
   stats: Object,
 });
+
+const showCreateTimeEntryModal = ref(false);
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(amount || 0);
@@ -347,8 +351,9 @@ const displayFields = computed(() => {
               </div>
             </Link>
 
-            <Link
-              :href="route('time-entries.create', { task_id: null, user_id: profile.user_id })"
+            <!-- :href="route('time-entries.create', { task_id: null, user_id: profile.user_id })" -->
+            <button
+            @click="showCreateTimeEntryModal = true"
               class="flex items-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
             >
               <div class="flex-shrink-0">
@@ -365,7 +370,8 @@ const displayFields = computed(() => {
                 <p class="text-sm font-medium text-purple-900 dark:text-purple-100">Add Time Entry</p>
                 <p class="text-xs text-purple-600 dark:text-purple-400">Log new hours</p>
               </div>
-            </Link>
+            </button>
+            <CreateTimeEntryModal :show="showCreateTimeEntryModal" :user-id="profile.user_id" />
 
             <button
               v-if="profile.is_active"

@@ -14,12 +14,20 @@ const props = defineProps({
 });
 
 const showModal = ref(false);
+const editingTimeEntry = ref(null);
 
 const openModal = () => {
+  editingTimeEntry.value = null;
+  showModal.value = true;
+};
+
+const openEditModal = (timeEntry) => {
+  editingTimeEntry.value = timeEntry;
   showModal.value = true;
 };
 
 const closeModal = () => {
+  editingTimeEntry.value = null;
   showModal.value = false;
 };
 
@@ -255,8 +263,8 @@ const handleRowClick = (entry) => {
 
   <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Create Time Entry Modal -->
-      <CreateTimeEntryModal :show="showModal" :projects="projects" @close="closeModal" />
+      <!-- Create/Edit Time Entry Modal -->
+      <CreateTimeEntryModal :show="showModal" :projects="projects" :timeEntry="editingTimeEntry" @close="closeModal" />
 
       <!-- Time Entries DataTable -->
       <DataTable
@@ -297,23 +305,23 @@ const handleRowClick = (entry) => {
 
         <!-- Custom Actions Column -->
         <template #cell-actions="{ item }">
-          <div class="flex space-x-2">
+          <div class="flex space-x-2" @click.stop>
             <Link
               :href="route('time-entries.show', item.id)"
               class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
             >
               {{ $t('words.view') }}
             </Link>
-            <Link
+            <button
               v-if="!item.is_approved && (canManageAll || item.user_id === $page.props.auth.user.id)"
-              :href="route('time-entries.edit', item.id)"
+              @click="openEditModal(item)"
               class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300"
             >
               {{ $t('words.edit') }}
-            </Link>
+            </button>
             <button
               v-if="canManageAll && !item.is_approved"
-              @click.stop="approveEntry(item.id)"
+              @click="approveEntry(item.id)"
               class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
             >
               {{ $t('payroll.time_entries.approve') }}

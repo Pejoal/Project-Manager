@@ -11,9 +11,12 @@ import vSelect from 'vue-select';
 const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
-  projects: Array, // Passed from Index.vue
+  projects: Array,
   task: {
-    // Optional pre-selected task
+    type: Object,
+    default: null,
+  },
+  timeEntry: {
     type: Object,
     default: null,
   },
@@ -23,11 +26,19 @@ const tasks = ref([]);
 const isLoadingTasks = ref(false);
 
 const form = useForm({
-  project_id: props.task?.project_id || null,
-  task_id: props.task?.id || null,
-  start_datetime: props.task?.start_datetime ? props.task.start_datetime.slice(0, 16) : '',
-  end_datetime: props.task?.end_datetime ? props.task.end_datetime.slice(0, 16) : '',
-  description: '',
+  project_id: props.timeEntry?.project_id || props.task?.project_id || null,
+  task_id: props.timeEntry?.task_id || props.task?.id || null,
+  start_datetime: props.timeEntry?.start_datetime
+    ? props.timeEntry.start_datetime.slice(0, 16)
+    : props.task?.start_datetime
+      ? props.task.start_datetime.slice(0, 16)
+      : '',
+  end_datetime: props.timeEntry?.end_datetime
+    ? props.timeEntry.end_datetime.slice(0, 16)
+    : props.task?.end_datetime
+      ? props.task.end_datetime.slice(0, 16)
+      : '',
+  description: props.timeEntry?.description || '',
 });
 
 // Watch for project selection to fetch its tasks
@@ -36,9 +47,8 @@ watch(
   async (newProjectId) => {
     if (newProjectId) {
       isLoadingTasks.value = true;
-      form.task_id = null; // Reset task selection
+      form.task_id = null;
       try {
-        // Use the dedicated endpoint from TimeEntryController
         const response = await axios.get(route('time-entries.tasks-for-project', { project: newProjectId }));
         tasks.value = response.data;
       } catch (error) {
@@ -53,10 +63,40 @@ watch(
   }
 );
 
+// Load tasks when editing
+watch(
+  () => props.show,
+  async (isShowing) => {
+    if (isShowing && props.timeEntry && props.timeEntry.project_id) {
+      isLoadingTasks.value = true;
+      try {
+        const response = await axios.get(
+          route('time-entries.tasks-for-project', { project: props.timeEntry.project_id })
+        );
+        tasks.value = response.data;
+        form.task_id = props.timeEntry.task_id;
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+        tasks.value = [];
+      } finally {
+        isLoadingTasks.value = false;
+      }
+    }
+  }
+);
+
 const submit = () => {
-  form.post(route('time-entries.store'), {
-    onSuccess: () => closeModal(),
-  });
+  if (props.timeEntry) {
+    // Update existing time entry
+    form.put(route('time-entries.update', props.timeEntry.id), {
+      onSuccess: () => closeModal(),
+    });
+  } else {
+    // Create new time entry
+    form.post(route('time-entries.store'), {
+      onSuccess: () => closeModal(),
+    });
+  }
 };
 
 const closeModal = () => {
@@ -77,10 +117,14 @@ const calculateHours = () => {
 
 <template>
   <DialogModal :show="props.show" @close="closeModal">
-    <template #title>Create Time Entry</template>
+    <template #title>{{ timeEntry ? 'Edit Time Entry' : 'Create Time Entry' }}</template>
 
     <template #content>
-      <form id="create-time-entry-form" @submit.prevent="submit" class="space-y-4">
+      <form
+        :id="timeEntry ? 'edit-time-entry-form' : 'create-time-entry-form'"
+        @submit.prevent="submit"
+        class="space-y-4"
+      >
         <div>
           <InputLabel for="project" value="Project" />
           <vSelect
@@ -90,7 +134,7 @@ const calculateHours = () => {
             :reduce="(project) => project.id"
             label="name"
             placeholder="Select a project"
-            :disabled="!!task"
+            :disabled="!!task || !!timeEntry"
           />
           <InputError class="mt-2" :message="form.errors.project_id" />
         </div>
@@ -134,7 +178,7 @@ const calculateHours = () => {
           <textarea
             v-model="form.description"
             rows="3"
-            class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 rounded-md"
+            class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           ></textarea>
           <InputError class="mt-2" :message="form.errors.description" />
         </div>
@@ -146,9 +190,14 @@ const calculateHours = () => {
     </template>
 
     <template #footer>
-      <button @click="closeModal" class="btn-secondary mr-3">Cancel</button>
-      <button form="create-time-entry-form" type="submit" :disabled="form.processing" class="btn-primary">
-        Create
+      <button @click="closeModal" class="btn-secondary mr-3 text-gray-900 dark:text-gray-200">Cancel</button>
+      <button
+        :form="timeEntry ? 'edit-time-entry-form' : 'create-time-entry-form'"
+        type="submit"
+        :disabled="form.processing"
+        class="text-gray-900 dark:text-gray-200"
+      >
+        {{ timeEntry ? 'Update' : 'Create' }}
       </button>
     </template>
   </DialogModal>

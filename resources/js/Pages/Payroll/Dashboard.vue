@@ -1,8 +1,11 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import { Chart, registerables } from 'chart.js';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { BarChart, DoughnutChart } from 'vue-chart-3';
+import CreateTimeEntryModal from '../TimeEntries/CreateTimeEntryModal.vue';
+
+const showCreateTimeEntryModal = ref(false);
 
 Chart.register(...registerables);
 
@@ -700,16 +703,18 @@ const getStatusBadgeClass = (status) => {
               {{ $t('payroll.dashboard.quick_actions_description') }}
             </p>
           </div>
+          <CreateTimeEntryModal :show="showCreateTimeEntryModal" />
+
           <div class="flex flex-wrap gap-3">
-            <Link
-              :href="route('time-entries.create')"
+            <button
+              @click="showCreateTimeEntryModal = true"
               class="inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-md font-semibold text-sm hover:bg-blue-50 transition"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
               {{ $t('payroll.actions.add_time_entry') }}
-            </Link>
+            </button>
             <Link
               :href="route('payslips.generate-bulk')"
               class="inline-flex items-center px-4 py-2 bg-blue-700 text-white rounded-md font-semibold text-sm hover:bg-blue-800 transition"
