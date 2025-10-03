@@ -113,13 +113,14 @@ class PayrollController extends Controller
 
     $recentPayslips = Payslip::with(['user', 'generatedBy'])
       ->latest()
-      ->limit(5)
+      ->limit(10)
       ->get();
 
     return Inertia::render('Payroll/Dashboard', [
       'stats' => $stats,
       'recentTimeEntries' => $recentTimeEntries,
       'recentPayslips' => $recentPayslips,
+      'payrollSettings' => PayrollSettings::current(),
     ]);
   }
 
@@ -138,10 +139,10 @@ class PayrollController extends Controller
   {
     $request->validate([
       'company_name' => 'required|string|max:255',
-      'company_address' => 'nullable|string|max:500',
-      'company_tax_id' => 'nullable|string|max:50',
+      'company_address' => 'nullable|string',
+      'company_tax_id' => 'nullable|string',
       'pay_period' => 'required|in:weekly,bi_weekly,monthly',
-      'pay_day' => 'required|integer|min:1|max:31',
+      'pay_day' => 'required|integer|min:0|max:31',
       'default_hourly_rate' => 'required|numeric|min:0',
       'working_days' => 'required|array',
       'working_days.*' => 'in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
@@ -167,20 +168,9 @@ class PayrollController extends Controller
 
   public function reports(Request $request)
   {
-    // Validate filters
-    $request->validate([
-      'period' => 'sometimes|in:weekly,monthly,quarterly,yearly,custom',
-      'start_date' => 'nullable|date',
-      'end_date' => 'nullable|date|after_or_equal:start_date',
-      'user_ids' => 'nullable|array',
-      'user_ids.*' => 'exists:users,id',
-      'project_ids' => 'nullable|array',
-      'project_ids.*' => 'exists:projects,id',
-      'report_type' => 'sometimes|in:summary,detailed,by_employee,by_project',
-    ]);
-
-    // Determine date range from period
     $period = $request->input('period', 'monthly');
+    $reportType = $request->input('report_type', 'summary');
+
     $startDate = $request->filled('start_date') ? Carbon::parse($request->start_date) : now()->startOfMonth();
     $endDate = $request->filled('end_date') ? Carbon::parse($request->end_date) : now()->endOfMonth();
 
@@ -214,55 +204,85 @@ class PayrollController extends Controller
         $q->whereIn('user_id', $request->user_ids);
       })
       ->when($request->filled('project_ids'), function ($q) use ($request) {
-        $q->whereIn('project_id', $request->project_ids);
+        $q->whereHas('user.timeEntries', function ($tq) use ($request) {
+          $tq->whereIn('project_id', $request->project_ids);
+        });
       });
 
-    // Determine how to group the data based on report type
-    $reportType = $request->input('report_type', 'summary');
-    $reportData = [];
+    // Calculate summary statistics
+    $summary = [
+      'total_hours' => $query->sum('regular_hours') + $query->sum('overtime_hours'),
+      'regular_hours' => $query->sum('regular_hours'),
+      'overtime_hours' => $query->sum('overtime_hours'),
+      'total_payroll' => $query->sum('gross_total_pay'),
+      'total_tax_deductions' => $query->sum('total_tax_deductions'),
+      'total_net_pay' => $query->sum('net_pay'),
+      'total_employees' => $query->distinct('user_id')->count(),
+      'average_hourly_rate' => $query->avg('regular_rate'),
+    ];
 
+    // Get detailed data based on report type
+    $reportData = [];
     switch ($reportType) {
       case 'by_employee':
         $reportData = $query
-          ->selectRaw(
-            'user_id, SUM(regular_hours + overtime_hours) as total_hours, SUM(gross_total_pay) as gross_pay, SUM(total_tax_deductions) as total_deductions, SUM(net_pay) as net_pay'
-          )
+          ->get()
           ->groupBy('user_id')
-          ->get()
-          ->map(function ($item) {
-            $item->employee_name = $item->user->name;
-            return $item;
-          });
+          ->map(function ($payslips, $userId) {
+            $user = $payslips->first()->user;
+            return [
+              'user_id' => $userId,
+              'user_name' => $user->name,
+              'employee_id' => $user->employeeProfile->employee_id ?? null,
+              'total_hours' => $payslips->sum('regular_hours') + $payslips->sum('overtime_hours'),
+              'regular_hours' => $payslips->sum('regular_hours'),
+              'overtime_hours' => $payslips->sum('overtime_hours'),
+              'gross_pay' => $payslips->sum('gross_total_pay'),
+              'deductions' => $payslips->sum('total_tax_deductions'),
+              'net_pay' => $payslips->sum('net_pay'),
+              'payslips_count' => $payslips->count(),
+            ];
+          })
+          ->values();
         break;
+
       case 'by_project':
-        $reportData = $query
-          ->selectRaw(
-            'project_id, SUM(regular_hours + overtime_hours) as total_hours, SUM(gross_total_pay) as gross_pay, SUM(total_tax_deductions) as total_deductions, SUM(net_pay) as net_pay'
-          )
+        $timeEntries = TimeEntry::whereBetween('start_datetime', [$startDate, $endDate])
+          ->when($request->filled('user_ids'), function ($q) use ($request) {
+            $q->whereIn('user_id', $request->user_ids);
+          })
+          ->when($request->filled('project_ids'), function ($q) use ($request) {
+            $q->whereIn('project_id', $request->project_ids);
+          })
+          ->with('project')
+          ->get();
+
+        $reportData = $timeEntries
           ->groupBy('project_id')
-          ->get()
-          ->map(function ($item) {
-            $item->project_name = $item->project->name ?? 'N/A';
-            return $item;
-          });
+          ->map(function ($entries, $projectId) {
+            $project = $entries->first()->project;
+            return [
+              'project_id' => $projectId,
+              'project_name' => $project->name ?? 'N/A',
+              'total_hours' => $entries->sum('hours_worked'),
+              'total_cost' => $entries->sum('gross_amount'),
+              'employees_count' => $entries->unique('user_id')->count(),
+              'entries_count' => $entries->count(),
+            ];
+          })
+          ->values();
         break;
+
       case 'detailed':
         $reportData = $query->get();
         break;
+
       case 'summary':
       default:
-        // For summary, we only need totals, which are calculated below.
+        $reportData = $summary;
         break;
     }
 
-    // Always calculate overall summary totals
-    $summaryTotalsQuery = clone $query;
-    $summary = [
-      'total_hours' => $summaryTotalsQuery->sum(\DB::raw('regular_hours + overtime_hours')),
-      'total_payroll' => $summaryTotalsQuery->sum('gross_total_pay'),
-    ];
-
-    // Data for dropdown filters
     $users = User::whereHas('employeeProfile')->select('id', 'name')->get();
     $projects = Project::select('id', 'name')->get();
 
@@ -281,7 +301,7 @@ class PayrollController extends Controller
         'project_ids' => $request->input('project_ids', []),
         'report_type' => $reportType,
       ],
-      'canExport' => true, // Determine this based on permissions if needed
+      'canExport' => true,
     ]);
   }
 

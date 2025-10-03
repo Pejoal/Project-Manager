@@ -179,6 +179,8 @@ return [
   'team_name' => 'Team Name',
   'team_name_description' => 'The team\'s name and owner information.',
   'team_owner' => 'Team Owner',
+  'team_details' => 'Team Details',
+  'create_team_desc' => 'Create a new team to collaborate with others on projects.',
 
   // Project Components
   'basic_data' => 'Basic Data',

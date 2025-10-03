@@ -181,6 +181,8 @@ return [
   'team_name' => 'Team-Name',
   'team_name_description' => 'Der Name des Teams und Eigentümer-Informationen.',
   'team_owner' => 'Team-Eigentümer',
+  'team_details' => 'Team Details',
+  'create_team_desc' => 'Erstellen Sie ein neues Team, um mit anderen an Projekten zusammenzuarbeiten.',
 
   // Project Components
   'basic_data' => 'Basisdaten',

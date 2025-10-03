@@ -21,11 +21,11 @@ const createTeam = () => {
 <template>
   <FormSection @submitted="createTeam">
     <template #title>
-      {{ trans('words.team_details') }}
+      {{ $t('words.team_details') }}
     </template>
 
     <template #description>
-      {{ trans('words.create_team_desc') }}
+      {{ $t('words.create_team_desc') }}
     </template>
 
     <template #form>

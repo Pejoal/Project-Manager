@@ -31,7 +31,7 @@ const updateTeamName = () => {
     </template>
 
     <template #description>
-      {{ trans('words.team_name_desc') }}
+      {{ trans('words.team_name_description') }}
     </template>
 
     <template #form>
