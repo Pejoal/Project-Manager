@@ -22,6 +22,7 @@ return [
   'no_tasks_found' => 'No tasks found.',
   'start' => 'Start',
   'end' => 'End',
+  'log_time' => 'Log Time',
 
   // Navigation
   'dashboard' => 'Dashboard',
