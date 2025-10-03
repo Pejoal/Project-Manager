@@ -609,7 +609,10 @@ onMounted(() => {
                   class="px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <label class="flex items-center cursor-pointer">
-                    <Checkbox v-model="visibleColumns[column.key]" />
+                    <Checkbox
+                      :checked="visibleColumns[column.key]"
+                      @change="visibleColumns[column.key] = !visibleColumns[column.key]"
+                    />
                     <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
                       {{ column.label }}
                     </span>
@@ -798,7 +801,7 @@ onMounted(() => {
 
             <!-- Checkbox -->
             <div v-else-if="filter.type === 'checkbox'" class="flex items-center space-x-2">
-              <Checkbox :id="filter.key" v-model="form[filter.key]" />
+              <Checkbox :id="filter.key" :checked="form[filter.key]" />
               <label :for="filter.key" class="text-sm text-gray-700 dark:text-gray-300">{{ filter.label }}</label>
             </div>
           </div>
