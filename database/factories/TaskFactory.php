@@ -25,9 +25,14 @@ class TaskFactory extends Factory
       throw new \Exception('No milestones found for phase ID ' . $phase->id);
     }
 
-    // Generate random start and end datetime
+    // Generate random start datetime between -3 months and now
     $startDate = $this->faker->dateTimeBetween('-3 months', 'now');
-    $endDate = $this->faker->dateTimeBetween($startDate, '+1 month');
+
+    // Create a clone to avoid modifying the original $startDate
+    $endMax = (clone $startDate)->modify('+8 hours');
+
+    // Generate random end datetime between $startDate and $endMax
+    $endDate = $this->faker->dateTimeBetween($startDate, $endMax);
 
     return [
       'name' => $this->faker->sentence,
