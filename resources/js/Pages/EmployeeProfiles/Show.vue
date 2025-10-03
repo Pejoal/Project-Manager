@@ -145,12 +145,27 @@ const displayFields = computed(() => {
             </h2>
             <p class="text-sm text-gray-600 dark:text-gray-400">{{ profile.user.email }}</p>
             <div class="flex items-center space-x-2 mt-1">
-              <span :class="statusClass" class="px-2 py-1 rounded-full text-xs font-medium">
-                {{ profile.is_active ? 'Active' : 'Inactive' }}
-              </span>
-              <span :class="employmentStatus.class" class="px-2 py-1 rounded-full text-xs font-medium">
-                {{ employmentStatus.text }}
-              </span>
+              <!-- Account Status -->
+              <div :class="statusClass" class="px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                <span class="opacity-75">Account:</span>
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+                </svg>
+                <span>{{ profile.is_active ? 'Active' : 'Inactive' }}</span>
+              </div>
+
+              <!-- Employment Status -->
+              <div
+                :class="employmentStatus.class"
+                class="px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1"
+              >
+                <span class="opacity-75">Employment:</span>
+
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                </svg>
+                <span>{{ employmentStatus.text }}</span>
+              </div>
             </div>
           </div>
         </div>
