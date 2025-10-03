@@ -7,6 +7,8 @@ return [
 
   // Time Entries
   'time_entries' => [
+    'generate_from_tasks' => 'Auto Generate Time Entries',
+    'user' => 'User',
     'title' => 'Time Entries',
     'create' => 'Create Time Entry',
     'edit' => 'Edit Time Entry',

@@ -17,12 +17,14 @@ return [
   'language' => 'Language',
   'active' => 'Active',
   'inactive' => 'Inactive',
+  'filters' => 'Filters',
 
   // Navigation
   'dashboard' => 'Dashboard',
   'clients' => 'Clients',
   'projects' => 'Projects',
   'tasks' => 'Tasks',
+  'task' => 'Task',
   'profile' => 'Profile',
   'map' => 'Map',
   'activities' => 'Activities',
