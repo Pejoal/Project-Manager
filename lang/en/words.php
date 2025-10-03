@@ -18,6 +18,7 @@ return [
   'active' => 'Active',
   'inactive' => 'Inactive',
   'filters' => 'Filters',
+  'apply_filters' => 'Apply Filters',
 
   // Navigation
   'dashboard' => 'Dashboard',

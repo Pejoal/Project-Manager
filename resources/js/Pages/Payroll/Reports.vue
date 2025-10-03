@@ -152,6 +152,7 @@ const generateReport = () => {
   isLoading.value = true;
   router.get(route('payroll.reports'), form.data(), {
     preserveState: true,
+    preserveScroll: true,
     onFinish: () => {
       isLoading.value = false;
     },
@@ -359,7 +360,7 @@ watch(
               {{ trans('words.clear') }}
             </SecondaryButton>
             <PrimaryButton @click="generateReport" :disabled="isLoading">
-              {{ trans('payroll.reports.apply_filters') }}
+              {{ trans('words.apply_filters') }}
             </PrimaryButton>
           </div>
         </div>
