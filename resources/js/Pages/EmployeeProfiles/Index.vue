@@ -233,7 +233,7 @@ const handleRowClick = (profile) => {
       >
         <!-- Custom Actions Column -->
         <template #cell-actions="{ item }">
-          <div class="flex space-x-2">
+          <div class="flex space-x-2" @click.stop>
             <Link
               :href="route('employee-profiles.show', item.id)"
               class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
