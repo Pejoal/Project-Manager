@@ -69,7 +69,7 @@ const columns = [
     key: 'employee_id',
     label: 'Employee ID',
     sortable: true,
-    textClass: 'font-mono',
+    textClass: 'font-mono text-gray-800 dark:text-gray-300',
   },
   {
     key: 'hourly_rate',
@@ -89,12 +89,14 @@ const columns = [
     label: 'Current Month Hours',
     sortable: true,
     component: (item) => formatHours(item.current_month_hours),
+    textClass: 'text-gray-900 dark:text-gray-200',
   },
   {
     key: 'current_month_earnings',
     label: 'Current Month Earnings',
     sortable: true,
     component: (item) => formatCurrency(item.current_month_earnings),
+    textClass: 'text-gray-900 dark:text-gray-200',
   },
   {
     key: 'is_active',
