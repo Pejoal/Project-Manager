@@ -6,7 +6,27 @@ import { computed, ref } from 'vue';
 import CreateTaskModal from './CreateTaskModal.vue';
 import CreateTimeEntryModal from '../TimeEntries/CreateTimeEntryModal.vue';
 
+const showModal = ref(false);
 const showCreateTimeEntryModal = ref(false);
+const selectedTask = ref(null);
+
+const openModal = () => {
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
+const openTimeEntryModal = (task) => {
+  selectedTask.value = task;
+  showCreateTimeEntryModal.value = true;
+};
+
+const closeTimeEntryModal = () => {
+  selectedTask.value = null;
+  showCreateTimeEntryModal.value = false;
+};
 
 const props = defineProps({
   users: Array,
@@ -17,16 +37,6 @@ const props = defineProps({
   priorities: Array,
   filters: Object,
 });
-
-const showModal = ref(false);
-
-const openModal = () => {
-  showModal.value = true;
-};
-
-const closeModal = () => {
-  showModal.value = false;
-};
 
 // Column configuration for DataTable
 const columns = [
@@ -383,7 +393,9 @@ const formatDateTime = (datetime) => {
               {{ $t('words.edit') }}
             </Link>
             <button
-              @click="showCreateTimeEntryModal = true"
+              @click="() => {
+                openTimeEntryModal(item);
+              }"
               class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
             >
               {{ $t('words.log_time') }}
@@ -392,6 +404,11 @@ const formatDateTime = (datetime) => {
         </template>
       </DataTable>
     </div>
-    <CreateTimeEntryModal :show="showCreateTimeEntryModal" />
+    <CreateTimeEntryModal 
+      :show="showCreateTimeEntryModal" 
+      :projects="projects"
+      :task="selectedTask"
+      @close="closeTimeEntryModal"
+    />
   </div>
 </template>

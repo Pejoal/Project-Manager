@@ -116,11 +116,14 @@ class PayrollController extends Controller
       ->limit(10)
       ->get();
 
+    $projects = Project::select('id', 'name')->orderBy('name')->get();
+
     return Inertia::render('Payroll/Dashboard', [
       'stats' => $stats,
       'recentTimeEntries' => $recentTimeEntries,
       'recentPayslips' => $recentPayslips,
       'payrollSettings' => PayrollSettings::current(),
+      'projects' => $projects,
     ]);
   }
 

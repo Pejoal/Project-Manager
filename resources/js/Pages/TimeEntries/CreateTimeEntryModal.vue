@@ -11,7 +11,10 @@ import vSelect from 'vue-select';
 const emit = defineEmits(['close']);
 const props = defineProps({
   show: Boolean,
-  projects: Array,
+  projects: {
+    type: Array,
+    default: () => [],
+  },
   task: {
     type: Object,
     default: null,
@@ -20,26 +23,47 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  projectId: {
+    type: Number,
+    default: null,
+  },
+  taskId: {
+    type: Number,
+    default: null,
+  },
+  startDatetime: {
+    type: String,
+    default: null,
+  },
+  endDatetime: {
+    type: String,
+    default: null,
+  },
 });
 
 const tasks = ref([]);
 const isLoadingTasks = ref(false);
 
-const form = useForm({
-  project_id: props.timeEntry?.project_id || props.task?.project_id || null,
-  task_id: props.timeEntry?.task_id || props.task?.id || null,
-  start_datetime: props.timeEntry?.start_datetime
-    ? props.timeEntry.start_datetime.slice(0, 16)
-    : props.task?.start_datetime
-      ? props.task.start_datetime.slice(0, 16)
-      : '',
-  end_datetime: props.timeEntry?.end_datetime
-    ? props.timeEntry.end_datetime.slice(0, 16)
-    : props.task?.end_datetime
-      ? props.task.end_datetime.slice(0, 16)
-      : '',
-  description: props.timeEntry?.description || '',
-});
+// Initialize form with provided data or defaults
+const initializeForm = () => {
+  return {
+    project_id: props.timeEntry?.project_id || props.task?.project_id || props.projectId || null,
+    task_id: props.timeEntry?.task_id || props.task?.id || props.taskId || null,
+    start_datetime:
+      props.timeEntry?.start_datetime?.slice(0, 16) ||
+      props.task?.start_datetime?.slice(0, 16) ||
+      props.startDatetime?.slice(0, 16) ||
+      '',
+    end_datetime:
+      props.timeEntry?.end_datetime?.slice(0, 16) ||
+      props.task?.end_datetime?.slice(0, 16) ||
+      props.endDatetime?.slice(0, 16) ||
+      '',
+    description: props.timeEntry?.description || '',
+  };
+};
+
+const form = useForm(initializeForm());
 
 // Watch for project selection to fetch its tasks
 watch(
@@ -47,7 +71,11 @@ watch(
   async (newProjectId) => {
     if (newProjectId) {
       isLoadingTasks.value = true;
-      form.task_id = null;
+      // Don't clear task_id if it was pre-selected
+      const shouldKeepTaskId = form.task_id && (props.task?.id === form.task_id || props.taskId === form.task_id);
+      if (!shouldKeepTaskId) {
+        form.task_id = null;
+      }
       try {
         const response = await axios.get(route('time-entries.tasks-for-project', { project: newProjectId }));
         tasks.value = response.data;
@@ -63,23 +91,36 @@ watch(
   }
 );
 
-// Load tasks when editing
+// Watch for modal opening to load tasks and reset form
 watch(
   () => props.show,
   async (isShowing) => {
-    if (isShowing && props.timeEntry && props.timeEntry.project_id) {
-      isLoadingTasks.value = true;
-      try {
-        const response = await axios.get(
-          route('time-entries.tasks-for-project', { project: props.timeEntry.project_id })
-        );
-        tasks.value = response.data;
-        form.task_id = props.timeEntry.task_id;
-      } catch (error) {
-        console.error('Error fetching tasks:', error);
-        tasks.value = [];
-      } finally {
-        isLoadingTasks.value = false;
+    if (isShowing) {
+      // Reset form with current props
+      Object.assign(form, initializeForm());
+
+      // Load tasks if we have a project
+      const projectId = props.timeEntry?.project_id || props.task?.project_id || props.projectId;
+      if (projectId) {
+        isLoadingTasks.value = true;
+        try {
+          const response = await axios.get(route('time-entries.tasks-for-project', { project: projectId }));
+          tasks.value = response.data;
+
+          // Set task_id after tasks are loaded
+          if (props.timeEntry?.task_id) {
+            form.task_id = props.timeEntry.task_id;
+          } else if (props.task?.id) {
+            form.task_id = props.task.id;
+          } else if (props.taskId) {
+            form.task_id = props.taskId;
+          }
+        } catch (error) {
+          console.error('Error fetching tasks:', error);
+          tasks.value = [];
+        } finally {
+          isLoadingTasks.value = false;
+        }
       }
     }
   }
@@ -102,6 +143,7 @@ const submit = () => {
 const closeModal = () => {
   form.reset();
   form.clearErrors();
+  tasks.value = [];
   emit('close');
 };
 
@@ -117,7 +159,7 @@ const calculateHours = () => {
 
 <template>
   <DialogModal :show="props.show" @close="closeModal">
-    <template #title>{{ timeEntry ? 'Edit Time Entry' : 'Create Time Entry' }}</template>
+    <template #title>{{ timeEntry ? $t('payroll.time_entries.edit') : $t('payroll.time_entries.create') }}</template>
 
     <template #content>
       <form
@@ -126,37 +168,37 @@ const calculateHours = () => {
         class="space-y-4"
       >
         <div>
-          <InputLabel for="project" value="Project" />
+          <InputLabel for="project" :value="$t('words.project')" />
           <vSelect
             id="project"
             v-model="form.project_id"
             :options="projects"
             :reduce="(project) => project.id"
             label="name"
-            placeholder="Select a project"
-            :disabled="!!task || !!timeEntry"
+            :placeholder="$t('words.select_project')"
+            :disabled="!!task || !!timeEntry || !!projectId"
           />
           <InputError class="mt-2" :message="form.errors.project_id" />
         </div>
 
         <div>
-          <InputLabel for="task" value="Task" />
+          <InputLabel for="task" :value="$t('words.task')" />
           <vSelect
             id="task"
             v-model="form.task_id"
             :options="tasks"
             :reduce="(task) => task.id"
             label="name"
-            placeholder="Select a task"
+            :placeholder="$t('words.select_task')"
             :loading="isLoadingTasks"
-            :disabled="!form.project_id || !!task"
+            :disabled="!form.project_id || !!task || !!taskId"
           />
           <InputError class="mt-2" :message="form.errors.task_id" />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <InputLabel for="start_datetime" value="Start Time" />
+            <InputLabel for="start_datetime" :value="$t('payroll.time_entries.start_time')" />
             <TextInput
               id="start_datetime"
               v-model="form.start_datetime"
@@ -167,14 +209,14 @@ const calculateHours = () => {
             <InputError class="mt-2" :message="form.errors.start_datetime" />
           </div>
           <div>
-            <InputLabel for="end_datetime" value="End Time" />
+            <InputLabel for="end_datetime" :value="$t('payroll.time_entries.end_time')" />
             <TextInput id="end_datetime" v-model="form.end_datetime" type="datetime-local" class="w-full" required />
             <InputError class="mt-2" :message="form.errors.end_datetime" />
           </div>
         </div>
 
         <div>
-          <InputLabel for="description" value="Description" />
+          <InputLabel for="description" :value="$t('words.description')" />
           <textarea
             v-model="form.description"
             rows="3"
@@ -184,20 +226,20 @@ const calculateHours = () => {
         </div>
 
         <div v-if="form.start_datetime && form.end_datetime" class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-sm">
-          <strong>Hours Worked:</strong> {{ calculateHours() }}
+          <strong>{{ $t('payroll.time_entries.hours_worked') }}:</strong> {{ calculateHours() }}
         </div>
       </form>
     </template>
 
     <template #footer>
-      <button @click="closeModal" class="btn-secondary mr-3 text-gray-900 dark:text-gray-200">Cancel</button>
+      <button @click="closeModal" class="text-gray-900 dark:text-gray-200 mx-2">{{ $t('words.cancel') }}</button>
       <button
         :form="timeEntry ? 'edit-time-entry-form' : 'create-time-entry-form'"
         type="submit"
         :disabled="form.processing"
-        class="text-gray-900 dark:text-gray-200"
+        class="text-green-600 dark:text-green-500"
       >
-        {{ timeEntry ? 'Update' : 'Create' }}
+        {{ timeEntry ? $t('words.update') : $t('words.create') }}
       </button>
     </template>
   </DialogModal>

@@ -48,6 +48,10 @@ const props = defineProps({
       company_name: 'Company',
     }),
   },
+  projects: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 // Calculate percentage changes

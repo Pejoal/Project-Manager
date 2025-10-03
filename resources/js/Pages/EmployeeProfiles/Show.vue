@@ -1,12 +1,15 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import CreateTimeEntryModal from '../TimeEntries/CreateTimeEntryModal.vue';
-import { ref } from 'vue';
 
 const props = defineProps({
   profile: Object,
   stats: Object,
+  projects: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const showCreateTimeEntryModal = ref(false);
@@ -353,7 +356,7 @@ const displayFields = computed(() => {
 
             <!-- :href="route('time-entries.create', { task_id: null, user_id: profile.user_id })" -->
             <button
-            @click="showCreateTimeEntryModal = true"
+              @click="showCreateTimeEntryModal = true"
               class="flex items-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
             >
               <div class="flex-shrink-0">
