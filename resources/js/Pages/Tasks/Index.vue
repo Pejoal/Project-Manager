@@ -3,8 +3,8 @@ import DataTable from '@/Components/DataTable.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
-import CreateTaskModal from './CreateTaskModal.vue';
 import CreateTimeEntryModal from '../TimeEntries/CreateTimeEntryModal.vue';
+import CreateTaskModal from './CreateTaskModal.vue';
 
 const showModal = ref(false);
 const showCreateTimeEntryModal = ref(false);
@@ -393,9 +393,11 @@ const formatDateTime = (datetime) => {
               {{ $t('words.edit') }}
             </Link>
             <button
-              @click="() => {
-                openTimeEntryModal(item);
-              }"
+              @click="
+                () => {
+                  openTimeEntryModal(item);
+                }
+              "
               class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
             >
               {{ $t('words.log_time') }}
@@ -404,8 +406,8 @@ const formatDateTime = (datetime) => {
         </template>
       </DataTable>
     </div>
-    <CreateTimeEntryModal 
-      :show="showCreateTimeEntryModal" 
+    <CreateTimeEntryModal
+      :show="showCreateTimeEntryModal"
       :projects="projects"
       :task="selectedTask"
       @close="closeTimeEntryModal"

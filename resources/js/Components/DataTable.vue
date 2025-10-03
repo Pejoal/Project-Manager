@@ -2,7 +2,7 @@
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { router, useForm } from '@inertiajs/vue3';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, Transition, watch } from 'vue';
 import vSelect from 'vue-select';
 import Checkbox from './Checkbox.vue';
 import Pagination from './Pagination.vue';
@@ -598,11 +598,11 @@ onMounted(() => {
     </div>
 
     <!-- Filters Section -->
-    <transition name="slide-down">
+    <Transition name="slide-down">
       <div v-if="filterConfig.length > 0 && filtersVisible" class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div v-for="filter in filterConfig" :key="filter.key">
-            <InputLabel :for="filter.key" :value="filter.label" />
+            <InputLabel v-if="filter.type !== 'checkbox'" :for="filter.key" :value="filter.label" />
 
             <!-- Text Input -->
             <TextInput
@@ -657,7 +657,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-    </transition>
+    </Transition>
 
     <!-- Table -->
     <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-lg">
