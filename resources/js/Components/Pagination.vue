@@ -69,7 +69,7 @@ const getPageUrl = (pageNumber) => {
 
 <template>
   <!-- Pagination Controls -->
-  <section>
+  <section class="my-2">
     <div class="flex items-center justify-center gap-2">
       <button
         v-for="page in pageNumbers"
