@@ -338,16 +338,10 @@ class TimeEntryController extends Controller
         'approved_at' => now(),
       ]);
       $approvedCount++;
+      
+      event(new ActivityLogged(auth()->user(), 'update_time_entry', '', $timeEntry));
     }
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'bulk_approved_time_entries',
-        __('payroll.activity.bulk_time_entries_approved', ['count' => $approvedCount]),
-        null
-      )
-    );
 
     return redirect()
       ->back()
