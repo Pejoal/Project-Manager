@@ -11,7 +11,7 @@ const destroy = () => {
   if (confirm('Are you sure?')) {
     form.delete(
       route('tasks.destroy', {
-        project: props.project.slug,
+        project: props.task.project.slug,
         task: props.task.id,
       })
     );
