@@ -370,7 +370,7 @@ const inactiveTaxes = computed(() => {
           <!-- Submit Button -->
           <div class="flex justify-end border-t border-gray-200 dark:border-gray-700 pt-6">
             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-              {{ trans('payroll.settings.save_settings') }}
+              {{ trans('words.save') }}
             </PrimaryButton>
           </div>
         </form>
@@ -402,7 +402,7 @@ const inactiveTaxes = computed(() => {
                   </p>
                 </div>
                 <span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-xs font-semibold">
-                  {{ trans('payroll.tax_configurations.active') }}
+                  {{ trans('words.active') }}
                 </span>
               </div>
             </div>
@@ -427,7 +427,7 @@ const inactiveTaxes = computed(() => {
                   </p>
                 </div>
                 <span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 rounded-full text-xs font-semibold">
-                  {{ trans('payroll.tax_configurations.inactive') }}
+                  {{ trans('words.inactive') }}
                 </span>
               </div>
             </div>

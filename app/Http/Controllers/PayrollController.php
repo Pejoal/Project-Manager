@@ -345,14 +345,14 @@ class PayrollController extends Controller
       }
     }
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'generated_time_entries',
-        __('payroll.activity.time_entries_generated', ['count' => $generatedCount]),
-        null
-      )
-    );
+    // event(
+    //   new ActivityLogged(
+    //     auth()->user(),
+    //     'generated_time_entries',
+    //     __('payroll.activity.time_entries_generated', ['count' => $generatedCount]),
+    //     null
+    //   )
+    // );
 
     return redirect()
       ->back()
