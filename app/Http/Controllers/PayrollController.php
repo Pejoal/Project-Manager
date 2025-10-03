@@ -168,12 +168,25 @@ class PayrollController extends Controller
 
   public function reports(Request $request)
   {
+    $request->validate([
+      'period' => 'in:weekly,monthly,quarterly,yearly,custom',
+      'start_date' => 'nullable|date',
+      'end_date' => 'nullable|date|after_or_equal:start_date',
+      'user_ids' => 'nullable|array',
+      'user_ids.*' => 'exists:users,id',
+      'project_ids' => 'nullable|array',
+      'project_ids.*' => 'exists:projects,id',
+      'report_type' => 'in:summary,detailed,by_employee,by_project',
+      'export' => 'nullable|in:pdf,excel',
+    ]);
+
     $period = $request->input('period', 'monthly');
     $reportType = $request->input('report_type', 'summary');
 
     $startDate = $request->filled('start_date') ? Carbon::parse($request->start_date) : now()->startOfMonth();
     $endDate = $request->filled('end_date') ? Carbon::parse($request->end_date) : now()->endOfMonth();
 
+    // Set date ranges based on period
     if ($period !== 'custom') {
       switch ($period) {
         case 'weekly':
@@ -196,93 +209,148 @@ class PayrollController extends Controller
       }
     }
 
-    // Base query for payslips, applying all filters
-    $query = Payslip::query()
-      ->with(['user', 'project'])
-      ->whereBetween('pay_date', [$startDate, $endDate])
+    // Base query for time entries with filters
+    $timeEntriesQuery = TimeEntry::query()
+      ->with(['user.employeeProfile', 'task', 'project'])
+      ->whereBetween('start_datetime', [$startDate, $endDate])
       ->when($request->filled('user_ids'), function ($q) use ($request) {
         $q->whereIn('user_id', $request->user_ids);
       })
       ->when($request->filled('project_ids'), function ($q) use ($request) {
-        $q->whereHas('user.timeEntries', function ($tq) use ($request) {
-          $tq->whereIn('project_id', $request->project_ids);
-        });
+        $q->whereIn('project_id', $request->project_ids);
       });
 
     // Calculate summary statistics
+    $timeEntries = $timeEntriesQuery->get();
+
     $summary = [
-      'total_hours' => $query->sum('regular_hours') + $query->sum('overtime_hours'),
-      'regular_hours' => $query->sum('regular_hours'),
-      'overtime_hours' => $query->sum('overtime_hours'),
-      'total_payroll' => $query->sum('gross_total_pay'),
-      'total_tax_deductions' => $query->sum('total_tax_deductions'),
-      'total_net_pay' => $query->sum('net_pay'),
-      'total_employees' => $query->distinct('user_id')->count(),
-      'average_hourly_rate' => $query->avg('regular_rate'),
+      'total_hours' => $timeEntries->sum('hours_worked'),
+      'regular_hours' => $timeEntries->where('hours_worked', '<=', 8)->sum('hours_worked'),
+      'overtime_hours' => $timeEntries->where('hours_worked', '>', 8)->sum(function ($entry) {
+        return max(0, $entry->hours_worked - 8);
+      }),
+      'total_payroll' => $timeEntries->sum('gross_amount'),
+      'total_entries' => $timeEntries->count(),
+      'total_employees' => $timeEntries->unique('user_id')->count(),
+      'average_hourly_rate' => $timeEntries->avg('hourly_rate'),
     ];
 
     // Get detailed data based on report type
     $reportData = [];
+
     switch ($reportType) {
       case 'by_employee':
-        $reportData = $query
-          ->get()
+        $reportData = $timeEntries
           ->groupBy('user_id')
-          ->map(function ($payslips, $userId) {
-            $user = $payslips->first()->user;
+          ->map(function ($entries, $userId) {
+            $user = $entries->first()->user;
+            $totalHours = $entries->sum('hours_worked');
+            $grossPay = $entries->sum('gross_amount');
+
+            // Calculate tax deductions (simplified for demo)
+            $taxDeductions = $grossPay * 0.15; // 15% tax rate
+
             return [
-              'user_id' => $userId,
-              'user_name' => $user->name,
-              'employee_id' => $user->employeeProfile->employee_id ?? null,
-              'total_hours' => $payslips->sum('regular_hours') + $payslips->sum('overtime_hours'),
-              'regular_hours' => $payslips->sum('regular_hours'),
-              'overtime_hours' => $payslips->sum('overtime_hours'),
-              'gross_pay' => $payslips->sum('gross_total_pay'),
-              'deductions' => $payslips->sum('total_tax_deductions'),
-              'net_pay' => $payslips->sum('net_pay'),
-              'payslips_count' => $payslips->count(),
+              'employee_id' => $userId,
+              'employee_name' => $user->name,
+              'employee_code' => $user->employeeProfile->employee_id ?? 'N/A',
+              'total_hours' => round($totalHours, 2),
+              'regular_hours' => round($entries->where('hours_worked', '<=', 8)->sum('hours_worked'), 2),
+              'overtime_hours' => round(
+                $entries->sum(function ($entry) {
+                  return max(0, $entry->hours_worked - 8);
+                }),
+                2
+              ),
+              'gross_pay' => round($grossPay, 2),
+              'total_deductions' => round($taxDeductions, 2),
+              'net_pay' => round($grossPay - $taxDeductions, 2),
+              'entries_count' => $entries->count(),
+              'average_hourly_rate' => round($entries->avg('hourly_rate'), 2),
             ];
           })
           ->values();
         break;
 
       case 'by_project':
-        $timeEntries = TimeEntry::whereBetween('start_datetime', [$startDate, $endDate])
-          ->when($request->filled('user_ids'), function ($q) use ($request) {
-            $q->whereIn('user_id', $request->user_ids);
-          })
-          ->when($request->filled('project_ids'), function ($q) use ($request) {
-            $q->whereIn('project_id', $request->project_ids);
-          })
-          ->with('project')
-          ->get();
-
         $reportData = $timeEntries
           ->groupBy('project_id')
           ->map(function ($entries, $projectId) {
             $project = $entries->first()->project;
+            $totalHours = $entries->sum('hours_worked');
+            $totalCost = $entries->sum('gross_amount');
+
             return [
               'project_id' => $projectId,
-              'project_name' => $project->name ?? 'N/A',
-              'total_hours' => $entries->sum('hours_worked'),
-              'total_cost' => $entries->sum('gross_amount'),
+              'project_name' => $project->name ?? 'No Project',
+              'total_hours' => round($totalHours, 2),
+              'gross_pay' => round($totalCost, 2),
+              'total_deductions' => round($totalCost * 0.15, 2), // 15% tax
+              'net_pay' => round($totalCost * 0.85, 2),
               'employees_count' => $entries->unique('user_id')->count(),
               'entries_count' => $entries->count(),
+              'average_hourly_rate' => round($entries->avg('hourly_rate'), 2),
             ];
           })
           ->values();
         break;
 
       case 'detailed':
-        $reportData = $query->get();
+        $reportData = $timeEntries
+          ->map(function ($entry) {
+            $taxDeduction = $entry->gross_amount * 0.15;
+            return [
+              'id' => $entry->id,
+              'employee_name' => $entry->user->name,
+              'project_name' => $entry->project->name ?? 'No Project',
+              'task_name' => $entry->task->name ?? 'No Task',
+              'date' => $entry->start_datetime->format('Y-m-d'),
+              'hours_worked' => round($entry->hours_worked, 2),
+              'hourly_rate' => round($entry->hourly_rate, 2),
+              'gross_amount' => round($entry->gross_amount, 2),
+              'deductions' => round($taxDeduction, 2),
+              'net_pay' => round($entry->gross_amount - $taxDeduction, 2),
+              'description' => $entry->description,
+              'is_approved' => $entry->is_approved,
+            ];
+          })
+          ->values();
         break;
 
       case 'summary':
       default:
-        $reportData = $summary;
+        // For summary, we just use the summary data
+        $reportData = collect([
+          [
+            'metric' => 'Total Hours',
+            'value' => $summary['total_hours'],
+            'formatted_value' => number_format($summary['total_hours'], 2) . ' hours',
+          ],
+          [
+            'metric' => 'Total Payroll',
+            'value' => $summary['total_payroll'],
+            'formatted_value' => '€' . number_format($summary['total_payroll'], 2),
+          ],
+          [
+            'metric' => 'Total Employees',
+            'value' => $summary['total_employees'],
+            'formatted_value' => $summary['total_employees'] . ' employees',
+          ],
+          [
+            'metric' => 'Average Hourly Rate',
+            'value' => $summary['average_hourly_rate'],
+            'formatted_value' => '€' . number_format($summary['average_hourly_rate'], 2) . '/hour',
+          ],
+        ]);
         break;
     }
 
+    // Handle export requests
+    if ($request->filled('export')) {
+      return $this->exportReport($request->export, $reportData, $summary, $startDate, $endDate, $reportType);
+    }
+
+    // Get users and projects for filters
     $users = User::whereHas('employeeProfile')->select('id', 'name')->get();
     $projects = Project::select('id', 'name')->get();
 
@@ -301,8 +369,36 @@ class PayrollController extends Controller
         'project_ids' => $request->input('project_ids', []),
         'report_type' => $reportType,
       ],
-      'canExport' => true,
+      'canExport' => auth()->user()->can('export_payroll_reports'),
     ]);
+  }
+
+  /**
+   * Export report data in specified format
+   */
+  private function exportReport($format, $data, $summary, $startDate, $endDate, $reportType)
+  {
+    $filename = "payroll_report_{$reportType}_{$startDate->format('Y-m-d')}_to_{$endDate->format('Y-m-d')}";
+
+    if ($format === 'pdf') {
+      // PDF export logic would go here
+      // For now, return a simple response
+      return response()->json([
+        'message' => 'PDF export functionality would be implemented here',
+        'data' => $data,
+        'summary' => $summary,
+      ]);
+    } elseif ($format === 'excel') {
+      // Excel export logic would go here
+      // For now, return a simple response
+      return response()->json([
+        'message' => 'Excel export functionality would be implemented here',
+        'data' => $data,
+        'summary' => $summary,
+      ]);
+    }
+
+    return response()->json(['error' => 'Invalid export format'], 400);
   }
 
   public function generateTimeEntries()

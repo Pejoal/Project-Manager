@@ -1,10 +1,15 @@
 <script setup>
+import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
 import { computed, ref, watch } from 'vue';
-import vSelect from 'vue-select';
+import { Bar, Doughnut } from 'vue-chart-3';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 const props = defineProps({
   users: Array,
@@ -15,37 +20,138 @@ const props = defineProps({
 });
 
 const form = useForm({
-  period: props.filters?.period || 'monthly',
-  start_date: props.filters?.start_date || '',
-  end_date: props.filters?.end_date || '',
-  user_ids: props.filters?.user_ids || [],
-  project_ids: props.filters?.project_ids || [],
-  report_type: props.filters?.report_type || 'summary',
+  period: props.filters.period || 'monthly',
+  start_date: props.filters.start_date || '',
+  end_date: props.filters.end_date || '',
+  user_ids: props.filters.user_ids || [],
+  project_ids: props.filters.project_ids || [],
+  report_type: props.filters.report_type || 'summary',
 });
 
 const isLoading = ref(false);
-const activeChart = ref('hours');
+const showFilters = ref(false);
+
+const reportTypes = [
+  { value: 'summary', label: 'Summary' },
+  { value: 'detailed', label: 'Detailed' },
+  { value: 'by_employee', label: 'By Employee' },
+  { value: 'by_project', label: 'By Project' },
+];
+
+const periods = [
+  { value: 'weekly', label: 'This Week' },
+  { value: 'monthly', label: 'This Month' },
+  { value: 'quarterly', label: 'This Quarter' },
+  { value: 'yearly', label: 'This Year' },
+  { value: 'custom', label: 'Custom Range' },
+];
+
+const isCustomPeriod = computed(() => form.period === 'custom');
+
+const chartData = computed(() => {
+  if (!props.reportData?.data) return null;
+
+  switch (props.filters.report_type) {
+    case 'by_employee':
+      return {
+        labels: props.reportData.data.map((item) => item.employee_name),
+        datasets: [
+          {
+            label: 'Total Hours',
+            data: props.reportData.data.map((item) => item.total_hours),
+            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 1,
+          },
+          {
+            label: 'Gross Pay (€)',
+            data: props.reportData.data.map((item) => item.gross_pay),
+            backgroundColor: 'rgba(16, 185, 129, 0.5)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 1,
+            yAxisID: 'y1',
+          },
+        ],
+      };
+
+    case 'by_project':
+      return {
+        labels: props.reportData.data.map((item) => item.project_name),
+        datasets: [
+          {
+            label: 'Total Hours',
+            data: props.reportData.data.map((item) => item.total_hours),
+            backgroundColor: 'rgba(139, 92, 246, 0.5)',
+            borderColor: 'rgba(139, 92, 246, 1)',
+            borderWidth: 1,
+          },
+        ],
+      };
+
+    default:
+      return null;
+  }
+});
+
+const chartOptions = computed(() => ({
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: `Payroll Report - ${props.filters.report_type.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}`,
+    },
+  },
+  scales: {
+    y: {
+      type: 'linear',
+      display: true,
+      position: 'left',
+    },
+    y1: {
+      type: 'linear',
+      display: true,
+      position: 'right',
+      grid: {
+        drawOnChartArea: false,
+      },
+    },
+  },
+}));
+
+const summaryChartData = computed(() => {
+  if (!props.reportData?.summary) return null;
+
+  return {
+    labels: ['Regular Hours', 'Overtime Hours'],
+    datasets: [
+      {
+        data: [props.reportData.summary.regular_hours || 0, props.reportData.summary.overtime_hours || 0],
+        backgroundColor: ['rgba(59, 130, 246, 0.8)', 'rgba(249, 115, 22, 0.8)'],
+        borderColor: ['rgba(59, 130, 246, 1)', 'rgba(249, 115, 22, 1)'],
+        borderWidth: 1,
+      },
+    ],
+  };
+});
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
-  }).format(amount || 0);
+    currency: 'EUR',
+  }).format(amount);
 };
 
 const formatHours = (hours) => {
-  return parseFloat(hours || 0).toFixed(2);
-};
-
-const formatDate = (date) => {
-  return date ? new Date(date).toLocaleDateString() : 'N/A';
+  return `${parseFloat(hours).toFixed(2)} hrs`;
 };
 
 const generateReport = () => {
   isLoading.value = true;
-  form.get(route('payroll.reports'), {
+  router.get(route('payroll.reports'), form.data(), {
     preserveState: true,
-    preserveScroll: true,
     onFinish: () => {
       isLoading.value = false;
     },
@@ -53,295 +159,300 @@ const generateReport = () => {
 };
 
 const exportReport = (format) => {
-  const params = new URLSearchParams(form.data());
-  params.append('export', format);
-  window.open(`${route('payroll.reports.export')}?${params.toString()}`);
+  const exportForm = { ...form.data(), export: format };
+
+  router.get(route('payroll.reports.export'), exportForm, {
+    onStart: () => {
+      isLoading.value = true;
+    },
+    onFinish: () => {
+      isLoading.value = false;
+    },
+  });
 };
 
-const totalHours = computed(() => {
-  return props.reportData?.summary?.total_hours || 0;
-});
+const toggleUserSelection = (userId) => {
+  const index = form.user_ids.indexOf(userId);
+  if (index > -1) {
+    form.user_ids.splice(index, 1);
+  } else {
+    form.user_ids.push(userId);
+  }
+};
 
-const totalPayroll = computed(() => {
-  return props.reportData?.summary?.total_payroll || 0;
-});
+const toggleProjectSelection = (projectId) => {
+  const index = form.project_ids.indexOf(projectId);
+  if (index > -1) {
+    form.project_ids.splice(index, 1);
+  } else {
+    form.project_ids.push(projectId);
+  }
+};
 
-const averageHourlyRate = computed(() => {
-  return totalHours.value > 0 ? totalPayroll.value / totalHours.value : 0;
-});
+const clearFilters = () => {
+  form.reset();
+  form.period = 'monthly';
+  form.report_type = 'summary';
+  generateReport();
+};
 
 // Auto-generate report when filters change
 watch(
-  () => [form.period, form.start_date, form.end_date],
+  [() => form.period, () => form.report_type],
   () => {
-    if (form.start_date && form.end_date) {
-      generateReport();
+    if (!isCustomPeriod.value) {
+      form.start_date = '';
+      form.end_date = '';
     }
+    generateReport();
   },
   { deep: true }
 );
 </script>
 
 <template>
-  <Head title="Payroll Reports" />
+  <Head :title="trans('payroll.reports.title')" />
 
-  <header class="bg-white dark:bg-gray-800 shadow">
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+  <div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+      <!-- Header -->
       <div class="flex justify-between items-center">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
-          {{ $t('payroll.reports.title') }}
-        </h1>
-        <div class="flex space-x-3" v-if="canExport && reportData">
-          <PrimaryButton @click="exportReport('pdf')" :disabled="isLoading">
-            {{ $t('payroll.reports.export_pdf') }}
-          </PrimaryButton>
-          <PrimaryButton @click="exportReport('excel')" :disabled="isLoading" class="bg-green-600 hover:bg-green-700">
-            {{ $t('payroll.reports.export_excel') }}
+        <div>
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
+            {{ trans('payroll.reports.title') }}
+          </h2>
+          <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            {{ trans('payroll.reports.description') }}
+          </p>
+        </div>
+
+        <div class="flex space-x-3">
+          <SecondaryButton @click="showFilters = !showFilters">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+              />
+            </svg>
+            {{ trans('words.filters') }}
+          </SecondaryButton>
+
+          <PrimaryButton @click="generateReport" :disabled="isLoading">
+            <svg
+              v-if="isLoading"
+              class="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            {{ trans('payroll.reports.generate') }}
           </PrimaryButton>
         </div>
       </div>
-    </div>
-  </header>
 
-  <div class="py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Filter Section -->
-      <div class="bg-white dark:bg-gray-800 shadow rounded-lg mb-6">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ $t('payroll.reports.filters') }}
-          </h2>
-        </div>
-        <form @submit.prevent="generateReport" class="p-6 space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- Report Type -->
-            <div>
-              <InputLabel for="report_type" :value="$t('payroll.reports.report_type')" />
-              <select
-                id="report_type"
-                v-model="form.report_type"
-                class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm"
-              >
-                <option value="summary">{{ $t('payroll.reports.summary') }}</option>
-                <option value="detailed">{{ $t('payroll.reports.detailed') }}</option>
-                <option value="by_employee">{{ $t('payroll.reports.by_employee') }}</option>
-                <option value="by_project">{{ $t('payroll.reports.by_project') }}</option>
-              </select>
-            </div>
+      <!-- Filters Panel -->
+      <div v-if="showFilters" class="bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg">
+        <div class="p-6">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+            {{ trans('payroll.reports.filters') }}
+          </h3>
 
-            <!-- Period -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Period Selection -->
             <div>
-              <InputLabel for="period" :value="$t('payroll.reports.period')" />
+              <InputLabel for="period" :value="trans('payroll.reports.period')" />
               <select
                 id="period"
                 v-model="form.period"
-                class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm"
+                class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               >
-                <option value="weekly">{{ $t('payroll.reports.weekly') }}</option>
-                <option value="monthly">{{ $t('payroll.reports.monthly') }}</option>
-                <option value="quarterly">{{ $t('payroll.reports.quarterly') }}</option>
-                <option value="yearly">{{ $t('payroll.reports.yearly') }}</option>
-                <option value="custom">{{ $t('payroll.reports.custom') }}</option>
+                <option v-for="period in periods" :key="period.value" :value="period.value">
+                  {{ period.label }}
+                </option>
               </select>
+              <InputError :message="form.errors.period" class="mt-2" />
             </div>
 
-            <!-- Start Date -->
+            <!-- Report Type -->
             <div>
-              <InputLabel for="start_date" :value="$t('payroll.reports.start_date')" />
-              <TextInput
-                id="start_date"
-                type="date"
-                v-model="form.start_date"
-                class="mt-1 block w-full"
-                :disabled="form.period !== 'custom'"
-              />
+              <InputLabel for="report_type" :value="trans('payroll.reports.type')" />
+              <select
+                id="report_type"
+                v-model="form.report_type"
+                class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option v-for="type in reportTypes" :key="type.value" :value="type.value">
+                  {{ type.label }}
+                </option>
+              </select>
+              <InputError :message="form.errors.report_type" class="mt-2" />
             </div>
 
-            <!-- End Date -->
-            <div>
-              <InputLabel for="end_date" :value="$t('payroll.reports.end_date')" />
-              <TextInput
-                id="end_date"
-                type="date"
-                v-model="form.end_date"
-                class="mt-1 block w-full"
-                :disabled="form.period !== 'custom'"
-              />
+            <!-- Custom Date Range -->
+            <div v-if="isCustomPeriod">
+              <InputLabel for="start_date" :value="trans('payroll.reports.start_date')" />
+              <TextInput id="start_date" v-model="form.start_date" type="date" class="mt-1 block w-full" required />
+              <InputError :message="form.errors.start_date" class="mt-2" />
+            </div>
+
+            <div v-if="isCustomPeriod">
+              <InputLabel for="end_date" :value="trans('payroll.reports.end_date')" />
+              <TextInput id="end_date" v-model="form.end_date" type="date" class="mt-1 block w-full" required />
+              <InputError :message="form.errors.end_date" class="mt-2" />
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Employees Filter -->
-            <div>
-              <InputLabel for="users" :value="$t('payroll.reports.employees')" />
-              <vSelect
-                id="users"
-                v-model="form.user_ids"
-                :options="users"
-                :reduce="(user) => user.id"
-                label="name"
-                multiple
-                placeholder="Select employees..."
-                class="mt-1"
-              />
-            </div>
-
-            <!-- Projects Filter -->
-            <div>
-              <InputLabel for="projects" :value="$t('payroll.reports.projects')" />
-              <vSelect
-                id="projects"
-                v-model="form.project_ids"
-                :options="projects"
-                :reduce="(project) => project.id"
-                label="name"
-                multiple
-                placeholder="Select projects..."
-                class="mt-1"
-              />
+          <!-- Employee Filter -->
+          <div class="mt-6">
+            <InputLabel :value="trans('payroll.reports.employees')" />
+            <div class="mt-3 flex flex-wrap gap-2">
+              <button
+                v-for="user in users"
+                :key="user.id"
+                type="button"
+                @click="toggleUserSelection(user.id)"
+                :class="[
+                  'px-3 py-1 rounded-full text-sm font-medium transition',
+                  form.user_ids.includes(user.id)
+                    ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200'
+                    : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600',
+                ]"
+              >
+                {{ user.name }}
+              </button>
             </div>
           </div>
 
-          <div class="flex justify-end">
-            <PrimaryButton type="submit" :disabled="isLoading">
-              <span v-if="isLoading" class="mr-2">
-                <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              </span>
-              {{ $t('payroll.reports.generate') }}
+          <!-- Project Filter -->
+          <div class="mt-6">
+            <InputLabel :value="trans('payroll.reports.projects')" />
+            <div class="mt-3 flex flex-wrap gap-2">
+              <button
+                v-for="project in projects"
+                :key="project.id"
+                type="button"
+                @click="toggleProjectSelection(project.id)"
+                :class="[
+                  'px-3 py-1 rounded-full text-sm font-medium transition',
+                  form.project_ids.includes(project.id)
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                    : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600',
+                ]"
+              >
+                {{ project.name }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Actions -->
+          <div class="mt-6 flex justify-end space-x-3">
+            <SecondaryButton @click="clearFilters">
+              {{ trans('words.clear') }}
+            </SecondaryButton>
+            <PrimaryButton @click="generateReport" :disabled="isLoading">
+              {{ trans('payroll.reports.apply_filters') }}
             </PrimaryButton>
           </div>
-        </form>
+        </div>
       </div>
 
-      <!-- Report Results -->
-      <div v-if="reportData" class="space-y-6">
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                      {{ $t('payroll.reports.total_hours') }}
-                    </dt>
-                    <dd class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ formatHours(totalHours) }}h</dd>
-                  </dl>
-                </div>
+      <!-- Summary Cards -->
+      <div v-if="reportData?.summary" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+          <div class="p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <svg class="h-8 w-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
               </div>
-            </div>
-          </div>
-
-          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                    />
-                  </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                      {{ $t('payroll.reports.total_payroll') }}
-                    </dt>
-                    <dd class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                      {{ formatCurrency(totalPayroll) }}
-                    </dd>
-                  </dl>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                    />
-                  </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                      {{ $t('payroll.reports.average_rate') }}
-                    </dt>
-                    <dd class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                      {{ formatCurrency(averageHourlyRate) }}/h
-                    </dd>
-                  </dl>
-                </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                    {{ trans('payroll.reports.total_hours') }}
+                  </dt>
+                  <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                    {{ formatHours(reportData.summary.total_hours) }}
+                  </dd>
+                </dl>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Chart Section -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
-          <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <div class="flex justify-between items-center">
-              <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                {{ $t('payroll.reports.charts') }}
-              </h2>
-              <div class="flex space-x-2">
-                <button
-                  @click="activeChart = 'hours'"
-                  :class="[
-                    activeChart === 'hours'
-                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200',
-                    'px-3 py-2 rounded-md text-sm font-medium',
-                  ]"
-                >
-                  {{ $t('payroll.reports.hours_chart') }}
-                </button>
-                <button
-                  @click="activeChart = 'payroll'"
-                  :class="[
-                    activeChart === 'payroll'
-                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200',
-                    'px-3 py-2 rounded-md text-sm font-medium',
-                  ]"
-                >
-                  {{ $t('payroll.reports.payroll_chart') }}
-                </button>
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+          <div class="p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  />
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                    {{ trans('payroll.reports.total_payroll') }}
+                  </dt>
+                  <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                    {{ formatCurrency(reportData.summary.total_payroll) }}
+                  </dd>
+                </dl>
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
           <div class="p-6">
-            <!-- Chart placeholder - would integrate with Chart.js or similar -->
-            <div class="h-64 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-              <div class="text-center text-gray-500 dark:text-gray-400">
-                <svg class="mx-auto h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                    {{ trans('payroll.reports.total_employees') }}
+                  </dt>
+                  <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                    {{ reportData.summary.total_employees }}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+          <div class="p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -349,104 +460,253 @@ watch(
                     d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                   />
                 </svg>
-                <p class="text-sm">{{ $t('payroll.reports.chart_placeholder') }}</p>
-                <p class="text-xs mt-1">{{ activeChart === 'hours' ? 'Hours' : 'Payroll' }} data visualization</p>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                    {{ trans('payroll.reports.avg_hourly_rate') }}
+                  </dt>
+                  <dd class="text-lg font-medium text-gray-900 dark:text-white">
+                    {{ formatCurrency(reportData.summary.average_hourly_rate) }}
+                  </dd>
+                </dl>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Detailed Data Table -->
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
-          <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-              {{ $t('payroll.reports.detailed_data') }}
-            </h2>
-          </div>
-
-          <div v-if="reportData.data && reportData.data.length > 0" class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead class="bg-gray-50 dark:bg-gray-700">
-                <tr>
-                  <th
-                    v-if="form.report_type === 'by_employee' || form.report_type === 'detailed'"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                  >
-                    {{ $t('payroll.reports.employee') }}
-                  </th>
-                  <th
-                    v-if="form.report_type === 'by_project' || form.report_type === 'detailed'"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                  >
-                    {{ $t('payroll.reports.project') }}
-                  </th>
-                  <th
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                  >
-                    {{ $t('payroll.reports.hours') }}
-                  </th>
-                  <th
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                  >
-                    {{ $t('payroll.reports.gross_pay') }}
-                  </th>
-                  <th
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                  >
-                    {{ $t('payroll.reports.deductions') }}
-                  </th>
-                  <th
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                  >
-                    {{ $t('payroll.reports.net_pay') }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                <tr v-for="row in reportData.data" :key="row.id || row.employee_id || row.project_id">
-                  <td
-                    v-if="form.report_type === 'by_employee' || form.report_type === 'detailed'"
-                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    {{ row.employee_name || row.user?.name || '-' }}
-                  </td>
-                  <td
-                    v-if="form.report_type === 'by_project' || form.report_type === 'detailed'"
-                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300"
-                  >
-                    {{ row.project_name || row.project?.name || '-' }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {{ formatHours(row.total_hours || row.hours_worked) }}h
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {{ formatCurrency(row.gross_pay || row.gross_amount) }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {{ formatCurrency(row.total_deductions || row.deductions) }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {{ formatCurrency(row.net_pay) }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div v-else class="text-center py-8">
-            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-              />
-            </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-              {{ $t('payroll.reports.no_data') }}
+      <!-- Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Chart -->
+        <div v-if="chartData" class="lg:col-span-2 bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg">
+          <div class="p-6">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+              {{ trans('payroll.reports.chart_title') }}
             </h3>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $t('payroll.reports.no_data_description') }}</p>
+            <Bar :data="chartData" :options="chartOptions" />
           </div>
+        </div>
+
+        <!-- Hours Breakdown -->
+        <div v-if="summaryChartData" class="bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg">
+          <div class="p-6">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+              {{ trans('payroll.reports.hours_breakdown') }}
+            </h3>
+            <Doughnut :data="summaryChartData" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Data Table -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl sm:rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+              {{ trans('payroll.reports.report_data') }}
+            </h3>
+
+            <div v-if="canExport" class="flex space-x-2">
+              <SecondaryButton @click="exportReport('pdf')" :disabled="isLoading">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                {{ trans('words.export_pdf') }}
+              </SecondaryButton>
+              <SecondaryButton @click="exportReport('excel')" :disabled="isLoading">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                {{ trans('words.export_excel') }}
+              </SecondaryButton>
+            </div>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-900">
+              <tr v-if="form.report_type === 'summary'">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.metric') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.value') }}
+                </th>
+              </tr>
+
+              <tr v-else-if="form.report_type === 'by_employee'">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('words.employee') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.total_hours') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.gross_pay') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.net_pay') }}
+                </th>
+              </tr>
+
+              <tr v-else-if="form.report_type === 'by_project'">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('words.project') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.total_hours') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.employees_count') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.gross_pay') }}
+                </th>
+              </tr>
+
+              <tr v-else-if="form.report_type === 'detailed'">
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('words.employee') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('words.project') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('words.date') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.hours') }}
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                >
+                  {{ trans('payroll.reports.gross_amount') }}
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+              <!-- Summary Report -->
+              <tr v-if="form.report_type === 'summary'" v-for="item in reportData?.data" :key="item.metric">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  {{ item.metric }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ item.formatted_value }}
+                </td>
+              </tr>
+
+              <!-- By Employee Report -->
+              <tr
+                v-else-if="form.report_type === 'by_employee'"
+                v-for="employee in reportData?.data"
+                :key="employee.employee_id"
+              >
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900 dark:text-white">{{ employee.employee_name }}</div>
+                  <div class="text-sm text-gray-500 dark:text-gray-400">{{ employee.employee_code }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ formatHours(employee.total_hours) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ formatCurrency(employee.gross_pay) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ formatCurrency(employee.net_pay) }}
+                </td>
+              </tr>
+
+              <!-- By Project Report -->
+              <tr
+                v-else-if="form.report_type === 'by_project'"
+                v-for="project in reportData?.data"
+                :key="project.project_id"
+              >
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  {{ project.project_name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ formatHours(project.total_hours) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ project.employees_count }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ formatCurrency(project.gross_pay) }}
+                </td>
+              </tr>
+
+              <!-- Detailed Report -->
+              <tr v-else-if="form.report_type === 'detailed'" v-for="entry in reportData?.data" :key="entry.id">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  {{ entry.employee_name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ entry.project_name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ entry.date }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ formatHours(entry.hours_worked) }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  {{ formatCurrency(entry.gross_amount) }}
+                </td>
+              </tr>
+
+              <!-- No Data -->
+              <tr v-if="!reportData?.data || reportData.data.length === 0">
+                <td
+                  :colspan="form.report_type === 'detailed' ? 5 : 4"
+                  class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400"
+                >
+                  {{ trans('payroll.reports.no_data') }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -136,6 +136,7 @@ Route::group(
           Route::get('/', [PayrollController::class, 'index'])->name('payroll.index');
           Route::get('/dashboard', [PayrollController::class, 'dashboard'])->name('payroll.dashboard');
           Route::get('/reports', [PayrollController::class, 'reports'])->name('payroll.reports');
+          Route::get('/reports/export', [PayrollController::class, 'exportReports'])->name('payroll.reports.export');
           Route::get('/settings', [PayrollController::class, 'settings'])->name('payroll.settings');
           Route::put('/settings', [PayrollController::class, 'updateSettings'])->name('payroll.settings.update');
           Route::post('/generate-time-entries', [PayrollController::class, 'generateTimeEntries'])->name(
