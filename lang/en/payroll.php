@@ -294,6 +294,19 @@ return [
     'no_data_description' => 'Adjust your filters and generate a new report to see data.',
   ],
 
+  'employees' => [
+    'name' => 'Employee Name',
+    'employee_id' => 'Employee ID',
+    'base_hourly_rate' => 'Base Hourly Rate', 
+    'overtime_rate_multiplier' => 'Overtime Rate Multiplier',
+    'standard_hours_per_day' => 'Standard Hours per Day',
+    'standard_hours_per_week' => 'Standard Hours per Week',
+    'payment_method' => 'Payment Method',
+    'bank_account_number' => 'Bank Account Number',
+    'status' => 'Status',
+  ],
+
+
   // Dashboard (Dashboard.vue)
   'dashboard' => [
     'title' => 'Payroll Dashboard',
