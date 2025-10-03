@@ -189,11 +189,8 @@ class TimeEntryController extends Controller
       ->exists();
 
     if ($overlapping) {
-      return redirect()
-        ->back()
-        ->withErrors([
-          'time_overlap' => __('payroll.time_entries.overlapping_time'),
-        ]);
+      session()->flash('flash.bannerStyle', 'danger');
+      return redirect()->back()->with('flash.banner', __('payroll.time_entries.overlapping_time'));
     }
 
     $timeEntry = TimeEntry::create([
@@ -215,9 +212,9 @@ class TimeEntryController extends Controller
       )
     );
 
-    return redirect()
-      ->route('time-entries.index')
-      ->with('flash.banner', __('payroll.time_entries.created_successfully'));
+    // return redirect()
+    //   ->back()
+    //   ->with('flash.banner', __('payroll.time_entries.created_successfully'));
   }
 
   public function show(TimeEntry $timeEntry)
@@ -313,9 +310,9 @@ class TimeEntryController extends Controller
       )
     );
 
-    return redirect()
-      ->route('time-entries.index')
-      ->with('flash.banner', __('payroll.time_entries.updated_successfully'));
+    // return redirect()
+    //   ->route('time-entries.index')
+    //   ->with('flash.banner', __('payroll.time_entries.updated_successfully'));
   }
 
   public function destroy(TimeEntry $timeEntry)

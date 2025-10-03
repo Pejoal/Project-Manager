@@ -176,7 +176,6 @@ Route::group(
       // Time Entries Management (Users can manage their own, Admins can manage all)
       Route::get('time-entries', [TimeEntryController::class, 'index'])->name('time-entries.index');
       Route::post('time-entries', [TimeEntryController::class, 'store'])->name('time-entries.store');
-      Route::get('time-entries/{timeEntry}', [TimeEntryController::class, 'show'])->name('time-entries.show');
       Route::put('time-entries/{timeEntry}', [TimeEntryController::class, 'update'])->name('time-entries.update');
       Route::delete('time-entries/{timeEntry}', [TimeEntryController::class, 'destroy'])->name('time-entries.destroy');
       Route::patch('time-entries/{timeEntry}/approve', [TimeEntryController::class, 'approve'])->name(
@@ -188,6 +187,7 @@ Route::group(
       Route::post('time-entries/bulk-update', [TimeEntryController::class, 'bulkUpdate'])->name(
         'time-entries.bulk-update'
       );
+      Route::get('time-entries/{timeEntry}', [TimeEntryController::class, 'show'])->name('time-entries.show');
 
       // Task bulk operations
       Route::post('tasks/bulk-update', [TaskController::class, 'bulkUpdate'])->name('tasks.bulk-update');

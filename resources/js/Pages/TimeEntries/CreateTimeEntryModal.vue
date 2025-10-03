@@ -140,7 +140,7 @@ const submit = () => {
   }
 };
 
-const closeModal = () => {
+const closeModal = () => {  
   form.reset();
   form.clearErrors();
   tasks.value = [];
