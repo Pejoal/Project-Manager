@@ -534,7 +534,7 @@ const getStatusBadgeClass = (status) => {
             {{ $t('payroll.dashboard.payroll_comparison') }}
           </h3>
           <div class="h-64">
-            <BarChart :data="payrollComparisonData" :options="barChartOptions" />
+            <BarChart :chart-data="payrollComparisonData" :options="barChartOptions" />
           </div>
         </div>
 
@@ -544,7 +544,7 @@ const getStatusBadgeClass = (status) => {
             {{ $t('payroll.dashboard.hours_breakdown') }}
           </h3>
           <div class="h-64">
-            <BarChart :data="hoursComparisonData" :options="hoursChartOptions" />
+            <BarChart :chart-data="hoursComparisonData" :options="hoursChartOptions" />
           </div>
         </div>
 
@@ -555,7 +555,7 @@ const getStatusBadgeClass = (status) => {
           </h3>
           <div class="h-64 flex items-center justify-center">
             <div class="w-48">
-              <DoughnutChart :data="pendingItemsData" :options="doughnutChartOptions" />
+              <DoughnutChart :chart-data="pendingItemsData" :options="doughnutChartOptions" />
             </div>
           </div>
         </div>
