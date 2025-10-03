@@ -134,6 +134,7 @@ class DatabaseSeeder extends Seeder
 
     $this->call(DataSeeder::class);
     $this->call(PayrollSeeder::class);
+    $this->call(EmployeeProfileSeeder::class);
 
     // Create a role
     // $role = Role::create(['name' => 'admin']);

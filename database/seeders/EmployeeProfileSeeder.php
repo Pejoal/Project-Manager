@@ -31,7 +31,7 @@ class EmployeeProfileSeeder extends Seeder
         'standard_hours_per_day' => 8,
         'standard_hours_per_week' => 40,
         'payment_method' => 'bank_transfer',
-        'bank_account_number' => 'DE' . rand(10000000000000000000, 99999999999999999999),
+        'bank_account_number' => 'DE' . str_pad(rand(1000000000, 9999999999), 20, '0', STR_PAD_LEFT),
         'bank_name' => 'Deutsche Bank',
         'tax_id' => 'DE' . rand(100000000, 999999999),
         'tax_exemptions' => null,
