@@ -164,11 +164,8 @@ class TimeEntryController extends Controller
     // Get user's hourly rate
     $employeeProfile = auth()->user()->employeeProfile;
     if (!$employeeProfile) {
-      return redirect()
-        ->back()
-        ->withErrors([
-          'employee_profile' => __('payroll.time_entries.no_employee_profile'),
-        ]);
+      session()->flash('flash.bannerStyle', 'danger');
+      return redirect()->back()->with('flash.banner', __('payroll.time_entries.no_employee_profile'));
     }
 
     // Check for overlapping time entries
@@ -212,9 +209,9 @@ class TimeEntryController extends Controller
       )
     );
 
-    // return redirect()
-    //   ->back()
-    //   ->with('flash.banner', __('payroll.time_entries.created_successfully'));
+    return redirect()
+      ->back()
+      ->with('flash.banner', __('payroll.time_entries.created_successfully'));
   }
 
   public function show(TimeEntry $timeEntry)
