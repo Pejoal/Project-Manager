@@ -8,6 +8,29 @@ import Checkbox from './Checkbox.vue';
 import Pagination from './Pagination.vue';
 import PrimaryButton from './PrimaryButton.vue';
 
+// Click away directive
+const vClickAway = {
+  mounted(el, binding) {
+    el.clickOutsideEvent = (event) => {
+      // Add a small delay to prevent immediate closing
+      setTimeout(() => {
+        if (!(el === event.target || el.contains(event.target)) && typeof binding.value === 'function') {
+          binding.value(event);
+        }
+      }, 0);
+    };
+
+    // Use mousedown instead of click to avoid bubbling issues
+    document.addEventListener('mousedown', el.clickOutsideEvent);
+  },
+  unmounted(el) {
+    if (el.clickOutsideEvent) {
+      document.removeEventListener('mousedown', el.clickOutsideEvent);
+      delete el.clickOutsideEvent;
+    }
+  },
+};
+
 const props = defineProps({
   // Data props
   data: {
@@ -70,6 +93,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  columnToggle: {
+    type: Boolean,
+    default: true,
+  },
 
   // Route for filtering
   routeName: {
@@ -114,6 +141,39 @@ const selectedItems = ref([]);
 const filtersVisible = ref(false);
 const sortColumn = ref(props.filters.sort_by || '');
 const sortDirection = ref(props.filters.sort_direction || 'asc');
+const columnSelectorVisible = ref(false);
+
+// Initialize visible columns from localStorage or default to all visible
+const initializeVisibleColumns = () => {
+  const storageKey = `datatable_visible_columns_${props.routeName}`;
+  const stored = localStorage.getItem(storageKey);
+
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      console.error('Failed to parse stored visible columns:', e);
+    }
+  }
+
+  // Default: all columns visible
+  return props.columns.reduce((acc, col) => {
+    acc[col.key] = true;
+    return acc;
+  }, {});
+};
+
+const visibleColumns = ref(initializeVisibleColumns());
+
+// Save visible columns to localStorage whenever they change
+watch(
+  visibleColumns,
+  (newVal) => {
+    const storageKey = `datatable_visible_columns_${props.routeName}`;
+    localStorage.setItem(storageKey, JSON.stringify(newVal));
+  },
+  { deep: true }
+);
 
 // Initialize form data - only include values that exist in props.filters
 const initializeFormData = () => {
@@ -194,6 +254,31 @@ const pagination = computed(() => ({
   total: props.data.total,
   next_page_url: props.data.next_page_url,
 }));
+
+// Filter columns based on visibility
+const filteredColumns = computed(() => {
+  return props.columns.filter((col) => visibleColumns.value[col.key] !== false);
+});
+
+// Check if all columns are visible
+const allColumnsVisible = computed(() => {
+  return props.columns.every((col) => visibleColumns.value[col.key] !== false);
+});
+
+// Toggle all columns visibility
+const toggleAllColumns = () => {
+  const newState = !allColumnsVisible.value;
+  props.columns.forEach((col) => {
+    visibleColumns.value[col.key] = newState;
+  });
+};
+
+// Reset columns to default (all visible)
+const resetColumns = () => {
+  props.columns.forEach((col) => {
+    visibleColumns.value[col.key] = true;
+  });
+};
 
 const allSelected = computed(() => {
   return selectedItems.value.length === props.data.data?.length && props.data.data?.length > 0;
@@ -473,6 +558,68 @@ onMounted(() => {
 
       <!-- Actions -->
       <div class="flex items-center gap-3 flex-wrap">
+        <!-- Column Toggle Button -->
+        <div v-if="columnToggle" class="relative">
+          <button
+            @click="columnSelectorVisible = !columnSelectorVisible"
+            class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          >
+            <svg class="inline-block w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 0v10"
+              />
+            </svg>
+            Columns
+          </button>
+
+          <!-- Column Selector Dropdown -->
+          <Transition name="fade">
+            <div
+              v-if="columnSelectorVisible"
+              v-click-away="() => (columnSelectorVisible = false)"
+              class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 py-2"
+            >
+              <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">Toggle Columns</span>
+                <button @click="resetColumns" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">
+                  Reset
+                </button>
+              </div>
+
+              <div class="max-h-80 overflow-y-auto">
+                <!-- Select/Deselect All -->
+                <div class="px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <label class="flex items-center cursor-pointer">
+                    <Checkbox :checked="allColumnsVisible" @change="toggleAllColumns" />
+                    <span class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-200">
+                      {{ allColumnsVisible ? 'Deselect All' : 'Select All' }}
+                    </span>
+                  </label>
+                </div>
+
+                <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+
+                <!-- Individual Column Toggles -->
+                <div
+                  v-for="column in columns"
+                  :key="column.key"
+                  class="px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  <label class="flex items-center cursor-pointer">
+                    <Checkbox v-model="visibleColumns[column.key]" />
+                    <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
+                      {{ column.label }}
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </Transition>
+        </div>
+
         <!-- Toggle Filters Button -->
         <button
           v-if="filterConfig.length > 0"
@@ -675,7 +822,12 @@ onMounted(() => {
               </th>
 
               <!-- Data Columns -->
-              <th v-for="column in columns" :key="column.key" :class="getHeaderClasses(column)" @click="sortBy(column)">
+              <th
+                v-for="column in filteredColumns"
+                :key="column.key"
+                :class="getHeaderClasses(column)"
+                @click="sortBy(column)"
+              >
                 <div class="flex items-center space-x-1">
                   <span>{{ column.label }}</span>
                   <span v-if="column.sortable && sortable" class="text-gray-400">
@@ -706,7 +858,7 @@ onMounted(() => {
 
               <!-- Data Cells -->
               <td
-                v-for="column in columns"
+                v-for="column in filteredColumns"
                 :key="column.key"
                 :class="getCellClasses(column)"
                 @click="onCellClick(item, column)"
@@ -725,7 +877,7 @@ onMounted(() => {
             <!-- Empty State -->
             <tr v-if="!data.data || data.data.length === 0">
               <td
-                :colspan="columns.length + (canBulkAction ? 1 : 0)"
+                :colspan="filteredColumns.length + (canBulkAction ? 1 : 0)"
                 class="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
               >
                 <div class="flex flex-col items-center">
@@ -743,7 +895,7 @@ onMounted(() => {
             <!-- Loading State -->
             <tr v-if="loading">
               <td
-                :colspan="columns.length + (canBulkAction ? 1 : 0)"
+                :colspan="filteredColumns.length + (canBulkAction ? 1 : 0)"
                 class="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
               >
                 <div class="flex items-center justify-center">
@@ -792,5 +944,25 @@ onMounted(() => {
 .slide-down-leave-from {
   max-height: 500px;
   opacity: 1;
+}
+
+/* Fade transition for column selector dropdown */
+.fade-enter-active,
+.fade-leave-active {
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
