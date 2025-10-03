@@ -87,30 +87,130 @@ class EmployeeProfileController extends Controller
     $employeeProfile->load([
       'user',
       'timeEntries' => function ($query) {
-        $query->latest()->limit(10);
+        $query
+          ->with(['task', 'project', 'approvedBy'])
+          ->latest('start_datetime')
+          ->limit(10);
       },
       'payslips' => function ($query) {
-        $query->latest()->limit(5);
+        $query
+          ->with(['generatedBy', 'approvedBy'])
+          ->latest()
+          ->limit(5);
       },
     ]);
 
-    // Calculate statistics
+    // Calculate comprehensive statistics
     $currentMonth = now();
+    $currentYear = now();
+
+    // Current month statistics
+    $currentMonthEntries = $employeeProfile
+      ->timeEntries()
+      ->whereMonth('start_datetime', $currentMonth->month)
+      ->whereYear('start_datetime', $currentMonth->year);
+
+    // Current year statistics
+    $currentYearEntries = $employeeProfile->timeEntries()->whereYear('start_datetime', $currentYear->year);
+
+    // Last 30 days statistics
+    $last30DaysEntries = $employeeProfile->timeEntries()->where('start_datetime', '>=', now()->subDays(30));
+
     $stats = [
-      'current_month_hours' => $employeeProfile
-        ->timeEntries()
-        ->whereMonth('start_datetime', $currentMonth->month)
-        ->whereYear('start_datetime', $currentMonth->year)
-        ->sum('hours_worked'),
-      'current_month_earnings' => $employeeProfile
-        ->timeEntries()
-        ->whereMonth('start_datetime', $currentMonth->month)
-        ->whereYear('start_datetime', $currentMonth->year)
-        ->sum('gross_amount'),
+      // Current month
+      'current_month_hours' => $currentMonthEntries->sum('hours_worked'),
+      'current_month_earnings' => $currentMonthEntries->sum('gross_amount'),
+      'current_month_entries' => $currentMonthEntries->count(),
+      'current_month_approved' => $currentMonthEntries->where('is_approved', true)->count(),
+
+      // Year to date
+      'year_to_date_hours' => $currentYearEntries->sum('hours_worked'),
+      'year_to_date_earnings' => $currentYearEntries->sum('gross_amount'),
+
+      // Last 30 days
+      'last_30_days_hours' => $last30DaysEntries->sum('hours_worked'),
+      'last_30_days_earnings' => $last30DaysEntries->sum('gross_amount'),
+
+      // All time totals
       'total_hours' => $employeeProfile->timeEntries()->sum('hours_worked'),
       'total_earnings' => $employeeProfile->timeEntries()->sum('gross_amount'),
+      'total_entries' => $employeeProfile->timeEntries()->count(),
+
+      // Pending items
       'pending_entries' => $employeeProfile->timeEntries()->pending()->count(),
+      'pending_hours' => $employeeProfile->timeEntries()->pending()->sum('hours_worked'),
+      'pending_earnings' => $employeeProfile->timeEntries()->pending()->sum('gross_amount'),
+
+      // Averages
+      'average_hours_per_entry' =>
+        $employeeProfile->timeEntries()->count() > 0
+          ? round($employeeProfile->timeEntries()->sum('hours_worked') / $employeeProfile->timeEntries()->count(), 2)
+          : 0,
+      'average_daily_rate' => round($employeeProfile->base_hourly_rate * $employeeProfile->standard_hours_per_day, 2),
+      'monthly_potential_earnings' => round(
+        $employeeProfile->base_hourly_rate * $employeeProfile->standard_hours_per_week * 4.33,
+        2
+      ),
+
+      // Performance metrics
+      'approval_rate' =>
+        $employeeProfile->timeEntries()->count() > 0
+          ? round(
+            ($employeeProfile->timeEntries()->approved()->count() / $employeeProfile->timeEntries()->count()) * 100,
+            1
+          )
+          : 0,
+
+      // Recent activity indicators
+      'last_entry_date' => $employeeProfile->timeEntries()->latest('start_datetime')->value('start_datetime'),
+      'most_active_month' => $employeeProfile
+        ->timeEntries()
+        ->selectRaw('YEAR(start_datetime) as year, MONTH(start_datetime) as month, SUM(hours_worked) as total_hours')
+        ->groupBy('year', 'month')
+        ->orderBy('total_hours', 'desc')
+        ->first(),
     ];
+
+    // Add overtime analysis
+    $overtimeEntries = $employeeProfile
+      ->timeEntries()
+      ->where('hours_worked', '>', $employeeProfile->standard_hours_per_day)
+      ->get();
+
+    $stats['overtime_entries'] = $overtimeEntries->count();
+    $stats['total_overtime_hours'] = $overtimeEntries->sum(function ($entry) use ($employeeProfile) {
+      return max(0, $entry->hours_worked - $employeeProfile->standard_hours_per_day);
+    });
+    $stats['overtime_earnings'] = $overtimeEntries->sum(function ($entry) use ($employeeProfile) {
+      $overtimeHours = max(0, $entry->hours_worked - $employeeProfile->standard_hours_per_day);
+      $regularHours = min($entry->hours_worked, $employeeProfile->standard_hours_per_day);
+      $regularPay = $regularHours * $employeeProfile->base_hourly_rate;
+      $overtimePay = $overtimeHours * ($employeeProfile->base_hourly_rate * $employeeProfile->overtime_rate_multiplier);
+      return $overtimePay;
+    });
+
+    // Project distribution analysis
+    $projectStats = $employeeProfile
+      ->timeEntries()
+      ->with('project')
+      ->selectRaw(
+        'project_id, SUM(hours_worked) as total_hours, SUM(gross_amount) as total_earnings, COUNT(*) as entry_count'
+      )
+      ->groupBy('project_id')
+      ->orderBy('total_hours', 'desc')
+      ->limit(5)
+      ->get()
+      ->map(function ($stat) {
+        return [
+          'project_name' => $stat->project->name ?? 'Unknown Project',
+          'project_slug' => $stat->project->slug ?? '',
+          'hours' => $stat->total_hours,
+          'earnings' => $stat->total_earnings,
+          'entries' => $stat->entry_count,
+        ];
+      });
+
+    $stats['top_projects'] = $projectStats;
 
     return Inertia::render('EmployeeProfiles/Show', [
       'profile' => $employeeProfile,
