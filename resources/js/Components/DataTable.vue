@@ -1,12 +1,12 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import Pagination from '@/Components/Pagination.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { router, useForm } from '@inertiajs/vue3';
 import { computed, onMounted, ref, watch } from 'vue';
 import vSelect from 'vue-select';
+import PrimaryButton from './PrimaryButton.vue';
+import Pagination from './Pagination.vue';
+import Checkbox from './Checkbox.vue';
 
 const props = defineProps({
   // Data props
@@ -115,19 +115,39 @@ const filtersVisible = ref(true);
 const sortColumn = ref(props.filters.sort_by || '');
 const sortDirection = ref(props.filters.sort_direction || 'asc');
 
-// Form for handling filters and pagination
-const form = useForm({
-  search: props.filters.search || '',
-  per_page: props.filters.per_page || props.perPageOptions[0],
-  sort_by: props.filters.sort_by || '',
-  sort_direction: props.filters.sort_direction || 'asc',
-  ...Object.keys(props.filters).reduce((acc, key) => {
+// Initialize form data - only include values that exist in props.filters
+const initializeFormData = () => {
+  const formData = {
+    search: props.filters.search || '',
+    per_page: props.filters.per_page || props.perPageOptions[0],
+    sort_by: props.filters.sort_by || '',
+    sort_direction: props.filters.sort_direction || 'asc',
+  };
+
+  // Only add filter values that actually exist in props.filters
+  Object.keys(props.filters).forEach((key) => {
     if (!['search', 'per_page', 'sort_by', 'sort_direction'].includes(key)) {
-      acc[key] = props.filters[key] || '';
+      formData[key] = props.filters[key];
     }
-    return acc;
-  }, {}),
-});
+  });
+
+  // Initialize filterConfig fields that are not in props.filters with appropriate empty values
+  props.filterConfig.forEach((filter) => {
+    if (!(filter.key in formData)) {
+      // Use appropriate empty value based on field type
+      if (filter.multiple || filter.type === 'multiselect') {
+        formData[filter.key] = [];
+      } else {
+        formData[filter.key] = '';
+      }
+    }
+  });
+
+  return formData;
+};
+
+// Form for handling filters and pagination
+const form = useForm(initializeFormData());
 
 // Bulk actions form
 const bulkForm = useForm({
@@ -145,9 +165,17 @@ const bulkForm = useForm({
 
 // Watch for filter changes with debounce
 let debounceTimer = null;
+let isInitialLoad = true;
+
 watch(
   () => form.data(),
   (newData, oldData) => {
+    // Skip initial load
+    if (isInitialLoad) {
+      isInitialLoad = false;
+      return;
+    }
+
     // Don't trigger on initial load
     if (oldData) {
       clearTimeout(debounceTimer);
