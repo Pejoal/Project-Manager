@@ -440,7 +440,7 @@ const getCellValue = (item, column) => {
     if (value === undefined || value === null) break;
   }
 
-  // return value;
+  return value;
 };
 
 const getCellClasses = (column) => {
@@ -869,7 +869,7 @@ onMounted(() => {
                 <!-- Slot for custom cell content -->
                 <slot :name="`cell-${column.key}`" :item="item" :value="getCellValue(item, column)" :column="column">
                   <!-- Default cell content -->
-                  <div v-if="column.component" v-html="column.component(item, getCellValue(item, column))" />
+                  <div v-if="column.component" :class="column.textClass" v-html="column.component(item, getCellValue(item, column))" />
                   <span v-else :class="['text-sm', column.textClass || 'text-gray-900 dark:text-gray-100']">
                     {{ getCellValue(item, column) }}
                   </span>
