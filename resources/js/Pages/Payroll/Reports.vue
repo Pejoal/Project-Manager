@@ -7,7 +7,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
 import { computed, ref, watch } from 'vue';
-import { Bar, Doughnut } from 'vue-chart-3';
+import { BarChart, DoughnutChart } from 'vue-chart-3';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
@@ -484,7 +484,7 @@ watch(
             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
               {{ trans('payroll.reports.chart_title') }}
             </h3>
-            <Bar :data="chartData" :options="chartOptions" />
+            <BarChart :chart-data="chartData" :options="chartOptions" />
           </div>
         </div>
 
@@ -494,7 +494,7 @@ watch(
             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
               {{ trans('payroll.reports.hours_breakdown') }}
             </h3>
-            <Doughnut :data="summaryChartData" />
+            <DoughnutChart :chart-data="summaryChartData" />
           </div>
         </div>
       </div>
