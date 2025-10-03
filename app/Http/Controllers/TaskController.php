@@ -32,7 +32,7 @@ class TaskController extends Controller
       'assigned_to_me' => 'nullable|string',
       'per_page' => 'nullable|integer|min:1|max:100',
       'sort_by' =>
-        'nullable|string|in:name,description,created_at,start_datetime,end_datetime,status_id,priority_id,project_id,assigned_to',
+        'nullable|string|in:name,description,created_at,start_datetime,end_datetime,status,priority,project,assigned_to',
       'sort_direction' => 'nullable|string|in:asc,desc',
     ]);
 
@@ -40,7 +40,7 @@ class TaskController extends Controller
     $sortBy = $request->input('sort_by', 'created_at');
     $sortDirection = $request->input('sort_direction', 'desc');
 
-    // Handle special sorting for assigned_to (relationship)
+    // Handle special sorting for relationships
     if ($sortBy === 'assigned_to') {
       $query
         ->leftJoin('task_user', 'tasks.id', '=', 'task_user.task_id')
@@ -48,6 +48,21 @@ class TaskController extends Controller
         ->orderBy('users.name', $sortDirection)
         ->select('tasks.*')
         ->groupBy('tasks.id');
+    } elseif ($sortBy === 'status') {
+      $query
+        ->leftJoin('task_statuses', 'tasks.status_id', '=', 'task_statuses.id')
+        ->orderBy('task_statuses.name', $sortDirection)
+        ->select('tasks.*');
+    } elseif ($sortBy === 'priority') {
+      $query
+        ->leftJoin('task_priorities', 'tasks.priority_id', '=', 'task_priorities.id')
+        ->orderBy('task_priorities.name', $sortDirection)
+        ->select('tasks.*');
+    } elseif ($sortBy === 'project') {
+      $query
+        ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+        ->orderBy('projects.name', $sortDirection)
+        ->select('tasks.*');
     } else {
       $query->orderBy($sortBy, $sortDirection);
     }

@@ -170,12 +170,13 @@ const bulkForm = useForm({
 
 // Watch for filter changes with debounce
 let debounceTimer = null;
+let isApplyingSort = false; // Flag to prevent watch from triggering during sort
 
 watch(
   () => form.data(),
   (newData, oldData) => {
-    // Only trigger if oldData exists (not initial load)
-    if (oldData) {
+    // Only trigger if oldData exists (not initial load) and not applying sort
+    if (oldData && !isApplyingSort) {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
         applyFilters();
@@ -259,6 +260,9 @@ const sortBy = (column) => {
     sortDirection.value = 'asc';
   }
 
+  // Set flag to prevent watch from triggering
+  isApplyingSort = true;
+
   form.sort_by = column.key;
   form.sort_direction = sortDirection.value;
 
@@ -266,6 +270,11 @@ const sortBy = (column) => {
 
   // Apply sorting immediately
   applyFilters();
+
+  // Reset flag after a short delay
+  setTimeout(() => {
+    isApplyingSort = false;
+  }, 100);
 };
 
 const getSortIcon = (column) => {
