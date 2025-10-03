@@ -1,13 +1,11 @@
 <?php
 
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-  /**
-   * Run the migrations.
-   */
   public function up(): void
   {
     Schema::create('time_entries', function (Blueprint $table) {
@@ -17,9 +15,9 @@ return new class extends Migration {
       $table->foreignId('project_id')->constrained()->onDelete('cascade');
       $table->dateTime('start_datetime');
       $table->dateTime('end_datetime');
-      $table->decimal('hours_worked', 8, 2)->comment('Calculated hours worked');
-      $table->decimal('hourly_rate', 8, 2)->comment('Rate at time of work');
-      $table->decimal('gross_amount', 10, 2)->comment('Amount before taxes');
+      $table->decimal('hours_worked', 8, 2)->default(0);
+      $table->decimal('hourly_rate', 8, 2)->default(0);
+      $table->decimal('gross_amount', 10, 2)->default(0);
       $table->text('description')->nullable();
       $table->boolean('is_approved')->default(false);
       $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
@@ -32,9 +30,6 @@ return new class extends Migration {
     });
   }
 
-  /**
-   * Reverse the migrations.
-   */
   public function down(): void
   {
     Schema::dropIfExists('time_entries');
