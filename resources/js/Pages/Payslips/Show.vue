@@ -28,34 +28,34 @@ const downloadPayslip = async () => {
   isDownloading.value = true;
   try {
     const response = await axios.get(route('payslips.download-pdf', props.payslip.id), {
-      responseType: 'blob', // This is crucial
+      responseType: 'blob', // This is crucial to receive the file data correctly
     });
 
-    // Create a blob URL to trigger the download
+    // Create a URL for the blob data
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
 
-    // Extract filename from response headers if available, otherwise create one
+    // Extract the filename from the 'Content-Disposition' header if available
     const contentDisposition = response.headers['content-disposition'];
-    let filename = `Lohnabrechnung-${props.payslip.payslip_number}.pdf`;
+    let filename = `Lohnabrechnung-${props.payslip.payslip_number}.pdf`; // Fallback filename
     if (contentDisposition) {
       const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-      if (filenameMatch.length === 2) {
+      if (filenameMatch && filenameMatch.length === 2) {
         filename = filenameMatch[1];
       }
     }
 
     link.setAttribute('download', filename);
     document.body.appendChild(link);
-    link.click();
 
-    // Clean up by revoking the object URL and removing the link
-    window.URL.revokeObjectURL(url);
+    // Trigger the download and clean up
+    link.click();
     link.remove();
+    window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error('PDF download error:', error);
-    alert('Could not download the PDF. Please try again.');
+    alert('Could not download the PDF. Please try again or check the console for errors.');
   } finally {
     isDownloading.value = false;
   }
