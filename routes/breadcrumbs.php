@@ -4,21 +4,21 @@
 
 use App\Models\Client;
 use App\Models\EmployeeProfile;
+use App\Models\Milestone;
 use App\Models\Payslip;
-use App\Models\Product;
+use App\Models\Phase;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
-// Dashboard
+// --- Home ---
 Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
   $trail->push('Dashboard', route('dashboard'));
 });
 
 // --- Client Management ---
-
 // Dashboard > Clients
 Breadcrumbs::for('clients.index', function (BreadcrumbTrail $trail) {
   $trail->parent('dashboard');
@@ -38,7 +38,6 @@ Breadcrumbs::for('clients.edit', function (BreadcrumbTrail $trail, Client $clien
 });
 
 // --- Project Management ---
-
 // Dashboard > Projects
 Breadcrumbs::for('projects.index', function (BreadcrumbTrail $trail) {
   $trail->parent('dashboard');
@@ -63,8 +62,7 @@ Breadcrumbs::for('projects.edit', function (BreadcrumbTrail $trail, Project $pro
   $trail->push('Edit', route('projects.edit', $project));
 });
 
-// --- Task Management ---
-
+// --- Task Management (Nested under Projects) ---
 // Dashboard > All Tasks
 Breadcrumbs::for('tasks.all', function (BreadcrumbTrail $trail) {
   $trail->parent('dashboard');
@@ -89,12 +87,52 @@ Breadcrumbs::for('tasks.edit', function (BreadcrumbTrail $trail, Project $projec
   $trail->push('Edit', route('tasks.edit', [$project, $task]));
 });
 
-// --- Payroll Management ---
+// --- Phases & Milestones (Nested under Projects) ---
+// Dashboard > Projects > [Project Name] > Phases
+Breadcrumbs::for('phases.index', function (BreadcrumbTrail $trail, Project $project) {
+  $trail->parent('projects.show', $project);
+  $trail->push('Phases', route('phases.index', $project));
+});
 
+// Dashboard > Projects > [Project Name] > Phases > [Phase Name]
+Breadcrumbs::for('phases.show', function (BreadcrumbTrail $trail, Project $project, Phase $phase) {
+  $trail->parent('phases.index', $project);
+  $trail->push($phase->name, route('phases.show', [$project, $phase]));
+});
+
+// Dashboard > Projects > [Project Name] > Milestones
+Breadcrumbs::for('milestones.index', function (BreadcrumbTrail $trail, Project $project) {
+  $trail->parent('projects.show', $project);
+  $trail->push('Milestones', route('milestones.index', $project));
+});
+
+// Dashboard > Projects > [Project Name] > Milestones > [Milestone Name]
+Breadcrumbs::for('milestones.show', function (BreadcrumbTrail $trail, Project $project, Milestone $milestone) {
+  $trail->parent('milestones.index', $project);
+  $trail->push($milestone->name, route('milestones.show', [$project, $milestone]));
+});
+
+// --- Payroll Management ---
 // Dashboard > Payroll
 Breadcrumbs::for('payroll.dashboard', function (BreadcrumbTrail $trail) {
   $trail->parent('dashboard');
   $trail->push('Payroll', route('payroll.dashboard'));
+});
+// Alias for payroll index
+Breadcrumbs::for('payroll.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('payroll.dashboard');
+});
+
+// Dashboard > Payroll > Employee Profiles
+Breadcrumbs::for('employee-profiles.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('payroll.dashboard');
+  $trail->push('Employee Profiles', route('employee-profiles.index'));
+});
+
+// Dashboard > Payroll > Employee Profiles > [Employee Profile]
+Breadcrumbs::for('employee-profiles.show', function (BreadcrumbTrail $trail, EmployeeProfile $employeeProfile) {
+  $trail->parent('employee-profiles.index');
+  $trail->push($employeeProfile->user->name, route('employee-profiles.show', $employeeProfile));
 });
 
 // Dashboard > Payroll > Time Entries
@@ -106,19 +144,10 @@ Breadcrumbs::for('time-entries.index', function (BreadcrumbTrail $trail) {
 // Dashboard > Payroll > Time Entries > [Time Entry]
 Breadcrumbs::for('time-entries.show', function (BreadcrumbTrail $trail, TimeEntry $timeEntry) {
   $trail->parent('time-entries.index');
-  $trail->push('Entry #' . $timeEntry->id, route('time-entries.show', $timeEntry));
-});
-
-// Dashboard > Payroll > Employee Profiles
-Breadcrumbs::for('employee-profiles.index', function (BreadcrumbTrail $trail) {
-  $trail->parent('payroll.dashboard');
-  $trail->push('Employee Profiles', route('employee-profiles.index'));
-});
-
-// Dashboard > Payroll > Employee Profiles > [Employee Name]
-Breadcrumbs::for('employee-profiles.show', function (BreadcrumbTrail $trail, EmployeeProfile $employeeProfile) {
-  $trail->parent('employee-profiles.index');
-  $trail->push($employeeProfile->user->name, route('employee-profiles.show', $employeeProfile));
+  $trail->push(
+    'Entry for ' . $timeEntry->user->name . ' on ' . $timeEntry->start_datetime->format('Y-m-d'),
+    route('time-entries.show', $timeEntry)
+  );
 });
 
 // Dashboard > Payroll > Payslips
@@ -130,7 +159,7 @@ Breadcrumbs::for('payslips.index', function (BreadcrumbTrail $trail) {
 // Dashboard > Payroll > Payslips > [Payslip]
 Breadcrumbs::for('payslips.show', function (BreadcrumbTrail $trail, Payslip $payslip) {
   $trail->parent('payslips.index');
-  $trail->push($payslip->payslip_id, route('payslips.show', $payslip));
+  $trail->push('Payslip ' . $payslip->payslip_id, route('payslips.show', $payslip));
 });
 
 // Dashboard > Payroll > Reports
@@ -146,7 +175,6 @@ Breadcrumbs::for('payroll.settings', function (BreadcrumbTrail $trail) {
 });
 
 // --- Master Settings ---
-
 // Dashboard > Settings (as a generic parent)
 Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
   $trail->parent('dashboard');
@@ -175,4 +203,11 @@ Breadcrumbs::for('task-statuses.index', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('task-priorities.index', function (BreadcrumbTrail $trail) {
   $trail->parent('settings.index');
   $trail->push('Task Priorities', route('task-priorities.index'));
+});
+
+// --- Other ---
+// Dashboard > Activities
+Breadcrumbs::for('activities.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('dashboard');
+  $trail->push('Activity Log', route('activities.index'));
 });
