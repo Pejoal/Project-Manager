@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Events\ActivityLogged;
 use App\Models\PayrollSettings;
 use App\Models\Task;
 use App\Models\TimeEntry;

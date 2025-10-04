@@ -4,7 +4,6 @@ use App\Models\Client;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Events\ActivityLogged;
 
 class ClientController extends Controller
 {

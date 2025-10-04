@@ -303,7 +303,7 @@ const exportData = async (format) => {
 
   try {
     // Get current data from the table
-    const exportData = props.data.data || [];
+    const exportDataPayload = props.data.data || [];
 
     // Filter columns to export (exclude actions, bulk_select, etc.)
     const exportColumns = filteredColumns.value.filter((col) => !['actions', 'bulk_select'].includes(col.key));
@@ -311,7 +311,7 @@ const exportData = async (format) => {
     // Create form data for export
     const formData = {
       format: format,
-      data: exportData,
+      data: exportDataPayload,
       columns: exportColumns.map((col) => ({
         key: col.key,
         label: col.label,
@@ -320,22 +320,17 @@ const exportData = async (format) => {
       title: props.exportTitle,
     };
 
-    // Send export request
-    const response = await fetch(route('export.data'), {
-      method: 'POST',
+    // Use axios to make the request
+    const response = await axios.post(route('export.data'), formData, {
+      responseType: 'blob',
       headers: {
         'Content-Type': 'application/json',
-        // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        Accept: 'application/json',
       },
-      body: JSON.stringify(formData),
     });
 
-    if (!response.ok) {
-      throw new Error('Export failed');
-    }
-
     // Get the blob from response
-    const blob = await response.blob();
+    const blob = response.data;
 
     // Create download link
     const url = window.URL.createObjectURL(blob);
@@ -343,8 +338,9 @@ const exportData = async (format) => {
     link.href = url;
 
     // Set filename based on format
+    const timestamp = new Date().toISOString().split('T')[0];
     const extension = format === 'xlsx' ? 'xlsx' : format === 'csv' ? 'csv' : 'pdf';
-    link.download = `${props.exportFilename}.${extension}`;
+    link.download = `${props.exportFilename}-${timestamp}.${extension}`;
 
     // Trigger download
     document.body.appendChild(link);
@@ -355,7 +351,7 @@ const exportData = async (format) => {
     window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error('Export error:', error);
-    alert('Export failed. Please try again.');
+    alert(`Export failed: ${error.message}. Please try again.`);
   } finally {
     isExporting.value = false;
   }

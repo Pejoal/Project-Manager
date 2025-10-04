@@ -102,15 +102,6 @@ class EmployeeProfileController extends Controller
 
     $profile = EmployeeProfile::create($request->all());
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'created_employee_profile',
-        __('payroll.activity.employee_profile_created', ['user' => $profile->user->name]),
-        $profile
-      )
-    );
-
     return redirect()
       ->route('employee-profiles.index')
       ->with('flash.banner', __('payroll.employee_profiles.created_successfully'));
