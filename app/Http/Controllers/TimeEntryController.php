@@ -37,17 +37,20 @@ class TimeEntryController extends Controller
     // Apply search
     if ($request->filled('search')) {
       $search = $request->search;
-      $query
-        ->whereHas('user', function ($q) use ($search) {
-          $q->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%");
+      // Group the search conditions within a single where clause
+      // This prevents the 'orWhere' clauses from overriding the initial user scope
+      $query->where(function ($q) use ($search) {
+        $q->whereHas('user', function ($subQ) use ($search) {
+          $subQ->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%");
         })
-        ->orWhereHas('task', function ($q) use ($search) {
-          $q->where('name', 'like', "%{$search}%");
-        })
-        ->orWhereHas('project', function ($q) use ($search) {
-          $q->where('name', 'like', "%{$search}%");
-        })
-        ->orWhere('description', 'like', "%{$search}%");
+          ->orWhereHas('task', function ($subQ) use ($search) {
+            $subQ->where('name', 'like', "%{$search}%");
+          })
+          ->orWhereHas('project', function ($subQ) use ($search) {
+            $subQ->where('name', 'like', "%{$search}%");
+          })
+          ->orWhere('description', 'like', "%{$search}%");
+      });
     }
 
     // Apply user filter
