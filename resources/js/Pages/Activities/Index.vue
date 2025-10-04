@@ -135,30 +135,30 @@ const filterConfig = computed(() => [
       >
         <!-- Custom Details Cell -->
         <template #cell-details="{ item }">
-          <div v-if="item.properties.attributes || item.properties.old" class="text-xs">
+          <div v-if="item.properties?.attributes || item.properties?.old" class="text-xs">
             <!-- New Values -->
-            <div v-if="item.properties.attributes" class="mb-2">
+            <div v-if="item.properties?.attributes" class="mb-2">
               <p class="font-semibold text-gray-700 dark:text-gray-300">New Values:</p>
               <dl class="mt-1">
-                <template v-for="(value, key) in item.properties.attributes" :key="key">
+                <template v-for="(value, key) in item.properties?.attributes" :key="key">
                   <div v-if="!key.endsWith('_formatted')" class="flex">
                     <dt class="font-medium text-gray-500 dark:text-gray-400 w-28 truncate">{{ key }}:</dt>
                     <dd class="text-gray-700 dark:text-gray-300">
-                      {{ item.properties.attributes[key + '_formatted'] || value }}
+                      {{ item.properties?.attributes[key + '_formatted'] || value }}
                     </dd>
                   </div>
                 </template>
               </dl>
             </div>
             <!-- Old Values -->
-            <div v-if="item.properties.old">
+            <div v-if="item.properties?.old">
               <p class="font-semibold text-gray-700 dark:text-gray-300">Old Values:</p>
               <dl class="mt-1">
-                <template v-for="(value, key) in item.properties.old" :key="key">
+                <template v-for="(value, key) in item.properties?.old" :key="key">
                   <div v-if="!key.endsWith('_formatted')" class="flex">
                     <dt class="font-medium text-gray-500 dark:text-gray-400 w-28 truncate">{{ key }}:</dt>
                     <dd class="text-gray-700 dark:text-gray-300">
-                      {{ item.properties.old[key + '_formatted'] || value }}
+                      {{ item.properties?.old[key + '_formatted'] || value }}
                     </dd>
                   </div>
                 </template>

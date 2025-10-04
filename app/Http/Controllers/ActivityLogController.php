@@ -46,9 +46,12 @@ class ActivityLogController extends Controller
       });
     }
 
-    // 4. Paginate the results
+    // 4. Paginate and transform the results, ensuring a plain array is returned for each item.
     $perPage = $request->input('per_page', 10);
-    $activities = $query->paginate($perPage)->withQueryString();
+    $activities = $query
+      ->paginate($perPage)
+      ->withQueryString()
+      ->through(fn(Activity $activity) => (new ActivityResource($activity))->resolve());
 
     // 5. Prepare filter options for the frontend dropdowns
     $subjectTypes = Activity::select('subject_type')
@@ -68,8 +71,8 @@ class ActivityLogController extends Controller
 
     // 6. Render the Inertia view, passing the transformed data and filters
     return Inertia::render('Activities/Index', [
-      // Use the API Resource to transform the paginated data
-      'activities' => ActivityResource::collection($activities),
+      // Now passing the paginator object with transformed data
+      'activities' => $activities,
       'filters' => $request->only(['search', 'subject_type', 'causer_id', 'event', 'per_page']),
       'filterOptions' => [
         'subject_types' => $subjectTypes,
