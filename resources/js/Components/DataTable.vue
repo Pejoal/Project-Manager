@@ -914,7 +914,7 @@ onMounted(() => {
     </div>
 
     <!-- Filters Section -->
-    <Transition name="slide-down">
+    <Transition name="slide-left">
       <div v-if="filterConfig.length > 0 && filtersVisible" class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div v-for="filter in filterConfig" :key="filter.key">
@@ -1100,22 +1100,20 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.slide-down-enter-active,
-.slide-down-leave-active {
+.slide-left-enter-active,
+.slide-left-leave-active {
   transition: all 0.3s ease-in-out;
-  max-height: 500px;
-  overflow: hidden;
 }
 
-.slide-down-enter-from,
-.slide-down-leave-to {
-  max-height: 0;
+.slide-left-enter-from,
+.slide-left-leave-to {
+  transform: translateX(-30px);
   opacity: 0;
 }
 
-.slide-down-enter-to,
-.slide-down-leave-from {
-  max-height: 500px;
+.slide-left-enter-to,
+.slide-left-leave-from {
+  transform: translateX(0);
   opacity: 1;
 }
 
