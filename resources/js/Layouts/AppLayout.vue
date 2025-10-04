@@ -90,6 +90,12 @@ const isPayrollActive = computed(
     route().current('payslips.*') ||
     route().current('time-entries.*')
 );
+
+const handleToggleSidebarCollapse = () => {
+  if (isSidebarCollapsed.value) {
+    toggleSidebarCollapse();
+  }
+};
 </script>
 
 <template>
@@ -153,7 +159,12 @@ const isPayrollActive = computed(
 
             <!-- Payroll Dropdown (Visible to admin and manager) -->
             <li v-if="hasAnyRole(['admin', 'manager'])">
-              <SidebarDropdown title="Payroll" :active="isPayrollActive" :is-collapsed="isSidebarCollapsed">
+              <SidebarDropdown
+                @toggled="handleToggleSidebarCollapse"
+                title="Payroll"
+                :active="isPayrollActive"
+                :is-collapsed="isSidebarCollapsed"
+              >
                 <template #icon><IconPayroll /></template>
                 <li v-if="hasRole('admin')">
                   <SidebarLink :href="route('payroll.dashboard')" :active="route().current('payroll.dashboard')"
@@ -349,7 +360,7 @@ const isPayrollActive = computed(
                 >
               </li>
               <li v-if="hasAnyRole(['admin', 'manager'])">
-                <SidebarDropdown title="Payroll" :active="isPayrollActive">
+                <SidebarDropdown title="Payroll" @toggled="handleToggleSidebarCollapse" :active="isPayrollActive">
                   <template #icon><IconPayroll /></template>
                   <li v-if="hasRole('admin')">
                     <SidebarLink :href="route('payroll.dashboard')" :active="route().current('payroll.dashboard')"

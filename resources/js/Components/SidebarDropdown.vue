@@ -6,6 +6,8 @@ const props = defineProps({
   active: Boolean,
   isCollapsed: Boolean,
 });
+const emit = defineEmits(['toggled']);
+
 
 const isOpen = ref(props.active);
 
@@ -14,6 +16,7 @@ const toggle = () => {
   if (!props.isCollapsed) {
     isOpen.value = !isOpen.value;
   }
+  emit('toggled');
 };
 
 // If the route becomes active (e.g. through navigation),
