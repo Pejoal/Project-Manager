@@ -25,7 +25,7 @@ const breadcrumbs = computed(() => usePage().props.breadcrumbs || []);
 
           <!-- Link for all items except the very last one -->
           <Link
-            v-if="index < breadcrumbs.length - 1"
+            v-if="index < breadcrumbs.length - 1 && breadcrumb.url"
             :href="breadcrumb.url"
             class="ml-2 hover:text-gray-700 dark:hover:text-gray-200 hover:underline"
           >
@@ -40,4 +40,14 @@ const breadcrumbs = computed(() => usePage().props.breadcrumbs || []);
       </li>
     </ol>
   </nav>
+  <section v-else class="flex items-center justify-center h-full py-6 px-4 sm:px-6 bg-gray-50 dark:bg-gray-900">
+    <div class="text-center">
+      <h1 class="text-2xl font-serif font-semibold text-gray-800 dark:text-gray-200 mb-1">
+        {{ trans('words.welcome') }}
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400 font-medium">
+        {{ $page.props.auth.user.name }}
+      </p>
+    </div>
+  </section>
 </template>

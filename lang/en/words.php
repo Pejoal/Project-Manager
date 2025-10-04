@@ -30,6 +30,7 @@ return [
   'select_task' => 'Select Task',
   'download' => 'Download',
   'quick_actions' => 'Quick Actions',
+  'create_team' => 'Create Team',
 
   // Navigation
   'dashboard' => 'Dashboard',
