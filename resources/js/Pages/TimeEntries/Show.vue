@@ -1,6 +1,10 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import CreateTimeEntryModal from './CreateTimeEntryModal.vue';
+import { ref } from 'vue';
+
+const showModal = ref(false);
 
 const props = defineProps({
   timeEntry: Object,
@@ -27,17 +31,28 @@ const statusInfo = computed(() => {
 
 <template>
   <Head :title="`Time Entry #${timeEntry.id}`" />
-  <header>
-    <div class="flex justify-between items-center">
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Time Entry Details</h2>
-      <div class="flex space-x-2">
-        <Link :href="route('time-entries.edit', timeEntry.id)" v-if="!timeEntry.is_approved" class="btn-secondary"
-          >Edit</Link
-        >
-        <Link :href="route('time-entries.index')" class="btn-secondary">Back to List</Link>
+  <header class="bg-white dark:bg-gray-800 shadow">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight">Time Entry Details</h2>
+        <div class="flex items-center gap-3">
+          <button
+            @click="showModal = true"
+            class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
+          >
+            Edit
+          </button>
+          <Link
+            :href="route('time-entries.index')"
+            class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
+          >
+            Back to List
+          </Link>
+        </div>
       </div>
     </div>
   </header>
+  <CreateTimeEntryModal :show="showModal" :timeEntry="timeEntry" @close="showModal = false" />
 
   <div class="py-12">
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
