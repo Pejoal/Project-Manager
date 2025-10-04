@@ -7,6 +7,8 @@ return [
   'manage_time_entries' => 'View and manage time entries.',
   'generate_payslips_description' => 'Process and review payslips.',
   'view_reports_description' => 'Generate and view payroll reports.',
+  'time_entries.start_time' => 'Start Time',
+  'time_entries.end_time' => 'End Time',
 
   // Time Entries
   'time_entries' => [
