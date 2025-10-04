@@ -6,7 +6,7 @@ import SettingsDropdown from '@/Components/Navigation/SettingsDropdown.vue';
 import TeamsDropdown from '@/Components/Navigation/TeamsDropdown.vue';
 import SidebarDropdown from '@/Components/SidebarDropdown.vue';
 import SidebarLink from '@/Components/SidebarLink.vue';
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import { loadLanguageAsync } from 'laravel-vue-i18n';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
@@ -69,6 +69,7 @@ if (activeLocaleCode.value) {
 const handleLocaleClick = (code, url) => {
   activeLocaleCode.value = code;
   loadLanguageAsync(code);
+  router.visit(url, { preserveState: true });
 };
 
 const handleClickOutsideLocales = (event) => {
