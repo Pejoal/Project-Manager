@@ -10,8 +10,7 @@ class ActivityController extends Controller
   public function index(Request $request)
   {
     // Get all activities with eager loading
-    $query = Activity::with('causer', 'subject')
-      ->latest();
+    $query = Activity::with('causer', 'subject')->latest();
 
     // Apply filters if needed
     if ($request->filled('subject_type')) {
@@ -27,7 +26,7 @@ class ActivityController extends Controller
     }
 
     $activities = $query->paginate(100);
-    
+
     // Group activities by subject type for better organization
     $groupedActivities = $activities->getCollection()->groupBy('subject_type');
 

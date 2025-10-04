@@ -111,7 +111,15 @@ class EmployeeProfile extends Model
   public function getActivitylogOptions(): LogOptions
   {
     return LogOptions::defaults()
-      ->logOnly(['employee_id', 'base_hourly_rate', 'overtime_rate_multiplier', 'is_active', 'hire_date', 'termination_date', 'payment_method'])
+      ->logOnly([
+        'employee_id',
+        'base_hourly_rate',
+        'overtime_rate_multiplier',
+        'is_active',
+        'hire_date',
+        'termination_date',
+        'payment_method',
+      ])
       ->logOnlyDirty()
       ->dontSubmitEmptyLogs()
       ->setDescriptionForEvent(fn(string $eventName) => "Employee profile has been {$eventName}");

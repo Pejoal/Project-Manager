@@ -128,7 +128,17 @@ class TimeEntry extends Model
   public function getActivitylogOptions(): LogOptions
   {
     return LogOptions::defaults()
-      ->logOnly(['user_id', 'task_id', 'project_id', 'start_datetime', 'end_datetime', 'hours_worked', 'hourly_rate', 'gross_amount', 'is_approved'])
+      ->logOnly([
+        'user_id',
+        'task_id',
+        'project_id',
+        'start_datetime',
+        'end_datetime',
+        'hours_worked',
+        'hourly_rate',
+        'gross_amount',
+        'is_approved',
+      ])
       ->logOnlyDirty()
       ->dontSubmitEmptyLogs()
       ->setDescriptionForEvent(fn(string $eventName) => "Time entry has been {$eventName}");

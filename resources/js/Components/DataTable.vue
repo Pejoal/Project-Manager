@@ -98,6 +98,20 @@ const props = defineProps({
     default: true,
   },
 
+  // Export configuration
+  exportable: {
+    type: Boolean,
+    default: true,
+  },
+  exportTitle: {
+    type: String,
+    default: 'Data Export',
+  },
+  exportFilename: {
+    type: String,
+    default: 'export',
+  },
+
   // Route for filtering
   routeName: {
     type: String,
@@ -142,6 +156,8 @@ const filtersVisible = ref(false);
 const sortColumn = ref(props.filters.sort_by || '');
 const sortDirection = ref(props.filters.sort_direction || 'asc');
 const columnSelectorVisible = ref(false);
+const exportMenuVisible = ref(false);
+const isExporting = ref(false);
 
 // Initialize visible columns from localStorage or default to all visible
 const initializeVisibleColumns = () => {
@@ -278,6 +294,71 @@ const resetColumns = () => {
   props.columns.forEach((col) => {
     visibleColumns.value[col.key] = true;
   });
+};
+
+// Export functionality
+const exportData = async (format) => {
+  isExporting.value = true;
+  exportMenuVisible.value = false;
+
+  try {
+    // Get current data from the table
+    const exportData = props.data.data || [];
+
+    // Filter columns to export (exclude actions, bulk_select, etc.)
+    const exportColumns = filteredColumns.value.filter((col) => !['actions', 'bulk_select'].includes(col.key));
+
+    // Create form data for export
+    const formData = {
+      format: format,
+      data: exportData,
+      columns: exportColumns.map((col) => ({
+        key: col.key,
+        label: col.label,
+      })),
+      filename: props.exportFilename,
+      title: props.exportTitle,
+    };
+
+    // Send export request
+    const response = await fetch(route('export.data'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Export failed');
+    }
+
+    // Get the blob from response
+    const blob = await response.blob();
+
+    // Create download link
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+
+    // Set filename based on format
+    const extension = format === 'xlsx' ? 'xlsx' : format === 'csv' ? 'csv' : 'pdf';
+    link.download = `${props.exportFilename}.${extension}`;
+
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+
+    // Cleanup
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Export error:', error);
+    alert('Export failed. Please try again.');
+  } finally {
+    isExporting.value = false;
+  }
 };
 
 const allSelected = computed(() => {
@@ -619,6 +700,95 @@ onMounted(() => {
                   </label>
                 </div>
               </div>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- Export Button -->
+        <div v-if="exportable && data.data && data.data.length > 0" class="relative">
+          <button
+            @click="exportMenuVisible = !exportMenuVisible"
+            :disabled="isExporting"
+            class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg
+              v-if="!isExporting"
+              class="inline-block w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
+            </svg>
+            <svg
+              v-else
+              class="inline-block w-4 h-4 mr-2 animate-spin"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            {{ isExporting ? 'Exporting...' : 'Export' }}
+          </button>
+
+          <!-- Export Dropdown -->
+          <Transition name="fade">
+            <div
+              v-if="exportMenuVisible"
+              v-click-away="() => (exportMenuVisible = false)"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 py-1"
+            >
+              <button
+                @click="exportData('xlsx')"
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
+              >
+                <svg class="w-4 h-4 mr-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"
+                  />
+                  <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                </svg>
+                Export as Excel (.xlsx)
+              </button>
+
+              <button
+                @click="exportData('csv')"
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
+              >
+                <svg class="w-4 h-4 mr-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Export as CSV (.csv)
+              </button>
+
+              <button
+                @click="exportData('pdf')"
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
+              >
+                <svg class="w-4 h-4 mr-3 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Export as PDF (.pdf)
+              </button>
             </div>
           </Transition>
         </div>

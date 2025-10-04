@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\MilestoneController;
 use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\ProjectController;
@@ -60,6 +61,10 @@ Route::group(
 
       Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
       Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+
+      // Export Route
+      Route::post('/export', [ExportController::class, 'export'])->name('export.data');
+
       Route::get('/maps', function () {
         return Inertia::render('Maps/Index', []);
       })->name('maps.index');

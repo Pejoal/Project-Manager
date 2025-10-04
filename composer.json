@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "^3.1",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
         "laravel/jetstream": "^5.3",
@@ -17,6 +18,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.12",
         "laravel/tinker": "^2.9",
+        "maatwebsite/excel": "^3.1",
         "mcamara/laravel-localization": "^2.2",
         "meilisearch/meilisearch-php": "^1.12",
         "spatie/laravel-activitylog": "^4.10",
