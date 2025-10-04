@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ExportController extends Controller
 {
@@ -73,7 +74,7 @@ class ExportController extends Controller
       $rowData = [];
       foreach ($columns as $column) {
         $value = $this->getCellValue($row, $column['key']);
-        $rowData[] = $this->formatValue($value);
+        $rowData[] = $this->formatValue($value, $column['key']);
       }
       $tableData[] = $rowData;
     }
@@ -114,25 +115,178 @@ class ExportController extends Controller
     return $value;
   }
 
-  protected function formatValue($value)
+  protected function formatValue($value, $key = '')
   {
-    if (is_array($value)) {
-      return implode(
-        ', ',
-        array_map(function ($item) {
-          return is_array($item) ? $item['name'] ?? json_encode($item) : $item;
-        }, $value)
-      );
+    // Handle null values
+    if ($value === null) {
+      return '';
     }
 
-    if (is_object($value)) {
-      return $value->name ?? (method_exists($value, '__toString') ? (string) $value : '');
-    }
-
+    // Handle boolean values
     if (is_bool($value)) {
       return $value ? 'Yes' : 'No';
     }
 
+    // Handle arrays (for relationships or multiple values)
+    if (is_array($value)) {
+      // If it's an array of objects/arrays with 'name' property (relationships)
+      if (isset($value[0]) && (is_array($value[0]) || is_object($value[0]))) {
+        return implode(
+          ', ',
+          array_map(function ($item) {
+            if (is_array($item)) {
+              return $item['name'] ?? ($item['label'] ?? ($item['title'] ?? ''));
+            } elseif (is_object($item)) {
+              return $item->name ?? ($item->label ?? ($item->title ?? ''));
+            }
+            return $item;
+          }, $value)
+        );
+      }
+
+      // Simple array of values
+      return implode(', ', array_filter($value));
+    }
+
+    // Handle objects (relationships)
+    if (is_object($value)) {
+      // Try to get a meaningful display value
+      if (isset($value->name)) {
+        return $value->name;
+      } elseif (isset($value->label)) {
+        return $value->label;
+      } elseif (isset($value->title)) {
+        return $value->title;
+      } elseif (method_exists($value, '__toString')) {
+        return (string) $value;
+      }
+
+      // For date objects
+      if ($value instanceof \DateTime || $value instanceof Carbon) {
+        return $value->format('Y-m-d H:i:s');
+      }
+
+      return '';
+    }
+
+    // Handle date strings
+    if ($this->isDateField($key) && $this->isValidDate($value)) {
+      try {
+        $date = Carbon::parse($value);
+        // Format based on if it has time component
+        if ($date->format('H:i:s') !== '00:00:00') {
+          return $date->format('Y-m-d H:i');
+        }
+        return $date->format('Y-m-d');
+      } catch (\Exception $e) {
+        return $value;
+      }
+    }
+
+    // Handle numeric values
+    if (is_numeric($value)) {
+      // Check if it's a currency field
+      if ($this->isCurrencyField($key)) {
+        return '$' . number_format((float) $value, 2);
+      }
+
+      // Check if it's a percentage field
+      if ($this->isPercentageField($key)) {
+        return number_format((float) $value, 2) . '%';
+      }
+
+      return $value;
+    }
+
+    // Strip HTML tags for text fields
+    if (is_string($value)) {
+      $cleaned = strip_tags($value);
+      // Decode HTML entities
+      $cleaned = html_entity_decode($cleaned, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+      return trim($cleaned);
+    }
+
     return $value ?? '';
+  }
+
+  /**
+   * Check if a field is likely a date field based on key name
+   */
+  protected function isDateField($key)
+  {
+    $datePatterns = [
+      'date',
+      'datetime',
+      '_at',
+      'time',
+      'created',
+      'updated',
+      'deleted',
+      'published',
+      'start',
+      'end',
+      'due',
+      'birth',
+      'hire',
+      'termination',
+      'pay_period',
+    ];
+
+    foreach ($datePatterns as $pattern) {
+      if (stripos($key, $pattern) !== false) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if a value is a valid date
+   */
+  protected function isValidDate($value)
+  {
+    if (!is_string($value)) {
+      return false;
+    }
+
+    try {
+      $date = Carbon::parse($value);
+      return $date->year >= 1900 && $date->year <= 2100;
+    } catch (\Exception $e) {
+      return false;
+    }
+  }
+
+  /**
+   * Check if a field is likely a currency field
+   */
+  protected function isCurrencyField($key)
+  {
+    $currencyPatterns = ['amount', 'price', 'cost', 'total', 'salary', 'rate', 'pay', 'earning', 'gross', 'net', 'tax'];
+
+    foreach ($currencyPatterns as $pattern) {
+      if (stripos($key, $pattern) !== false) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if a field is likely a percentage field
+   */
+  protected function isPercentageField($key)
+  {
+    $percentagePatterns = ['percent', 'percentage', 'multiplier'];
+
+    foreach ($percentagePatterns as $pattern) {
+      if (stripos($key, $pattern) !== false && !$this->isCurrencyField($key)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
