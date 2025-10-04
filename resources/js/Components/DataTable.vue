@@ -309,7 +309,6 @@ const hasActiveFilters = computed(() => {
 // Methods
 const applyFilters = () => {
   const params = { ...form.data() };
-  console.log('Applying filters with params:', params);
 
   // Remove empty values
   Object.keys(params).forEach((key) => {
