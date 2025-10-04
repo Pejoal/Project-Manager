@@ -5,11 +5,11 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
-import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 import { computed, ref, watch } from 'vue';
 import { BarChart, DoughnutChart } from 'vue-chart-3';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
+Chart.register(...registerables);
 
 const props = defineProps({
   users: Array,

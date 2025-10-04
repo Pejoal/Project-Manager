@@ -264,8 +264,10 @@ return [
 
   // Reports (Reports.vue)
   'reports' => [
+    'employees_count' => 'Employees Count',
     'hours_breakdown' => 'Hours Breakdown',
     'title' => 'Payroll Reports',
+    'description' => 'Generate detailed payroll reports based on various criteria.',
     'export_pdf' => 'Export PDF',
     'export_excel' => 'Export Excel',
     'filters' => 'Filters',
