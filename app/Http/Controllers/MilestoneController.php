@@ -7,7 +7,6 @@ use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Events\ActivityLogged;
 
 class MilestoneController extends Controller
 {

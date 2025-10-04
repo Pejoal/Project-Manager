@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use App\Events\ActivityLogged;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\ProjectPriority;

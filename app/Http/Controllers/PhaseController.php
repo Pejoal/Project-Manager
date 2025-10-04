@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ActivityLogged;
 use App\Models\Phase;
 use App\Models\Project;
 use App\Models\Task;

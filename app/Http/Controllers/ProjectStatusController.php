@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\ProjectStatus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Events\ActivityLogged;
 
 class ProjectStatusController extends Controller
 {

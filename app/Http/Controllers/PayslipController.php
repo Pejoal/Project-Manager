@@ -10,7 +10,6 @@ use App\Models\PayrollSettings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
-use App\Events\ActivityLogged;
 
 class PayslipController extends Controller
 {
@@ -134,15 +133,6 @@ class PayslipController extends Controller
       }
     }
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'generated_payslips',
-        __('payroll.activity.payslips_generated', ['count' => $generatedCount]),
-        null
-      )
-    );
-
     return redirect()
       ->route('payslips.index')
       ->with('flash.banner', __('payroll.payslips.generated_successfully', ['count' => $generatedCount]));
@@ -173,15 +163,6 @@ class PayslipController extends Controller
       'approved_at' => now(),
     ]);
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'approved_payslip',
-        __('payroll.activity.payslip_approved', ['user' => $payslip->user->name]),
-        $payslip
-      )
-    );
-
     return redirect()->back()->with('flash.banner', __('payroll.payslips.approved_successfully'));
   }
 
@@ -196,15 +177,6 @@ class PayslipController extends Controller
     }
 
     $payslip->update(['status' => 'paid']);
-
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'marked_payslip_paid',
-        __('payroll.activity.payslip_marked_paid', ['user' => $payslip->user->name]),
-        $payslip
-      )
-    );
 
     return redirect()->back()->with('flash.banner', __('payroll.payslips.marked_paid_successfully'));
   }
@@ -227,15 +199,6 @@ class PayslipController extends Controller
       ]);
       $approvedCount++;
     }
-
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'bulk_approved_payslips',
-        __('payroll.activity.bulk_payslips_approved', ['count' => $approvedCount]),
-        null
-      )
-    );
 
     return redirect()
       ->back()
@@ -303,15 +266,6 @@ class PayslipController extends Controller
 
     $userName = $payslip->user->name;
     $payslip->delete();
-
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'deleted_payslip',
-        __('payroll.activity.payslip_deleted', ['user' => $userName]),
-        $payslip
-      )
-    );
 
     return redirect()->route('payslips.index')->with('flash.banner', __('payroll.payslips.deleted_successfully'));
   }

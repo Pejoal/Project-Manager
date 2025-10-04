@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
-use App\Events\ActivityLogged;
 
 class PayrollController extends Controller
 {
@@ -161,10 +160,6 @@ class PayrollController extends Controller
 
     $settings = PayrollSettings::current();
     $settings->update($request->all());
-
-    event(
-      new ActivityLogged(auth()->user(), 'updated_payroll_settings', __('payroll.activity.settings_updated'), $settings)
-    );
 
     return redirect()->back()->with('flash.banner', __('payroll.settings.updated_successfully'));
   }
@@ -443,15 +438,6 @@ class PayrollController extends Controller
         $generatedCount++;
       }
     }
-
-    // event(
-    //   new ActivityLogged(
-    //     auth()->user(),
-    //     'generated_time_entries',
-    //     __('payroll.activity.time_entries_generated', ['count' => $generatedCount]),
-    //     null
-    //   )
-    // );
 
     return redirect()
       ->back()

@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Events\ActivityLogged;
 use Carbon\Carbon;
 
 class TimeEntryController extends Controller
@@ -200,18 +199,7 @@ class TimeEntryController extends Controller
       'description' => $request->description,
     ]);
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'created_time_entry',
-        __('payroll.activity.time_entry_created', ['hours' => $timeEntry->hours_worked]),
-        $timeEntry
-      )
-    );
-
-    return redirect()
-      ->back()
-      ->with('flash.banner', __('payroll.time_entries.created_successfully'));
+    return redirect()->back()->with('flash.banner', __('payroll.time_entries.created_successfully'));
   }
 
   public function show(TimeEntry $timeEntry)
@@ -298,15 +286,6 @@ class TimeEntryController extends Controller
       'description' => $request->description,
     ]);
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'updated_time_entry',
-        __('payroll.activity.time_entry_updated', ['hours' => $timeEntry->hours_worked]),
-        $timeEntry
-      )
-    );
-
     // return redirect()
     //   ->route('time-entries.index')
     //   ->with('flash.banner', __('payroll.time_entries.updated_successfully'));
@@ -325,10 +304,6 @@ class TimeEntryController extends Controller
     }
 
     $timeEntry->delete();
-
-    event(
-      new ActivityLogged(auth()->user(), 'deleted_time_entry', __('payroll.activity.time_entry_deleted'), $timeEntry)
-    );
 
     return redirect()
       ->route('time-entries.index')
@@ -356,15 +331,6 @@ class TimeEntryController extends Controller
       'approved_at' => now(),
     ]);
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'approved_time_entry',
-        __('payroll.activity.time_entry_approved', ['user' => $timeEntry->user->name]),
-        $timeEntry
-      )
-    );
-
     return redirect()->back()->with('flash.banner', __('payroll.time_entries.approved_successfully'));
   }
 
@@ -390,7 +356,6 @@ class TimeEntryController extends Controller
         'approved_at' => now(),
       ]);
       $approvedCount++;
-
     }
 
     return redirect()

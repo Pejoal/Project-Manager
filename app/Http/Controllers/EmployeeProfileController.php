@@ -7,7 +7,6 @@ use App\Models\EmployeeProfile;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Events\ActivityLogged;
 
 class EmployeeProfileController extends Controller
 {
@@ -174,15 +173,6 @@ class EmployeeProfileController extends Controller
 
     $employeeProfile->update($request->all());
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'updated_employee_profile',
-        __('payroll.activity.employee_profile_updated', ['user' => $employeeProfile->user->name]),
-        $employeeProfile
-      )
-    );
-
     return redirect()
       ->route('employee-profiles.index')
       ->with('flash.banner', __('payroll.employee_profiles.updated_successfully'));
@@ -202,15 +192,6 @@ class EmployeeProfileController extends Controller
     $userName = $employeeProfile->user->name;
     $employeeProfile->delete();
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'deleted_employee_profile',
-        __('payroll.activity.employee_profile_deleted', ['user' => $userName]),
-        $employeeProfile
-      )
-    );
-
     return redirect()
       ->route('employee-profiles.index')
       ->with('flash.banner', __('payroll.employee_profiles.deleted_successfully'));
@@ -220,30 +201,12 @@ class EmployeeProfileController extends Controller
   {
     $employeeProfile->update(['is_active' => true]);
 
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'activated_employee_profile',
-        __('payroll.activity.employee_profile_activated', ['user' => $employeeProfile->user->name]),
-        $employeeProfile
-      )
-    );
-
     return redirect()->back()->with('flash.banner', __('payroll.employee_profiles.activated_successfully'));
   }
 
   public function deactivate(EmployeeProfile $employeeProfile)
   {
     $employeeProfile->update(['is_active' => false]);
-
-    event(
-      new ActivityLogged(
-        auth()->user(),
-        'deactivated_employee_profile',
-        __('payroll.activity.employee_profile_deactivated', ['user' => $employeeProfile->user->name]),
-        $employeeProfile
-      )
-    );
 
     return redirect()->back()->with('flash.banner', __('payroll.employee_profiles.deactivated_successfully'));
   }

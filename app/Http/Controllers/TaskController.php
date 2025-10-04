@@ -13,7 +13,6 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TaskAssigned;
 use Illuminate\Database\Eloquent\Builder;
-use App\Events\ActivityLogged;
 
 class TaskController extends Controller
 {

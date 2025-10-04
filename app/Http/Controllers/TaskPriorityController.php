@@ -3,7 +3,6 @@
 use App\Models\TaskPriority;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Events\ActivityLogged;
 
 class TaskPriorityController extends Controller
 {
