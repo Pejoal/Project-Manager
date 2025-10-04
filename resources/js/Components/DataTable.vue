@@ -309,6 +309,7 @@ const hasActiveFilters = computed(() => {
 // Methods
 const applyFilters = () => {
   const params = { ...form.data() };
+  console.log('Applying filters with params:', params);
 
   // Remove empty values
   Object.keys(params).forEach((key) => {
@@ -801,7 +802,7 @@ onMounted(() => {
 
             <!-- Checkbox -->
             <div v-else-if="filter.type === 'checkbox'" class="flex items-center space-x-2">
-              <Checkbox :id="filter.key" :checked="form[filter.key]" />
+              <Checkbox :id="filter.key" v-model:checked="form[filter.key]" />
               <label :for="filter.key" class="text-sm text-gray-700 dark:text-gray-300">{{ filter.label }}</label>
             </div>
           </div>
@@ -869,7 +870,11 @@ onMounted(() => {
                 <!-- Slot for custom cell content -->
                 <slot :name="`cell-${column.key}`" :item="item" :value="getCellValue(item, column)" :column="column">
                   <!-- Default cell content -->
-                  <div v-if="column.component" :class="column.textClass" v-html="column.component(item, getCellValue(item, column))" />
+                  <div
+                    v-if="column.component"
+                    :class="column.textClass"
+                    v-html="column.component(item, getCellValue(item, column))"
+                  />
                   <span v-else :class="['text-sm', column.textClass || 'text-gray-900 dark:text-gray-100']">
                     {{ getCellValue(item, column) }}
                   </span>
