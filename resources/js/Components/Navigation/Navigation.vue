@@ -43,7 +43,10 @@ watch(
       <template #trigger>
         <button
           :class="
-            route().current('payroll.*') || route().current('employee-profiles.*') || route().current('payslips.*')
+            route().current('payroll.*') ||
+            route().current('employee-profiles.*') ||
+            route().current('payslips.*') ||
+            route().current('time-entries.*')
               ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
               : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out'
           "
@@ -74,7 +77,11 @@ watch(
         <div class="w-60">
           <div class="block px-4 py-2 text-xs text-gray-400">Payroll Management</div>
 
-          <DropdownLink :href="route('payroll.dashboard')" :active="route().current('payroll.dashboard')">
+          <DropdownLink
+            v-if="page.props?.user?.roles?.includes('admin')"
+            :href="route('payroll.dashboard')"
+            :active="route().current('payroll.dashboard')"
+          >
             <div class="flex items-center">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -88,7 +95,11 @@ watch(
             </div>
           </DropdownLink>
 
-          <DropdownLink :href="route('payroll.index')" :active="route().current('payroll.index')">
+          <DropdownLink
+            v-if="page.props?.user?.roles?.includes('admin')"
+            :href="route('payroll.index')"
+            :active="route().current('payroll.index')"
+          >
             <div class="flex items-center">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -117,7 +128,11 @@ watch(
             </div>
           </DropdownLink>
 
-          <DropdownLink :href="route('employee-profiles.index')" :active="route().current('employee-profiles.*')">
+          <DropdownLink
+            v-if="page.props?.user?.roles?.includes('admin')"
+            :href="route('employee-profiles.index')"
+            :active="route().current('employee-profiles.*')"
+          >
             <div class="flex items-center">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -131,7 +146,11 @@ watch(
             </div>
           </DropdownLink>
 
-          <DropdownLink :href="route('payslips.index')" :active="route().current('payslips.index')">
+          <DropdownLink
+            v-if="page.props?.user?.roles?.includes('admin')"
+            :href="route('payslips.index')"
+            :active="route().current('payslips.index')"
+          >
             <div class="flex items-center">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -147,7 +166,11 @@ watch(
 
           <div class="border-t border-gray-200 dark:border-gray-600"></div>
 
-          <DropdownLink :href="route('payroll.reports')" :active="route().current('payroll.reports')">
+          <DropdownLink
+            v-if="page.props?.user?.roles?.includes('admin')"
+            :href="route('payroll.reports')"
+            :active="route().current('payroll.reports')"
+          >
             <div class="flex items-center">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -161,7 +184,11 @@ watch(
             </div>
           </DropdownLink>
 
-          <DropdownLink :href="route('payroll.settings')" :active="route().current('payroll.settings')">
+          <DropdownLink
+            v-if="page.props?.user?.roles?.includes('admin')"
+            :href="route('payroll.settings')"
+            :active="route().current('payroll.settings')"
+          >
             <div class="flex items-center">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
