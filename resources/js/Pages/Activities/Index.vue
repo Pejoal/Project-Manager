@@ -36,7 +36,7 @@ const columns = computed(() => [
   {
     key: 'causer.name',
     label: 'User',
-    sortable: false, // Sorting on relationships requires special backend handling
+    sortable: true, // Sorting on relationships requires special backend handling
     component: (item) => {
       if (!item.causer) {
         return `<span class="text-sm text-gray-500 dark:text-gray-400">System</span>`;
@@ -54,7 +54,7 @@ const columns = computed(() => [
   {
     key: 'event',
     label: 'Event',
-    sortable: false,
+    sortable: true,
     component: (item) => {
       const colorMap = {
         created: 'background-color: #10B98130; color: #059669;',

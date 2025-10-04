@@ -21,8 +21,20 @@ class ActivityLogController extends Controller
       'per_page' => 'nullable|integer|min:1|max:100',
     ]);
 
+    // Apply sorting
+    $sortBy = $request->input('sort_by', 'created_at');
+    $sortDirection = $request->input('sort_direction', 'desc');
+
     // 2. Start with the base query, eager-loading relationships for performance
-    $query = Activity::with(['causer', 'subject'])->latest();
+    $query = Activity::with(['causer', 'subject']);
+    if ($sortBy === 'causer.name') {
+      $query
+        ->join('users', 'activity_log.causer_id', '=', 'users.id')
+        ->orderBy('users.name', $sortDirection)
+        ->select('activity_log.*');
+    } else {
+      $query->orderBy($sortBy, $sortDirection);
+    }
 
     // 3. Apply filters based on request input
     if ($request->filled('subject_type')) {
