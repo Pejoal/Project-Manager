@@ -12,7 +12,7 @@ const props = defineProps({
 // Column configuration for DataTable
 const columns = [
   {
-    key: 'user',
+    key: 'user.name',
     label: 'Employee',
     sortable: true,
     component: (item) => `

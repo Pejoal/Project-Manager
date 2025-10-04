@@ -76,7 +76,7 @@ const columns = [
     `,
   },
   {
-    key: 'status',
+    key: 'status.name',
     label: 'Status',
     sortable: true,
     component: (item) => `
@@ -86,7 +86,7 @@ const columns = [
     `,
   },
   {
-    key: 'priority',
+    key: 'priority.name',
     label: 'Priority',
     sortable: true,
     component: (item) => `
