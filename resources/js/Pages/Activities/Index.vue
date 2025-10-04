@@ -34,9 +34,10 @@ const columns = computed(() => [
     `,
   },
   {
-    key: 'causer.name',
+    key: 'causer',
+    exportKey: 'causer.name', // Use causer.name for export
     label: 'User',
-    sortable: true, // Sorting on relationships requires special backend handling
+    sortable: true, 
     component: (item) => {
       if (!item.causer) {
         return `<span class="text-sm text-gray-500 dark:text-gray-400">System</span>`;

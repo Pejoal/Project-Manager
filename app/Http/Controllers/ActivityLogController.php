@@ -27,7 +27,7 @@ class ActivityLogController extends Controller
 
     // 2. Start with the base query, eager-loading relationships for performance
     $query = Activity::with(['causer', 'subject']);
-    if ($sortBy === 'causer.name') {
+    if ($sortBy === 'causer') {
       $query
         ->join('users', 'activity_log.causer_id', '=', 'users.id')
         ->orderBy('users.name', $sortDirection)
