@@ -161,9 +161,11 @@ class PayslipController extends Controller
   public function show(Payslip $payslip)
   {
     $payslip->load(['user.employeeProfile', 'generatedBy', 'approvedBy']);
+    $settings = PayrollSettings::first();
 
     return Inertia::render('Payslips/Show', [
       'payslip' => $payslip,
+      'settings' => $settings,
     ]);
   }
 

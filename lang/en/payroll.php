@@ -88,8 +88,8 @@ return [
 
   // Payslips
   'payslips' => [
-    'generated_with_errors' => ':count payslips generated with some errors. Please review the messages.',
-    'no_payslips_generated' => 'No payslips were generated. Please review the messages.',
+    'generated_with_errors' => ':count payslips generated with some errors',
+    'no_payslips_generated' => 'No payslips were generated',
     'title' => 'Payslips',
     'generate' => 'Generate Payslips',
     'generate_bulk' => 'Generate Bulk Payslips',

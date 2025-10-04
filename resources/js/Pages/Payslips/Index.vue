@@ -233,6 +233,40 @@ const approvePayslip = (payslipId) => {
     });
   }
 };
+
+const downloadPayslip = async (payslipId, payslip_number) => {
+  try {
+    const response = await axios.get(route('payslips.download-pdf', payslipId), {
+      responseType: 'blob', // This is crucial to receive the file data correctly
+    });
+
+    // Create a URL for the blob data
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+
+    // Extract the filename from the 'Content-Disposition' header if available
+    const contentDisposition = response.headers['content-disposition'];
+    let filename = `Lohnabrechnung-${payslip_number}.pdf`; // Fallback filename
+    if (contentDisposition) {
+      const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+      if (filenameMatch && filenameMatch.length === 2) {
+        filename = filenameMatch[1];
+      }
+    }
+
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+
+    // Trigger the download and clean up
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('PDF download error:', error);
+    alert('Could not download the PDF. Please try again or check the console for errors.');
+  }
+};
 </script>
 
 <template>
@@ -344,7 +378,8 @@ const approvePayslip = (payslipId) => {
               {{ $t('words.view') }}
             </Link>
             <Link
-              :href="route('payslips.download-pdf', item.id)"
+              @click="downloadPayslip(item.id, item.payslip_number)"
+              as="button"
               class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
             >
               {{ $t('words.download') }}
