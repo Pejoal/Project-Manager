@@ -54,7 +54,7 @@ const columns = [
     label: 'Payment Method',
     component: (item) => `
       <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100">
-        ${trans(`payroll.employee_profiles.payment_methods.${item.payment_method}`)}
+        ${trans(`payroll.payment_methods.${item.payment_method}`)}
       </span>
     `,
   },
@@ -108,9 +108,9 @@ const filterConfig = [
     label: 'Payment Method',
     type: 'select',
     options: [
-      { value: 'bank_transfer', label: trans('payroll.employee_profiles.payment_methods.bank_transfer') },
-      { value: 'cash', label: trans('payroll.employee_profiles.payment_methods.cash') },
-      { value: 'check', label: trans('payroll.employee_profiles.payment_methods.check') },
+      { value: 'bank_transfer', label: trans('payroll.payment_methods.bank_transfer') },
+      { value: 'cash', label: trans('payroll.payment_methods.cash') },
+      { value: 'check', label: trans('payroll.payment_methods.check') },
     ],
     placeholder: 'All Methods',
   },

@@ -51,6 +51,11 @@ return [
 
   // Employee Profiles
   'employee_profiles' => [
+    'overtime_multiplier_hint' => 'E.g., 1.5 for "time and a half", 2 for "double time"',
+    'overtime_multiplier' => 'Overtime Multiplier',
+    'compensation' => 'Compensation',
+    'tax_information' => 'Tax Information',
+    'payment_information' => 'Payment Information',
     'title' => 'Employee Profiles',
     'create' => 'Create Employee Profile',
     'edit' => 'Edit Employee Profile',
@@ -79,11 +84,15 @@ return [
     'bulk_activated' => ':count employee profiles activated successfully!',
     'bulk_deactivated' => ':count employee profiles deactivated successfully!',
     'bulk_rate_updated' => 'Hourly rate updated for :count employee profiles!',
-    'payment_methods' => [
-      'bank_transfer' => 'Bank Transfer',
-      'cash' => 'Cash',
-      'check' => 'Check',
-    ],
+    'bank_account' => 'Bank Account',
+    'user_information' => 'User Information',
+    'employment_details' => 'Employment Details',
+  ],
+
+  'payment_methods' => [
+    'bank_transfer' => 'Bank Transfer',
+    'cash' => 'Cash',
+    'check' => 'Check',
   ],
 
   // Payslips
@@ -147,9 +156,12 @@ return [
     'working_hours' => 'Working Hours',
     'break_duration' => 'Break Duration',
     'minutes' => 'minutes',
-    'auto_generate_time_entries_hint' => 'If enabled, time entries will be automatically generated for employees based on their standard working hours and days.',
-    'require_approval_for_overtime_hint' => 'If enabled, overtime entries will require managerial approval before being included in payslips.',
-    'auto_calculate_overtime_hint' => 'If enabled, overtime will be calculated automatically based on hours worked beyond standard hours.',
+    'auto_generate_time_entries_hint' =>
+      'If enabled, time entries will be automatically generated for employees based on their standard working hours and days.',
+    'require_approval_for_overtime_hint' =>
+      'If enabled, overtime entries will require managerial approval before being included in payslips.',
+    'auto_calculate_overtime_hint' =>
+      'If enabled, overtime will be calculated automatically based on hours worked beyond standard hours.',
     'company_information' => 'Company Information',
     'description' => 'Configure your payroll settings including pay periods, company details, and default rates.',
     'title' => 'Payroll Settings',
