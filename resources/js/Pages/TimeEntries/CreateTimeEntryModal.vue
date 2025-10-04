@@ -112,6 +112,27 @@ watch(
   }
 );
 
+// Watch for task selection to auto-fill start and end times
+watch(
+  () => form.task_id,
+  (newTaskId) => {
+    if (newTaskId && !props.timeEntry) {
+      // Find the selected task from the tasks array
+      const selectedTask = tasks.value.find(task => task.id === newTaskId);
+      
+      if (selectedTask) {
+        // Auto-fill start and end datetime from the task
+        if (selectedTask.start_datetime) {
+          form.start_datetime = selectedTask.start_datetime.slice(0, 16);
+        }
+        if (selectedTask.end_datetime) {
+          form.end_datetime = selectedTask.end_datetime.slice(0, 16);
+        }
+      }
+    }
+  }
+);
+
 // Watch for modal opening to load data and reset form
 watch(
   () => props.show,
