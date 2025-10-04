@@ -102,6 +102,21 @@ watch(
             </div>
           </DropdownLink>
 
+          <!-- Time Entries Link - Visible to employees, managers, and admins -->
+          <DropdownLink :href="route('time-entries.index')" :active="route().current('time-entries.*')">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              Time Entries
+            </div>
+          </DropdownLink>
+
           <DropdownLink :href="route('employee-profiles.index')" :active="route().current('employee-profiles.*')">
             <div class="flex items-center">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
