@@ -172,6 +172,11 @@ const handleToggleSidebarCollapse = () => {
                     >Dashboard</SidebarLink
                   >
                 </li>
+                <li v-if="hasRole('admin')">
+                  <SidebarLink :href="route('payroll.index')" :active="route().current('payroll.index')"
+                    >Payrolls</SidebarLink
+                  >
+                </li>
                 <li v-if="hasAnyRole(['admin', 'manager', 'employee'])">
                   <SidebarLink :href="route('time-entries.index')" :active="route().current('time-entries.*')"
                     >Time Entries</SidebarLink
