@@ -333,6 +333,7 @@ const formatDateTime = (datetime) => {
         :empty-state-text="$t('words.no_tasks_found')"
         @bulk-action="handleBulkAction"
         @row-click="handleRowClick"
+        :except="['users','projects', 'statuses', 'priorities']"
       >
         <!-- Custom Task Name Cell with Description -->
         <template #cell-name="{ item }">

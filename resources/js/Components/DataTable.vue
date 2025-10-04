@@ -64,6 +64,11 @@ const props = defineProps({
     default: false,
   },
 
+  except: {
+    type: Array,
+    default: [],
+  },
+
   // Search configuration
   searchable: {
     type: Boolean,
@@ -405,6 +410,7 @@ const applyFilters = () => {
     preserveState: true,
     preserveScroll: true,
     replace: true,
+    except: props.except,
   });
 };
 
