@@ -1307,7 +1307,7 @@ sail artisan queue:work
 # View logs in real-time
 sail artisan pail
 
-# Generate IDE helper files
+# Generate IDE helper files (Soon)
 sail artisan ide-helper:generate
 
 # Run code style fixer
@@ -1448,4 +1448,4 @@ sail artisan optimize:clear
 
 ---
 
-_Last Updated: Oktober 2025_
+_Last Updated: October 2025_
