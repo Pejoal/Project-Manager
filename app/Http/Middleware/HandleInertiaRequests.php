@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Diglactic\Breadcrumbs\Breadcrumbs;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -36,6 +37,15 @@ class HandleInertiaRequests extends Middleware
       ...parent::share($request),
       'user.can' => $user ? $user->getAllPermissions()->pluck('name')->toArray() : [],
       'user.roles' => $user ? $user->getRoleNames()->toArray() : [],
+      'breadcrumbs' => function () {
+        // Return an empty array if no breadcrumbs are defined for the route
+        try {
+          return Breadcrumbs::generate();
+        } catch (\Exception $e) {
+          return [];
+        }
+      },
+
       'ziggy' => fn() => [...(new Ziggy())->toArray(), 'location' => $request->url()],
     ];
   }

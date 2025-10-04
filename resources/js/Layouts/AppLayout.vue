@@ -1,6 +1,7 @@
 <script setup>
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
+import Breadcrumps from '@/Components/Breadcrumps.vue';
 import Navigation from '@/Components/Navigation/Navigation.vue';
 import ResponsiveNavigation from '@/Components/Navigation/ResponsiveNavigation.vue';
 import SettingsDropdown from '@/Components/Navigation/SettingsDropdown.vue';
@@ -95,6 +96,7 @@ const toggleDarkMode = () => {
           @toggle-dark-mode="toggleDarkMode"
         />
       </nav>
+      <Breadcrumps /> 
 
       <!-- Page Content -->
       <main class="pb-6">
