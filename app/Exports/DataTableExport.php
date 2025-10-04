@@ -59,6 +59,7 @@ class DataTableExport implements FromCollection, WithHeadings, WithMapping, With
       if (is_array($value)) {
         $value = $value[$k] ?? null;
       } elseif (is_object($value)) {
+        // This now automatically calls the accessor if the key matches, e.g., 'payment_method_text'
         $value = $value->$k ?? null;
       } else {
         return null;
@@ -74,6 +75,10 @@ class DataTableExport implements FromCollection, WithHeadings, WithMapping, With
 
   protected function formatValue($value, $key = '')
   {
+    // NOTE: The special-case logic for 'payment_method' and 'is_active' has been removed.
+    // The Eloquent accessors on the model now handle this translation logic,
+    // so this method can be much simpler and more generic.
+
     // Handle null values
     if ($value === null) {
       return '';

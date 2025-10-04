@@ -50,7 +50,7 @@ const columns = [
     textClass: 'text-green-600 dark:text-green-500',
   },
   {
-    key: 'payment_method',
+    key: 'payment_method_text',
     label: 'Payment Method',
     component: (item) => `
       <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100">
@@ -66,7 +66,7 @@ const columns = [
     textClass: 'text-gray-900 dark:text-gray-100',
   },
   {
-    key: 'is_active',
+    key: 'status_text', // <-- USE THE NEW ACCESSOR
     label: 'Status',
     component: (item) => `
       <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
