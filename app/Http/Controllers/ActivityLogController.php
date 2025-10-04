@@ -1,19 +1,30 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Spatie\Activitylog\Models\Activity;
+use App\Http\Resources\ActivityResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\User;
+use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
 {
   public function index(Request $request)
   {
-    // Get all activities with eager loading
+    // 1. Validate incoming filter requests
+    $request->validate([
+      'search' => 'nullable|string|max:255',
+      'subject_type' => 'nullable|string',
+      'causer_id' => 'nullable|integer|exists:users,id',
+      'event' => 'nullable|string|in:created,updated,deleted',
+      'per_page' => 'nullable|integer|min:1|max:100',
+    ]);
+
+    // 2. Start with the base query, eager-loading relationships for performance
     $query = Activity::with(['causer', 'subject'])->latest();
 
-    // Apply filters if needed
+    // 3. Apply filters based on request input
     if ($request->filled('subject_type')) {
       $query->where('subject_type', $request->subject_type);
     }
@@ -35,77 +46,34 @@ class ActivityLogController extends Controller
       });
     }
 
-    $perPage = $request->input('per_page', 25);
+    // 4. Paginate the results
+    $perPage = $request->input('per_page', 10);
     $activities = $query->paginate($perPage)->withQueryString();
 
-    // Transform activities for better display
-    $transformedActivities = $activities->getCollection()->map(function ($activity) {
-      return [
-        'id' => $activity->id,
-        'log_name' => $activity->log_name,
-        'description' => $activity->description,
-        'event' => $activity->event,
-        'subject_type' => $activity->subject_type ? class_basename($activity->subject_type) : null,
-        'subject_id' => $activity->subject_id,
-        'causer' => $activity->causer
-          ? [
-            'id' => $activity->causer->id,
-            'name' => $activity->causer->name,
-            'email' => $activity->causer->email,
-            'profile_photo_url' => $activity->causer->profile_photo_url,
-          ]
-          : null,
-        'properties' => $activity->properties,
-        'created_at' => $activity->created_at->toISOString(),
-        'updated_at' => $activity->updated_at->toISOString(),
-      ];
-    });
-
-    // Group activities by subject type for better organization
-    $groupedActivities = $transformedActivities->groupBy('subject_type');
-
-    // Get filter options
+    // 5. Prepare filter options for the frontend dropdowns
     $subjectTypes = Activity::select('subject_type')
       ->distinct()
       ->whereNotNull('subject_type')
       ->pluck('subject_type')
-      ->map(
-        fn($type) => [
-          'value' => $type,
-          'label' => class_basename($type),
-        ]
-      )
+      ->map(fn($type) => ['value' => $type, 'label' => class_basename($type)])
+      ->sortBy('label')
       ->values();
-
-    $users = User::select('id', 'name')->orderBy('name')->get();
 
     $events = Activity::select('event')
       ->distinct()
       ->whereNotNull('event')
       ->pluck('event')
-      ->map(
-        fn($event) => [
-          'value' => $event,
-          'label' => ucfirst($event),
-        ]
-      )
+      ->map(fn($event) => ['value' => $event, 'label' => ucfirst($event)])
       ->values();
 
+    // 6. Render the Inertia view, passing the transformed data and filters
     return Inertia::render('Activities/Index', [
-      'activities' => $groupedActivities,
-      'pagination' => [
-        'data' => $transformedActivities->values(),
-        'current_page' => $activities->currentPage(),
-        'last_page' => $activities->lastPage(),
-        'per_page' => $activities->perPage(),
-        'prev_page_url' => $activities->previousPageUrl(),
-        'next_page_url' => $activities->nextPageUrl(),
-        'total' => $activities->total(),
-      ],
+      // Use the API Resource to transform the paginated data
+      'activities' => ActivityResource::collection($activities),
       'filters' => $request->only(['search', 'subject_type', 'causer_id', 'event', 'per_page']),
       'filterOptions' => [
         'subject_types' => $subjectTypes,
-        'users' => $users,
+        'users' => User::select('id', 'name')->orderBy('name')->get(),
         'events' => $events,
       ],
     ]);
