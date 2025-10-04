@@ -228,7 +228,6 @@ class TaskController extends Controller
 
     $task = $project->tasks()->create($request->except(['assigned_to', 'project_slug']));
     $task->assignedTo()->sync($request->assigned_to);
-    event(new ActivityLogged(auth()->user(), 'created_task', 'Created a task', $task));
 
     // Send email notifications
     // if ($request->has('assigned_to')) {
@@ -293,7 +292,6 @@ class TaskController extends Controller
 
     $task->update($request->except('assigned_to'));
     $task->assignedTo()->sync($request->assigned_to);
-    event(new ActivityLogged(auth()->user(), 'updated_task', 'Updated a task', $task));
 
     // Send email notifications
     // if ($request->has('assigned_to')) {
@@ -313,7 +311,6 @@ class TaskController extends Controller
     }
 
     $task->delete();
-    event(new ActivityLogged(auth()->user(), 'deleted_task', 'Deleted a task', $task));
     return redirect()->route('tasks.index', $project);
   }
 
@@ -342,7 +339,6 @@ class TaskController extends Controller
           $task->update(['status_id' => $request->status_id]);
         });
         $message = trans('tasks.bulk_status_updated', ['count' => $tasks->count(), 'status' => $status->name]);
-        event(new ActivityLogged(auth()->user(), 'bulk_updated_task_status', $message, null));
         break;
 
       case 'update_priority':
@@ -351,7 +347,6 @@ class TaskController extends Controller
           $task->update(['priority_id' => $request->priority_id]);
         });
         $message = trans('tasks.bulk_priority_updated', ['count' => $tasks->count(), 'priority' => $priority->name]);
-        event(new ActivityLogged(auth()->user(), 'bulk_updated_task_priority', $message, null));
         break;
 
       case 'assign_users':
@@ -359,7 +354,6 @@ class TaskController extends Controller
           $task->assignedTo()->sync($request->user_ids);
         });
         $message = trans('tasks.bulk_assigned', ['count' => $tasks->count()]);
-        event(new ActivityLogged(auth()->user(), 'bulk_assigned_tasks', $message, null));
         break;
 
       case 'delete':
@@ -367,7 +361,6 @@ class TaskController extends Controller
           $task->delete();
         });
         $message = trans('tasks.bulk_deleted', ['count' => $tasks->count()]);
-        event(new ActivityLogged(auth()->user(), 'bulk_deleted_tasks', $message, null));
         break;
 
       default:

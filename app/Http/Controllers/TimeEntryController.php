@@ -391,7 +391,6 @@ class TimeEntryController extends Controller
       ]);
       $approvedCount++;
 
-      event(new ActivityLogged(auth()->user(), 'update_time_entry', 'Updated a time entry', $timeEntry));
     }
 
     return redirect()
@@ -442,7 +441,6 @@ class TimeEntryController extends Controller
           ]);
         });
         $message = trans('payroll.time_entries.bulk_approved', ['count' => $timeEntries->count()]);
-        event(new ActivityLogged(auth()->user(), 'bulk_approved_time_entries', $message, $timeEntries[0]));
         break;
 
       case 'reject':
@@ -460,7 +458,6 @@ class TimeEntryController extends Controller
           ]);
         });
         $message = trans('payroll.time_entries.bulk_rejected', ['count' => $timeEntries->count()]);
-        event(new ActivityLogged(auth()->user(), 'bulk_rejected_time_entries', $message, $timeEntries[0]));
         break;
 
       case 'delete':
@@ -468,7 +465,6 @@ class TimeEntryController extends Controller
           $entry->delete();
         });
         $message = trans('payroll.time_entries.bulk_deleted', ['count' => $timeEntries->count()]);
-        event(new ActivityLogged(auth()->user(), 'bulk_deleted_time_entries', $message, $timeEntries[0]));
         break;
 
       default:

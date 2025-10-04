@@ -61,7 +61,6 @@ class ProjectController extends Controller
     $project->clients()->sync($request->clients);
 
     // Log the activity
-    event(new ActivityLogged(auth()->user(), 'created_project', 'Created a new project', $project));
 
     session()->flash('flash.banner', 'Project created successfully!');
     session()->flash('flash.bannerStyle', 'success');
@@ -142,7 +141,6 @@ class ProjectController extends Controller
 
     $project->update($data);
     $project->clients()->sync($request->clients);
-    event(new ActivityLogged(auth()->user(), 'updated_project', 'Updated a project', $project));
 
     session()->flash('flash.banner', 'Project updated successfully!');
     session()->flash('flash.bannerStyle', 'success');
@@ -152,8 +150,6 @@ class ProjectController extends Controller
   public function destroy(Project $project)
   {
     $project->delete();
-    event(new ActivityLogged(auth()->user(), 'deleted_project', 'Deleted a project', $project));
-
     session()->flash('flash.banner', 'Project deleted successfully!');
     session()->flash('flash.bannerStyle', 'success');
     return redirect()->route('projects.index');

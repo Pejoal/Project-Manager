@@ -25,7 +25,6 @@ class PhaseController extends Controller
     ]);
 
     $phase = $project->phases()->create($request->all());
-    event(new ActivityLogged(auth()->user(), 'created_phase', 'Created a phase', $phase));
 
     return redirect()->route('phases.index', $project);
   }
@@ -61,7 +60,6 @@ class PhaseController extends Controller
     ]);
 
     $phase->update($request->all());
-    event(new ActivityLogged(auth()->user(), 'updated_phase', 'Updated a phase', $phase));
 
     return redirect()->route('phases.index', $project);
   }
@@ -73,7 +71,6 @@ class PhaseController extends Controller
     }
 
     $phase->delete();
-    event(new ActivityLogged(auth()->user(), 'deleted_phase', 'Deleted a phase', $phase));
     return redirect()->route('phases.index', $project);
   }
 

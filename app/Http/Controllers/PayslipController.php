@@ -268,7 +268,6 @@ class PayslipController extends Controller
           }
         });
         $message = trans('payroll.payslips.bulk_approved', ['count' => $payslips->count()]);
-        event(new ActivityLogged(auth()->user(), 'bulk_approved_payslips', $message, $payslips[0]));
         break;
 
       case 'mark_paid':
@@ -281,7 +280,6 @@ class PayslipController extends Controller
           }
         });
         $message = trans('payroll.payslips.bulk_marked_paid', ['count' => $payslips->count()]);
-        event(new ActivityLogged(auth()->user(), 'bulk_marked_payslips_paid', $message, $payslips[0]));
         break;
 
       default:

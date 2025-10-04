@@ -278,7 +278,6 @@ class EmployeeProfileController extends Controller
           $profile->update(['is_active' => true]);
         });
         $message = trans('payroll.employee_profiles.bulk_activated', ['count' => $profiles->count()]);
-        event(new ActivityLogged(auth()->user(), 'bulk_activated_employee_profiles', $message, null));
         break;
 
       case 'deactivate':
@@ -286,7 +285,6 @@ class EmployeeProfileController extends Controller
           $profile->update(['is_active' => false]);
         });
         $message = trans('payroll.employee_profiles.bulk_deactivated', ['count' => $profiles->count()]);
-        event(new ActivityLogged(auth()->user(), 'bulk_deactivated_employee_profiles', $message, null));
         break;
 
       case 'update_rate':
@@ -297,7 +295,6 @@ class EmployeeProfileController extends Controller
           'count' => $profiles->count(),
           'rate' => $request->hourly_rate,
         ]);
-        event(new ActivityLogged(auth()->user(), 'bulk_updated_employee_profile_rates', $message, null));
         break;
 
       default:
