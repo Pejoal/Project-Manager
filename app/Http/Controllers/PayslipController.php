@@ -24,7 +24,7 @@ class PayslipController extends Controller
       'status' => 'nullable|string|in:draft,approved,paid',
       'pay_period_start' => 'nullable|date',
       'pay_period_end' => 'nullable|date|after_or_equal:pay_period_start',
-      'per_page' => 'nullable|integer|min:1|max:500',
+      'per_page' => 'nullable|integer|min:1|max:250',
       'sort_by' => 'nullable|string|in:created_at,pay_period_start,pay_period_end,gross_pay,net_pay',
       'sort_direction' => 'nullable|string|in:asc,desc',
     ]);

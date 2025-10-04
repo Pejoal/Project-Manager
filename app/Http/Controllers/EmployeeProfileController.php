@@ -19,7 +19,7 @@ class EmployeeProfileController extends Controller
       'search' => 'nullable|string|max:255',
       'status' => 'nullable|string|in:active,inactive',
       'payment_method' => 'nullable|string|in:bank_transfer,cash,check',
-      'per_page' => 'nullable|integer|min:1|max:500',
+      'per_page' => 'nullable|integer|min:1|max:250',
       'sort_by' => 'nullable|string|in:created_at,hire_date,base_hourly_rate',
       'sort_direction' => 'nullable|string|in:asc,desc',
     ]);

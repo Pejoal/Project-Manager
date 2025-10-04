@@ -29,7 +29,7 @@ class TaskController extends Controller
       'projects' => 'nullable|array',
       'projects.*' => 'integer|exists:projects,id',
       'assigned_to_me' => 'nullable|string|in:true,false',
-      'per_page' => 'nullable|integer|min:1|max:500',
+      'per_page' => 'nullable|integer|min:1|max:250',
       'sort_by' =>
         'nullable|string|in:name,description,created_at,start_datetime,end_datetime,status,priority,project,assigned_to',
       'sort_direction' => 'nullable|string|in:asc,desc',

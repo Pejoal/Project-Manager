@@ -24,7 +24,7 @@ class TimeEntryController extends Controller
       'status' => 'nullable|string|in:pending,approved',
       'date_from' => 'nullable|date',
       'date_to' => 'nullable|date|after_or_equal:date_from',
-      'per_page' => 'nullable|integer|min:1|max:500',
+      'per_page' => 'nullable|integer|min:1|max:250',
       'sort_by' => 'nullable|string|in:start_datetime,end_datetime,hours_worked,gross_amount,created_at',
       'sort_direction' => 'nullable|string|in:asc,desc',
     ]);
