@@ -29,7 +29,7 @@ class TaskController extends Controller
       'projects' => 'nullable|array',
       'projects.*' => 'integer|exists:projects,id',
       'assigned_to_me' => 'nullable|string|in:true,false',
-      'per_page' => 'nullable|integer|min:1|max:100',
+      'per_page' => 'nullable|integer|min:1|max:500',
       'sort_by' =>
         'nullable|string|in:name,description,created_at,start_datetime,end_datetime,status,priority,project,assigned_to',
       'sort_direction' => 'nullable|string|in:asc,desc',
@@ -177,7 +177,7 @@ class TaskController extends Controller
       $this->applyFilters($query, $request);
     }
 
-    $perPage = $request->input('per_page', 15);
+    $perPage = $request->input('per_page', 10);
     $tasks = $query->paginate($perPage)->appends($request->except('page'));
 
     if ($request->has('search') && !empty($request->search)) {

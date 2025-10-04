@@ -77,7 +77,7 @@ const props = defineProps({
   // Pagination
   perPageOptions: {
     type: Array,
-    default: () => [10, 25, 50, 100],
+    default: () => [10, 25, 50, 100, 250, 500],
   },
 
   // Table configuration
