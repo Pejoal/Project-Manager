@@ -159,7 +159,7 @@ const handleToggleSidebarCollapse = () => {
             </li>
 
             <!-- Payroll Dropdown (Visible to admin and manager) -->
-            <li v-if="hasAnyRole(['admin', 'manager'])">
+            <li>
               <SidebarDropdown
                 @toggled="handleToggleSidebarCollapse"
                 title="Payroll"

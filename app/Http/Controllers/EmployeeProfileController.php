@@ -99,7 +99,12 @@ class EmployeeProfileController extends Controller
       'termination_date' => 'nullable|date|after:hire_date',
     ]);
 
-    $profile = EmployeeProfile::create($request->all());
+    EmployeeProfile::create($request->all());
+    // check if user has no roles then assign employee role
+    $user = User::find($request->user_id);
+    if ($user && $user->getRoleNames()->isEmpty()) {
+      $user->assignRole('employee');
+    }
 
     return redirect()
       ->route('employee-profiles.index')
