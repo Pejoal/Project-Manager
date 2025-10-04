@@ -10,6 +10,7 @@ use App\Models\PayrollSettings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf; // Import the PDF facade
 
 class PayslipController extends Controller
 {
@@ -291,16 +292,26 @@ class PayslipController extends Controller
 
   public function downloadPdf(Payslip $payslip)
   {
-    $payslip->load(['user.employeeProfile']);
+    // Eager load all necessary relationships for the PDF view.
+    $payslip->load(['user.employeeProfile', 'generatedBy', 'approvedBy']);
 
-    // Generate PDF using a PDF library (e.g., dompdf, tcpdf)
-    // This is a placeholder for PDF generation
-    return response()->json(
-      [
-        'message' => __('payroll.payslips.pdf_generation_not_implemented'),
-      ],
-      501
-    );
+    // Get the company settings for the PDF header/footer.
+    $settings = PayrollSettings::first();
+
+    // Prepare the data array to pass to the view.
+    $data = [
+      'payslip' => $payslip,
+      'settings' => $settings,
+    ];
+
+    // Load the Blade view, passing the data to it.
+    $pdf = Pdf::loadView('pdfs.payslip', $data);
+
+    // Set a dynamic, user-friendly filename for the download.
+    $filename = 'Lohnabrechnung-' . $payslip->payslip_number . '.pdf';
+
+    // Stream the generated PDF to the user's browser for download.
+    return $pdf->download($filename);
   }
 
   protected function generatePayslipForUser(User $user, string $startDate, string $endDate, string $payDate): ?Payslip

@@ -26,6 +26,7 @@ return [
   'search_tasks' => 'Search by name or description',
   'select_project' => 'Select Project',
   'select_task' => 'Select Task',
+  'download' => 'Download',
 
   // Navigation
   'dashboard' => 'Dashboard',

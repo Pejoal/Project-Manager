@@ -344,10 +344,10 @@ const approvePayslip = (payslipId) => {
               {{ $t('words.view') }}
             </Link>
             <Link
-              :href="route('payslips.download', item.id)"
+              :href="route('payslips.download-pdf', item.id)"
               class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
             >
-              {{ $t('payroll.payslips.download') }}
+              {{ $t('words.download') }}
             </Link>
             <button
               v-if="canGeneratePayslips && item.status === 'draft'"
