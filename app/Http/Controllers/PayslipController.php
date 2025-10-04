@@ -102,12 +102,19 @@ class PayslipController extends Controller
       'pay_period_end' => 'required|date|after:pay_period_start',
       'pay_date' => 'required|date|after_or_equal:pay_period_end',
     ]);
-
+    $isThereErrors = false;
     $users = User::with('employeeProfile')->whereIn('id', $request->user_ids)->get();
     $generatedCount = 0;
-
     foreach ($users as $user) {
       if (!$user->employeeProfile || !$user->employeeProfile->isActiveEmployee()) {
+        $isThereErrors = true;
+        if ($user->employeeProfile) {
+          session()->flash('flash.banner', 'Skipping ' . $user->name . ' - Employee is not active.');
+          session()->flash('flash.bannerStyle', 'danger');
+        } else {
+          session()->flash('flash.banner', 'Skipping ' . $user->name . ' - No employee profile found.');
+          session()->flash('flash.bannerStyle', 'danger');
+        }
         continue;
       }
 
@@ -118,6 +125,9 @@ class PayslipController extends Controller
         ->first();
 
       if ($existingPayslip) {
+        session()->flash('flash.banner', 'Payslip already exists for ' . $user->name . ' for the selected period.');
+        session()->flash('flash.bannerStyle', 'danger');
+        $isThereErrors = true;
         continue;
       }
 
@@ -133,9 +143,18 @@ class PayslipController extends Controller
       }
     }
 
-    return redirect()
-      ->route('payslips.index')
-      ->with('flash.banner', __('payroll.payslips.generated_successfully', ['count' => $generatedCount]));
+    if ($isThereErrors && $generatedCount > 0) {
+      session()->flash('flash.banner', __('payroll.payslips.generated_with_errors', ['count' => $generatedCount]));
+      session()->flash('flash.bannerStyle', 'success');
+    } elseif ($isThereErrors && $generatedCount === 0) {
+      session()->flash('flash.banner', __('payroll.payslips.no_payslips_generated'));
+      session()->flash('flash.bannerStyle', 'danger');
+      return redirect()->back();
+    } else {
+      session()->flash('flash.bannerStyle', 'success');
+      session()->flash('flash.banner', __('payroll.payslips.generated_successfully', ['count' => $generatedCount]));
+    }
+    return redirect()->route('payslips.index');
   }
 
   public function show(Payslip $payslip)

@@ -1,5 +1,6 @@
 <script setup>
 import DataTable from '@/Components/DataTable.vue';
+import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -21,6 +22,7 @@ const generateForm = useForm({
   user_ids: [],
   pay_period_start: '',
   pay_period_end: '',
+  pay_date: new Date().toISOString().slice(0, 10), // Default to today
 });
 
 // Column configuration for DataTable
@@ -293,6 +295,13 @@ const approvePayslip = (payslipId) => {
           <div>
             <InputLabel for="pay_period_end" value="Pay Period End" />
             <TextInput id="pay_period_end" v-model="generateForm.pay_period_end" type="date" class="w-full" required />
+          </div>
+
+          <div>
+            <InputLabel for="pay_date" value="Pay Date" />
+            <TextInput id="pay_date" v-model="generateForm.pay_date" type="date" class="w-full" required />
+
+            <InputError :message="generateForm.errors.pay_date" class="mt-2" />
           </div>
         </div>
         <div class="flex space-x-3">

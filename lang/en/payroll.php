@@ -12,6 +12,9 @@ return [
 
   // Time Entries
   'time_entries' => [
+    'bulk_approved' => ':count time entries approved successfully!',
+    'bulk_rejected' => ':count time entries rejected successfully!',
+    'bulk_deleted' => ':count time entries deleted successfully!',
     'generate_from_tasks' => 'Auto Generate Time Entries',
     'user' => 'User',
     'title' => 'Time Entries',
@@ -85,6 +88,8 @@ return [
 
   // Payslips
   'payslips' => [
+    'generated_with_errors' => ':count payslips generated with some errors. Please review the messages.',
+    'no_payslips_generated' => 'No payslips were generated. Please review the messages.',
     'title' => 'Payslips',
     'generate' => 'Generate Payslips',
     'generate_bulk' => 'Generate Bulk Payslips',
@@ -262,6 +267,7 @@ return [
     'add_time_entry' => 'Add Time Entry',
     'generate_payslips' => 'Generate Payslips',
     'view_all' => 'View All',
+    'generate' => 'Generate',
   ],
 
   // Reports (Reports.vue)
