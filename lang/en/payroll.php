@@ -51,6 +51,7 @@ return [
 
   // Employee Profiles
   'employee_profiles' => [
+    'hourly' => 'Hourly',
     'overtime_multiplier_hint' => 'E.g., 1.5 for "time and a half", 2 for "double time"',
     'overtime_multiplier' => 'Overtime Multiplier',
     'compensation' => 'Compensation',
