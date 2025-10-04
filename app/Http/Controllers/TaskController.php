@@ -114,11 +114,21 @@ class TaskController extends Controller
 
         return $meilisearch->search($query, $options);
       })->query(function (Builder $query) use ($request) {
-        $query->with(['status', 'priority', 'assignedTo', 'project:id,slug,name']);
+        $query->with([
+          'status:id,name,color', // Select only needed columns from relationships
+          'priority:id,name,color',
+          'assignedTo:id,name',
+          'project:id,slug,name',
+        ]);
         $this->applyFilters($query, $request);
       });
     } else {
-      $query = Task::with(['status', 'priority', 'assignedTo', 'project:id,slug,name']);
+      $query = Task::with([
+        'status:id,name,color',
+        'priority:id,name,color',
+        'assignedTo:id,name',
+        'project:id,slug,name',
+      ]);
       $this->applyFilters($query, $request);
     }
 
