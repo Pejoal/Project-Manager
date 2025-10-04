@@ -2,10 +2,12 @@
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Project extends Model
 {
-  use HasFactory;
+  use HasFactory, LogsActivity;
 
   protected $guarded = [];
 
@@ -37,5 +39,14 @@ class Project extends Model
   public function priority()
   {
     return $this->belongsTo(ProjectPriority::class);
+  }
+
+  public function getActivitylogOptions(): LogOptions
+  {
+    return LogOptions::defaults()
+      ->logOnly(['name', 'description', 'slug', 'status_id', 'priority_id', 'start_date', 'end_date'])
+      ->logOnlyDirty()
+      ->dontSubmitEmptyLogs()
+      ->setDescriptionForEvent(fn(string $eventName) => "Project has been {$eventName}");
   }
 }

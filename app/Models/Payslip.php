@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Payslip extends Model
 {
-  use HasFactory;
+  use HasFactory, LogsActivity;
 
   protected $fillable = [
     'user_id',
@@ -148,5 +150,14 @@ class Payslip extends Model
       // Recalculate net pay when saving
       $payslip->net_pay = $payslip->calculateNetPay();
     });
+  }
+
+  public function getActivitylogOptions(): LogOptions
+  {
+    return LogOptions::defaults()
+      ->logOnly(['user_id', 'pay_period_start', 'pay_period_end', 'status', 'gross_total_pay', 'net_pay'])
+      ->logOnlyDirty()
+      ->dontSubmitEmptyLogs()
+      ->setDescriptionForEvent(fn(string $eventName) => "Payslip has been {$eventName}");
   }
 }

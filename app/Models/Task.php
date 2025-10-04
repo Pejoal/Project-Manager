@@ -5,10 +5,12 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Task extends Model
 {
-  use HasFactory, Searchable;
+  use HasFactory, Searchable, LogsActivity;
 
   protected $guarded = [];
 
@@ -74,5 +76,23 @@ class Task extends Model
   protected static function sanitize($input)
   {
     return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+  }
+
+  public function getActivitylogOptions(): LogOptions
+  {
+    return LogOptions::defaults()
+      ->logOnly([
+        'name',
+        'description',
+        'status_id',
+        'priority_id',
+        'phase_id',
+        'milestone_id',
+        'start_datetime',
+        'end_datetime',
+      ])
+      ->logOnlyDirty()
+      ->dontSubmitEmptyLogs()
+      ->setDescriptionForEvent(fn(string $eventName) => "Task has been {$eventName}");
   }
 }

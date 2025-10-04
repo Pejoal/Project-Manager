@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.9",
         "mcamara/laravel-localization": "^2.2",
         "meilisearch/meilisearch-php": "^1.12",
+        "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-permission": "^6.21",
         "tightenco/ziggy": "^2.0"
     },

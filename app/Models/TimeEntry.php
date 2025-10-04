@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class TimeEntry extends Model
 {
-  use HasFactory;
+  use HasFactory, LogsActivity;
 
   protected $fillable = [
     'user_id',
@@ -121,5 +123,14 @@ class TimeEntry extends Model
         $timeEntry->gross_amount = $timeEntry->calculateGrossAmount();
       }
     });
+  }
+
+  public function getActivitylogOptions(): LogOptions
+  {
+    return LogOptions::defaults()
+      ->logOnly(['user_id', 'task_id', 'project_id', 'start_datetime', 'end_datetime', 'hours_worked', 'hourly_rate', 'gross_amount', 'is_approved'])
+      ->logOnlyDirty()
+      ->dontSubmitEmptyLogs()
+      ->setDescriptionForEvent(fn(string $eventName) => "Time entry has been {$eventName}");
   }
 }

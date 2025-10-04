@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class EmployeeProfile extends Model
 {
-  use HasFactory;
+  use HasFactory, LogsActivity;
 
   protected $fillable = [
     'user_id',
@@ -104,5 +106,14 @@ class EmployeeProfile extends Model
         $employeeProfile->employee_id = 'EMP' . str_pad(static::max('id') + 1, 4, '0', STR_PAD_LEFT);
       }
     });
+  }
+
+  public function getActivitylogOptions(): LogOptions
+  {
+    return LogOptions::defaults()
+      ->logOnly(['employee_id', 'base_hourly_rate', 'overtime_rate_multiplier', 'is_active', 'hire_date', 'termination_date', 'payment_method'])
+      ->logOnlyDirty()
+      ->dontSubmitEmptyLogs()
+      ->setDescriptionForEvent(fn(string $eventName) => "Employee profile has been {$eventName}");
   }
 }
