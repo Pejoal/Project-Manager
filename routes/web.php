@@ -165,10 +165,10 @@ Route::group(
         );
 
         // Payslips Management
-        Route::resource('payslips', PayslipController::class)->except(['create', 'edit', 'update']);
         Route::get('payslips/generate-bulk', [PayslipController::class, 'generateBulk'])->name(
           'payslips.generate-bulk'
         );
+        Route::resource('payslips', PayslipController::class)->except(['create', 'edit', 'update']);
         Route::post('payslips/generate', [PayslipController::class, 'generate'])->name('payslips.generate');
         Route::patch('payslips/{payslip}/approve', [PayslipController::class, 'approve'])->name('payslips.approve');
         Route::patch('payslips/{payslip}/mark-paid', [PayslipController::class, 'markAsPaid'])->name(
