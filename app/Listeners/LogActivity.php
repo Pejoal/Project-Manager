@@ -12,8 +12,8 @@ class LogActivity
       'user_id' => $event->user->id,
       'type' => $event->type,
       'description' => $event->description,
-      'subject_id' => $event->subject->id,
-      'subject_type' => get_class($event->subject),
+      'subject_id' => $event->subject ? $event->subject->id : null,
+      'subject_type' => $event->subject ? get_class($event->subject) : null,
     ]);
   }
 }

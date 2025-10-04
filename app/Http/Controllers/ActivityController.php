@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use Spatie\Activitylog\Models\Activity;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -10,19 +10,19 @@ class ActivityController extends Controller
   public function index(Request $request)
   {
     // Get all activities with eager loading
-    $query = Activity::with('causer', 'subject')->latest();
+    $query = Activity::with('user', 'subject')->latest();
 
     // Apply filters if needed
     if ($request->filled('subject_type')) {
       $query->where('subject_type', $request->subject_type);
     }
 
-    if ($request->filled('causer_id')) {
-      $query->where('causer_id', $request->causer_id);
+    if ($request->filled('user_id')) {
+      $query->where('user_id', $request->user_id);
     }
 
-    if ($request->filled('event')) {
-      $query->where('event', $request->event);
+    if ($request->filled('type')) {
+      $query->where('type', $request->type);
     }
 
     $activities = $query->paginate(100);
