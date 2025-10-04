@@ -5,7 +5,7 @@ use App\Models\Activity;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ActivityController extends Controller
+class ActivityLogController extends Controller
 {
   public function index(Request $request)
   {

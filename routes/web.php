@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
@@ -60,7 +60,7 @@ Route::group(
       Route::put('/api/settings', [SettingsController::class, 'updateSettings']);
 
       Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
-      Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+      Route::get('/activities', [ActivityLogController::class, 'index'])->name('activities.index');
 
       // Export Route
       Route::post('/export', [ExportController::class, 'export'])->name('export.data');
