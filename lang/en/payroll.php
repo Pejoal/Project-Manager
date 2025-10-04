@@ -140,6 +140,18 @@ return [
 
   // Settings
   'settings' => [
+    'monthly' => 'Monthly',
+    'bi_weekly' => 'Bi-Weekly',
+    'weekly' => 'Weekly',
+    'pay_day_hint' => 'Day of the month to process payroll (e.g., 25 for monthly, 15 and 30 for bi-weekly)',
+    'working_hours' => 'Working Hours',
+    'break_duration' => 'Break Duration',
+    'minutes' => 'minutes',
+    'auto_generate_time_entries_hint' => 'If enabled, time entries will be automatically generated for employees based on their standard working hours and days.',
+    'require_approval_for_overtime_hint' => 'If enabled, overtime entries will require managerial approval before being included in payslips.',
+    'auto_calculate_overtime_hint' => 'If enabled, overtime will be calculated automatically based on hours worked beyond standard hours.',
+    'company_information' => 'Company Information',
+    'description' => 'Configure your payroll settings including pay periods, company details, and default rates.',
     'title' => 'Payroll Settings',
     'company_name' => 'Company Name',
     'company_address' => 'Company Address',
@@ -188,6 +200,8 @@ return [
     'applies_to' => 'Applies To',
     'priority' => 'Priority',
     'description' => 'Description',
+    'note' => 'Note: Higher priority taxes are applied first.',
+    'activation_note' => 'Note: Activating or deactivating a tax will affect future payslips only.',
     'types' => [
       'flat' => 'Flat Rate',
       'percentage' => 'Percentage',
@@ -272,6 +286,11 @@ return [
 
   // Reports (Reports.vue)
   'reports' => [
+    'total_employees' => 'Total Employees',
+    'avg_hourly_rate' => 'Avg. Hourly Rate',
+    'report_data' => 'Report Data',
+    'metric' => 'Metric',
+    'value' => 'Value',
     'employees_count' => 'Employees Count',
     'hours_breakdown' => 'Hours Breakdown',
     'title' => 'Payroll Reports',
@@ -316,7 +335,7 @@ return [
   'employees' => [
     'name' => 'Employee Name',
     'employee_id' => 'Employee ID',
-    'base_hourly_rate' => 'Base Hourly Rate', 
+    'base_hourly_rate' => 'Base Hourly Rate',
     'overtime_rate_multiplier' => 'Overtime Rate Multiplier',
     'standard_hours_per_day' => 'Standard Hours per Day',
     'standard_hours_per_week' => 'Standard Hours per Week',
@@ -325,7 +344,6 @@ return [
     'status' => 'Status',
     'title' => 'Employees',
   ],
-
 
   // Dashboard (Dashboard.vue)
   'dashboard' => [
@@ -353,5 +371,4 @@ return [
     'hours_breakdown' => 'Hours Breakdown',
     'pending_items' => 'Pending Items',
   ],
-
 ];

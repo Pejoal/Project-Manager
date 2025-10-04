@@ -6,6 +6,7 @@ import { ref } from 'vue';
 
 const props = defineProps({
   payslip: Object,
+  settings: Object, // Accept the new settings prop
 });
 
 const isDownloading = ref(false);
@@ -76,7 +77,7 @@ const downloadPayslip = async () => {
         </div>
         <div class="flex items-center space-x-4">
           <Link :href="route('payslips.index')" class="text-sm text-gray-600 dark:text-gray-400 hover:underline">
-            &larr; Zurück zur Übersicht
+            ← Zurück zur Übersicht
           </Link>
           <PrimaryButton @click="downloadPayslip" :disabled="isDownloading">
             <svg
@@ -115,12 +116,10 @@ const downloadPayslip = async () => {
             </div>
             <div class="text-sm text-right">
               <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100">
-                {{ payslip.metadata?.company_name ?? 'Your Company' }}
+                {{ settings?.company_name ?? 'Your Company' }}
               </h3>
-              <p class="text-gray-600 dark:text-gray-400">{{ payslip.metadata?.company_address ?? 'Your Address' }}</p>
-              <p class="text-gray-600 dark:text-gray-400">
-                Steuernummer: {{ payslip.metadata?.company_tax_id ?? 'N/A' }}
-              </p>
+              <p class="text-gray-600 dark:text-gray-400">{{ settings?.company_address ?? 'Your Address' }}</p>
+              <p class="text-gray-600 dark:text-gray-400">Steuernummer: {{ settings?.company_tax_id ?? 'N/A' }}</p>
             </div>
           </div>
 

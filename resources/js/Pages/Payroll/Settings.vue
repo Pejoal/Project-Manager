@@ -96,7 +96,7 @@ const inactiveTaxes = computed(() => {
 <template>
   <Head :title="trans('payroll.settings.title')" />
 
-  <div class="py-12">
+  <div class="py-2">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
       <!-- Header -->
       <div>
@@ -224,7 +224,7 @@ const inactiveTaxes = computed(() => {
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <InputLabel for="standard_start_time" :value="trans('payroll.settings.start_time')" />
+                <InputLabel for="standard_start_time" :value="trans('words.start_time')" />
                 <TextInput
                   id="standard_start_time"
                   v-model="form.standard_start_time"
@@ -236,7 +236,7 @@ const inactiveTaxes = computed(() => {
               </div>
 
               <div>
-                <InputLabel for="standard_end_time" :value="trans('payroll.settings.end_time')" />
+                <InputLabel for="standard_end_time" :value="trans('words.end_time')" />
                 <TextInput
                   id="standard_end_time"
                   v-model="form.standard_end_time"

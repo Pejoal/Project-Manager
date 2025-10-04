@@ -300,7 +300,7 @@ const getStatusBadgeClass = (status) => {
 <template>
   <Head :title="$t('payroll.dashboard.title')" />
 
-  <div class="py-12">
+  <div class="py-2">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
       <!-- Header -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">

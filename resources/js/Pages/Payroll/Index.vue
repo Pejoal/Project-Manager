@@ -378,7 +378,7 @@ const handleRowClick = (employee) => {
       <!-- Quick Actions -->
       <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          {{ $t('payroll.quick_actions') }}
+          {{ $t('words.quick_actions') }}
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link

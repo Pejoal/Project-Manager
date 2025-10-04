@@ -22,11 +22,14 @@ return [
   'no_tasks_found' => 'No tasks found.',
   'start' => 'Start',
   'end' => 'End',
+  'start_time' => 'Start Time',
+  'end_time' => 'End Time',
   'log_time' => 'Log Time',
   'search_tasks' => 'Search by name or description',
   'select_project' => 'Select Project',
   'select_task' => 'Select Task',
   'download' => 'Download',
+  'quick_actions' => 'Quick Actions',
 
   // Navigation
   'dashboard' => 'Dashboard',
