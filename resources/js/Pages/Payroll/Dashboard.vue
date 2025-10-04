@@ -707,7 +707,7 @@ const getStatusBadgeClass = (status) => {
               {{ $t('payroll.dashboard.quick_actions_description') }}
             </p>
           </div>
-          <CreateTimeEntryModal :show="showCreateTimeEntryModal" />
+          <CreateTimeEntryModal v-on:close="showCreateTimeEntryModal = false" :show="showCreateTimeEntryModal" />
 
           <div class="flex flex-wrap gap-3">
             <button

@@ -24,6 +24,8 @@ return [
   'end' => 'End',
   'log_time' => 'Log Time',
   'search_tasks' => 'Search by name or description',
+  'select_project' => 'Select Project',
+  'select_task' => 'Select Task',
 
   // Navigation
   'dashboard' => 'Dashboard',

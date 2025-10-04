@@ -343,6 +343,9 @@ return [
     'quick_actions_description' => 'Use the buttons below for quick access to common payroll tasks.',
     'overview_description' => 'A quick snapshot of your payroll system status and recent activities.',
     'vs_last_month' => 'vs Last Month',
+    'payroll_comparison' => 'Payroll Comparison',
+    'hours_breakdown' => 'Hours Breakdown',
+    'pending_items' => 'Pending Items',
   ],
 
 ];
