@@ -674,7 +674,7 @@ const getStatusBadgeClass = (status) => {
                     <span
                       :class="['px-2 py-0.5 text-xs font-medium rounded-full', getStatusBadgeClass(payslip.status)]"
                     >
-                      {{ $t(`payroll.payslips.status.${payslip.status}`) }}
+                      {{ $t(`payroll.payslips.${payslip.status}`) }}
                     </span>
                   </div>
                   <p class="text-sm text-gray-600 dark:text-gray-300">
