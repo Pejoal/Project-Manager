@@ -67,6 +67,7 @@ const columns = [
   },
   {
     key: 'project',
+    exportKey: 'project.name',
     label: 'Project',
     sortable: true,
     component: (item) => `
@@ -76,7 +77,8 @@ const columns = [
     `,
   },
   {
-    key: 'status.name',
+    key: 'status',
+    exportKey: 'status.name',
     label: 'Status',
     sortable: true,
     component: (item) => `
@@ -86,7 +88,8 @@ const columns = [
     `,
   },
   {
-    key: 'priority.name',
+    key: 'priority',
+    exportKey: 'priority.name',
     label: 'Priority',
     sortable: true,
     component: (item) => `

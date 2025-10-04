@@ -318,7 +318,7 @@ const exportData = async (format) => {
       format: format,
       data: exportDataPayload,
       columns: exportColumns.map((col) => ({
-        key: col.key,
+        key: col?.exportKey || col?.key,
         label: col.label,
       })),
       filename: props.exportFilename,
@@ -410,6 +410,9 @@ const applyFilters = () => {
   }
 
   // Use Inertia visit instead of form.get to handle route parameters properly
+  // console.log(params);
+  
+  // if (!props.routeName) return;
   router.visit(route(props.routeName, props.routeParams), {
     method: 'get',
     data: params,
