@@ -4,6 +4,9 @@ return [
   // General
   'payroll' => 'Payroll',
   'payroll_system' => 'Payroll System',
+  'manage_time_entries' => 'View and manage time entries.',
+  'generate_payslips_description' => 'Process and review payslips.',
+  'view_reports_description' => 'Generate and view payroll reports.',
 
   // Time Entries
   'time_entries' => [
@@ -222,6 +225,9 @@ return [
     'total_hours' => 'Total Hours',
     'total_earnings' => 'Total Earnings',
     'pending_entries' => 'Pending Entries',
+    'pending' => 'Pending',
+    'time_entries' => 'Time Entries',
+    'active_employees' => 'Active Employees',
   ],
 
   // Filters & Search
@@ -251,6 +257,9 @@ return [
     'import' => 'Import',
     'select_all' => 'Select All',
     'deselect_all' => 'Deselect All',
+    'add_time_entry' => 'Add Time Entry',
+    'generate_payslips' => 'Generate Payslips',
+    'view_all' => 'View All',
   ],
 
   // Reports (Reports.vue)
@@ -304,6 +313,7 @@ return [
     'payment_method' => 'Payment Method',
     'bank_account_number' => 'Bank Account Number',
     'status' => 'Status',
+    'title' => 'Employees',
   ],
 
 
@@ -323,12 +333,12 @@ return [
     'view_reports' => 'Generate and view payroll reports.',
     'upcoming_payslips' => 'Upcoming Payslips',
     'recent_time_entries' => 'Recent Time Entries',
+    'recent_payslips' => 'Recent Payslips',
+    'no_recent_payslips' => 'No recent payslips available.',
+    'need_help' => 'Need Help?',
+    'quick_actions_description' => 'Use the buttons below for quick access to common payroll tasks.',
+    'overview_description' => 'A quick snapshot of your payroll system status and recent activities.',
+    'vs_last_month' => 'vs Last Month',
   ],
 
-  // Add these to the root of your language file
-  'words' => [
-    'active' => 'Active',
-    'inactive' => 'Inactive',
-    // ... any other general words
-  ],
 ];
