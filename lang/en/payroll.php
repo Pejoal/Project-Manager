@@ -150,6 +150,7 @@ return [
 
   // Settings
   'settings' => [
+    'pay_period_settings' => 'Pay Period Settings',
     'monthly' => 'Monthly',
     'bi_weekly' => 'Bi-Weekly',
     'weekly' => 'Weekly',
@@ -200,6 +201,8 @@ return [
 
   // Tax Configurations
   'tax_configurations' => [
+    'active_taxes' => 'Active Taxes',
+    'inactive_taxes' => 'Inactive Taxes',
     'title' => 'Tax Configurations',
     'create' => 'Create Tax Configuration',
     'edit' => 'Edit Tax Configuration',
