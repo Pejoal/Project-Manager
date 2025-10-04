@@ -26,7 +26,7 @@ watch(
 <template>
   <!-- Navigation Links -->
   <div class="hidden space-x-2 sm:-my-px sm:ms-4 md:flex">
-    <NavLink :href="route('dashboard')" :active="current.endsWith('dashboard') && route().current('dashboard')">
+    <NavLink :href="route('dashboard')" :active="current?.endsWith('dashboard') && route().current('dashboard')">
       {{ trans('words.dashboard') }}
     </NavLink>
     <NavLink :href="route('clients.index')" :active="route().current('clients.*')">
