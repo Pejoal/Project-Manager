@@ -31,6 +31,9 @@ return [
   'download' => 'Download',
   'quick_actions' => 'Quick Actions',
   'create_team' => 'Create Team',
+  'delete_team' => 'Delete Team',
+  'delete_team_warning' => 'Are you sure you want to delete this team? This action cannot be undone.',
+  'delete_team_confirmation' => 'Deleting a team will remove all its resources and data permanently.',
 
   // Navigation
   'dashboard' => 'Dashboard',
