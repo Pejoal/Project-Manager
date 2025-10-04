@@ -403,6 +403,12 @@ const applyFilters = () => {
     }
   });
 
+  // ADD THIS BLOCK TO SEND VISIBLE COLUMNS
+  if (props.columnToggle) {
+    const visible = Object.keys(visibleColumns.value).filter((key) => visibleColumns.value[key]);
+    params.columns = visible.join(',');
+  }
+
   // Use Inertia visit instead of form.get to handle route parameters properly
   router.visit(route(props.routeName, props.routeParams), {
     method: 'get',
