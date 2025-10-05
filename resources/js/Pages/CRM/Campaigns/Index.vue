@@ -305,12 +305,12 @@ const handleRowClick = (campaign) => {
             >
               {{ $t('words.edit') }}
             </button>
-            <Link
+            <!-- <Link
               :href="route('campaigns.report', item.id)"
               class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
             >
               {{ $t('crm.view_report') }}
-            </Link>
+            </Link> -->
           </div>
         </template>
       </DataTable>

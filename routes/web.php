@@ -279,6 +279,7 @@ Route::group(
         // Opportunity Management Routes
         Route::prefix('opportunities')->group(function () {
           Route::get('/', [OpportunityController::class, 'index'])->name('opportunities.index');
+          Route::get('/create', [OpportunityController::class, 'create'])->name('opportunities.create');
           Route::post('/', [OpportunityController::class, 'store'])->name('opportunities.store');
           Route::get('/{opportunity}', [OpportunityController::class, 'show'])->name('opportunities.show');
           Route::get('/{opportunity}/edit', [OpportunityController::class, 'edit'])->name('opportunities.edit');
