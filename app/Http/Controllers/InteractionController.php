@@ -17,7 +17,7 @@ class InteractionController extends Controller
 {
   public function index(Request $request)
   {
-    Gate::authorize('viewAny', Interaction::class);
+    // Gate::authorize('viewAny', Interaction::class);
 
     $interactions = Interaction::with(['user', 'interactable'])
       ->when($request->search, function ($query, $search) {
@@ -65,7 +65,7 @@ class InteractionController extends Controller
 
   public function create(Request $request)
   {
-    Gate::authorize('create', Interaction::class);
+    // Gate::authorize('create', Interaction::class);
 
     $users = User::select(['id', 'name'])->get();
 
@@ -91,7 +91,7 @@ class InteractionController extends Controller
 
   public function store(Request $request)
   {
-    Gate::authorize('create', Interaction::class);
+    // Gate::authorize('create', Interaction::class);
 
     $validated = $request->validate([
       'type' => 'required|in:call,email,meeting,note,sms,social_media,webinar,demo,other',
@@ -121,7 +121,7 @@ class InteractionController extends Controller
 
   public function show(Interaction $interaction)
   {
-    Gate::authorize('view', $interaction);
+    // Gate::authorize('view', $interaction);
 
     $interaction->load(['user', 'interactable']);
 
@@ -132,7 +132,7 @@ class InteractionController extends Controller
 
   public function edit(Interaction $interaction)
   {
-    Gate::authorize('update', $interaction);
+    // Gate::authorize('update', $interaction);
 
     $users = User::select(['id', 'name'])->get();
 
@@ -144,7 +144,7 @@ class InteractionController extends Controller
 
   public function update(Request $request, Interaction $interaction)
   {
-    Gate::authorize('update', $interaction);
+    // Gate::authorize('update', $interaction);
 
     $validated = $request->validate([
       'type' => 'required|in:call,email,meeting,note,sms,social_media,webinar,demo,other',
@@ -169,7 +169,7 @@ class InteractionController extends Controller
 
   public function destroy(Interaction $interaction)
   {
-    Gate::authorize('delete', $interaction);
+    // Gate::authorize('delete', $interaction);
 
     $interaction->delete();
 
@@ -178,7 +178,7 @@ class InteractionController extends Controller
 
   public function markFollowUpComplete(Interaction $interaction)
   {
-    Gate::authorize('update', $interaction);
+    // Gate::authorize('update', $interaction);
 
     $interaction->markFollowUpComplete();
 
@@ -190,7 +190,7 @@ class InteractionController extends Controller
 
   public function addToContact(Request $request, Contact $contact)
   {
-    Gate::authorize('create', Interaction::class);
+    // Gate::authorize('create', Interaction::class);
 
     $validated = $request->validate([
       'type' => 'required|in:call,email,meeting,note,sms,social_media,webinar,demo,other',
@@ -218,7 +218,7 @@ class InteractionController extends Controller
 
   public function analytics(Request $request)
   {
-    Gate::authorize('viewAny', Interaction::class);
+    // Gate::authorize('viewAny', Interaction::class);
 
     $dateFrom = $request->date_from ?? now()->subDays(30);
     $dateTo = $request->date_to ?? now();
@@ -273,7 +273,7 @@ class InteractionController extends Controller
 
   public function followUps(Request $request)
   {
-    Gate::authorize('viewAny', Interaction::class);
+    // Gate::authorize('viewAny', Interaction::class);
 
     $followUps = Interaction::with(['user', 'interactable'])
       ->pendingFollowUp()
@@ -298,7 +298,7 @@ class InteractionController extends Controller
 
   public function bulkAction(Request $request)
   {
-    Gate::authorize('viewAny', Interaction::class);
+    // Gate::authorize('viewAny', Interaction::class);
 
     $validated = $request->validate([
       'action' => 'required|in:mark_follow_up_complete,delete',
@@ -309,7 +309,7 @@ class InteractionController extends Controller
     $interactions = Interaction::whereIn('id', $validated['interaction_ids'])->get();
 
     foreach ($interactions as $interaction) {
-      Gate::authorize('update', $interaction);
+      // Gate::authorize('update', $interaction);
     }
 
     switch ($validated['action']) {

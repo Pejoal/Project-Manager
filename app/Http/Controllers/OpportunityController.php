@@ -13,7 +13,7 @@ class OpportunityController extends Controller
 {
   public function index(Request $request)
   {
-    Gate::authorize('viewAny', Opportunity::class);
+    // Gate::authorize('viewAny', Opportunity::class);
 
     $opportunities = Opportunity::with(['contact', 'assignedTo'])
       ->when($request->search, function ($query, $search) {
@@ -67,7 +67,7 @@ class OpportunityController extends Controller
 
   public function create()
   {
-    Gate::authorize('create', Opportunity::class);
+    // Gate::authorize('create', Opportunity::class);
 
     $users = User::select(['id', 'name'])->get();
     $contacts = Contact::select(['id', 'first_name', 'last_name', 'company'])->get();
@@ -80,7 +80,7 @@ class OpportunityController extends Controller
 
   public function store(Request $request)
   {
-    Gate::authorize('create', Opportunity::class);
+    // Gate::authorize('create', Opportunity::class);
 
     $validated = $request->validate([
       'name' => 'required|string|max:255',
@@ -106,7 +106,7 @@ class OpportunityController extends Controller
 
   public function show(Opportunity $opportunity)
   {
-    Gate::authorize('view', $opportunity);
+    // Gate::authorize('view', $opportunity);
 
     $opportunity->load([
       'contact',
@@ -124,7 +124,7 @@ class OpportunityController extends Controller
 
   public function edit(Opportunity $opportunity)
   {
-    Gate::authorize('update', $opportunity);
+    // Gate::authorize('update', $opportunity);
 
     $users = User::select(['id', 'name'])->get();
     $contacts = Contact::select(['id', 'first_name', 'last_name', 'company'])->get();
@@ -138,7 +138,7 @@ class OpportunityController extends Controller
 
   public function update(Request $request, Opportunity $opportunity)
   {
-    Gate::authorize('update', $opportunity);
+    // Gate::authorize('update', $opportunity);
 
     $validated = $request->validate([
       'name' => 'required|string|max:255',
@@ -165,7 +165,7 @@ class OpportunityController extends Controller
 
   public function destroy(Opportunity $opportunity)
   {
-    Gate::authorize('delete', $opportunity);
+    // Gate::authorize('delete', $opportunity);
 
     $opportunity->delete();
 
@@ -174,7 +174,7 @@ class OpportunityController extends Controller
 
   public function updateStage(Request $request, Opportunity $opportunity)
   {
-    Gate::authorize('update', $opportunity);
+    // Gate::authorize('update', $opportunity);
 
     $validated = $request->validate([
       'stage' => 'required|in:prospecting,qualification,needs_analysis,proposal,negotiation,closed_won,closed_lost',
@@ -193,7 +193,7 @@ class OpportunityController extends Controller
 
   public function win(Request $request, Opportunity $opportunity)
   {
-    Gate::authorize('update', $opportunity);
+    // Gate::authorize('update', $opportunity);
 
     $validated = $request->validate([
       'notes' => 'nullable|string',
@@ -209,7 +209,7 @@ class OpportunityController extends Controller
 
   public function lose(Request $request, Opportunity $opportunity)
   {
-    Gate::authorize('update', $opportunity);
+    // Gate::authorize('update', $opportunity);
 
     $validated = $request->validate([
       'loss_reason' => 'required|string',
@@ -226,7 +226,7 @@ class OpportunityController extends Controller
 
   public function addCompetitor(Request $request, Opportunity $opportunity)
   {
-    Gate::authorize('update', $opportunity);
+    // Gate::authorize('update', $opportunity);
 
     $validated = $request->validate([
       'competitor' => 'required|string|max:255',
@@ -242,7 +242,7 @@ class OpportunityController extends Controller
 
   public function removeCompetitor(Request $request, Opportunity $opportunity)
   {
-    Gate::authorize('update', $opportunity);
+    // Gate::authorize('update', $opportunity);
 
     $validated = $request->validate([
       'competitor' => 'required|string',
@@ -258,7 +258,7 @@ class OpportunityController extends Controller
 
   public function pipeline(Request $request)
   {
-    Gate::authorize('viewAny', Opportunity::class);
+    // Gate::authorize('viewAny', Opportunity::class);
 
     $opportunities = Opportunity::with(['contact', 'assignedTo'])
       ->open()
@@ -291,7 +291,7 @@ class OpportunityController extends Controller
 
   public function bulkAction(Request $request)
   {
-    Gate::authorize('viewAny', Opportunity::class);
+    // Gate::authorize('viewAny', Opportunity::class);
 
     $validated = $request->validate([
       'action' => 'required|in:assign,update_stage,delete',
@@ -304,7 +304,7 @@ class OpportunityController extends Controller
     $opportunities = Opportunity::whereIn('id', $validated['opportunity_ids'])->get();
 
     foreach ($opportunities as $opportunity) {
-      Gate::authorize('update', $opportunity);
+      // Gate::authorize('update', $opportunity);
     }
 
     switch ($validated['action']) {
@@ -337,7 +337,7 @@ class OpportunityController extends Controller
 
   public function export(Request $request)
   {
-    Gate::authorize('viewAny', Opportunity::class);
+    // Gate::authorize('viewAny', Opportunity::class);
 
     // In a full implementation, you would use Laravel Excel or similar
     $opportunities = Opportunity::with(['contact', 'assignedTo'])

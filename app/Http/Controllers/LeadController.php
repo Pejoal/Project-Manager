@@ -13,7 +13,11 @@ class LeadController extends Controller
 {
   public function index(Request $request)
   {
-    Gate::authorize('viewAny', Lead::class);
+    // check if user has role admin or manager
+
+    if (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('manager')) {
+      abort(403);
+    }
 
     $leads = Lead::with(['assignedTo'])
       ->when($request->search, function ($query, $search) {
@@ -47,7 +51,7 @@ class LeadController extends Controller
 
   public function create()
   {
-    Gate::authorize('create', Lead::class);
+    // // Gate::authorize('create', Lead::class);
 
     $users = User::select(['id', 'name'])->get();
 
@@ -58,7 +62,7 @@ class LeadController extends Controller
 
   public function store(Request $request)
   {
-    Gate::authorize('create', Lead::class);
+    // // Gate::authorize('create', Lead::class);
 
     $validated = $request->validate([
       'first_name' => 'required|string|max:255',
@@ -85,7 +89,7 @@ class LeadController extends Controller
 
   public function show(Lead $lead)
   {
-    Gate::authorize('view', $lead);
+    // // Gate::authorize('view', $lead);
 
     $lead->load([
       'assignedTo',
@@ -102,7 +106,7 @@ class LeadController extends Controller
 
   public function edit(Lead $lead)
   {
-    Gate::authorize('update', $lead);
+    // // Gate::authorize('update', $lead);
 
     $users = User::select(['id', 'name'])->get();
 
@@ -114,7 +118,7 @@ class LeadController extends Controller
 
   public function update(Request $request, Lead $lead)
   {
-    Gate::authorize('update', $lead);
+    // // Gate::authorize('update', $lead);
 
     $validated = $request->validate([
       'first_name' => 'required|string|max:255',
@@ -138,7 +142,7 @@ class LeadController extends Controller
 
   public function destroy(Lead $lead)
   {
-    Gate::authorize('delete', $lead);
+    // // Gate::authorize('delete', $lead);
 
     $lead->delete();
 
@@ -147,7 +151,7 @@ class LeadController extends Controller
 
   public function convert(Request $request, Lead $lead)
   {
-    Gate::authorize('update', $lead);
+    // // Gate::authorize('update', $lead);
 
     if ($lead->status === 'converted') {
       return back()->with('error', __('Lead has already been converted.'));
@@ -174,7 +178,7 @@ class LeadController extends Controller
 
   public function updateScore(Lead $lead)
   {
-    Gate::authorize('update', $lead);
+    // // Gate::authorize('update', $lead);
 
     $newScore = $lead->updateScore();
 
@@ -186,7 +190,7 @@ class LeadController extends Controller
 
   public function bulkAction(Request $request)
   {
-    Gate::authorize('viewAny', Lead::class);
+    // // Gate::authorize('viewAny', Lead::class);
 
     $validated = $request->validate([
       'action' => 'required|in:assign,update_status,delete',
@@ -199,7 +203,7 @@ class LeadController extends Controller
     $leads = Lead::whereIn('id', $validated['lead_ids'])->get();
 
     foreach ($leads as $lead) {
-      Gate::authorize('update', $lead);
+      // // Gate::authorize('update', $lead);
     }
 
     switch ($validated['action']) {
@@ -228,7 +232,7 @@ class LeadController extends Controller
 
   public function export(Request $request)
   {
-    Gate::authorize('viewAny', Lead::class);
+    // // Gate::authorize('viewAny', Lead::class);
 
     // In a full implementation, you would use Laravel Excel or similar
     $leads = Lead::with(['assignedTo'])
