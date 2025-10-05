@@ -1,7 +1,13 @@
+<!-- Updated Sidebar.vue (Now Using All Smaller Components) -->
 <script setup>
-import { Link, usePage } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import NavItem from './NavItem.vue';
+import NavSection from './NavSection.vue';
+import SidebarCollapseToggle from './SidebarCollapseToggle.vue';
+import SidebarLogo from './SidebarLogo.vue';
+import SidebarMobileClose from './SidebarMobileClose.vue';
 
 const page = usePage();
 
@@ -22,8 +28,6 @@ const emit = defineEmits(['toggle-sidebar', 'close-mobile-menu']);
 const hasRole = (role) => {
   return page.props.auth?.user?.roles?.some((userRole) => userRole.name === role) || false;
 };
-
-const hasAnyRole = (roles) => roles.some((r) => hasRole(r));
 
 // Navigation items configuration
 const navigationItems = computed(() => [
@@ -195,7 +199,19 @@ const navigationItems = computed(() => [
   },
 ]);
 
-// Icon components
+// Track expanded state for sections (keyed by item name)
+const expandedSections = ref(new Set());
+
+// Toggle section expansion
+const toggleSection = (itemName) => {
+  if (expandedSections.value.has(itemName)) {
+    expandedSections.value.delete(itemName);
+  } else {
+    expandedSections.value.add(itemName);
+  }
+};
+
+// Icon components (shared)
 const icons = {
   dashboard: {
     template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v0a2 2 0 01-2 2H10a2 2 0 01-2-2v0z"></path></svg>`,
@@ -242,99 +258,32 @@ const icons = {
     class="hidden md:flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300"
     :class="isSidebarCollapsed ? 'w-20' : 'w-64'"
   >
-    <!-- Logo -->
-    <div class="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900 dark:bg-gray-800">
-      <Link :href="route('dashboard')" class="flex items-center">
-        <span v-if="!isSidebarCollapsed" class="ml-3 text-white font-semibold text-lg">Project Manager</span>
-      </Link>
-    </div>
+    <SidebarLogo :is-collapsed="isSidebarCollapsed" />
 
     <!-- Navigation -->
     <div class="flex-1 flex flex-col overflow-y-auto">
       <nav class="flex-1 px-2 py-4 space-y-1">
-        <template v-for="item in navigationItems" :key="item.name">
-          <!-- Single level item -->
-          <Link
-            v-if="!item.children"
-            :href="item.href"
-            :class="[
-              item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-              'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
-            ]"
-            :title="isSidebarCollapsed ? item.name : ''"
-          >
-            <component
-              :is="icons[item.icon]"
-              :class="[
-                item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                'flex-shrink-0 h-6 w-6',
-                isSidebarCollapsed ? '' : 'mr-3',
-              ]"
-            />
-            <span v-if="!isSidebarCollapsed">{{ item.name }}</span>
-          </Link>
+        <NavItem
+          v-for="item in navigationItems.filter((i) => !i.children)"
+          :key="item.name"
+          :item="item"
+          :is-collapsed="isSidebarCollapsed"
+          :icons="icons"
+        />
 
-          <!-- Multi-level item -->
-          <div v-else class="space-y-1">
-            <div
-              :class="[
-                item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                'group flex items-center px-2 py-2 text-sm font-medium rounded-md cursor-pointer',
-              ]"
-              :title="isSidebarCollapsed ? item.name : ''"
-            >
-              <component
-                :is="icons[item.icon]"
-                :class="[
-                  item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                  'flex-shrink-0 h-6 w-6',
-                  isSidebarCollapsed ? '' : 'mr-3',
-                ]"
-              />
-              <span v-if="!isSidebarCollapsed">{{ item.name }}</span>
-              <component
-                v-if="!isSidebarCollapsed"
-                :is="icons.chevronDown"
-                :class="[
-                  item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                  'ml-auto h-5 w-5 transform transition-colors',
-                ]"
-              />
-            </div>
-
-            <!-- Sub-items -->
-            <div v-if="!isSidebarCollapsed" class="ml-6 space-y-1">
-              <Link
-                v-for="subItem in item.children"
-                :key="subItem.name"
-                :href="subItem.href"
-                :class="[
-                  subItem.current ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-600 hover:text-white',
-                  'group flex items-center px-2 py-1 text-sm font-medium rounded-md',
-                ]"
-              >
-                {{ subItem.name }}
-              </Link>
-            </div>
-          </div>
-        </template>
+        <NavSection
+          v-for="item in navigationItems.filter((i) => i.children)"
+          :key="item.name"
+          :item="item"
+          :is-collapsed="isSidebarCollapsed"
+          :icons="icons"
+          :expanded-sections="expandedSections"
+          @toggle-section="toggleSection"
+        />
       </nav>
     </div>
 
-    <!-- Collapse Toggle -->
-    <div class="p-3 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
-      <button
-        @click="emit('toggle-sidebar')"
-        class="w-full flex items-center justify-center p-2 text-gray-500 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-        :title="isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
-      >
-        <component
-          :is="icons.chevronLeft"
-          class="w-6 h-6 transition-transform duration-300"
-          :class="{ 'rotate-180': isSidebarCollapsed }"
-        />
-      </button>
-    </div>
+    <SidebarCollapseToggle :is-collapsed="isSidebarCollapsed" :icons="icons" @toggle-sidebar="emit('toggle-sidebar')" />
   </aside>
 
   <!-- Mobile Sidebar -->
@@ -345,86 +294,32 @@ const icons = {
 
       <!-- Sidebar -->
       <div class="relative flex-1 flex flex-col max-w-xs w-full bg-gray-800">
-        <!-- Close button -->
-        <div class="absolute top-0 right-0 -mr-12 pt-2">
-          <button
-            @click="emit('close-mobile-menu')"
-            class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-          >
-            <span class="sr-only">Close sidebar</span>
-            <svg class="h-6 w-6 text-white" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        </div>
+        <SidebarMobileClose @close-mobile-menu="emit('close-mobile-menu')" />
 
-        <!-- Logo -->
-        <div class="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900">
-          <Link :href="route('dashboard')" class="flex items-center" @click="emit('close-mobile-menu')">
-            <img class="h-8 w-auto" src="/favicon.ico" alt="Company Logo" />
-            <span class="ml-3 text-white font-semibold text-lg">Project Manager</span>
-          </Link>
-        </div>
+        <SidebarLogo :is-collapsed="false" @close-mobile-menu="emit('close-mobile-menu')" />
 
         <!-- Navigation -->
         <div class="flex-1 flex flex-col overflow-y-auto">
           <nav class="flex-1 px-2 py-4 space-y-1">
-            <template v-for="item in navigationItems" :key="item.name">
-              <!-- Single level item -->
-              <Link
-                v-if="!item.children"
-                :href="item.href"
-                :class="[
-                  item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
-                ]"
-                @click="emit('close-mobile-menu')"
-              >
-                <component
-                  :is="icons[item.icon]"
-                  :class="[
-                    item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                    'mr-3 flex-shrink-0 h-6 w-6',
-                  ]"
-                />
-                {{ item.name }}
-              </Link>
+            <NavItem
+              v-for="item in navigationItems.filter((i) => !i.children)"
+              :key="item.name"
+              :item="item"
+              :is-collapsed="false"
+              :icons="icons"
+              @close-mobile-menu="emit('close-mobile-menu')"
+            />
 
-              <!-- Multi-level item -->
-              <div v-else class="space-y-1">
-                <div
-                  :class="[
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'group flex items-center px-2 py-2 text-sm font-medium rounded-md cursor-pointer',
-                  ]"
-                >
-                  <component
-                    :is="icons[item.icon]"
-                    :class="[
-                      item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                      'mr-3 flex-shrink-0 h-6 w-6',
-                    ]"
-                  />
-                  {{ item.name }}
-                </div>
-
-                <!-- Sub-items -->
-                <div class="ml-6 space-y-1">
-                  <Link
-                    v-for="subItem in item.children"
-                    :key="subItem.name"
-                    :href="subItem.href"
-                    :class="[
-                      subItem.current ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-600 hover:text-white',
-                      'group flex items-center px-2 py-1 text-sm font-medium rounded-md',
-                    ]"
-                    @click="emit('close-mobile-menu')"
-                  >
-                    {{ subItem.name }}
-                  </Link>
-                </div>
-              </div>
-            </template>
+            <NavSection
+              v-for="item in navigationItems.filter((i) => i.children)"
+              :key="item.name"
+              :item="item"
+              :is-collapsed="false"
+              :icons="icons"
+              :expanded-sections="expandedSections"
+              @toggle-section="toggleSection"
+              @close-mobile-menu="emit('close-mobile-menu')"
+            />
           </nav>
         </div>
       </div>
