@@ -71,7 +71,7 @@ const columns = [
   {
     key: 'gross_pay',
     label: 'Gross Pay',
-    sortable: true,
+    sortable: false,
     component: (item) => formatCurrency(item.gross_pay),
     textClass: 'text-gray-900 dark:text-gray-100',
   },
