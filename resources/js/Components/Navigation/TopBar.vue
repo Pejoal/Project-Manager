@@ -99,7 +99,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutsideLo
                 class="fi mr-2"
                 :class="`fi-${$page.props.locales[$page.props.active_locale_code].flag}`"
               ></span>
-              <span class="hidden sm:inline">
+              <span class="inline">
                 {{ $page.props.locales && $page.props.locales[$page.props.active_locale_code]?.native }}
               </span>
               <svg
