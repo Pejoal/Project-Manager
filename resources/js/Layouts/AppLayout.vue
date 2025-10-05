@@ -244,8 +244,14 @@ const handleToggleSidebarCollapse = () => {
                   @click="toggleDarkMode"
                   class="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none"
                 >
-                  <IconSun v-if="isDarkMode" />
-                  <IconMoon v-else />
+                  <template v-if="isDarkMode">
+                    {{ $t('words.light_mode') }}
+                  </template>
+                  <template v-else>
+                    {{ $t('words.dark_mode') }}
+                  </template>
+                  <!-- <IconSun v-if="isDarkMode" />
+                  <IconMoon v-else /> -->
                 </button>
 
                 <!-- Locales Dropdown -->

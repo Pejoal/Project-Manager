@@ -320,9 +320,8 @@ return [
   'file_uploaded_successfully' => 'Files uploaded successfully!',
   'attachment_deleted_successfully' => 'Attachment deleted successfully!',
   'description_updated_successfully' => 'Description updated successfully!',
-  'download' => 'Download',
+  'error_uploading_files' => 'Error uploading files. Please try again.',
   'edit_description' => 'Edit description',
   'add_description' => 'Add description',
   'uploading' => 'Uploading...',
-  'cancel' => 'Cancel',
 ];

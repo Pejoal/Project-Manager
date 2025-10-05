@@ -4,14 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\TaskAttachment;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TaskAttachmentController extends Controller
 {
-  public function store(Request $request, Task $task)
+  public function store(Request $request, Project $project, Task $task)
   {
+    // Verify task belongs to project
+    if ($task->project_id !== $project->id) {
+      abort(404, 'Task not found in this project');
+    }
+
     $request->validate([
       'files.*' => 'required|file|max:10240', // 10MB max per file
       'descriptions.*' => 'nullable|string|max:255',
@@ -40,10 +46,7 @@ class TaskAttachmentController extends Controller
       }
     }
 
-    return response()->json([
-      'message' => 'Files uploaded successfully',
-      'attachments' => $attachments,
-    ]);
+    return back()->with('success', 'Files uploaded successfully');
   }
 
   public function download(TaskAttachment $attachment)

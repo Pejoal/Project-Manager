@@ -294,4 +294,14 @@ return [
   'this_device' => 'Dieses Gerät',
   'last_active' => 'Zuletzt aktiv',
   'unknown' => 'Unbekannt',
+
+  // File Upload Error Handling
+  'file_uploaded_successfully' => 'Dateien erfolgreich hochgeladen!',
+  'attachment_deleted_successfully' => 'Anhang erfolgreich gelöscht!',
+  'description_updated_successfully' => 'Beschreibung erfolgreich aktualisiert!',
+  'error_uploading_files' => 'Fehler beim Hochladen der Dateien. Bitte versuchen Sie es erneut.',
+  'download' => 'Herunterladen',
+  'edit_description' => 'Beschreibung bearbeiten',
+  'add_description' => 'Beschreibung hinzufügen',
+  'uploading' => 'Hochladen...',
 ];

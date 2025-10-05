@@ -264,6 +264,10 @@ class TaskController extends Controller
       'milestone:id,name',
       'attachments.user:id,name',
     ]);
+    // if request json return task as json
+    if (request()->wantsJson()) {
+      return response()->json($task);
+    }
     return Inertia::render('Tasks/Show', compact('task'));
   }
 

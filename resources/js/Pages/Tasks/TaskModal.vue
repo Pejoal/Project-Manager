@@ -5,7 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm } from '@inertiajs/vue3';
-import axios from 'axios';
+import { trans } from 'laravel-vue-i18n';
 import { computed, ref, watch } from 'vue';
 
 const emit = defineEmits(['close', 'refresh']);
@@ -76,40 +76,64 @@ const removeSelectedFile = (index) => {
   fileDescriptions.value.splice(index, 1);
 };
 
-const uploadFiles = async () => {
+const uploadFiles = () => {
   if (selectedFiles.value.length === 0) return;
 
   uploadingFiles.value = true;
-  const formData = new FormData();
 
-  selectedFiles.value.forEach((file, index) => {
-    formData.append(`files[${index}]`, file);
-    formData.append(`descriptions[${index}]`, fileDescriptions.value[index] || '');
-  });
+  // Reset the upload form
+  uploadForm.clearErrors();
 
-  try {
-    const response = await axios.post(route('task-attachments.store', props.task.id), formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+  // Prepare form data
+  uploadForm.files = selectedFiles.value;
+  uploadForm.descriptions = fileDescriptions.value;
+
+  uploadForm.post(
+    route('task-attachments.store', {
+      project: props.task.project.slug,
+      task: props.task.id,
+    }),
+    {
+      forceFormData: true, // This ensures files are sent as FormData
+      preserveScroll: true,
+      onSuccess: () => {
+        // Reset form
+        selectedFiles.value = [];
+        fileDescriptions.value = [];
+        if (fileInput.value) {
+          fileInput.value.value = '';
+        }
+        uploadForm.reset();
+
+        // Refresh the task data
+        emit('refresh');
+
+        // Show success message
+        alert(trans('words.file_uploaded_successfully'));
       },
-    });
+      onError: (errors) => {
+        console.error('Upload errors:', errors);
 
-    // Reset form
-    selectedFiles.value = [];
-    fileDescriptions.value = [];
-    fileInput.value.value = '';
+        // Handle validation errors
+        let errorMessage = trans('words.error_uploading_files');
 
-    // Refresh the task data
-    emit('refresh');
+        if (errors.files) {
+          errorMessage = Array.isArray(errors.files) ? errors.files[0] : errors.files;
+        } else if (errors.message) {
+          errorMessage = errors.message;
+        } else if (Object.keys(errors).length > 0) {
+          // Get first error message
+          const firstError = Object.values(errors)[0];
+          errorMessage = Array.isArray(firstError) ? firstError[0] : firstError;
+        }
 
-    // Show success message
-    alert('Files uploaded successfully!');
-  } catch (error) {
-    console.error('Upload error:', error);
-    alert('Error uploading files. Please try again.');
-  } finally {
-    uploadingFiles.value = false;
-  }
+        alert(errorMessage);
+      },
+      onFinish: () => {
+        uploadingFiles.value = false;
+      },
+    }
+  );
 };
 
 // Attachment management methods
@@ -122,14 +146,19 @@ const deleteAttachment = async (attachment) => {
     return;
   }
 
-  try {
-    await axios.delete(route('task-attachments.destroy', attachment.id));
-    emit('refresh');
-    alert('Attachment deleted successfully!');
-  } catch (error) {
-    console.error('Delete error:', error);
-    alert('Error deleting attachment. Please try again.');
-  }
+  const deleteForm = useForm({});
+
+  deleteForm.delete(route('task-attachments.destroy', attachment.id), {
+    preserveScroll: true,
+    onSuccess: () => {
+      emit('refresh');
+      alert(trans('words.attachment_deleted_successfully'));
+    },
+    onError: (errors) => {
+      console.error('Delete error:', errors);
+      alert('Error deleting attachment. Please try again.');
+    },
+  });
 };
 
 const startEditDescription = (attachment) => {
@@ -200,20 +229,20 @@ watch(
         <!-- Basic Information Section -->
         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-            {{ $t('words.basic_data') }}
+            {{ trans('words.basic_data') }}
           </h3>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ $t('words.task_id') }}
+                {{ trans('words.task_id') }}
               </label>
               <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">#{{ task.id }}</p>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ $t('words.project') }}
+                {{ trans('words.project') }}
               </label>
               <Link
                 :href="route('projects.show', task.project.slug)"
@@ -225,7 +254,7 @@ watch(
 
             <div v-if="task.phase">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ $t('words.phase') }}
+                {{ trans('words.phase') }}
               </label>
               <Link
                 :href="route('phases.show', { project: task.project.slug, phase: task.phase.id })"
@@ -237,7 +266,7 @@ watch(
 
             <div v-if="task.milestone">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ $t('words.milestone') }}
+                {{ trans('words.milestone') }}
               </label>
               <Link
                 :href="route('milestones.show', { project: task.project.slug, milestone: task.milestone.id })"
@@ -249,7 +278,7 @@ watch(
 
             <div class="md:col-span-2">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ $t('words.description') }}
+                {{ trans('words.description') }}
               </label>
               <p class="mt-1 text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap">
                 {{ task.description || 'No description provided' }}
@@ -265,7 +294,7 @@ watch(
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ $t('words.assigned_to') }}
+                {{ trans('words.assigned_to') }}
               </label>
               <div class="mt-1">
                 <div v-if="task.assigned_to?.length > 0" class="flex flex-wrap gap-2">
@@ -283,7 +312,7 @@ watch(
 
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ $t('words.created_at') }}
+                {{ trans('words.created_at') }}
               </label>
               <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                 {{ formatDateTime(task.created_at) }}
@@ -292,7 +321,7 @@ watch(
 
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ $t('words.start_datetime') }}
+                {{ trans('words.start_datetime') }}
               </label>
               <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                 {{ formatDateTime(task.start_datetime) }}
@@ -301,7 +330,7 @@ watch(
 
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ $t('words.end_datetime') }}
+                {{ trans('words.end_datetime') }}
               </label>
               <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                 {{ formatDateTime(task.end_datetime) }}
@@ -510,19 +539,19 @@ watch(
             :href="route('tasks.edit', { project: task.project.slug, task: task.id })"
             class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring focus:ring-blue-300 disabled:opacity-25 transition"
           >
-            {{ $t('words.edit') }}
+            {{ trans('words.edit') }}
           </Link>
           <Link
             v-if="task"
             :href="route('time-entries.index', { task_id: task.id })"
             class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring focus:ring-green-300 disabled:opacity-25 transition"
           >
-            {{ $t('words.log_time') }}
+            {{ trans('words.log_time') }}
           </Link>
         </div>
 
         <SecondaryButton @click="emit('close')">
-          {{ $t('words.close') }}
+          {{ trans('words.close') }}
         </SecondaryButton>
       </div>
     </template>

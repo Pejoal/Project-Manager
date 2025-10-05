@@ -41,7 +41,8 @@ const openTaskDetailsModal = async (task) => {
         task: task.id,
       })
     );
-    selectedTaskForModal.value = response.data.props.task;
+
+    selectedTaskForModal.value = response.data;
     showTaskModal.value = true;
   } catch (error) {
     console.error('Error fetching task details:', error);
@@ -65,7 +66,7 @@ const refreshTaskDetails = async () => {
           task: selectedTaskForModal.value.id,
         })
       );
-      selectedTaskForModal.value = response.data.props.task;
+      selectedTaskForModal.value = response.data;
     } catch (error) {
       console.error('Error refreshing task details:', error);
     }
