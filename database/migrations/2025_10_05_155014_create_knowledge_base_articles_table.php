@@ -17,7 +17,7 @@ return new class extends Migration {
       $table->text('content');
       $table->text('excerpt')->nullable();
       $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
-      $table->json('categories')->nullable();
+      $table->string('category')->nullable(); // Single category as string
       $table->json('tags')->nullable();
       $table->integer('view_count')->default(0);
       $table->decimal('rating', 3, 2)->default(0); // Average rating 0-5
@@ -26,12 +26,14 @@ return new class extends Migration {
       $table->integer('sort_order')->default(0);
       $table->json('attachments')->nullable();
       $table->json('related_articles')->nullable(); // Array of article IDs
+      $table->string('meta_description')->nullable();
       $table->foreignId('author_id')->constrained('users')->cascadeOnDelete();
       $table->timestamp('published_at')->nullable();
       $table->timestamps();
 
       $table->index(['status', 'published_at']);
       $table->index(['is_featured', 'sort_order']);
+      $table->index(['category', 'status']);
       $table->index('author_id');
       $table->fullText(['title', 'content', 'excerpt']);
     });

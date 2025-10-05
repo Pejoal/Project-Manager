@@ -16,7 +16,6 @@ class KnowledgeBaseArticle extends Model
   protected $guarded = [];
 
   protected $casts = [
-    'categories' => 'array',
     'tags' => 'array',
     'rating' => 'decimal:2',
     'attachments' => 'array',
@@ -67,9 +66,9 @@ class KnowledgeBaseArticle extends Model
     return $query->where('is_featured', true);
   }
 
-  public function scopeByCategory($query, $category)
+  public function scopeInCategory($query, $category)
   {
-    return $query->whereJsonContains('categories', $category);
+    return $query->where('category', $category);
   }
 
   public function scopeWithTag($query, $tag)
@@ -150,21 +149,17 @@ class KnowledgeBaseArticle extends Model
     return $this;
   }
 
-  public function addCategory($category)
+  public function feature()
   {
-    $categories = $this->categories ?? [];
-    if (!in_array($category, $categories)) {
-      $categories[] = $category;
-      $this->update(['categories' => $categories]);
-    }
+    $this->update(['is_featured' => true]);
+    activity()->performedOn($this)->log('Article featured');
     return $this;
   }
 
-  public function removeCategory($category)
+  public function unfeature()
   {
-    $categories = $this->categories ?? [];
-    $categories = array_values(array_filter($categories, fn($c) => $c !== $category));
-    $this->update(['categories' => $categories]);
+    $this->update(['is_featured' => false]);
+    activity()->performedOn($this)->log('Article unfeatured');
     return $this;
   }
 
@@ -244,7 +239,7 @@ class KnowledgeBaseArticle extends Model
       'title' => $this->title,
       'content' => strip_tags($this->content),
       'excerpt' => $this->excerpt,
-      'categories' => $this->categories,
+      'category' => $this->category,
       'tags' => $this->tags,
     ];
   }
@@ -258,7 +253,7 @@ class KnowledgeBaseArticle extends Model
   public function getActivitylogOptions(): LogOptions
   {
     return LogOptions::defaults()
-      ->logOnly(['title', 'status', 'categories', 'tags', 'is_featured', 'published_at', 'sort_order'])
+      ->logOnly(['title', 'status', 'category', 'tags', 'is_featured', 'published_at', 'sort_order'])
       ->logOnlyDirty()
       ->dontSubmitEmptyLogs()
       ->setDescriptionForEvent(fn(string $eventName) => "Knowledge base article has been {$eventName}");

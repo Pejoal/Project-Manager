@@ -322,13 +322,53 @@ Route::group(
         // Knowledge Base Management Routes
         Route::prefix('knowledge-base')->group(function () {
           Route::get('/', [KnowledgeBaseArticleController::class, 'index'])->name('knowledge-base.index');
+          Route::get('/create', [KnowledgeBaseArticleController::class, 'create'])->name('knowledge-base.create');
           Route::post('/', [KnowledgeBaseArticleController::class, 'store'])->name('knowledge-base.store');
-          Route::get('/{article}', [KnowledgeBaseArticleController::class, 'show'])->name('knowledge-base.show');
-          Route::get('/{article}/edit', [KnowledgeBaseArticleController::class, 'edit'])->name('knowledge-base.edit');
-          Route::put('/{article}', [KnowledgeBaseArticleController::class, 'update'])->name('knowledge-base.update');
-          Route::delete('/{article}', [KnowledgeBaseArticleController::class, 'destroy'])->name(
+          Route::get('/categories', [KnowledgeBaseArticleController::class, 'categories'])->name(
+            'knowledge-base.categories'
+          );
+          Route::get('/popular', [KnowledgeBaseArticleController::class, 'popular'])->name('knowledge-base.popular');
+          Route::get('/search', [KnowledgeBaseArticleController::class, 'search'])->name('knowledge-base.search');
+          Route::get('/analytics', [KnowledgeBaseArticleController::class, 'analytics'])->name(
+            'knowledge-base.analytics'
+          );
+          Route::post('/bulk-action', [KnowledgeBaseArticleController::class, 'bulkAction'])->name(
+            'knowledge-base.bulk-action'
+          );
+          Route::get('/{knowledgeBaseArticle}', [KnowledgeBaseArticleController::class, 'show'])->name(
+            'knowledge-base.show'
+          );
+          Route::get('/{knowledgeBaseArticle}/edit', [KnowledgeBaseArticleController::class, 'edit'])->name(
+            'knowledge-base.edit'
+          );
+          Route::put('/{knowledgeBaseArticle}', [KnowledgeBaseArticleController::class, 'update'])->name(
+            'knowledge-base.update'
+          );
+          Route::delete('/{knowledgeBaseArticle}', [KnowledgeBaseArticleController::class, 'destroy'])->name(
             'knowledge-base.destroy'
           );
+          Route::patch('/{knowledgeBaseArticle}/publish', [KnowledgeBaseArticleController::class, 'publish'])->name(
+            'knowledge-base.publish'
+          );
+          Route::patch('/{knowledgeBaseArticle}/unpublish', [KnowledgeBaseArticleController::class, 'unpublish'])->name(
+            'knowledge-base.unpublish'
+          );
+          Route::patch('/{knowledgeBaseArticle}/archive', [KnowledgeBaseArticleController::class, 'archive'])->name(
+            'knowledge-base.archive'
+          );
+          Route::patch('/{knowledgeBaseArticle}/feature', [KnowledgeBaseArticleController::class, 'feature'])->name(
+            'knowledge-base.feature'
+          );
+          Route::patch('/{knowledgeBaseArticle}/unfeature', [KnowledgeBaseArticleController::class, 'unfeature'])->name(
+            'knowledge-base.unfeature'
+          );
+          Route::post('/{knowledgeBaseArticle}/add-tag', [KnowledgeBaseArticleController::class, 'addTag'])->name(
+            'knowledge-base.add-tag'
+          );
+          Route::delete('/{knowledgeBaseArticle}/remove-tag', [
+            KnowledgeBaseArticleController::class,
+            'removeTag',
+          ])->name('knowledge-base.remove-tag');
         });
       });
     });

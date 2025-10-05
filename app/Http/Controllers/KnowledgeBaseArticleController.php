@@ -16,25 +16,34 @@ class KnowledgeBaseArticleController extends Controller
 
     $articles = KnowledgeBaseArticle::with(['author'])
       ->when($request->search, function ($query, $search) {
-        $query->search($search);
+        $query->where(function ($q) use ($search) {
+          $q->where('title', 'like', "%{$search}%")
+            ->orWhere('content', 'like', "%{$search}%")
+            ->orWhere('excerpt', 'like', "%{$search}%");
+        });
       })
       ->when($request->category, function ($query, $category) {
-        $query->inCategory($category);
+        $query->where('category', $category);
       })
       ->when($request->status, function ($query, $status) {
         $query->where('status', $status);
       })
       ->when($request->featured, function ($query) {
-        $query->featured();
+        $query->where('is_featured', true);
       })
       ->when($request->tag, function ($query, $tag) {
-        $query->withTag($tag);
+        $query->whereJsonContains('tags', $tag);
       })
       ->orderBy($request->sort ?? 'created_at', $request->direction ?? 'desc')
       ->paginate($request->per_page ?? 15)
       ->withQueryString();
 
-    $categories = KnowledgeBaseArticle::distinct()->pluck('category')->filter();
+    $categories = KnowledgeBaseArticle::whereNotNull('category')
+      ->distinct()
+      ->pluck('category')
+      ->filter()
+      ->sort()
+      ->values();
 
     return Inertia::render('CRM/KnowledgeBase/Index', [
       'articles' => $articles,
