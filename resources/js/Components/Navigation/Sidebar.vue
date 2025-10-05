@@ -106,7 +106,7 @@ const navigationItems = computed(() => [
     : []),
   // CRM section
   {
-    name: 'CRM',
+    name: 'CRM (Soon)',
     icon: 'crm',
     current:
       route().current('leads.*') ||
