@@ -35,7 +35,7 @@ const closeModal = () => {
 const columns = [
   {
     key: 'user',
-    label: 'User',
+    label: 'Employee',
     sortable: false,
     component: (item) => `
       <div class="flex items-center">
