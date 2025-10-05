@@ -259,6 +259,18 @@ const handleBulkAction = ({ action, items, data }) => {
 const handleRowClick = (lead) => {
   window.location.href = route('leads.show', lead.id);
 };
+
+// Convert lead function
+const convertLead = (lead) => {
+  if (confirm('Are you sure you want to convert this lead to a contact?')) {
+    useForm().post(route('leads.convert', lead.id), {
+      preserveState: true,
+      onSuccess: () => {
+        // Optionally show success notification
+      },
+    });
+  }
+};
 </script>
 
 <template>

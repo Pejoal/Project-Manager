@@ -277,6 +277,29 @@ const handleBulkAction = ({ action, items, data }) => {
 const handleRowClick = (opportunity) => {
   window.location.href = route('opportunities.show', opportunity.id);
 };
+
+// Close opportunity function
+const closeOpportunity = (opportunity, outcome) => {
+  const action = outcome === 'won' ? 'win' : 'lose';
+  const message =
+    outcome === 'won'
+      ? 'Are you sure you want to mark this opportunity as won?'
+      : 'Are you sure you want to mark this opportunity as lost?';
+
+  if (confirm(message)) {
+    const form = useForm({
+      notes: '',
+      loss_reason: outcome === 'lost' ? 'Competitor chosen' : null,
+    });
+
+    form.patch(route(`opportunities.${action}`, opportunity.id), {
+      preserveState: true,
+      onSuccess: () => {
+        // Optionally show success notification
+      },
+    });
+  }
+};
 </script>
 
 <template>

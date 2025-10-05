@@ -308,6 +308,18 @@ const handleBulkAction = ({ action, items, data }) => {
 const handleRowClick = (ticket) => {
   window.location.href = route('support-tickets.show', ticket.id);
 };
+
+// Resolve ticket function
+const resolveTicket = (ticket) => {
+  if (confirm('Are you sure you want to resolve this ticket?')) {
+    useForm().patch(route('support-tickets.resolve', ticket.id), {
+      preserveState: true,
+      onSuccess: () => {
+        // Optionally show success notification
+      },
+    });
+  }
+};
 </script>
 
 <template>
