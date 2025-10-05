@@ -17,8 +17,8 @@ const toggleDarkMode = () => {
   <button
     @click="toggleDarkMode"
     class="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none transition-colors duration-200"
+    >
     :title="isDarkMode ? $t('words.light_mode') : $t('words.dark_mode')"
-  >
     <svg v-if="isDarkMode" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
         stroke-linecap="round"

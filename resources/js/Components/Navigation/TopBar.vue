@@ -5,6 +5,7 @@ import TeamsDropdown from '@/Components/Navigation/TeamsDropdown.vue';
 import { router, usePage } from '@inertiajs/vue3';
 import { loadLanguageAsync } from 'laravel-vue-i18n';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
+import DarkModeToggle from './DarkModeToggle.vue';
 
 const page = usePage();
 
@@ -44,14 +45,6 @@ const handleClickOutsideLocales = (event) => {
 
 onMounted(() => document.addEventListener('click', handleClickOutsideLocales));
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutsideLocales));
-
-// Icons
-const IconSun = {
-  template: `<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-15.66l-.707.707M4.34 19.66l-.707.707M21 12h-1M4 12H3m15.66 8.66l-.707-.707M4.34 4.34l-.707-.707"></path></svg>`,
-};
-const IconMoon = {
-  template: `<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>`,
-};
 </script>
 
 <template>
@@ -92,14 +85,7 @@ const IconMoon = {
         <!-- Right side controls -->
         <div class="flex items-center space-x-3">
           <!-- Dark Mode Toggle -->
-          <button
-            @click="emit('toggle-dark-mode')"
-            class="p-2 rounded-full text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            :title="isDarkMode ? $t('words.light_mode') : $t('words.dark_mode')"
-          >
-            <IconSun v-if="isDarkMode" />
-            <IconMoon v-else />
-          </button>
+          <DarkModeToggle :is-dark-mode="true"  />
 
           <!-- Locales Dropdown -->
           <div ref="localesDropdownRef" class="relative">
