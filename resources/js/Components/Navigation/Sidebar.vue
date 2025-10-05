@@ -1,4 +1,3 @@
-<!-- Sidebar.vue -->
 <script setup>
 import { usePage } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
@@ -291,6 +290,7 @@ const icons = {
           :icons="icons"
           :expanded-sections="expandedSections"
           @toggle-section="toggleSection"
+          @toggle-sidebar="emit('toggle-sidebar')"
         />
       </nav>
     </div>

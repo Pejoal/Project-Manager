@@ -21,12 +21,15 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['toggle-section', 'close-mobile-menu']);
+const emit = defineEmits(['toggle-section', 'close-mobile-menu', 'toggle-sidebar']);
 
 const isExpanded = computed(() => props.expandedSections.has(props.item.name));
 
 const handleToggle = () => {
-  emit('toggle-section', props.item.name);
+  if (props.isCollapsed) {
+    emit('toggle-sidebar'); // Expand sidebar if collapsed
+  }
+  emit('toggle-section', props.item.name); // Toggle submenu
 };
 </script>
 
