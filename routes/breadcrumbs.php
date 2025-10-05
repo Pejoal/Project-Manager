@@ -10,6 +10,13 @@ use App\Models\Phase;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
+use App\Models\Lead;
+use App\Models\Contact;
+use App\Models\Opportunity;
+use App\Models\Campaign;
+use App\Models\SupportTicket;
+use App\Models\Interaction;
+use App\Models\KnowledgeBaseArticle;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
@@ -110,6 +117,142 @@ Breadcrumbs::for('milestones.index', function (BreadcrumbTrail $trail, Project $
 Breadcrumbs::for('milestones.show', function (BreadcrumbTrail $trail, Project $project, Milestone $milestone) {
   $trail->parent('milestones.index', $project);
   $trail->push($milestone->name, route('milestones.show', [$project, $milestone]));
+});
+
+// --- CRM Management ---
+// Dashboard > CRM (Generic parent for CRM sections)
+Breadcrumbs::for('crm.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('dashboard');
+  $trail->push('CRM');
+});
+
+// Dashboard > CRM > Leads
+Breadcrumbs::for('leads.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('crm.index');
+  $trail->push('Leads', route('leads.index'));
+});
+
+// Dashboard > CRM > Leads > [Lead Name]
+Breadcrumbs::for('leads.show', function (BreadcrumbTrail $trail, Lead $lead) {
+  $trail->parent('leads.index');
+  $trail->push($lead->company_name ?: $lead->first_name . ' ' . $lead->last_name, route('leads.show', $lead));
+});
+
+// Dashboard > CRM > Leads > [Lead Name] > Edit
+Breadcrumbs::for('leads.edit', function (BreadcrumbTrail $trail, Lead $lead) {
+  $trail->parent('leads.show', $lead);
+  $trail->push('Edit', route('leads.edit', $lead));
+});
+
+// Dashboard > CRM > Contacts
+Breadcrumbs::for('contacts.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('crm.index');
+  $trail->push('Contacts', route('contacts.index'));
+});
+
+// Dashboard > CRM > Contacts > [Contact Name]
+Breadcrumbs::for('contacts.show', function (BreadcrumbTrail $trail, Contact $contact) {
+  $trail->parent('contacts.index');
+  $trail->push(
+    $contact->company_name ?: $contact->first_name . ' ' . $contact->last_name,
+    route('contacts.show', $contact)
+  );
+});
+
+// Dashboard > CRM > Contacts > [Contact Name] > Edit
+Breadcrumbs::for('contacts.edit', function (BreadcrumbTrail $trail, Contact $contact) {
+  $trail->parent('contacts.show', $contact);
+  $trail->push('Edit', route('contacts.edit', $contact));
+});
+
+// Dashboard > CRM > Opportunities
+Breadcrumbs::for('opportunities.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('crm.index');
+  $trail->push('Opportunities', route('opportunities.index'));
+});
+
+// Dashboard > CRM > Opportunities > [Opportunity Name]
+Breadcrumbs::for('opportunities.show', function (BreadcrumbTrail $trail, Opportunity $opportunity) {
+  $trail->parent('opportunities.index');
+  $trail->push($opportunity->name, route('opportunities.show', $opportunity));
+});
+
+// Dashboard > CRM > Opportunities > [Opportunity Name] > Edit
+Breadcrumbs::for('opportunities.edit', function (BreadcrumbTrail $trail, Opportunity $opportunity) {
+  $trail->parent('opportunities.show', $opportunity);
+  $trail->push('Edit', route('opportunities.edit', $opportunity));
+});
+
+// Dashboard > CRM > Campaigns
+Breadcrumbs::for('campaigns.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('crm.index');
+  $trail->push('Campaigns', route('campaigns.index'));
+});
+
+// Dashboard > CRM > Campaigns > [Campaign Name]
+Breadcrumbs::for('campaigns.show', function (BreadcrumbTrail $trail, Campaign $campaign) {
+  $trail->parent('campaigns.index');
+  $trail->push($campaign->name, route('campaigns.show', $campaign));
+});
+
+// Dashboard > CRM > Campaigns > [Campaign Name] > Edit
+Breadcrumbs::for('campaigns.edit', function (BreadcrumbTrail $trail, Campaign $campaign) {
+  $trail->parent('campaigns.show', $campaign);
+  $trail->push('Edit', route('campaigns.edit', $campaign));
+});
+
+// Dashboard > CRM > Support Tickets
+Breadcrumbs::for('support-tickets.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('crm.index');
+  $trail->push('Support Tickets', route('support-tickets.index'));
+});
+
+// Dashboard > CRM > Support Tickets > [Ticket Subject]
+Breadcrumbs::for('support-tickets.show', function (BreadcrumbTrail $trail, SupportTicket $supportTicket) {
+  $trail->parent('support-tickets.index');
+  $trail->push($supportTicket->subject, route('support-tickets.show', $supportTicket));
+});
+
+// Dashboard > CRM > Support Tickets > [Ticket Subject] > Edit
+Breadcrumbs::for('support-tickets.edit', function (BreadcrumbTrail $trail, SupportTicket $supportTicket) {
+  $trail->parent('support-tickets.show', $supportTicket);
+  $trail->push('Edit', route('support-tickets.edit', $supportTicket));
+});
+
+// Dashboard > CRM > Interactions
+Breadcrumbs::for('interactions.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('crm.index');
+  $trail->push('Interactions', route('interactions.index'));
+});
+
+// Dashboard > CRM > Interactions > [Interaction Subject]
+Breadcrumbs::for('interactions.show', function (BreadcrumbTrail $trail, Interaction $interaction) {
+  $trail->parent('interactions.index');
+  $trail->push($interaction->subject, route('interactions.show', $interaction));
+});
+
+// Dashboard > CRM > Interactions > [Interaction Subject] > Edit
+Breadcrumbs::for('interactions.edit', function (BreadcrumbTrail $trail, Interaction $interaction) {
+  $trail->parent('interactions.show', $interaction);
+  $trail->push('Edit', route('interactions.edit', $interaction));
+});
+
+// Dashboard > CRM > Knowledge Base
+Breadcrumbs::for('knowledge-base.index', function (BreadcrumbTrail $trail) {
+  $trail->parent('crm.index');
+  $trail->push('Knowledge Base', route('knowledge-base.index'));
+});
+
+// Dashboard > CRM > Knowledge Base > [Article Title]
+Breadcrumbs::for('knowledge-base.show', function (BreadcrumbTrail $trail, KnowledgeBaseArticle $article) {
+  $trail->parent('knowledge-base.index');
+  $trail->push($article->title, route('knowledge-base.show', $article));
+});
+
+// Dashboard > CRM > Knowledge Base > [Article Title] > Edit
+Breadcrumbs::for('knowledge-base.edit', function (BreadcrumbTrail $trail, KnowledgeBaseArticle $article) {
+  $trail->parent('knowledge-base.show', $article);
+  $trail->push('Edit', route('knowledge-base.edit', $article));
 });
 
 // --- Payroll Management ---

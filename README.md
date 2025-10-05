@@ -153,7 +153,7 @@ Built with modern web technologies, the system offers real-time updates, full-te
    - Net pay computation
    - Bonus inclusion
    - Status management (draft, approved, paid)
-   - PDF export (coming soon)
+   - PDF export
    - Bulk operations
 
 6. **Reports & Analytics Module**:
@@ -166,7 +166,7 @@ Built with modern web technologies, the system offers real-time updates, full-te
    - Visual charts and graphs
    - Trend analysis
 
-### 📞 Customer Relationship Management (CRM) Features
+### 📞 Customer Relationship Management (CRM) Features (Soon)
 
 #### Core CRM Capabilities
 
@@ -574,6 +574,131 @@ The system includes three main roles with specific permissions managed by Spatie
 
 ## 💼 Payroll System Usage
 
+### For Employees:
+
+1. **Time Tracking**:
+   - Log worked hours by creating time entries linked to assigned tasks
+   - View the "Time Entries" page from the navigation
+   - Click "Create Time Entry"
+   - Select task, enter start/end datetime
+   - Add optional description
+   - Submit for approval
+
+2. **View Payslips**:
+   - Access generated payslips from the Payroll menu
+   - View detailed breakdown of earnings and deductions
+   - Download payslips
+   - Check payment history
+
+3. **Profile Management**:
+   - Update personal information
+   - View hourly rate and overtime rate
+   - Check standard working hours
+
+### For Administrators:
+
+1. **Employee Setup**:
+   - Navigate to Payroll → Employee Profiles
+   - Click "Create Employee Profile"
+   - Enter employee details, hourly rates, tax settings
+   - Set standard working hours and overtime multiplier
+   - Configure payment method
+   - Activate the profile
+
+2. **Time Entry Management**:
+   - Review pending time entries
+   - Approve or reject submitted entries
+   - Use bulk approve for multiple entries
+   - Monitor for overlapping time entries
+   - Generate automatic time entries from completed tasks
+
+3. **Payroll Processing**:
+   - Navigate to Payroll → Payslips
+   - Choose "Generate Payslips" or "Generate Bulk"
+   - Select pay period (start and end dates)
+   - Choose employees
+   - System automatically:
+     - Calculates regular vs. overtime hours
+     - Applies appropriate hourly rates
+     - Computes tax deductions
+     - Calculates net pay
+   - Review draft payslips
+   - Approve payslips
+   - Mark as paid when payment is completed
+
+4. **Tax Configuration**:
+   - Access Payroll → Settings → Tax Configurations
+   - Create tax configurations for different tax types
+   - Set up progressive tax brackets
+   - Configure minimum/maximum income thresholds
+   - Set priority for calculation order
+   - Activate/deactivate taxes as needed
+
+5. **Payroll Settings**:
+   - Configure company information
+   - Set pay period (weekly, bi-weekly, monthly)
+   - Define standard working hours
+   - Set default hourly rates
+   - Choose working days
+   - Configure overtime settings
+   - Enable/disable automatic features
+
+6. **Reports & Analytics**:
+   - Access Payroll → Reports
+   - Select report type (summary, detailed, by employee, by project)
+   - Choose time period
+   - Filter by employees or projects
+   - View charts and statistics
+   - Export data for accounting software
+
+### Key Features:
+
+- **Automatic Calculations**: Hours worked automatically calculated from task start/end times
+- **Overtime Detection**: System identifies overtime hours based on daily/weekly configured limits
+- **Progressive Tax Calculations**: Support for bracket-based federal income tax
+- **Multi-Tax Support**: Apply multiple taxes (federal, state, Social Security, Medicare) with priority ordering
+- **Approval Workflows**: Multi-level approval process for time entries and payslips
+- **Audit Trail**: Complete activity logging for all payroll-related actions with timestamps
+- **Overlap Prevention**: System prevents overlapping time entries for the same employee
+- **Bulk Operations**: Approve multiple time entries or payslips simultaneously
+- **Real-time Updates**: Dashboard statistics update in real-time
+
+---
+
+## 📐 Project Structure & Organization
+
+The system implements a sophisticated hierarchical structure for organizing work, providing flexibility and clarity in project management.
+
+### Hierarchical Structure
+
+```
+Client(s)
+    └── Project
+            ├── Phases (Optional organizational layer)
+            │   └── Milestones (Optional within phases)
+            │       └── Tasks (Can be assigned to phases, milestones, or directly to projects)
+            └── Milestones (Optional, can exist without phases)
+                └── Tasks
+```
+
+### Structure Components
+
+#### 🏢 Clients
+
+- Top-level entity representing customers or stakeholders
+- Multiple clients can be associated with a single project
+- Stores contact information (name, email, phone)
+- Can be linked to multiple projects
+
+#### 📁 Projects
+
+- Core organizational unit for all work
+- **Unique Features:**
+  - Slug-based URLs for SEO-friendly navigation
+  - Start and end date tracking
+  - Customizable status (from master settings)
+  - Customizable priority (from master settings)
+  - Multiple client associations
 - **Contains:**
   - Phases (optional)
   - Milestones (optional)
@@ -1213,8 +1338,8 @@ The payroll system provides comprehensive reporting through the Reports module:
 
 ### Export Capabilities
 
-- PDF export (coming soon)
-- Excel export (coming soon)
+- PDF export
+- Excel export
 - CSV data export
 - Print-friendly format
 

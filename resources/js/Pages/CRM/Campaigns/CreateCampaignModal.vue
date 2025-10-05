@@ -1,11 +1,11 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
 import DialogModal from '@/Components/DialogModal.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
-import vSelect from 'vue-select';
+import { useForm } from '@inertiajs/vue3';
 import { computed, watch } from 'vue';
+import vSelect from 'vue-select';
 
 const emit = defineEmits(['close']);
 const props = defineProps({
@@ -44,23 +44,27 @@ const form = useForm({
 });
 
 // Watch for campaign changes to populate form when editing
-watch(() => props.campaign, (newCampaign) => {
-  if (newCampaign) {
-    Object.keys(form.data()).forEach(key => {
-      if (key === 'created_by') {
-        form[key] = newCampaign.created_by?.id || null;
-      } else if (key === 'goals' || key === 'channels') {
-        form[key] = newCampaign[key] || [];
-      } else if (key === 'demographics') {
-        form[key] = newCampaign[key] || {};
-      } else {
-        form[key] = newCampaign[key] || (typeof form[key] === 'number' ? 0 : '');
-      }
-    });
-  } else {
-    form.reset();
-  }
-}, { immediate: true });
+watch(
+  () => props.campaign,
+  (newCampaign) => {
+    if (newCampaign) {
+      Object.keys(form.data()).forEach((key) => {
+        if (key === 'created_by') {
+          form[key] = newCampaign.created_by?.id || null;
+        } else if (key === 'goals' || key === 'channels') {
+          form[key] = newCampaign[key] || [];
+        } else if (key === 'demographics') {
+          form[key] = newCampaign[key] || {};
+        } else {
+          form[key] = newCampaign[key] || (typeof form[key] === 'number' ? 0 : '');
+        }
+      });
+    } else {
+      form.reset();
+    }
+  },
+  { immediate: true }
+);
 
 const submit = () => {
   if (isEditing.value) {
@@ -138,13 +142,7 @@ const goalOptions = [
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="md:col-span-2">
               <InputLabel for="name" :value="$t('crm.campaign_name')" />
-              <TextInput
-                id="name"
-                v-model="form.name"
-                type="text"
-                class="mt-1 block w-full"
-                required
-              />
+              <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required />
               <InputError class="mt-2" :message="form.errors.name" />
             </div>
             <div>
@@ -217,22 +215,12 @@ const goalOptions = [
             </div>
             <div>
               <InputLabel for="start_date" :value="$t('crm.start_date')" />
-              <TextInput
-                id="start_date"
-                v-model="form.start_date"
-                type="date"
-                class="mt-1 block w-full"
-              />
+              <TextInput id="start_date" v-model="form.start_date" type="date" class="mt-1 block w-full" />
               <InputError class="mt-2" :message="form.errors.start_date" />
             </div>
             <div>
               <InputLabel for="end_date" :value="$t('crm.end_date')" />
-              <TextInput
-                id="end_date"
-                v-model="form.end_date"
-                type="date"
-                class="mt-1 block w-full"
-              />
+              <TextInput id="end_date" v-model="form.end_date" type="date" class="mt-1 block w-full" />
               <InputError class="mt-2" :message="form.errors.end_date" />
             </div>
           </div>

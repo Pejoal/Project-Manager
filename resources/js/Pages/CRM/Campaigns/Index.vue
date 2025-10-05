@@ -56,7 +56,7 @@ const columns = [
         active: '#10B981',
         paused: '#F59E0B',
         completed: '#8B5CF6',
-        cancelled: '#EF4444'
+        cancelled: '#EF4444',
       };
       const color = statusColors[item.status] || '#6B7280';
       return `
@@ -124,7 +124,7 @@ const columns = [
     component: (item) => {
       const cost = parseFloat(item.actual_cost || 0);
       const revenue = parseFloat(item.revenue_generated || 0);
-      const roi = cost > 0 ? ((revenue - cost) / cost * 100).toFixed(1) : 0;
+      const roi = cost > 0 ? (((revenue - cost) / cost) * 100).toFixed(1) : 0;
       const color = roi > 0 ? '#10B981' : roi < 0 ? '#EF4444' : '#6B7280';
       return `
         <div class="text-sm font-medium" style="color: ${color}">
@@ -274,12 +274,7 @@ const handleRowClick = (campaign) => {
   <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Create/Edit Campaign Modal -->
-      <CreateCampaignModal 
-        :show="showModal" 
-        :campaign="editingCampaign" 
-        :users="users"
-        @close="closeModal" 
-      />
+      <CreateCampaignModal :show="showModal" :campaign="editingCampaign" :users="users" @close="closeModal" />
 
       <!-- Campaigns DataTable -->
       <DataTable

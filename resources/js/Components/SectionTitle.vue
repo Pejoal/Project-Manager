@@ -1,3 +1,7 @@
+<script setup>
+// No props needed for this component
+</script>
+
 <template>
   <div class="md:col-span-1 flex justify-between">
     <div class="px-4 sm:px-0">
@@ -10,8 +14,6 @@
       </p>
     </div>
 
-    <div class="px-4 sm:px-0">
-      <slot name="aside" />
-    </div>
+    <slot name="aside" />
   </div>
 </template>

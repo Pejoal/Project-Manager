@@ -72,7 +72,7 @@ const columns = [
         in_progress: '#F59E0B',
         pending_customer: '#8B5CF6',
         resolved: '#10B981',
-        closed: '#6B7280'
+        closed: '#6B7280',
       };
       const color = statusColors[item.status] || '#6B7280';
       return `
@@ -92,7 +92,7 @@ const columns = [
         low: '#10B981',
         medium: '#F59E0B',
         high: '#EF4444',
-        urgent: '#DC2626'
+        urgent: '#DC2626',
       };
       const color = priorityColors[item.priority] || '#6B7280';
       return `
@@ -331,12 +331,12 @@ const handleRowClick = (ticket) => {
   <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Create/Edit Support Ticket Modal -->
-      <CreateSupportTicketModal 
-        :show="showModal" 
-        :ticket="editingTicket" 
+      <CreateSupportTicketModal
+        :show="showModal"
+        :ticket="editingTicket"
         :users="users"
         :contacts="contacts"
-        @close="closeModal" 
+        @close="closeModal"
       />
 
       <!-- Support Tickets DataTable -->
