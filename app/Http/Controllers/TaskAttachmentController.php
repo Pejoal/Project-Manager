@@ -89,9 +89,9 @@ class TaskAttachmentController extends Controller
 
     $attachment->update($request->only('description'));
 
-    return response()->json([
-      'message' => 'Attachment description updated successfully',
-      'attachment' => $attachment->load('user'),
-    ]);
+    // return response()->json([
+    //   'message' => 'Attachment description updated successfully',
+    //   'attachment' => $attachment->load('user'),
+    // ]);
   }
 }

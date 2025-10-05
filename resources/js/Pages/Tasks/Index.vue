@@ -364,6 +364,12 @@ const formatDateTime = (datetime) => {
         :task="selectedTaskForModal"
         @close="closeTaskModal"
         @refresh="refreshTaskDetails"
+        @action="
+          () => {
+            showTaskModal = false;
+            openTimeEntryModal(item);
+          }
+        "
       />
 
       <!-- Tasks DataTable -->
