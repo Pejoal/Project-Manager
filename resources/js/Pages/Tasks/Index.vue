@@ -2,13 +2,17 @@
 import DataTable from '@/Components/DataTable.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import axios from 'axios';
 import { computed, ref } from 'vue';
 import CreateTimeEntryModal from '../TimeEntries/CreateTimeEntryModal.vue';
 import CreateTaskModal from './CreateTaskModal.vue';
+import TaskModal from './TaskModal.vue';
 
 const showModal = ref(false);
 const showCreateTimeEntryModal = ref(false);
+const showTaskModal = ref(false);
 const selectedTask = ref(null);
+const selectedTaskForModal = ref(null);
 
 const openModal = () => {
   showModal.value = true;
@@ -28,6 +32,46 @@ const closeTimeEntryModal = () => {
   showCreateTimeEntryModal.value = false;
 };
 
+const openTaskDetailsModal = async (task) => {
+  try {
+    // Fetch full task details with attachments
+    const response = await axios.get(
+      route('tasks.show', {
+        project: task.project.slug,
+        task: task.id,
+      })
+    );
+    selectedTaskForModal.value = response.data.props.task;
+    showTaskModal.value = true;
+  } catch (error) {
+    console.error('Error fetching task details:', error);
+    // Fallback to using the task data we have
+    selectedTaskForModal.value = task;
+    showTaskModal.value = true;
+  }
+};
+
+const closeTaskModal = () => {
+  showTaskModal.value = false;
+  selectedTaskForModal.value = null;
+};
+
+const refreshTaskDetails = async () => {
+  if (selectedTaskForModal.value) {
+    try {
+      const response = await axios.get(
+        route('tasks.show', {
+          project: selectedTaskForModal.value.project.slug,
+          task: selectedTaskForModal.value.id,
+        })
+      );
+      selectedTaskForModal.value = response.data.props.task;
+    } catch (error) {
+      console.error('Error refreshing task details:', error);
+    }
+  }
+};
+
 const props = defineProps({
   users: Array,
   tasks: Object,
@@ -44,16 +88,6 @@ const columns = [
     key: 'name',
     label: 'Task',
     sortable: true,
-    component: (item) => `
-      <div>
-        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-          ${item.name}
-        </div>
-        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          ID: ${item.id}
-        </div>
-      </div>
-    `,
   },
   {
     key: 'description',
@@ -322,6 +356,14 @@ const formatDateTime = (datetime) => {
         @close="closeModal"
       />
 
+      <!-- Task Details Modal -->
+      <TaskModal
+        :show="showTaskModal"
+        :task="selectedTaskForModal"
+        @close="closeTaskModal"
+        @refresh="refreshTaskDetails"
+      />
+
       <!-- Tasks DataTable -->
       <DataTable
         :data="tasks"
@@ -336,19 +378,14 @@ const formatDateTime = (datetime) => {
         :empty-state-text="$t('words.no_tasks_found')"
         @bulk-action="handleBulkAction"
         @row-click="handleRowClick"
-        :except="['users','projects', 'statuses', 'priorities']"
+        :except="['users', 'projects', 'statuses', 'priorities']"
       >
         <!-- Custom Task Name Cell with Description -->
         <template #cell-name="{ item }">
           <div @click.stop>
-            <Link
-              :href="
-                route('tasks.show', {
-                  project: project ? project.slug : item.project.slug,
-                  task: item.id,
-                })
-              "
-              class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+            <button
+              @click="openTaskDetailsModal(item)"
+              class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 font-medium text-left"
               v-html="item.name"
             />
             <div v-if="item.start_datetime || item.end_datetime" class="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -358,7 +395,6 @@ const formatDateTime = (datetime) => {
             </div>
           </div>
         </template>
-
         <!-- Custom Project Cell (only for all tasks view) -->
         <template #cell-project="{ item }" v-if="!project">
           <div @click.stop>

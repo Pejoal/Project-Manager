@@ -262,6 +262,7 @@ class TaskController extends Controller
       'project:id,name,slug',
       'phase:id,name',
       'milestone:id,name',
+      'attachments.user:id,name',
     ]);
     return Inertia::render('Tasks/Show', compact('task'));
   }

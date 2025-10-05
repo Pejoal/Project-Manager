@@ -202,7 +202,7 @@ return [
   'create_team_desc' => 'Create a new team to collaborate with others on projects.',
 
   // Project Components
-  'basic_data' => 'Basic Data',
+  'basic_data' => 'Basic Information',
   'project_id' => 'Project ID',
   'description' => 'Description',
   'status' => 'Status',
@@ -294,8 +294,8 @@ return [
   'create_task_priority' => 'Create Task Priority',
   'select_projects' => 'Select Projects',
   'select_assigned_to' => 'Select Assigned to',
-  'start_datetime' => 'Start Date/Time',
-  'end_datetime' => 'End Date/Time',
+  'start_datetime' => 'Start Date & Time',
+  'end_datetime' => 'End Date & Time',
 
   // Profile Additional Translations
   'click_to_resend' => 'Click here to re-send the verification email.',
@@ -309,4 +309,20 @@ return [
   'this_device' => 'This device',
   'last_active' => 'Last active',
   'unknown' => 'Unknown',
+
+  // Attachments
+  'attachments' => 'Attachments',
+  'no_attachments' => 'No attachments yet',
+  'add_files' => 'Add Files',
+  'upload_files' => 'Upload Files',
+  'selected_files' => 'Selected Files',
+  'optional_description' => 'Optional description',
+  'file_uploaded_successfully' => 'Files uploaded successfully!',
+  'attachment_deleted_successfully' => 'Attachment deleted successfully!',
+  'description_updated_successfully' => 'Description updated successfully!',
+  'download' => 'Download',
+  'edit_description' => 'Edit description',
+  'add_description' => 'Add description',
+  'uploading' => 'Uploading...',
+  'cancel' => 'Cancel',
 ];

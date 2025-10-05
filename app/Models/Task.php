@@ -50,6 +50,12 @@ class Task extends Model
     return $this->hasMany(TimeEntry::class);
   }
 
+  // Attachment relationships
+  public function attachments()
+  {
+    return $this->hasMany(TaskAttachment::class)->latest();
+  }
+
   public function toSearchableArray()
   {
     return [

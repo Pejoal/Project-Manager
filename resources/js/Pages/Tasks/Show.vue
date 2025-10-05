@@ -1,11 +1,14 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import TaskModal from './TaskModal.vue';
 
 const props = defineProps({
   task: Object,
 });
 
 const form = useForm({});
+const showTaskModal = ref(false);
 
 const destroy = () => {
   if (confirm('Are you sure?')) {
@@ -16,6 +19,12 @@ const destroy = () => {
       })
     );
   }
+};
+
+const refreshTask = async () => {
+  // In a real implementation, you might want to refresh the task data
+  // For now, we'll just close the modal since this is a demo
+  console.log('Task refresh requested');
 };
 </script>
 
@@ -94,5 +103,31 @@ const destroy = () => {
       Edit
     </Link>
     <button @click="destroy" class="ml-4 text-red-500 dark:text-red-400 hover:underline">Delete</button>
+
+    <!-- Example: Quick access button to open task details -->
+    <div v-if="task" class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Task Details</h3>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+        View comprehensive task information including attachments, assignments, and project relationships.
+      </p>
+      <button
+        @click="showTaskModal = true"
+        class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring focus:ring-blue-300 disabled:opacity-25 transition"
+      >
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+          />
+        </svg>
+        View Task Details & Attachments
+      </button>
+    </div>
+
+    <!-- TaskModal Component -->
+    <TaskModal :show="showTaskModal" :task="task" @close="showTaskModal = false" @refresh="refreshTask" />
   </div>
 </template>

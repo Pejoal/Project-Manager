@@ -17,6 +17,7 @@ use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\EmployeeProfileController;
 use App\Http\Controllers\PayslipController;
 use App\Http\Controllers\TimeEntryController;
+use App\Http\Controllers\TaskAttachmentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -122,8 +123,24 @@ Route::group(
           Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
           Route::put('/{task}', [TaskController::class, 'update'])->name('tasks.update');
           Route::delete('/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+          // Task Attachment Routes
+          Route::post('/{task}/attachments', [TaskAttachmentController::class, 'store'])->name(
+            'task-attachments.store'
+          );
         });
       });
+
+      // Task Attachment Routes (outside project scope for global access)
+      Route::get('/task-attachments/{attachment}/download', [TaskAttachmentController::class, 'download'])->name(
+        'task-attachments.download'
+      );
+      Route::put('/task-attachments/{attachment}', [TaskAttachmentController::class, 'update'])->name(
+        'task-attachments.update'
+      );
+      Route::delete('/task-attachments/{attachment}', [TaskAttachmentController::class, 'destroy'])->name(
+        'task-attachments.destroy'
+      );
 
       // Project Status Management Routes
       Route::prefix('project-statuses')->group(function () {
