@@ -72,11 +72,8 @@ class TaskAttachmentController extends Controller
 
     $attachment->delete();
 
-    session()->flash('flash.banner', trans('words.attachment_deleted_successfully'));
-    session()->flash('flash.bannerStyle', 'danger');
-    // return response()->json([
-    //   'message' => '',
-    // ]);
+    // session()->flash('flash.banner', trans('words.attachment_deleted_successfully'));
+    // session()->flash('flash.bannerStyle', 'danger');
   }
 
   public function update(Request $request, TaskAttachment $attachment)
