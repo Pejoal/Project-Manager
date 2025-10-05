@@ -1,240 +1,394 @@
 <script setup>
-import ApplicationMark from '@/Components/ApplicationMark.vue';
-import SidebarDropdown from '@/Components/SidebarDropdown.vue';
-import SidebarLink from '@/Components/SidebarLink.vue';
 import { Link, usePage } from '@inertiajs/vue3';
+import { trans } from 'laravel-vue-i18n';
 import { computed } from 'vue';
 
-// SVG Icons
-const IconDashboard = {
-  template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>`,
-};
-const IconClients = {
-  template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.224-1.25-.62-1.722M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.224-1.25.62-1.722M12 12a3 3 0 100-6 3 3 0 000 6z"></path></svg>`,
-};
-const IconProjects = {
-  template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>`,
-};
-const IconTasks = {
-  template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>`,
-};
-const IconPayroll = {
-  template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>`,
-};
-const IconCRM = {
-  template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>`,
-};
-const IconChevronLeft = {
-  template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>`,
-};
+const page = usePage();
 
 const props = defineProps({
-  isSidebarCollapsed: {
+  showingMobileMenu: {
     type: Boolean,
     default: false,
   },
 });
 
-const emit = defineEmits(['toggle-collapse', 'toggle-sidebar-collapse']);
+// Check if user has specific role
+const hasRole = (role) => {
+  return page.props.auth?.user?.roles?.some((userRole) => userRole.name === role) || false;
+};
 
-const page = usePage();
+// Navigation items configuration
+const navigationItems = computed(() => [
+  {
+    name: trans('words.dashboard'),
+    href: route('dashboard'),
+    icon: 'dashboard',
+    current: route().current('dashboard'),
+  },
+  {
+    name: trans('words.clients'),
+    href: route('clients.index'),
+    icon: 'clients',
+    current: route().current('clients.*'),
+  },
+  {
+    name: trans('words.projects'),
+    href: route('projects.index'),
+    icon: 'projects',
+    current: route().current('projects.*'),
+  },
+  {
+    name: trans('words.all_tasks'),
+    href: route('tasks.all'),
+    icon: 'tasks',
+    current: route().current('tasks.all'),
+  },
+  {
+    name: trans('words.time_entries'),
+    href: route('time-entries.index'),
+    icon: 'time',
+    current: route().current('time-entries.*'),
+  },
+  // Payroll section (admin only)
+  ...(hasRole('admin')
+    ? [
+        {
+          name: trans('words.payroll'),
+          icon: 'payroll',
+          current:
+            route().current('payroll.*') || route().current('employee-profiles.*') || route().current('payslips.*'),
+          children: [
+            {
+              name: trans('words.dashboard'),
+              href: route('payroll.dashboard'),
+              current: route().current('payroll.dashboard'),
+            },
+            {
+              name: trans('words.employee_profiles'),
+              href: route('employee-profiles.index'),
+              current: route().current('employee-profiles.*'),
+            },
+            {
+              name: trans('words.time_entries'),
+              href: route('time-entries.index'),
+              current: route().current('time-entries.*'),
+            },
+            {
+              name: trans('words.payslips'),
+              href: route('payslips.index'),
+              current: route().current('payslips.*'),
+            },
+            {
+              name: trans('words.reports'),
+              href: route('payroll.reports'),
+              current: route().current('payroll.reports'),
+            },
+            {
+              name: trans('words.settings'),
+              href: route('payroll.settings'),
+              current: route().current('payroll.settings'),
+            },
+          ],
+        },
+      ]
+    : []),
+  // CRM section
+  {
+    name: 'CRM',
+    icon: 'crm',
+    current:
+      route().current('leads.*') ||
+      route().current('contacts.*') ||
+      route().current('opportunities.*') ||
+      route().current('campaigns.*') ||
+      route().current('support-tickets.*') ||
+      route().current('interactions.*') ||
+      route().current('knowledge-base.*'),
+    children: [
+      {
+        name: trans('words.leads'),
+        href: route('leads.index'),
+        current: route().current('leads.*'),
+      },
+      {
+        name: trans('words.contacts'),
+        href: route('contacts.index'),
+        current: route().current('contacts.*'),
+      },
+      {
+        name: trans('words.opportunities'),
+        href: route('opportunities.index'),
+        current: route().current('opportunities.*'),
+      },
+      {
+        name: trans('words.campaigns'),
+        href: route('campaigns.index'),
+        current: route().current('campaigns.*'),
+      },
+      {
+        name: trans('words.support_tickets'),
+        href: route('support-tickets.index'),
+        current: route().current('support-tickets.*'),
+      },
+      {
+        name: trans('words.interactions'),
+        href: route('interactions.index'),
+        current: route().current('interactions.*'),
+      },
+      {
+        name: trans('words.knowledge_base'),
+        href: route('knowledge-base.index'),
+        current: route().current('knowledge-base.*'),
+      },
+    ],
+  },
+  // Settings section (admin only)
+  ...(hasRole('admin')
+    ? [
+        {
+          name: trans('words.settings'),
+          icon: 'settings',
+          current:
+            route().current('project-statuses.*') ||
+            route().current('project-priorities.*') ||
+            route().current('task-statuses.*') ||
+            route().current('task-priorities.*'),
+          children: [
+            {
+              name: trans('words.project_statuses'),
+              href: route('project-statuses.index'),
+              current: route().current('project-statuses.*'),
+            },
+            {
+              name: trans('words.project_priorities'),
+              href: route('project-priorities.index'),
+              current: route().current('project-priorities.*'),
+            },
+            {
+              name: trans('words.task_statuses'),
+              href: route('task-statuses.index'),
+              current: route().current('task-statuses.*'),
+            },
+            {
+              name: trans('words.task_priorities'),
+              href: route('task-priorities.index'),
+              current: route().current('task-priorities.*'),
+            },
+          ],
+        },
+      ]
+    : []),
+  {
+    name: trans('words.activities'),
+    href: route('activities.index'),
+    icon: 'activities',
+    current: route().current('activities.*'),
+  },
+  {
+    name: trans('words.maps'),
+    href: route('maps.index'),
+    icon: 'map',
+    current: route().current('maps.*'),
+  },
+]);
 
-// Role-based Access
-const hasRole = (role) => page.props.user.roles.includes(role);
-const hasAnyRole = (roles) => roles.some((r) => hasRole(r));
-
-// Active State Logic
-const isPayrollActive = computed(
-  () =>
-    route().current('payroll.*') ||
-    route().current('employee-profiles.*') ||
-    route().current('payslips.*') ||
-    route().current('time-entries.*')
-);
-
-const isCRMActive = computed(
-  () =>
-    route().current('leads.*') ||
-    route().current('contacts.*') ||
-    route().current('opportunities.*') ||
-    route().current('campaigns.*') ||
-    route().current('support-tickets.*') ||
-    route().current('interactions.*') ||
-    route().current('knowledge-base.*')
-);
-
-const handleToggleSidebarCollapse = () => {
-  if (props.isSidebarCollapsed) {
-    emit('toggle-collapse');
-  }
+// Icon components
+const icons = {
+  dashboard: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v0a2 2 0 01-2 2H10a2 2 0 01-2-2v0z"></path></svg>`,
+  },
+  clients: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>`,
+  },
+  projects: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>`,
+  },
+  tasks: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>`,
+  },
+  time: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+  },
+  payroll: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+  },
+  crm: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>`,
+  },
+  settings: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>`,
+  },
+  activities: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>`,
+  },
+  map: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>`,
+  },
+  chevronDown: {
+    template: `<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
+  },
 };
 </script>
 
 <template>
-  <aside
-    class="hidden md:flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300"
-    :class="isSidebarCollapsed ? 'w-20' : 'w-64'"
-  >
-    <!-- Logo Section -->
-    <div class="flex items-center justify-center h-16 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-      <Link :href="route('dashboard')">
-        <ApplicationMark class="block h-8 w-auto" />
-      </Link>
+  <!-- Desktop Sidebar -->
+  <div class="hidden md:flex md:flex-shrink-0">
+    <div class="flex flex-col w-64">
+      <div class="flex flex-col h-0 flex-1 bg-gray-800 dark:bg-gray-900">
+        <!-- Logo -->
+        <div class="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900 dark:bg-gray-800">
+          <Link :href="route('dashboard')" class="flex items-center">
+            <img class="h-8 w-auto" src="/favicon.ico" alt="Company Logo" />
+            <span class="ml-3 text-white font-semibold text-lg">Project Manager</span>
+          </Link>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex-1 flex flex-col overflow-y-auto">
+          <nav class="flex-1 px-2 py-4 space-y-1">
+            <template v-for="item in navigationItems" :key="item.name">
+              <!-- Single level item -->
+              <Link
+                v-if="!item.children"
+                :href="item.href"
+                :class="[
+                  item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                  'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                ]"
+              >
+                <component
+                  :is="icons[item.icon]"
+                  :class="[
+                    item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                    'mr-3 flex-shrink-0 h-6 w-6',
+                  ]"
+                />
+                {{ item.name }}
+              </Link>
+
+              <!-- Multi-level item -->
+              <div v-else class="space-y-1">
+                <div
+                  :class="[
+                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'group flex items-center px-2 py-2 text-sm font-medium rounded-md cursor-pointer',
+                  ]"
+                >
+                  <component
+                    :is="icons[item.icon]"
+                    :class="[
+                      item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                      'mr-3 flex-shrink-0 h-6 w-6',
+                    ]"
+                  />
+                  {{ item.name }}
+                  <component
+                    :is="icons.chevronDown"
+                    :class="[
+                      item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                      'ml-auto h-5 w-5 transform transition-colors',
+                    ]"
+                  />
+                </div>
+
+                <!-- Sub-items -->
+                <div class="ml-6 space-y-1">
+                  <Link
+                    v-for="subItem in item.children"
+                    :key="subItem.name"
+                    :href="subItem.href"
+                    :class="[
+                      subItem.current ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-600 hover:text-white',
+                      'group flex items-center px-2 py-1 text-sm font-medium rounded-md',
+                    ]"
+                  >
+                    {{ subItem.name }}
+                  </Link>
+                </div>
+              </div>
+            </template>
+          </nav>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Navigation Menu -->
-    <nav class="flex-1 px-3 py-4 overflow-y-auto">
-      <ul class="space-y-2">
-        <!-- Dashboard -->
-        <li>
-          <SidebarLink
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
-            :is-collapsed="isSidebarCollapsed"
-          >
-            <template #icon><IconDashboard /></template>
-            {{ $t('words.dashboard') }}
-          </SidebarLink>
-        </li>
+  <!-- Mobile Sidebar -->
+  <div v-show="showingMobileMenu" class="md:hidden">
+    <div class="fixed inset-0 flex z-40">
+      <!-- Overlay -->
+      <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
 
-        <!-- Clients -->
-        <li>
-          <SidebarLink
-            :href="route('clients.index')"
-            :active="route().current('clients.*')"
-            :is-collapsed="isSidebarCollapsed"
-          >
-            <template #icon><IconClients /></template>
-            {{ $t('words.clients') }}
-          </SidebarLink>
-        </li>
+      <!-- Sidebar -->
+      <div class="relative flex-1 flex flex-col max-w-xs w-full bg-gray-800">
+        <!-- Logo -->
+        <div class="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900">
+          <Link :href="route('dashboard')" class="flex items-center">
+            <img class="h-8 w-auto" src="/favicon.ico" alt="Company Logo" />
+            <span class="ml-3 text-white font-semibold text-lg">Project Manager</span>
+          </Link>
+        </div>
 
-        <!-- Projects -->
-        <li>
-          <SidebarLink
-            :href="route('projects.index')"
-            :active="route().current('projects.*')"
-            :is-collapsed="isSidebarCollapsed"
-          >
-            <template #icon><IconProjects /></template>
-            {{ $t('words.projects') }}
-          </SidebarLink>
-        </li>
+        <!-- Navigation -->
+        <div class="flex-1 flex flex-col overflow-y-auto">
+          <nav class="flex-1 px-2 py-4 space-y-1">
+            <template v-for="item in navigationItems" :key="item.name">
+              <!-- Single level item -->
+              <Link
+                v-if="!item.children"
+                :href="item.href"
+                :class="[
+                  item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                  'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                ]"
+              >
+                <component
+                  :is="icons[item.icon]"
+                  :class="[
+                    item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                    'mr-3 flex-shrink-0 h-6 w-6',
+                  ]"
+                />
+                {{ item.name }}
+              </Link>
 
-        <!-- All Tasks -->
-        <li>
-          <SidebarLink
-            :href="route('tasks.all')"
-            :active="route().current('tasks.all')"
-            :is-collapsed="isSidebarCollapsed"
-          >
-            <template #icon><IconTasks /></template>
-            {{ $t('words.all_tasks') }}
-          </SidebarLink>
-        </li>
+              <!-- Multi-level item -->
+              <div v-else class="space-y-1">
+                <div
+                  :class="[
+                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'group flex items-center px-2 py-2 text-sm font-medium rounded-md cursor-pointer',
+                  ]"
+                >
+                  <component
+                    :is="icons[item.icon]"
+                    :class="[
+                      item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                      'mr-3 flex-shrink-0 h-6 w-6',
+                    ]"
+                  />
+                  {{ item.name }}
+                </div>
 
-        <!-- Payroll Dropdown -->
-        <li v-if="hasAnyRole(['admin', 'manager', 'employee'])">
-          <SidebarDropdown
-            @toggled="handleToggleSidebarCollapse"
-            :title="$t('words.payroll')"
-            :active="isPayrollActive"
-            :is-collapsed="isSidebarCollapsed"
-          >
-            <template #icon><IconPayroll /></template>
-            <li v-if="hasRole('admin')">
-              <SidebarLink :href="route('payroll.dashboard')" :active="route().current('payroll.dashboard')">
-                {{ $t('words.dashboard') }}
-              </SidebarLink>
-            </li>
-            <li v-if="hasRole('admin')">
-              <SidebarLink :href="route('payroll.index')" :active="route().current('payroll.index')">
-                {{ $t('words.payrolls') }}
-              </SidebarLink>
-            </li>
-            <li v-if="hasAnyRole(['admin', 'manager', 'employee'])">
-              <SidebarLink :href="route('time-entries.index')" :active="route().current('time-entries.*')">
-                {{ $t('words.time_entries') }}
-              </SidebarLink>
-            </li>
-            <li v-if="hasRole('admin')">
-              <SidebarLink :href="route('employee-profiles.index')" :active="route().current('employee-profiles.*')">
-                {{ $t('words.employees') }}
-              </SidebarLink>
-            </li>
-            <li v-if="hasRole('admin')">
-              <SidebarLink :href="route('payslips.index')" :active="route().current('payslips.*')">
-                {{ $t('words.payslips') }}
-              </SidebarLink>
-            </li>
-            <li v-if="hasRole('admin')">
-              <SidebarLink :href="route('payroll.settings')" :active="route().current('payroll.settings')">
-                {{ $t('words.settings') }}
-              </SidebarLink>
-            </li>
-          </SidebarDropdown>
-        </li>
-
-        <!-- CRM Dropdown -->
-        <li v-if="hasAnyRole(['admin', 'manager', 'sales'])">
-          <SidebarDropdown
-            @toggled="handleToggleSidebarCollapse"
-            :title="$t('words.crm')"
-            :active="isCRMActive"
-            :is-collapsed="isSidebarCollapsed"
-          >
-            <template #icon><IconCRM /></template>
-            <li>
-              <SidebarLink :href="route('leads.index')" :active="route().current('leads.*')">
-                {{ $t('words.leads') }}
-              </SidebarLink>
-            </li>
-            <li>
-              <SidebarLink :href="route('contacts.index')" :active="route().current('contacts.*')">
-                {{ $t('words.contacts') }}
-              </SidebarLink>
-            </li>
-            <li>
-              <SidebarLink :href="route('opportunities.index')" :active="route().current('opportunities.*')">
-                {{ $t('words.opportunities') }}
-              </SidebarLink>
-            </li>
-            <li>
-              <SidebarLink :href="route('campaigns.index')" :active="route().current('campaigns.*')">
-                {{ $t('words.campaigns') }}
-              </SidebarLink>
-            </li>
-            <li>
-              <SidebarLink :href="route('support-tickets.index')" :active="route().current('support-tickets.*')">
-                {{ $t('words.support_tickets') }}
-              </SidebarLink>
-            </li>
-            <li>
-              <SidebarLink :href="route('interactions.index')" :active="route().current('interactions.*')">
-                {{ $t('words.interactions') }}
-              </SidebarLink>
-            </li>
-            <li>
-              <SidebarLink :href="route('knowledge-base.index')" :active="route().current('knowledge-base.*')">
-                {{ $t('words.knowledge_base') }}
-              </SidebarLink>
-            </li>
-          </SidebarDropdown>
-        </li>
-      </ul>
-    </nav>
-
-    <!-- Collapse Toggle Button -->
-    <div class="p-3 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
-      <button
-        @click="emit('toggle-collapse')"
-        class="w-full flex items-center justify-center p-2 text-gray-500 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-      >
-        <IconChevronLeft
-          class="w-6 h-6 transition-transform duration-300"
-          :class="{ 'rotate-180': isSidebarCollapsed }"
-        />
-      </button>
+                <!-- Sub-items -->
+                <div class="ml-6 space-y-1">
+                  <Link
+                    v-for="subItem in item.children"
+                    :key="subItem.name"
+                    :href="subItem.href"
+                    :class="[
+                      subItem.current ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-600 hover:text-white',
+                      'group flex items-center px-2 py-1 text-sm font-medium rounded-md',
+                    ]"
+                  >
+                    {{ subItem.name }}
+                  </Link>
+                </div>
+              </div>
+            </template>
+          </nav>
+        </div>
+      </div>
     </div>
-  </aside>
+  </div>
 </template>

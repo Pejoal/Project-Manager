@@ -1,77 +1,72 @@
 <script setup>
-import { router, usePage } from '@inertiajs/vue3';
-import { loadLanguageAsync } from 'laravel-vue-i18n';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const page = usePage();
-const isLocalesOpen = ref(false);
-const localesDropdownRef = ref(null);
-const activeLocaleCode = ref(page.props.active_locale_code);
 
-if (activeLocaleCode.value) {
-  loadLanguageAsync(activeLocaleCode.value);
-}
+const locales = computed(() => page.props.locales || []);
+const activeLocale = computed(() => page.props.active_locale_code || 'en');
 
-const handleLocaleClick = (code, url) => {
-  activeLocaleCode.value = code;
-  loadLanguageAsync(code);
-  router.visit(url, { preserveState: true });
-  isLocalesOpen.value = false;
+const getCurrentLocale = computed(() => {
+  return (
+    locales.value.find((locale) => locale.code === activeLocale.value) || { code: 'en', native: 'English', flag: '🇺🇸' }
+  );
+});
+
+// SVG Icon
+const IconGlobe = {
+  template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9-3-9m-9 9a9 9 0 019-9"></path></svg>`,
 };
-
-const handleClickOutside = (event) => {
-  if (localesDropdownRef.value && !localesDropdownRef.value.contains(event.target)) {
-    isLocalesOpen.value = false;
-  }
-};
-
-onMounted(() => document.addEventListener('click', handleClickOutside));
-onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside));
 </script>
 
 <template>
-  <div ref="localesDropdownRef" class="relative">
-    <button
-      @click="isLocalesOpen = !isLocalesOpen"
-      type="button"
-      class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-colors duration-200"
-    >
-      <span
-        v-if="$page.props.locales && $page.props.locales[$page.props.active_locale_code]"
-        class="fi"
-        :class="`fi-${$page.props.locales[$page.props.active_locale_code].flag}`"
-      ></span>
-      <svg
-        class="ms-2 -me-0.5 h-4 w-4"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
+  <Dropdown align="right" width="48">
+    <template #trigger>
+      <button
+        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-      </svg>
-    </button>
-    <div
-      v-show="isLocalesOpen"
-      class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 z-50"
-    >
-      <div class="py-1" role="none">
-        <button
-          v-for="locale in $page.props.locales"
-          :key="locale.code"
-          @click.prevent="handleLocaleClick(locale.code, locale.url)"
-          class="w-full text-left flex items-center px-4 py-2 text-sm transition-colors duration-200"
-          :class="[
-            activeLocaleCode === locale.code
-              ? 'bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white'
-              : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800',
-          ]"
-        >
-          <span class="fi mr-3" :class="`fi-${locale.flag}`"></span>
-          {{ locale.native }}
-        </button>
+        <span class="mr-2">{{ getCurrentLocale.flag }}</span>
+        <span class="hidden sm:inline">{{ getCurrentLocale.native }}</span>
+        <IconGlobe class="ml-2 -mr-0.5 h-4 w-4 sm:hidden" />
+        <svg class="ml-2 -mr-0.5 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </template>
+
+    <template #content>
+      <div class="px-4 py-2 text-xs text-gray-400 border-b border-gray-200 dark:border-gray-600">
+        {{ $t('words.select_language') }}
       </div>
-    </div>
-  </div>
+      <DropdownLink
+        v-for="locale in locales"
+        :key="locale.code"
+        :href="locale.url"
+        :class="{ 'bg-gray-100 dark:bg-gray-700': locale.code === activeLocale }"
+      >
+        <div class="flex items-center">
+          <span class="mr-3">{{ locale.flag }}</span>
+          <span>{{ locale.native }}</span>
+          <svg
+            v-if="locale.code === activeLocale"
+            class="ml-auto h-4 w-4 text-green-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+      </DropdownLink>
+    </template>
+  </Dropdown>
 </template>
