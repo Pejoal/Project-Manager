@@ -40,14 +40,22 @@ const breadcrumbs = computed(() => usePage().props.breadcrumbs || []);
       </li>
     </ol>
   </nav>
-  <section v-else class="flex items-center justify-center h-full py-6 px-4 sm:px-6 bg-gray-50 dark:bg-gray-900">
-    <div class="text-center">
-      <h1 class="text-2xl font-serif font-semibold text-gray-800 dark:text-gray-200 mb-1">
+  <section v-else>
+    <!-- Mobile Design (below md: breakpoint, <768px) -->
+    <div class="flex items-center justify-center gap-1 md:hidden">
+      <h1 class="text-xl font-serif font-semibold text-gray-800 dark:text-gray-200">
         {{ trans('words.welcome') }}
       </h1>
-      <p class="text-lg text-gray-600 dark:text-gray-400 font-medium">
+      <p class="text-lg text-gray-600 dark:text-gray-300 font-medium">
         {{ $page.props.auth.user.name }}
       </p>
+    </div>
+
+    <!-- Desktop/Tablet Design (md: and above, ≥768px) -->
+    <div class="hidden md:flex items-center justify-center">
+      <h1 class="text-lg font-serif font-bold text-gray-800 dark:text-gray-100">
+        {{ trans('words.welcome') }}, {{ $page.props.auth.user.name }}!
+      </h1>
     </div>
   </section>
 </template>

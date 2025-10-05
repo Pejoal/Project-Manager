@@ -77,7 +77,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutsideLo
           </button>
 
           <!-- Breadcrumbs for Desktop -->
-          <div class="hidden md:flex items-center ml-4">
+          <div class="hidden md:flex items-center justify-center">
             <Breadcrumps />
           </div>
         </div>
@@ -151,7 +151,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutsideLo
       </div>
 
       <!-- Breadcrumbs for Mobile -->
-      <div class="md:hidden pb-4">
+      <div class="md:hidden">
         <Breadcrumps />
       </div>
     </div>
