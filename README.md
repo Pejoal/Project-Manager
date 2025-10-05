@@ -18,6 +18,7 @@ Built with modern web technologies, the system offers real-time updates, full-te
 - **Project Management**: Full project lifecycle management with phases and milestones
 - **Task Management**: Advanced task tracking with assignments, priorities, and statuses
 - **Phase & Milestone Tracking**: Organize projects with structured phases and milestones
+- **Customer Relationship Management (CRM)**: Comprehensive CRM system with sales automation, marketing campaigns, and customer support
 - **Full-Text Search**: Lightning-fast, typo-tolerant search powered by **Meilisearch**
 - **Real-time Notifications**: Instant updates and notifications using **Laravel Reverb** WebSockets
 - **User Authentication**: Comprehensive security with Laravel Jetstream including:
@@ -164,6 +165,132 @@ Built with modern web technologies, the system offers real-time updates, full-te
    - Export capabilities
    - Visual charts and graphs
    - Trend analysis
+
+### 📞 Customer Relationship Management (CRM) Features
+
+#### Core CRM Capabilities
+
+- **Lead Management**: Complete lead tracking from initial contact to conversion
+- **Contact Management**: Comprehensive contact database with detailed customer profiles
+- **Sales Pipeline Management**: Visual sales pipeline with customizable stages
+- **Opportunity Tracking**: Revenue opportunity management with forecasting
+- **Marketing Automation**: Email campaigns, lead nurturing, and marketing analytics
+- **Customer Support**: Ticket system with issue tracking and resolution
+- **Knowledge Base**: Self-service support documentation
+- **Communication History**: Complete audit trail of all customer interactions
+- **Task & Activity Management**: Follow-up tasks and scheduled activities
+- **Reporting & Analytics**: Sales performance, conversion rates, and customer insights
+
+#### Sales Force Automation
+
+1. **Lead Management System**:
+   - Lead capture from multiple sources (web forms, imports, manual entry)
+   - Lead scoring and qualification
+   - Automatic lead assignment and routing
+   - Lead conversion tracking
+   - Duplicate detection and management
+   - Lead source tracking and ROI analysis
+
+2. **Sales Pipeline Management**:
+   - Customizable sales stages and processes
+   - Visual drag-and-drop pipeline interface
+   - Probability-based revenue forecasting
+   - Stage duration tracking and optimization
+   - Sales velocity metrics
+   - Win/loss analysis and reporting
+
+3. **Opportunity Management**:
+   - Detailed opportunity records with value tracking
+   - Expected close dates and probability estimates
+   - Competitor tracking and analysis
+   - Product/service association
+   - Sales team collaboration tools
+   - Revenue forecasting and pipeline analysis
+
+4. **Contact & Account Management**:
+   - Comprehensive contact profiles with custom fields
+   - Account hierarchy and relationship mapping
+   - Contact interaction history and preferences
+   - Social media integration and monitoring
+   - Contact segmentation and tagging
+   - Communication preferences and opt-out management
+
+#### Marketing Automation
+
+1. **Campaign Management**:
+   - Multi-channel campaign creation and execution
+   - Email marketing with templates and personalization
+   - Campaign performance tracking and analytics
+   - A/B testing capabilities
+   - Automated drip campaigns and nurturing sequences
+   - Integration with social media platforms
+
+2. **Lead Generation & Nurturing**:
+   - Landing page creation and optimization
+   - Form building and lead capture
+   - Automated lead scoring and qualification
+   - Behavior-based triggers and responses
+   - Lead nurturing workflows
+   - Marketing qualified lead (MQL) identification
+
+3. **Email Marketing**:
+   - Professional email templates and design tools
+   - Personalization and dynamic content
+   - Automated email sequences and workflows
+   - Email deliverability optimization
+   - Open, click, and conversion tracking
+   - Unsubscribe and bounce management
+
+4. **Analytics & Reporting**:
+   - Campaign ROI and performance metrics
+   - Lead source attribution and analysis
+   - Conversion funnel optimization
+   - Customer journey mapping
+   - Marketing dashboard with real-time metrics
+   - Custom report generation and scheduling
+
+#### Customer Service & Support
+
+1. **Ticket Management System**:
+   - Multi-channel ticket creation (email, web, phone, chat)
+   - Automatic ticket routing and assignment
+   - Priority-based queue management
+   - SLA tracking and compliance monitoring
+   - Escalation workflows and notifications
+   - Customer satisfaction surveys and feedback
+
+2. **Knowledge Base**:
+   - Self-service documentation and FAQs
+   - Article creation and management
+   - Search functionality and categorization
+   - User feedback and article rating
+   - Analytics on article usage and effectiveness
+   - Multi-language support
+
+3. **Communication Hub**:
+   - Unified inbox for all customer communications
+   - Email, chat, and phone integration
+   - Communication templates and canned responses
+   - Internal notes and collaboration tools
+   - Communication history and audit trail
+   - Customer preference management
+
+4. **Case Management**:
+   - Issue tracking and resolution workflows
+   - Case escalation and assignment rules
+   - Time tracking and billing integration
+   - Customer portal for case status updates
+   - Resolution metrics and reporting
+   - Quality assurance and review processes
+
+#### CRM Integration Features
+
+- **Project Integration**: Link CRM activities to project management
+- **Payroll Integration**: Track sales commissions and customer-related time
+- **Task Integration**: Create follow-up tasks and activities
+- **Calendar Integration**: Schedule meetings and appointments
+- **Document Management**: Store and share customer-related documents
+- **Mobile Access**: Full CRM functionality on mobile devices
 
 ---
 
@@ -447,131 +574,6 @@ The system includes three main roles with specific permissions managed by Spatie
 
 ## 💼 Payroll System Usage
 
-### For Employees:
-
-1. **Time Tracking**:
-   - Log worked hours by creating time entries linked to assigned tasks
-   - View the "Time Entries" page from the navigation
-   - Click "Create Time Entry"
-   - Select task, enter start/end datetime
-   - Add optional description
-   - Submit for approval
-
-2. **View Payslips**:
-   - Access generated payslips from the Payroll menu
-   - View detailed breakdown of earnings and deductions
-   - Download payslips (PDF feature coming soon)
-   - Check payment history
-
-3. **Profile Management**:
-   - Update personal information
-   - View hourly rate and overtime rate
-   - Check standard working hours
-
-### For Administrators:
-
-1. **Employee Setup**:
-   - Navigate to Payroll → Employee Profiles
-   - Click "Create Employee Profile"
-   - Enter employee details, hourly rates, tax settings
-   - Set standard working hours and overtime multiplier
-   - Configure payment method
-   - Activate the profile
-
-2. **Time Entry Management**:
-   - Review pending time entries
-   - Approve or reject submitted entries
-   - Use bulk approve for multiple entries
-   - Monitor for overlapping time entries
-   - Generate automatic time entries from completed tasks
-
-3. **Payroll Processing**:
-   - Navigate to Payroll → Payslips
-   - Choose "Generate Payslips" or "Generate Bulk"
-   - Select pay period (start and end dates)
-   - Choose employees
-   - System automatically:
-     - Calculates regular vs. overtime hours
-     - Applies appropriate hourly rates
-     - Computes tax deductions
-     - Calculates net pay
-   - Review draft payslips
-   - Approve payslips
-   - Mark as paid when payment is completed
-
-4. **Tax Configuration**:
-   - Access Payroll → Settings → Tax Configurations
-   - Create tax configurations for different tax types
-   - Set up progressive tax brackets
-   - Configure minimum/maximum income thresholds
-   - Set priority for calculation order
-   - Activate/deactivate taxes as needed
-
-5. **Payroll Settings**:
-   - Configure company information
-   - Set pay period (weekly, bi-weekly, monthly)
-   - Define standard working hours
-   - Set default hourly rates
-   - Choose working days
-   - Configure overtime settings
-   - Enable/disable automatic features
-
-6. **Reports & Analytics**:
-   - Access Payroll → Reports
-   - Select report type (summary, detailed, by employee, by project)
-   - Choose time period
-   - Filter by employees or projects
-   - View charts and statistics
-   - Export data for accounting software
-
-### Key Features:
-
-- **Automatic Calculations**: Hours worked automatically calculated from task start/end times
-- **Overtime Detection**: System identifies overtime hours based on daily/weekly configured limits
-- **Progressive Tax Calculations**: Support for bracket-based federal income tax
-- **Multi-Tax Support**: Apply multiple taxes (federal, state, Social Security, Medicare) with priority ordering
-- **Approval Workflows**: Multi-level approval process for time entries and payslips
-- **Audit Trail**: Complete activity logging for all payroll-related actions with timestamps
-- **Overlap Prevention**: System prevents overlapping time entries for the same employee
-- **Bulk Operations**: Approve multiple time entries or payslips simultaneously
-- **Real-time Updates**: Dashboard statistics update in real-time
-
----
-
-## 📐 Project Structure & Organization
-
-The system implements a sophisticated hierarchical structure for organizing work, providing flexibility and clarity in project management.
-
-### Hierarchical Structure
-
-```
-Client(s)
-    └── Project
-            ├── Phases (Optional organizational layer)
-            │   └── Milestones (Optional within phases)
-            │       └── Tasks (Can be assigned to phases, milestones, or directly to projects)
-            └── Milestones (Optional, can exist without phases)
-                └── Tasks
-```
-
-### Structure Components
-
-#### 🏢 Clients
-
-- Top-level entity representing customers or stakeholders
-- Multiple clients can be associated with a single project
-- Stores contact information (name, email, phone)
-- Can be linked to multiple projects
-
-#### 📁 Projects
-
-- Core organizational unit for all work
-- **Unique Features:**
-  - Slug-based URLs for SEO-friendly navigation
-  - Start and end date tracking
-  - Customizable status (from master settings)
-  - Customizable priority (from master settings)
-  - Multiple client associations
 - **Contains:**
   - Phases (optional)
   - Milestones (optional)

@@ -96,9 +96,6 @@ return [
       'prefix' => '',
       'schema' => 'public',
       'sslmode' => env('DB_SSL_MODE', 'prefer'),
-      'options' => [
-        PDO::MYSQL_ATTR_SSL_CA => base_path('path/to/rds-combined-ca-bundle.pem'),
-      ],
     ],
 
     'sqlsrv' => [

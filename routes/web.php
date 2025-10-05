@@ -18,6 +18,13 @@ use App\Http\Controllers\EmployeeProfileController;
 use App\Http\Controllers\PayslipController;
 use App\Http\Controllers\TimeEntryController;
 use App\Http\Controllers\TaskAttachmentController;
+use App\Http\Controllers\LeadController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\OpportunityController;
+use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\SupportTicketController;
+use App\Http\Controllers\InteractionController;
+use App\Http\Controllers\KnowledgeBaseArticleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -127,7 +134,6 @@ Route::group(
           Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
           Route::put('/{task}', [TaskController::class, 'update'])->name('tasks.update');
           Route::delete('/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
-
         });
       });
 
@@ -246,6 +252,83 @@ Route::group(
         Route::post('/', [TaskPriorityController::class, 'store'])->name('task-priorities.store');
         Route::put('/{taskPriority}', [TaskPriorityController::class, 'update'])->name('task-priorities.update');
         Route::delete('/{taskPriority}', [TaskPriorityController::class, 'destroy'])->name('task-priorities.destroy');
+      });
+
+      // CRM Routes
+      Route::prefix('crm')->group(function () {
+        // Lead Management Routes
+        Route::prefix('leads')->group(function () {
+          Route::get('/', [LeadController::class, 'index'])->name('leads.index');
+          Route::post('/', [LeadController::class, 'store'])->name('leads.store');
+          Route::get('/{lead}', [LeadController::class, 'show'])->name('leads.show');
+          Route::get('/{lead}/edit', [LeadController::class, 'edit'])->name('leads.edit');
+          Route::put('/{lead}', [LeadController::class, 'update'])->name('leads.update');
+          Route::delete('/{lead}', [LeadController::class, 'destroy'])->name('leads.destroy');
+        });
+
+        // Contact Management Routes
+        Route::prefix('contacts')->group(function () {
+          Route::get('/', [ContactController::class, 'index'])->name('contacts.index');
+          Route::post('/', [ContactController::class, 'store'])->name('contacts.store');
+          Route::get('/{contact}', [ContactController::class, 'show'])->name('contacts.show');
+          Route::get('/{contact}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
+          Route::put('/{contact}', [ContactController::class, 'update'])->name('contacts.update');
+          Route::delete('/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+        });
+
+        // Opportunity Management Routes
+        Route::prefix('opportunities')->group(function () {
+          Route::get('/', [OpportunityController::class, 'index'])->name('opportunities.index');
+          Route::post('/', [OpportunityController::class, 'store'])->name('opportunities.store');
+          Route::get('/{opportunity}', [OpportunityController::class, 'show'])->name('opportunities.show');
+          Route::get('/{opportunity}/edit', [OpportunityController::class, 'edit'])->name('opportunities.edit');
+          Route::put('/{opportunity}', [OpportunityController::class, 'update'])->name('opportunities.update');
+          Route::delete('/{opportunity}', [OpportunityController::class, 'destroy'])->name('opportunities.destroy');
+        });
+
+        // Campaign Management Routes
+        Route::prefix('campaigns')->group(function () {
+          Route::get('/', [CampaignController::class, 'index'])->name('campaigns.index');
+          Route::post('/', [CampaignController::class, 'store'])->name('campaigns.store');
+          Route::get('/{campaign}', [CampaignController::class, 'show'])->name('campaigns.show');
+          Route::get('/{campaign}/edit', [CampaignController::class, 'edit'])->name('campaigns.edit');
+          Route::put('/{campaign}', [CampaignController::class, 'update'])->name('campaigns.update');
+          Route::delete('/{campaign}', [CampaignController::class, 'destroy'])->name('campaigns.destroy');
+        });
+
+        // Support Ticket Management Routes
+        Route::prefix('support-tickets')->group(function () {
+          Route::get('/', [SupportTicketController::class, 'index'])->name('support-tickets.index');
+          Route::post('/', [SupportTicketController::class, 'store'])->name('support-tickets.store');
+          Route::get('/{supportTicket}', [SupportTicketController::class, 'show'])->name('support-tickets.show');
+          Route::get('/{supportTicket}/edit', [SupportTicketController::class, 'edit'])->name('support-tickets.edit');
+          Route::put('/{supportTicket}', [SupportTicketController::class, 'update'])->name('support-tickets.update');
+          Route::delete('/{supportTicket}', [SupportTicketController::class, 'destroy'])->name(
+            'support-tickets.destroy'
+          );
+        });
+
+        // Interaction Management Routes
+        Route::prefix('interactions')->group(function () {
+          Route::get('/', [InteractionController::class, 'index'])->name('interactions.index');
+          Route::post('/', [InteractionController::class, 'store'])->name('interactions.store');
+          Route::get('/{interaction}', [InteractionController::class, 'show'])->name('interactions.show');
+          Route::get('/{interaction}/edit', [InteractionController::class, 'edit'])->name('interactions.edit');
+          Route::put('/{interaction}', [InteractionController::class, 'update'])->name('interactions.update');
+          Route::delete('/{interaction}', [InteractionController::class, 'destroy'])->name('interactions.destroy');
+        });
+
+        // Knowledge Base Management Routes
+        Route::prefix('knowledge-base')->group(function () {
+          Route::get('/', [KnowledgeBaseArticleController::class, 'index'])->name('knowledge-base.index');
+          Route::post('/', [KnowledgeBaseArticleController::class, 'store'])->name('knowledge-base.store');
+          Route::get('/{article}', [KnowledgeBaseArticleController::class, 'show'])->name('knowledge-base.show');
+          Route::get('/{article}/edit', [KnowledgeBaseArticleController::class, 'edit'])->name('knowledge-base.edit');
+          Route::put('/{article}', [KnowledgeBaseArticleController::class, 'update'])->name('knowledge-base.update');
+          Route::delete('/{article}', [KnowledgeBaseArticleController::class, 'destroy'])->name(
+            'knowledge-base.destroy'
+          );
+        });
       });
     });
   }
