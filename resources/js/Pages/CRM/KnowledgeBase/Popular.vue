@@ -1,6 +1,6 @@
 <script setup>
-import { ArrowLeftIcon, ClockIcon, EyeIcon, StarIcon } from '@heroicons/vue/24/outline';
 import { Head, Link } from '@inertiajs/vue3';
+import { IconArrowLeft, IconClock, IconEye, IconStar } from '@tabler/icons-vue';
 
 const props = defineProps({
   articles: Array,
@@ -35,7 +35,7 @@ const truncateContent = (content, length = 150) => {
             :href="route('knowledge-base.index')"
             class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >
-            <ArrowLeftIcon class="w-5 h-5" />
+            <IconArrowLeft class="w-5 h-5" />
           </Link>
           <div>
             <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -80,7 +80,7 @@ const truncateContent = (content, length = 150) => {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
             <div class="flex items-center">
-              <EyeIcon class="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              <IconEye class="w-8 h-8 text-blue-600 dark:text-blue-400" />
               <div class="ml-3">
                 <p class="text-sm font-medium text-blue-900 dark:text-blue-100">
                   {{ $t('crm.total_views') }}
@@ -93,7 +93,7 @@ const truncateContent = (content, length = 150) => {
           </div>
           <div class="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
             <div class="flex items-center">
-              <StarIcon class="w-8 h-8 text-green-600 dark:text-green-400" />
+              <IconStar class="w-8 h-8 text-green-600 dark:text-green-400" />
               <div class="ml-3">
                 <p class="text-sm font-medium text-green-900 dark:text-green-100">
                   {{ $t('crm.featured_articles') }}
@@ -139,7 +139,7 @@ const truncateContent = (content, length = 150) => {
               <div class="flex items-center justify-between mb-2">
                 <span class="text-2xl font-bold">#{{ index + 1 }}</span>
                 <div class="flex items-center text-sm">
-                  <EyeIcon class="w-4 h-4 mr-1" />
+                  <IconEye class="w-4 h-4 mr-1" />
                   {{ article.view_count || 0 }}
                 </div>
               </div>
@@ -186,7 +186,7 @@ const truncateContent = (content, length = 150) => {
                       v-if="article.is_featured"
                       class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
                     >
-                      <StarIcon class="w-3 h-3 mr-1" />
+                      <IconStar class="w-3 h-3 mr-1" />
                       {{ $t('crm.featured') }}
                     </span>
                     <span
@@ -211,7 +211,7 @@ const truncateContent = (content, length = 150) => {
 
                 <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-4">
                   <div class="flex items-center">
-                    <ClockIcon class="w-4 h-4 mr-1" />
+                    <IconClock class="w-4 h-4 mr-1" />
                     {{ formatDate(article.created_at) }}
                   </div>
                   <div>{{ $t('words.by') }} {{ article.author?.name }}</div>
@@ -221,7 +221,7 @@ const truncateContent = (content, length = 150) => {
               <div class="ml-4 flex-shrink-0">
                 <div class="text-right">
                   <div class="flex items-center text-lg font-bold text-blue-600 dark:text-blue-400">
-                    <EyeIcon class="w-5 h-5 mr-1" />
+                    <IconEye class="w-5 h-5 mr-1" />
                     {{ (article.view_count || 0).toLocaleString() }}
                   </div>
                   <div class="text-xs text-gray-500 dark:text-gray-400">
@@ -235,7 +235,7 @@ const truncateContent = (content, length = 150) => {
 
         <!-- Empty State -->
         <div v-else class="p-12 text-center">
-          <EyeIcon class="mx-auto h-12 w-12 text-gray-400" />
+          <IconEye class="mx-auto h-12 w-12 text-gray-400" />
           <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
             {{ $t('crm.no_popular_articles') }}
           </h3>

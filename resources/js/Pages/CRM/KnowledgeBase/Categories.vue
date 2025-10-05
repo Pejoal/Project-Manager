@@ -1,6 +1,6 @@
 <script setup>
-import { ArrowLeftIcon, DocumentTextIcon, FolderIcon } from '@heroicons/vue/24/outline';
 import { Head, Link } from '@inertiajs/vue3';
+import { IconArrowLeft, IconFileText, IconFolder } from '@tabler/icons-vue';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -27,7 +27,7 @@ const sortedCategories = computed(() => {
             :href="route('knowledge-base.index')"
             class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >
-            <ArrowLeftIcon class="w-5 h-5" />
+            <IconArrowLeft class="w-5 h-5" />
           </Link>
           <div>
             <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -66,7 +66,7 @@ const sortedCategories = computed(() => {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
             <div class="flex items-center">
-              <FolderIcon class="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              <IconFolder class="w-8 h-8 text-blue-600 dark:text-blue-400" />
               <div class="ml-3">
                 <p class="text-sm font-medium text-blue-900 dark:text-blue-100">
                   {{ $t('crm.total_categories') }}
@@ -79,7 +79,7 @@ const sortedCategories = computed(() => {
           </div>
           <div class="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
             <div class="flex items-center">
-              <DocumentTextIcon class="w-8 h-8 text-green-600 dark:text-green-400" />
+              <IconFileText class="w-8 h-8 text-green-600 dark:text-green-400" />
               <div class="ml-3">
                 <p class="text-sm font-medium text-green-900 dark:text-green-100">
                   {{ $t('crm.total_articles') }}
@@ -118,7 +118,7 @@ const sortedCategories = computed(() => {
           <div class="p-6">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center">
-                <FolderIcon class="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                <IconFolder class="w-8 h-8 text-blue-600 dark:text-blue-400" />
                 <div class="ml-3">
                   <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     {{ category.category }}
@@ -167,7 +167,7 @@ const sortedCategories = computed(() => {
         <!-- Empty State -->
         <div v-if="categories.length === 0" class="col-span-full">
           <div class="text-center py-12">
-            <FolderIcon class="mx-auto h-12 w-12 text-gray-400" />
+            <IconFolder class="mx-auto h-12 w-12 text-gray-400" />
             <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
               {{ $t('crm.no_categories') }}
             </h3>

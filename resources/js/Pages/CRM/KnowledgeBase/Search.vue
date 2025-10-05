@@ -1,6 +1,6 @@
 <script setup>
-import { ArrowLeftIcon, ClockIcon, EyeIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { IconArrowLeft, IconClock, IconEye, IconSearch, IconX } from '@tabler/icons-vue';
 import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps({
@@ -90,7 +90,7 @@ onMounted(() => {
             :href="route('knowledge-base.index')"
             class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >
-            <ArrowLeftIcon class="w-5 h-5" />
+            <IconArrowLeft class="w-5 h-5" />
           </Link>
           <div>
             <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -125,7 +125,7 @@ onMounted(() => {
       <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
         <form @submit.prevent="search" class="space-y-4">
           <div class="relative">
-            <MagnifyingGlassIcon class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <IconSearch class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               ref="searchInput"
               v-model="searchForm.q"
@@ -141,7 +141,7 @@ onMounted(() => {
               type="button"
               class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              <XMarkIcon class="w-5 h-5" />
+              <IconX class="w-5 h-5" />
             </button>
           </div>
 
@@ -154,7 +154,7 @@ onMounted(() => {
               :disabled="searchForm.processing || searchForm.q.length < 3"
               class="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-6 rounded inline-flex items-center"
             >
-              <MagnifyingGlassIcon class="w-4 h-4 mr-2" />
+              <IconSearch class="w-4 h-4 mr-2" />
               {{ searchForm.processing ? $t('words.searching') : $t('words.search') }}
             </button>
           </div>
@@ -199,7 +199,7 @@ onMounted(() => {
           </div>
           <div class="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg">
             <div class="flex items-center">
-              <EyeIcon class="w-8 h-8 text-purple-600 dark:text-purple-400" />
+              <IconEye class="w-8 h-8 text-purple-600 dark:text-purple-400" />
               <div class="ml-3">
                 <p class="text-sm font-medium text-purple-900 dark:text-purple-100">
                   {{ $t('crm.avg_views') }}
@@ -267,12 +267,12 @@ onMounted(() => {
 
                 <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-4">
                   <div class="flex items-center">
-                    <ClockIcon class="w-4 h-4 mr-1" />
+                    <IconClock class="w-4 h-4 mr-1" />
                     {{ formatDate(article.created_at) }}
                   </div>
                   <div>{{ $t('words.by') }} {{ article.author?.name }}</div>
                   <div class="flex items-center">
-                    <EyeIcon class="w-4 h-4 mr-1" />
+                    <IconEye class="w-4 h-4 mr-1" />
                     {{ article.view_count || 0 }} {{ $t('crm.views') }}
                   </div>
                 </div>
@@ -283,7 +283,7 @@ onMounted(() => {
 
         <!-- No Results -->
         <div v-else-if="query" class="p-12 text-center">
-          <MagnifyingGlassIcon class="mx-auto h-12 w-12 text-gray-400" />
+          <IconSearch class="mx-auto h-12 w-12 text-gray-400" />
           <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
             {{ $t('crm.no_results_found') }}
           </h3>
@@ -308,7 +308,7 @@ onMounted(() => {
 
         <!-- Initial State -->
         <div v-else class="p-12 text-center">
-          <MagnifyingGlassIcon class="mx-auto h-12 w-12 text-gray-400" />
+          <IconSearch class="mx-auto h-12 w-12 text-gray-400" />
           <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
             {{ $t('crm.search_knowledge_base') }}
           </h3>

@@ -1,6 +1,6 @@
 <script setup>
-import { ArrowLeftIcon, ChartBarIcon, DocumentTextIcon, EyeIcon, StarIcon } from '@heroicons/vue/24/outline';
 import { Head, Link } from '@inertiajs/vue3';
+import { IconArrowLeft, IconChartBar, IconEye, IconFileText, IconStar } from '@tabler/icons-vue';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -68,7 +68,7 @@ const formatMonth = (monthString) => {
             :href="route('knowledge-base.index')"
             class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >
-            <ArrowLeftIcon class="w-5 h-5" />
+            <IconArrowLeft class="w-5 h-5" />
           </Link>
           <div>
             <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -109,7 +109,7 @@ const formatMonth = (monthString) => {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
           <div class="flex items-center">
-            <DocumentTextIcon class="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <IconFileText class="w-8 h-8 text-blue-600 dark:text-blue-400" />
             <div class="ml-3">
               <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
                 {{ $t('crm.total_articles') }}
@@ -155,7 +155,7 @@ const formatMonth = (monthString) => {
 
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
           <div class="flex items-center">
-            <EyeIcon class="w-8 h-8 text-purple-600 dark:text-purple-400" />
+            <IconEye class="w-8 h-8 text-purple-600 dark:text-purple-400" />
             <div class="ml-3">
               <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
                 {{ $t('crm.total_views') }}
@@ -185,7 +185,7 @@ const formatMonth = (monthString) => {
 
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
           <div class="flex items-center">
-            <StarIcon class="w-8 h-8 text-orange-600 dark:text-orange-400" />
+            <IconStar class="w-8 h-8 text-orange-600 dark:text-orange-400" />
             <div class="ml-3">
               <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
                 {{ $t('crm.featured') }}
@@ -203,7 +203,7 @@ const formatMonth = (monthString) => {
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
           <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center">
-              <ChartBarIcon class="w-5 h-5 mr-2" />
+              <IconChartBar class="w-5 h-5 mr-2" />
               {{ $t('crm.top_performing_articles') }}
             </h2>
           </div>
@@ -241,7 +241,7 @@ const formatMonth = (monthString) => {
                 </div>
                 <div class="flex-shrink-0 text-right">
                   <div class="flex items-center text-sm font-semibold text-blue-600 dark:text-blue-400">
-                    <EyeIcon class="w-4 h-4 mr-1" />
+                    <IconEye class="w-4 h-4 mr-1" />
                     {{ formatNumber(article.view_count) }}
                   </div>
                   <div class="text-xs text-gray-500 dark:text-gray-400">
@@ -251,7 +251,7 @@ const formatMonth = (monthString) => {
               </div>
             </div>
             <div v-else class="text-center py-8">
-              <DocumentTextIcon class="mx-auto h-12 w-12 text-gray-400" />
+              <IconFileText class="mx-auto h-12 w-12 text-gray-400" />
               <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
                 {{ $t('crm.no_articles_yet') }}
               </h3>
@@ -387,7 +387,7 @@ const formatMonth = (monthString) => {
             </div>
           </div>
           <div v-else class="text-center py-12">
-            <ChartBarIcon class="mx-auto h-12 w-12 text-gray-400" />
+            <IconChartBar class="mx-auto h-12 w-12 text-gray-400" />
             <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
               {{ $t('crm.no_view_data') }}
             </h3>

@@ -1,14 +1,7 @@
 <script setup>
-import {
-  ChevronDownIcon,
-  EyeIcon,
-  MagnifyingGlassIcon,
-  PencilIcon,
-  PlusIcon,
-  TrashIcon,
-} from '@heroicons/vue/24/outline';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { IconChevronDown, IconSearch, IconPlus, IconEye, IconPencil, IconTrash } from '@tabler/icons-vue';
 
 const props = defineProps({
   articles: Object,
@@ -156,7 +149,7 @@ const truncateContent = (content, length = 100) => {
             :href="route('knowledge-base.create')"
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
           >
-            <PlusIcon class="w-4 h-4 mr-2" />
+            <IconPlus class="w-4 h-4 mr-2" />
             {{ $t('crm.create_article') }}
           </Link>
         </div>
@@ -171,7 +164,7 @@ const truncateContent = (content, length = 100) => {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <!-- Search -->
           <div class="relative">
-            <MagnifyingGlassIcon class="w-5 h-5 absolute left-3 top-3 text-gray-400" />
+            <IconSearch class="w-5 h-5 absolute left-3 top-3 text-gray-400" />
             <input
               v-model="form.search"
               @keyup.enter="search"
@@ -279,7 +272,7 @@ const truncateContent = (content, length = 100) => {
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
               >
                 {{ $t('words.title') }}
-                <ChevronDownIcon v-if="sort.sort === 'title'" class="w-4 h-4 inline ml-1" />
+                <IconChevronDown v-if="sort.sort === 'title'" class="w-4 h-4 inline ml-1" />
               </th>
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
@@ -296,7 +289,7 @@ const truncateContent = (content, length = 100) => {
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
               >
                 {{ $t('crm.views') }}
-                <ChevronDownIcon v-if="sort.sort === 'view_count'" class="w-4 h-4 inline ml-1" />
+                <IconChevronDown v-if="sort.sort === 'view_count'" class="w-4 h-4 inline ml-1" />
               </th>
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
@@ -308,7 +301,7 @@ const truncateContent = (content, length = 100) => {
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
               >
                 {{ $t('words.created_at') }}
-                <ChevronDownIcon v-if="sort.sort === 'created_at'" class="w-4 h-4 inline ml-1" />
+                <IconChevronDown v-if="sort.sort === 'created_at'" class="w-4 h-4 inline ml-1" />
               </th>
               <th
                 class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
@@ -374,14 +367,14 @@ const truncateContent = (content, length = 100) => {
                   class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                   title="View"
                 >
-                  <EyeIcon class="w-4 h-4 inline" />
+                  <IconEye class="w-4 h-4 inline" />
                 </Link>
                 <Link
                   :href="route('knowledge-base.edit', article.id)"
                   class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300"
                   title="Edit"
                 >
-                  <PencilIcon class="w-4 h-4 inline" />
+                  <IconPencil class="w-4 h-4 inline" />
                 </Link>
                 <button
                   @click="toggleFeature(article)"
@@ -402,7 +395,7 @@ const truncateContent = (content, length = 100) => {
                   class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
                   title="Delete"
                 >
-                  <TrashIcon class="w-4 h-4 inline" />
+                  <IconTrash class="w-4 h-4 inline" />
                 </button>
               </td>
             </tr>

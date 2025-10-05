@@ -24,6 +24,7 @@
     "vue": "^3.3.13"
   },
   "dependencies": {
+    "@tabler/icons-vue": "^3.35.0",
     "chart.js": "^3.9.1",
     "laravel-vue-i18n": "^2.8.0",
     "maplibre-gl": "^5.1.0",

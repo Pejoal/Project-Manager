@@ -1,6 +1,7 @@
 <script setup>
-import { ArrowLeftIcon, EyeIcon, PencilIcon, StarIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { IconEye, IconPencil, IconTrash, IconStar, IconArrowLeft } from '@tabler/icons-vue';
 
 const props = defineProps({
   article: Object,
@@ -54,7 +55,7 @@ const getStatusColor = (status) => {
             :href="route('knowledge-base.index')"
             class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >
-            <ArrowLeftIcon class="w-5 h-5" />
+            <IconArrowLeft class="w-5 h-5" />
           </Link>
           <div>
             <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -70,7 +71,7 @@ const getStatusColor = (status) => {
                 v-if="article.is_featured"
                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
               >
-                <StarIcon class="w-3 h-3 mr-1" />
+                <IconStar class="w-3 h-3 mr-1" />
                 {{ $t('crm.featured') }}
               </span>
               <span
@@ -86,14 +87,14 @@ const getStatusColor = (status) => {
             :href="route('knowledge-base.edit', article.id)"
             class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
           >
-            <PencilIcon class="w-4 h-4 mr-2" />
+            <IconPencil class="w-4 h-4 mr-2" />
             {{ $t('words.edit') }}
           </Link>
           <button
             @click="toggleFeature"
             class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
           >
-            <StarIcon class="w-4 h-4 mr-2" />
+            <IconStar class="w-4 h-4 mr-2" />
             {{ article.is_featured ? $t('crm.unfeature') : $t('crm.feature') }}
           </button>
           <button
@@ -106,7 +107,7 @@ const getStatusColor = (status) => {
             @click="deleteArticle"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
           >
-            <TrashIcon class="w-4 h-4 mr-2" />
+            <IconTrash class="w-4 h-4 mr-2" />
             {{ $t('words.delete') }}
           </button>
         </div>
@@ -126,7 +127,7 @@ const getStatusColor = (status) => {
                 <span>{{ $t('words.by') }} {{ article.author?.name }}</span>
                 <span>{{ formatDate(article.created_at) }}</span>
                 <span class="flex items-center">
-                  <EyeIcon class="w-4 h-4 mr-1" />
+                  <IconEye class="w-4 h-4 mr-1" />
                   {{ article.view_count || 0 }} {{ $t('crm.views') }}
                 </span>
               </div>
@@ -300,7 +301,7 @@ const getStatusColor = (status) => {
                     {{ relatedArticle.title }}
                   </h4>
                   <div class="flex items-center mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    <EyeIcon class="w-3 h-3 mr-1" />
+                    <IconEye class="w-3 h-3 mr-1" />
                     {{ relatedArticle.view_count || 0 }} {{ $t('crm.views') }}
                   </div>
                 </div>

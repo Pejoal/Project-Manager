@@ -1,6 +1,6 @@
 <script setup>
-import { ArrowLeftIcon, PencilIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { IconArrowLeft, IconPencil, IconX } from '@tabler/icons-vue';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -75,7 +75,7 @@ const predefinedCategories = [
             :href="route('knowledge-base.show', article.id)"
             class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >
-            <ArrowLeftIcon class="w-5 h-5" />
+            <IconArrowLeft class="w-5 h-5" />
           </Link>
           <div>
             <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -257,7 +257,7 @@ const predefinedCategories = [
                     :disabled="form.processing"
                     class="flex-1 bg-blue-500 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded inline-flex items-center justify-center"
                   >
-                    <PencilIcon class="w-4 h-4 mr-2" />
+                    <IconPencil class="w-4 h-4 mr-2" />
                     {{ form.processing ? $t('words.updating') : $t('words.update') }}
                   </button>
                 </div>
@@ -356,7 +356,7 @@ const predefinedCategories = [
                       type="button"
                       class="ml-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
                     >
-                      <XMarkIcon class="w-3 h-3" />
+                      <IconX class="w-3 h-3" />
                     </button>
                   </span>
                 </div>
