@@ -235,5 +235,5 @@ Route::group(
 );
 
 Route::fallback(function () {
-  return to_route('dashboard');
+  return to_route('welcome');
 });
