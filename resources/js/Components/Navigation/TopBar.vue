@@ -85,7 +85,7 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutsideLo
         <!-- Right side controls -->
         <div class="flex items-center space-x-3">
           <!-- Dark Mode Toggle -->
-          <DarkModeToggle :is-dark-mode="true"  />
+          <DarkModeToggle  />
 
           <!-- Locales Dropdown -->
           <div ref="localesDropdownRef" class="relative">
