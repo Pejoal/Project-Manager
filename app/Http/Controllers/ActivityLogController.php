@@ -18,13 +18,13 @@ class ActivityLogController extends Controller
       'subject_type' => 'nullable|string',
       'causer_id' => 'nullable|integer|exists:users,id',
       'event' => 'nullable|string|in:created,updated,deleted',
-      'per_page' => 'nullable|integer|min:1|max:100',
+      'per_page' => 'nullable|integer|min:1|max:250',
     ]);
 
     // Apply sorting
     $sortBy = $request->input('sort_by', 'created_at');
     $sortDirection = $request->input('sort_direction', 'desc');
-    
+
     \Log::info('ActivityLogController URL: ' . $request->fullUrl());
 
     // 2. Start with the base query, eager-loading relationships for performance

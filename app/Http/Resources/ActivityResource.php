@@ -27,6 +27,18 @@ class ActivityResource extends JsonResource
       if (isset($props['end_datetime'])) {
         $props['end_datetime_formatted'] = Carbon::parse($props['end_datetime'])->isoFormat('L LT');
       }
+      if (isset($props['hire_date'])) {
+        $props['hire_date'] = Carbon::parse($props['hire_date'])->isoFormat('L LT');
+      }
+      if (isset($props['termination_date'])) {
+        $props['termination_date'] = Carbon::parse($props['termination_date'])->isoFormat('L LT');
+      }
+      if (isset($props['pay_period_start'])) {
+        $props['pay_period_start'] = Carbon::parse($props['pay_period_start'])->isoFormat('L LT');
+      }
+      if (isset($props['pay_period_end'])) {
+        $props['pay_period_end'] = Carbon::parse($props['pay_period_end'])->isoFormat('L LT');
+      }
       if (isset($props['gross_amount'])) {
         $props['gross_amount_formatted'] = '€' . number_format($props['gross_amount'], 2, ',', '.');
       }
