@@ -1,8 +1,8 @@
-<!-- Updated Sidebar.vue (Now Using All Smaller Components) -->
+<!-- Sidebar.vue -->
 <script setup>
 import { usePage } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import NavItem from './NavItem.vue';
 import NavSection from './NavSection.vue';
 import SidebarCollapseToggle from './SidebarCollapseToggle.vue';
@@ -204,8 +204,15 @@ const navigationItems = computed(() => [
   },
 ]);
 
-// Track expanded state for sections (keyed by item name)
+// Initialize expanded sections based on current route
 const expandedSections = ref(new Set());
+onMounted(() => {
+  navigationItems.value.forEach((item) => {
+    if (item.children && item.children.some((subItem) => subItem.current)) {
+      expandedSections.value.add(item.name);
+    }
+  });
+});
 
 // Toggle section expansion
 const toggleSection = (itemName) => {
@@ -266,8 +273,8 @@ const icons = {
     <SidebarLogo :is-collapsed="isSidebarCollapsed" />
 
     <!-- Navigation -->
-    <div class="flex-1 flex flex-col overflow-y-auto">
-      <nav class="flex-1 px-2 py-4 space-y-1 hide-scrollbar">
+    <div class="flex-1 flex flex-col overflow-y-auto hide-scrollbar">
+      <nav class="flex-1 px-2 py-4 space-y-1">
         <NavItem
           v-for="item in navigationItems.filter((i) => !i.children)"
           :key="item.name"
