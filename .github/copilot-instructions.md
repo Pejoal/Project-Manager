@@ -133,3 +133,4 @@ When generating code:
 6. Implement proper validation
 7. Consider performance impact
 8. Write clean, maintainable code
+9. do not give me commands to run in terminal unless necessary (try first to create the files directly)
