@@ -39,6 +39,9 @@ class ActivityResource extends JsonResource
       if (isset($props['pay_period_end'])) {
         $props['pay_period_end'] = Carbon::parse($props['pay_period_end'])->isoFormat('L LT');
       }
+      if (isset($props['payment_method'])) {
+        $props['payment_method'] = trans("payroll.payment_methods.{$props['payment_method']}");
+      }
       if (isset($props['gross_amount'])) {
         $props['gross_amount_formatted'] = '€' . number_format($props['gross_amount'], 2, ',', '.');
       }
