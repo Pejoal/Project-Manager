@@ -119,6 +119,7 @@ const getStatusColor = (status) => {
 };
 
 const truncateContent = (content, length = 100) => {
+  if (!content) return '';
   return content.length > length ? content.substring(0, length) + '...' : content;
 };
 </script>

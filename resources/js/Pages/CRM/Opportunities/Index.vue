@@ -39,7 +39,7 @@ const columns = [
     component: (item) => `
       <div>
         <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-          ${item.name}
+          ${item.name || 'Untitled'}
         </div>
         <div class="text-xs text-gray-500 dark:text-gray-400">
           ${item.contact ? item.contact.first_name + ' ' + item.contact.last_name : 'No Contact'}
@@ -53,7 +53,7 @@ const columns = [
     sortable: true,
     component: (item) => `
       <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-        $${parseFloat(item.value).toLocaleString()}
+        $${item.value ? parseFloat(item.value).toLocaleString() : '0'}
       </div>
     `,
   },
@@ -71,11 +71,12 @@ const columns = [
         closed_won: '#10B981',
         closed_lost: '#DC2626',
       };
-      const color = stageColors[item.stage] || '#6B7280';
+      const stage = item.stage || 'prospecting';
+      const color = stageColors[stage] || '#6B7280';
       return `
         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full text-white" 
               style="background-color: ${color}">
-          ${item.stage.replace(/_/g, ' ').toUpperCase()}
+          ${stage.replace(/_/g, ' ').toUpperCase()}
         </span>
       `;
     },
@@ -103,7 +104,7 @@ const columns = [
     sortable: true,
     component: (item) => `
       <div class="text-sm text-gray-900 dark:text-gray-100">
-        ${new Date(item.expected_close_date).toLocaleDateString()}
+        ${item.expected_close_date ? new Date(item.expected_close_date).toLocaleDateString() : 'Not set'}
       </div>
     `,
   },
@@ -113,7 +114,7 @@ const columns = [
     sortable: true,
     component: (item) => `
       <div class="text-sm text-gray-900 dark:text-gray-100">
-        ${item.type.replace(/_/g, ' ').toUpperCase()}
+        ${item.type ? item.type.replace(/_/g, ' ').toUpperCase() : 'N/A'}
       </div>
     `,
   },
@@ -123,7 +124,7 @@ const columns = [
     sortable: false,
     component: (item) => `
       <div class="text-sm text-gray-900 dark:text-gray-100">
-        ${item.assigned_to ? item.assigned_to.name : 'Unassigned'}
+        ${item.assigned_to?.name || 'Unassigned'}
       </div>
     `,
   },

@@ -182,7 +182,7 @@ const predefinedCategories = [
                 <div>
                   <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('words.created') }}:</span>
                   <div class="text-gray-900 dark:text-gray-100">
-                    {{ new Date(article.created_at).toLocaleDateString() }} by {{ article.author?.name }}
+                    {{ new Date(article.created_at).toLocaleDateString() }} by {{ article.author?.name || 'Unknown' }}
                   </div>
                 </div>
                 <div>

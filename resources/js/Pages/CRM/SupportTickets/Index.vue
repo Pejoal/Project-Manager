@@ -39,10 +39,10 @@ const columns = [
     component: (item) => `
       <div>
         <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-          #${item.ticket_number}
+          #${item.ticket_number || item.id}
         </div>
         <div class="text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">
-          ${item.subject}
+          ${item.subject || 'No Subject'}
         </div>
       </div>
     `,
@@ -57,7 +57,7 @@ const columns = [
           ${item.contact ? item.contact.first_name + ' ' + item.contact.last_name : 'Unknown'}
         </div>
         <div class="text-xs text-gray-500 dark:text-gray-400">
-          ${item.contact ? item.contact.email : 'No email'}
+          ${item.contact?.email || 'No email'}
         </div>
       </div>
     `,
@@ -74,11 +74,12 @@ const columns = [
         resolved: '#10B981',
         closed: '#6B7280',
       };
-      const color = statusColors[item.status] || '#6B7280';
+      const status = item.status || 'open';
+      const color = statusColors[status] || '#6B7280';
       return `
         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full text-white" 
               style="background-color: ${color}">
-          ${item.status.replace(/_/g, ' ').toUpperCase()}
+          ${status.replace(/_/g, ' ').toUpperCase()}
         </span>
       `;
     },
@@ -94,11 +95,12 @@ const columns = [
         high: '#EF4444',
         urgent: '#DC2626',
       };
-      const color = priorityColors[item.priority] || '#6B7280';
+      const priority = item.priority || 'medium';
+      const color = priorityColors[priority] || '#6B7280';
       return `
         <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full text-white" 
               style="background-color: ${color}">
-          ${item.priority.toUpperCase()}
+          ${priority.toUpperCase()}
         </span>
       `;
     },
@@ -109,7 +111,7 @@ const columns = [
     sortable: true,
     component: (item) => `
       <div class="text-sm text-gray-900 dark:text-gray-100">
-        ${item.type.replace(/_/g, ' ').toUpperCase()}
+        ${item.type ? item.type.replace(/_/g, ' ').toUpperCase() : 'N/A'}
       </div>
     `,
   },
@@ -119,7 +121,7 @@ const columns = [
     sortable: true,
     component: (item) => `
       <div class="text-sm text-gray-900 dark:text-gray-100">
-        ${item.source.replace(/_/g, ' ').toUpperCase()}
+        ${item.source ? item.source.replace(/_/g, ' ').toUpperCase() : 'N/A'}
       </div>
     `,
   },
@@ -129,7 +131,7 @@ const columns = [
     sortable: false,
     component: (item) => `
       <div class="text-sm text-gray-900 dark:text-gray-100">
-        ${item.assigned_to ? item.assigned_to.name : 'Unassigned'}
+        ${item.assigned_to?.name || 'Unassigned'}
       </div>
     `,
   },

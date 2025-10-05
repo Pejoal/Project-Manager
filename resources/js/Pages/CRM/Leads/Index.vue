@@ -85,7 +85,7 @@ const columns = [
     sortable: true,
     component: (item) => `
       <div class="text-sm text-gray-900 dark:text-gray-100">
-        ${item.source.replace(/_/g, ' ').toUpperCase()}
+        ${item.source ? item.source.replace(/_/g, ' ').toUpperCase() : 'N/A'}
       </div>
     `,
   },
@@ -122,7 +122,7 @@ const columns = [
     sortable: false,
     component: (item) => `
       <div class="text-sm text-gray-900 dark:text-gray-100">
-        ${item.assigned_to ? item.assigned_to.name : 'Unassigned'}
+        ${item.assigned_to?.name || 'Unassigned'}
       </div>
     `,
   },
