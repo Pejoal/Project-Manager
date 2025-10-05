@@ -66,6 +66,7 @@ const refreshTaskDetails = async () => {
           task: selectedTaskForModal.value.id,
         })
       );
+
       selectedTaskForModal.value = response.data;
     } catch (error) {
       console.error('Error refreshing task details:', error);

@@ -65,7 +65,6 @@ class ClientController extends Controller
   {
     $client->delete();
 
-    
     session()->flash('flash.banner', 'Client deleted successfully!');
     session()->flash('flash.bannerStyle', 'danger');
     return redirect()->route('clients.index');
