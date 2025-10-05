@@ -69,7 +69,7 @@ const columns = computed(() => [
   {
     key: 'created_at_human',
     label: 'Time',
-    sortable: false, // Sorting should be on created_at
+    sortable: true, // Sorting should be on created_at
     component: (item) => `
         <div class="text-sm text-gray-600 dark:text-gray-400" title="${item.created_at_formatted}">
             ${item.created_at_human}

@@ -404,16 +404,15 @@ const applyFilters = () => {
   });
 
   // ADD THIS BLOCK TO SEND VISIBLE COLUMNS
-  if (props.columnToggle) {
-    const visible = Object.keys(visibleColumns.value).filter((key) => visibleColumns.value[key]);
-    params.columns = visible.join(',');
-  }
+  // if (props.columnToggle) {
+  //   const visible = Object.keys(visibleColumns.value).filter((key) => visibleColumns.value[key]);
+  //   params.columns = visible.join(',');
+  // }
 
   // Use Inertia visit instead of form.get to handle route parameters properly
-  // console.log(params);
-  
+
   // if (!props.routeName) return;
-  router.visit(route(props.routeName, props.routeParams), {
+  router.reload({
     method: 'get',
     data: params,
     preserveState: true,
