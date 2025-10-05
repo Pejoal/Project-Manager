@@ -53,8 +53,11 @@ const breadcrumbs = computed(() => usePage().props.breadcrumbs || []);
 
     <!-- Desktop/Tablet Design (md: and above, ≥768px) -->
     <div class="hidden md:flex items-center justify-center">
-      <h1 class="text-lg font-serif font-bold text-gray-800 dark:text-gray-100">
-        {{ trans('words.welcome') }}, {{ $page.props.auth.user.name }}!
+      <h1>
+        <span class="text-xl font-serif font-semibold text-gray-800 dark:text-gray-200">
+          {{ trans('words.welcome') }},
+        </span>
+        <span class="text-lg text-gray-600 dark:text-gray-300 font-medium"> {{ $page.props.auth.user.name }}!</span>
       </h1>
     </div>
   </section>
