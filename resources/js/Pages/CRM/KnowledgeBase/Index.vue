@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
-import { IconChevronDown, IconSearch, IconPlus, IconEye, IconPencil, IconTrash } from '@tabler/icons-vue';
+import { IconChevronDown, IconEye, IconPencil, IconPlus, IconSearch, IconTrash } from '@tabler/icons-vue';
+import { ref } from 'vue';
 
 const props = defineProps({
   articles: Object,

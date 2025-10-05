@@ -267,7 +267,7 @@ const icons = {
 
     <!-- Navigation -->
     <div class="flex-1 flex flex-col overflow-y-auto">
-      <nav class="flex-1 px-2 py-4 space-y-1">
+      <nav class="flex-1 px-2 py-4 space-y-1 hide-scrollbar">
         <NavItem
           v-for="item in navigationItems.filter((i) => !i.children)"
           :key="item.name"

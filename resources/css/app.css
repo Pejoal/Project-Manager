@@ -84,3 +84,7 @@ html.dark {
 .vs__actions {
   background: var(--vs-actions-bg) !important;
 }
+
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+}
