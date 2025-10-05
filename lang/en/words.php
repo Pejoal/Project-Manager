@@ -24,6 +24,7 @@ return [
   'campaigns' => 'Campaigns',
   'support_tickets' => 'Support Tickets',
   'interactions' => 'Interactions',
+  'payrolls' => 'Payrolls',
   'knowledge_base' => 'Knowledge Base',
   'maps' => 'Maps',
   'welcome' => 'Welcome',

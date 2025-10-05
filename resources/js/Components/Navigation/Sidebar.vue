@@ -76,6 +76,11 @@ const navigationItems = computed(() => [
               current: route().current('payroll.dashboard'),
             },
             {
+              name: trans('words.payrolls'),
+              href: route('payroll.index'),
+              current: route().current('payroll.index'),
+            },
+            {
               name: trans('words.employee_profiles'),
               href: route('employee-profiles.index'),
               current: route().current('employee-profiles.*'),
