@@ -70,6 +70,17 @@ const logout = () => {
 
       <div class="border-t border-gray-200 dark:border-gray-600" />
 
+      <!-- CRM Links -->
+      <DropdownLink :href="route('leads.index')">{{ trans('words.leads') }}</DropdownLink>
+      <DropdownLink :href="route('contacts.index')">{{ trans('words.contacts') }}</DropdownLink>
+      <DropdownLink :href="route('opportunities.index')">{{ trans('words.opportunities') }}</DropdownLink>
+      <DropdownLink :href="route('campaigns.index')">{{ trans('words.campaigns') }}</DropdownLink>
+      <DropdownLink :href="route('support-tickets.index')">{{ trans('words.support_tickets') }}</DropdownLink>
+      <DropdownLink :href="route('interactions.index')">{{ trans('words.interactions') }}</DropdownLink>
+      <DropdownLink :href="route('knowledge-base.index')">{{ trans('words.knowledge_base') }}</DropdownLink>
+
+      <div class="border-t border-gray-200 dark:border-gray-600" />
+
       <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
         {{ trans('words.api_tokens') }}
       </DropdownLink>

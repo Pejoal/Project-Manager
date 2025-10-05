@@ -6,16 +6,24 @@ import { computed } from 'vue';
 const page = usePage();
 
 const props = defineProps({
+  isSidebarCollapsed: {
+    type: Boolean,
+    default: false,
+  },
   showingMobileMenu: {
     type: Boolean,
     default: false,
   },
 });
 
+const emit = defineEmits(['toggle-sidebar', 'close-mobile-menu']);
+
 // Check if user has specific role
 const hasRole = (role) => {
   return page.props.auth?.user?.roles?.some((userRole) => userRole.name === role) || false;
 };
+
+const hasAnyRole = (roles) => roles.some((r) => hasRole(r));
 
 // Navigation items configuration
 const navigationItems = computed(() => [
@@ -227,103 +235,137 @@ const icons = {
   chevronDown: {
     template: `<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
   },
+  chevronLeft: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>`,
+  },
 };
 </script>
 
 <template>
   <!-- Desktop Sidebar -->
-  <div class="hidden md:flex md:flex-shrink-0">
-    <div class="flex flex-col w-64">
-      <div class="flex flex-col h-0 flex-1 bg-gray-800 dark:bg-gray-900">
-        <!-- Logo -->
-        <div class="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900 dark:bg-gray-800">
-          <Link :href="route('dashboard')" class="flex items-center">
-            <img class="h-8 w-auto" src="/favicon.ico" alt="Company Logo" />
-            <span class="ml-3 text-white font-semibold text-lg">Project Manager</span>
-          </Link>
-        </div>
+  <aside
+    class="hidden md:flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300"
+    :class="isSidebarCollapsed ? 'w-20' : 'w-64'"
+  >
+    <!-- Logo -->
+    <div class="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900 dark:bg-gray-800">
+      <Link :href="route('dashboard')" class="flex items-center">
+        <span v-if="!isSidebarCollapsed" class="ml-3 text-white font-semibold text-lg">Project Manager</span>
+      </Link>
+    </div>
 
-        <!-- Navigation -->
-        <div class="flex-1 flex flex-col overflow-y-auto">
-          <nav class="flex-1 px-2 py-4 space-y-1">
-            <template v-for="item in navigationItems" :key="item.name">
-              <!-- Single level item -->
-              <Link
-                v-if="!item.children"
-                :href="item.href"
+    <!-- Navigation -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+      <nav class="flex-1 px-2 py-4 space-y-1">
+        <template v-for="item in navigationItems" :key="item.name">
+          <!-- Single level item -->
+          <Link
+            v-if="!item.children"
+            :href="item.href"
+            :class="[
+              item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+              'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+            ]"
+            :title="isSidebarCollapsed ? item.name : ''"
+          >
+            <component
+              :is="icons[item.icon]"
+              :class="[
+                item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                'flex-shrink-0 h-6 w-6',
+                isSidebarCollapsed ? '' : 'mr-3',
+              ]"
+            />
+            <span v-if="!isSidebarCollapsed">{{ item.name }}</span>
+          </Link>
+
+          <!-- Multi-level item -->
+          <div v-else class="space-y-1">
+            <div
+              :class="[
+                item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                'group flex items-center px-2 py-2 text-sm font-medium rounded-md cursor-pointer',
+              ]"
+              :title="isSidebarCollapsed ? item.name : ''"
+            >
+              <component
+                :is="icons[item.icon]"
                 :class="[
-                  item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                  item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                  'flex-shrink-0 h-6 w-6',
+                  isSidebarCollapsed ? '' : 'mr-3',
+                ]"
+              />
+              <span v-if="!isSidebarCollapsed">{{ item.name }}</span>
+              <component
+                v-if="!isSidebarCollapsed"
+                :is="icons.chevronDown"
+                :class="[
+                  item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                  'ml-auto h-5 w-5 transform transition-colors',
+                ]"
+              />
+            </div>
+
+            <!-- Sub-items -->
+            <div v-if="!isSidebarCollapsed" class="ml-6 space-y-1">
+              <Link
+                v-for="subItem in item.children"
+                :key="subItem.name"
+                :href="subItem.href"
+                :class="[
+                  subItem.current ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-600 hover:text-white',
+                  'group flex items-center px-2 py-1 text-sm font-medium rounded-md',
                 ]"
               >
-                <component
-                  :is="icons[item.icon]"
-                  :class="[
-                    item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                    'mr-3 flex-shrink-0 h-6 w-6',
-                  ]"
-                />
-                {{ item.name }}
+                {{ subItem.name }}
               </Link>
-
-              <!-- Multi-level item -->
-              <div v-else class="space-y-1">
-                <div
-                  :class="[
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'group flex items-center px-2 py-2 text-sm font-medium rounded-md cursor-pointer',
-                  ]"
-                >
-                  <component
-                    :is="icons[item.icon]"
-                    :class="[
-                      item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                      'mr-3 flex-shrink-0 h-6 w-6',
-                    ]"
-                  />
-                  {{ item.name }}
-                  <component
-                    :is="icons.chevronDown"
-                    :class="[
-                      item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-                      'ml-auto h-5 w-5 transform transition-colors',
-                    ]"
-                  />
-                </div>
-
-                <!-- Sub-items -->
-                <div class="ml-6 space-y-1">
-                  <Link
-                    v-for="subItem in item.children"
-                    :key="subItem.name"
-                    :href="subItem.href"
-                    :class="[
-                      subItem.current ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-600 hover:text-white',
-                      'group flex items-center px-2 py-1 text-sm font-medium rounded-md',
-                    ]"
-                  >
-                    {{ subItem.name }}
-                  </Link>
-                </div>
-              </div>
-            </template>
-          </nav>
-        </div>
-      </div>
+            </div>
+          </div>
+        </template>
+      </nav>
     </div>
-  </div>
+
+    <!-- Collapse Toggle -->
+    <div class="p-3 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
+      <button
+        @click="emit('toggle-sidebar')"
+        class="w-full flex items-center justify-center p-2 text-gray-500 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+        :title="isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+      >
+        <component
+          :is="icons.chevronLeft"
+          class="w-6 h-6 transition-transform duration-300"
+          :class="{ 'rotate-180': isSidebarCollapsed }"
+        />
+      </button>
+    </div>
+  </aside>
 
   <!-- Mobile Sidebar -->
   <div v-show="showingMobileMenu" class="md:hidden">
     <div class="fixed inset-0 flex z-40">
       <!-- Overlay -->
-      <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
+      <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true" @click="emit('close-mobile-menu')"></div>
 
       <!-- Sidebar -->
       <div class="relative flex-1 flex flex-col max-w-xs w-full bg-gray-800">
+        <!-- Close button -->
+        <div class="absolute top-0 right-0 -mr-12 pt-2">
+          <button
+            @click="emit('close-mobile-menu')"
+            class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+          >
+            <span class="sr-only">Close sidebar</span>
+            <svg class="h-6 w-6 text-white" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
         <!-- Logo -->
         <div class="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900">
-          <Link :href="route('dashboard')" class="flex items-center">
+          <Link :href="route('dashboard')" class="flex items-center" @click="emit('close-mobile-menu')">
             <img class="h-8 w-auto" src="/favicon.ico" alt="Company Logo" />
             <span class="ml-3 text-white font-semibold text-lg">Project Manager</span>
           </Link>
@@ -341,6 +383,7 @@ const icons = {
                   item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                   'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
                 ]"
+                @click="emit('close-mobile-menu')"
               >
                 <component
                   :is="icons[item.icon]"
@@ -380,6 +423,7 @@ const icons = {
                       subItem.current ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-600 hover:text-white',
                       'group flex items-center px-2 py-1 text-sm font-medium rounded-md',
                     ]"
+                    @click="emit('close-mobile-menu')"
                   >
                     {{ subItem.name }}
                   </Link>
