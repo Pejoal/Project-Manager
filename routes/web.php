@@ -259,16 +259,22 @@ Route::group(
         // Lead Management Routes
         Route::prefix('leads')->group(function () {
           Route::get('/', [LeadController::class, 'index'])->name('leads.index');
+          Route::get('/create', [LeadController::class, 'create'])->name('leads.create');
           Route::post('/', [LeadController::class, 'store'])->name('leads.store');
           Route::get('/{lead}', [LeadController::class, 'show'])->name('leads.show');
           Route::get('/{lead}/edit', [LeadController::class, 'edit'])->name('leads.edit');
           Route::put('/{lead}', [LeadController::class, 'update'])->name('leads.update');
           Route::delete('/{lead}', [LeadController::class, 'destroy'])->name('leads.destroy');
+          Route::post('/{lead}/convert', [LeadController::class, 'convert'])->name('leads.convert');
+          Route::patch('/{lead}/update-score', [LeadController::class, 'updateScore'])->name('leads.update-score');
+          Route::post('/bulk-action', [LeadController::class, 'bulkAction'])->name('leads.bulk-action');
+          Route::get('/export', [LeadController::class, 'export'])->name('leads.export');
         });
 
         // Contact Management Routes
         Route::prefix('contacts')->group(function () {
           Route::get('/', [ContactController::class, 'index'])->name('contacts.index');
+          Route::get('/create', [ContactController::class, 'create'])->name('contacts.create');
           Route::post('/', [ContactController::class, 'store'])->name('contacts.store');
           Route::get('/{contact}', [ContactController::class, 'show'])->name('contacts.show');
           Route::get('/{contact}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
@@ -281,44 +287,116 @@ Route::group(
           Route::get('/', [OpportunityController::class, 'index'])->name('opportunities.index');
           Route::get('/create', [OpportunityController::class, 'create'])->name('opportunities.create');
           Route::post('/', [OpportunityController::class, 'store'])->name('opportunities.store');
+          Route::get('/pipeline', [OpportunityController::class, 'pipeline'])->name('opportunities.pipeline');
           Route::get('/{opportunity}', [OpportunityController::class, 'show'])->name('opportunities.show');
           Route::get('/{opportunity}/edit', [OpportunityController::class, 'edit'])->name('opportunities.edit');
           Route::put('/{opportunity}', [OpportunityController::class, 'update'])->name('opportunities.update');
           Route::delete('/{opportunity}', [OpportunityController::class, 'destroy'])->name('opportunities.destroy');
+          Route::patch('/{opportunity}/update-stage', [OpportunityController::class, 'updateStage'])->name(
+            'opportunities.update-stage'
+          );
+          Route::patch('/{opportunity}/win', [OpportunityController::class, 'win'])->name('opportunities.win');
+          Route::patch('/{opportunity}/lose', [OpportunityController::class, 'lose'])->name('opportunities.lose');
+          Route::post('/{opportunity}/add-competitor', [OpportunityController::class, 'addCompetitor'])->name(
+            'opportunities.add-competitor'
+          );
+          Route::delete('/{opportunity}/remove-competitor', [OpportunityController::class, 'removeCompetitor'])->name(
+            'opportunities.remove-competitor'
+          );
+          Route::post('/bulk-action', [OpportunityController::class, 'bulkAction'])->name('opportunities.bulk-action');
+          Route::get('/export', [OpportunityController::class, 'export'])->name('opportunities.export');
         });
 
         // Campaign Management Routes
         Route::prefix('campaigns')->group(function () {
           Route::get('/', [CampaignController::class, 'index'])->name('campaigns.index');
+          Route::get('/create', [CampaignController::class, 'create'])->name('campaigns.create');
           Route::post('/', [CampaignController::class, 'store'])->name('campaigns.store');
           Route::get('/{campaign}', [CampaignController::class, 'show'])->name('campaigns.show');
           Route::get('/{campaign}/edit', [CampaignController::class, 'edit'])->name('campaigns.edit');
           Route::put('/{campaign}', [CampaignController::class, 'update'])->name('campaigns.update');
           Route::delete('/{campaign}', [CampaignController::class, 'destroy'])->name('campaigns.destroy');
+          Route::patch('/{campaign}/launch', [CampaignController::class, 'launch'])->name('campaigns.launch');
+          Route::patch('/{campaign}/pause', [CampaignController::class, 'pause'])->name('campaigns.pause');
+          Route::patch('/{campaign}/resume', [CampaignController::class, 'resume'])->name('campaigns.resume');
+          Route::patch('/{campaign}/complete', [CampaignController::class, 'complete'])->name('campaigns.complete');
+          Route::post('/{campaign}/add-contacts', [CampaignController::class, 'addContacts'])->name(
+            'campaigns.add-contacts'
+          );
+          Route::delete('/{campaign}/remove-contact', [CampaignController::class, 'removeContact'])->name(
+            'campaigns.remove-contact'
+          );
+          Route::post('/{campaign}/track-engagement', [CampaignController::class, 'trackEngagement'])->name(
+            'campaigns.track-engagement'
+          );
+          Route::get('/{campaign}/analytics', [CampaignController::class, 'analytics'])->name('campaigns.analytics');
+          Route::post('/bulk-action', [CampaignController::class, 'bulkAction'])->name('campaigns.bulk-action');
+          Route::get('/export', [CampaignController::class, 'export'])->name('campaigns.export');
         });
 
         // Support Ticket Management Routes
         Route::prefix('support-tickets')->group(function () {
           Route::get('/', [SupportTicketController::class, 'index'])->name('support-tickets.index');
+          Route::get('/create', [SupportTicketController::class, 'create'])->name('support-tickets.create');
           Route::post('/', [SupportTicketController::class, 'store'])->name('support-tickets.store');
+          Route::get('/dashboard', [SupportTicketController::class, 'dashboard'])->name('support-tickets.dashboard');
           Route::get('/{supportTicket}', [SupportTicketController::class, 'show'])->name('support-tickets.show');
           Route::get('/{supportTicket}/edit', [SupportTicketController::class, 'edit'])->name('support-tickets.edit');
           Route::put('/{supportTicket}', [SupportTicketController::class, 'update'])->name('support-tickets.update');
           Route::delete('/{supportTicket}', [SupportTicketController::class, 'destroy'])->name(
             'support-tickets.destroy'
           );
+          Route::patch('/{supportTicket}/assign', [SupportTicketController::class, 'assign'])->name(
+            'support-tickets.assign'
+          );
+          Route::patch('/{supportTicket}/update-status', [SupportTicketController::class, 'updateStatus'])->name(
+            'support-tickets.update-status'
+          );
+          Route::patch('/{supportTicket}/resolve', [SupportTicketController::class, 'resolve'])->name(
+            'support-tickets.resolve'
+          );
+          Route::patch('/{supportTicket}/close', [SupportTicketController::class, 'close'])->name(
+            'support-tickets.close'
+          );
+          Route::patch('/{supportTicket}/reopen', [SupportTicketController::class, 'reopen'])->name(
+            'support-tickets.reopen'
+          );
+          Route::post('/{supportTicket}/add-tag', [SupportTicketController::class, 'addTag'])->name(
+            'support-tickets.add-tag'
+          );
+          Route::delete('/{supportTicket}/remove-tag', [SupportTicketController::class, 'removeTag'])->name(
+            'support-tickets.remove-tag'
+          );
+          Route::post('/{supportTicket}/rate-satisfaction', [SupportTicketController::class, 'rateSatisfaction'])->name(
+            'support-tickets.rate-satisfaction'
+          );
+          Route::post('/bulk-action', [SupportTicketController::class, 'bulkAction'])->name(
+            'support-tickets.bulk-action'
+          );
+          Route::get('/export', [SupportTicketController::class, 'export'])->name('support-tickets.export');
         });
 
         // Interaction Management Routes
         Route::prefix('interactions')->group(function () {
           Route::get('/', [InteractionController::class, 'index'])->name('interactions.index');
+          Route::get('/create', [InteractionController::class, 'create'])->name('interactions.create');
           Route::post('/', [InteractionController::class, 'store'])->name('interactions.store');
+          Route::get('/analytics', [InteractionController::class, 'analytics'])->name('interactions.analytics');
+          Route::get('/follow-ups', [InteractionController::class, 'followUps'])->name('interactions.follow-ups');
           Route::get('/{interaction}', [InteractionController::class, 'show'])->name('interactions.show');
           Route::get('/{interaction}/edit', [InteractionController::class, 'edit'])->name('interactions.edit');
           Route::put('/{interaction}', [InteractionController::class, 'update'])->name('interactions.update');
           Route::delete('/{interaction}', [InteractionController::class, 'destroy'])->name('interactions.destroy');
+          Route::patch('/{interaction}/mark-follow-up-complete', [
+            InteractionController::class,
+            'markFollowUpComplete',
+          ])->name('interactions.mark-follow-up-complete');
+          Route::post('/contacts/{contact}/add', [InteractionController::class, 'addToContact'])->name(
+            'interactions.add-to-contact'
+          );
+          Route::post('/bulk-action', [InteractionController::class, 'bulkAction'])->name('interactions.bulk-action');
         });
-
+        
         // Knowledge Base Management Routes
         Route::prefix('knowledge-base')->group(function () {
           Route::get('/', [KnowledgeBaseArticleController::class, 'index'])->name('knowledge-base.index');

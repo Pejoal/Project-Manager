@@ -3,7 +3,7 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
   IconArrowLeft,
   IconCalendar,
-  IconCheckCircle,
+  IconCheck,
   IconClock,
   IconMail,
   IconPhone,
@@ -304,7 +304,7 @@ const formatDate = (date) => {
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
           <div class="flex items-center">
             <div class="flex-shrink-0">
-              <IconCheckCircle class="w-8 h-8 text-green-600" />
+              <IconCheck class="w-8 h-8 text-green-600" />
             </div>
             <div class="ml-5 w-0 flex-1">
               <dl>
