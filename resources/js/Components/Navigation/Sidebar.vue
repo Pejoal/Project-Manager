@@ -155,41 +155,47 @@ const navigationItems = computed(() => [
   },
   {
     name: 'Sales (Soon)',
-    icon: 'sales',
+    icon: 'report-money',
     current: route().current('broadcast.test'),
     children: [
       {
-        name: trans('words.leads'),
+        name: trans('words.dashboard'),
         href: route('broadcast.test'),
         current: route().current('broadcast.test'),
       },
+    ],
+  },
+  {
+    name: 'Inventory - Stock (Soon)',
+    icon: 'file-isr',
+    current: route().current('broadcast.test'),
+    children: [
       {
-        name: trans('words.contacts'),
+        name: trans('words.dashboard'),
         href: route('broadcast.test'),
         current: route().current('broadcast.test'),
       },
+    ],
+  },
+  {
+    name: 'HR (Soon)',
+    icon: 'users',
+    current: route().current('broadcast.test'),
+    children: [
       {
-        name: trans('words.opportunities'),
+        name: trans('words.dashboard'),
         href: route('broadcast.test'),
         current: route().current('broadcast.test'),
       },
+    ],
+  },
+  {
+    name: 'Automation (Soon)',
+    icon: 'automation',
+    current: route().current('broadcast.test'),
+    children: [
       {
-        name: trans('words.campaigns'),
-        href: route('broadcast.test'),
-        current: route().current('broadcast.test'),
-      },
-      {
-        name: trans('words.support_tickets'),
-        href: route('broadcast.test'),
-        current: route().current('broadcast.test'),
-      },
-      {
-        name: trans('words.interactions'),
-        href: route('broadcast.test'),
-        current: route().current('broadcast.test'),
-      },
-      {
-        name: trans('words.knowledge_base'),
+        name: trans('words.dashboard'),
         href: route('broadcast.test'),
         current: route().current('broadcast.test'),
       },
@@ -295,6 +301,18 @@ const icons = {
   },
   map: {
     template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>`,
+  },
+  'report-money': {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>`,
+  },
+  'file-isr': {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z"></path></svg>`,
+  },
+  users: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm6-11a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>`,
+  },
+  automation: {
+    template: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`,
   },
   chevronDown: {
     template: `<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>`,
