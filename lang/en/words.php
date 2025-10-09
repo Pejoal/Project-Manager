@@ -62,6 +62,10 @@ return [
   'login' => 'Log in',
   'register' => 'Register',
 
+  'first_name' => 'First Name',
+  'last_name' => 'Last Name',
+  'company' => 'Company',
+
   // Theme
   'light_mode' => '☀️ Light Mode',
   'dark_mode' => '🌙 Dark Mode',
