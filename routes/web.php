@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MessageSent;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
@@ -30,10 +31,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-// Route::get('/broadcast-test', function () {
-//   event(new MessageSent('Hello from Laravel Reverb!'));
-//   return 'Message broadcasted!';
-// });
+Route::get('/broadcast-test', function () {
+  event(new MessageSent('Hello from Laravel Reverb!'));
+  return 'Message broadcasted!';
+});
 
 Route::group(
   [
