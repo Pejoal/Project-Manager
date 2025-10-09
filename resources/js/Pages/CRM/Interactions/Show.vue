@@ -1,374 +1,384 @@
 <script setup>
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { IconArrowLeft, IconCalendar, IconCheck, IconClock, IconMail, IconPhone, IconUser } from '@tabler/icons-vue';
+import axios from 'axios';
+import { ref } from 'vue';
 
 const props = defineProps({
   interaction: Object,
 });
 
-const markFollowUpCompleteForm = useForm({});
+const showFollowUpModal = ref(false);
 
-const formatDate = (date) => {
-  if (!date) return '';
-  return new Date(date).toLocaleDateString();
-};
+const followUpForm = useForm({
+  follow_up_notes: '',
+});
 
-const formatDateTime = (datetime) => {
-  if (!datetime) return '';
-  return new Date(datetime).toLocaleString();
-};
-
-const getTypeIcon = (type) => {
-  const icons = {
-    call: IconPhone,
-    email: IconMail,
-    meeting: IconCalendar,
-    note: IconUser,
-  };
-  return icons[type] || IconUser;
-};
-
-const getTypeColor = (type) => {
-  const colors = {
-    call: 'bg-blue-100 text-blue-800',
-    email: 'bg-green-100 text-green-800',
-    meeting: 'bg-purple-100 text-purple-800',
-    note: 'bg-gray-100 text-gray-800',
-    sms: 'bg-yellow-100 text-yellow-800',
-    social_media: 'bg-pink-100 text-pink-800',
-    webinar: 'bg-indigo-100 text-indigo-800',
-    demo: 'bg-orange-100 text-orange-800',
-    other: 'bg-gray-100 text-gray-800',
-  };
-  return colors[type] || 'bg-gray-100 text-gray-800';
-};
-
-const getDirectionColor = (direction) => {
-  return direction === 'inbound' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800';
+const typeIcons = {
+  call: '📞',
+  email: '📧',
+  meeting: '🤝',
+  note: '📝',
+  sms: '💬',
+  social_media: '📱',
+  webinar: '💻',
+  demo: '🎥',
+  other: '📄',
 };
 
 const getOutcomeColor = (outcome) => {
   const colors = {
-    positive: 'bg-green-100 text-green-800',
-    neutral: 'bg-yellow-100 text-yellow-800',
-    negative: 'bg-red-100 text-red-800',
+    positive: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+    neutral: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
+    negative: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
   };
-  return colors[outcome] || 'bg-gray-100 text-gray-800';
+  return colors[outcome] || colors.neutral;
 };
 
-const getInteractableName = () => {
-  const interactable = props.interaction.interactable;
-  if (!interactable) return 'Unknown';
+const getDirectionColor = (direction) => {
+  const colors = {
+    inbound: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+    outbound: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  };
+  return colors[direction] || colors.outbound;
+};
 
-  if (props.interaction.interactable_type === 'App\\Models\\Contact') {
-    return `${interactable.first_name || ''} ${interactable.last_name || ''}`.trim() || 'Unknown Contact';
+const formatDuration = (minutes) => {
+  if (!minutes) return null;
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+};
+
+const formatDateTime = (datetime) => {
+  if (!datetime) return null;
+  return new Date(datetime).toLocaleString();
+};
+
+const markFollowUpComplete = async () => {
+  try {
+    await axios.post(route('interactions.mark-follow-up-complete', props.interaction.id));
+    // Reload the page to get updated data
+    window.location.reload();
+  } catch (error) {
+    console.error('Error marking follow-up complete:', error);
+    alert('Failed to mark follow-up as complete');
   }
-
-  return interactable.name || interactable.subject || 'Unknown';
 };
 
-const getInteractableType = () => {
-  const type = props.interaction.interactable_type;
-  if (!type) return 'Unknown';
+const getRelatedEntityName = () => {
+  const entity = props.interaction.interactable;
+  if (!entity) return 'Unknown';
 
-  return type.split('\\').pop();
+  return (
+    entity.name ||
+    (entity.first_name && entity.last_name ? `${entity.first_name} ${entity.last_name}` : '') ||
+    entity.subject ||
+    entity.title ||
+    `#${entity.id}`
+  );
 };
 
-const markFollowUpComplete = () => {
-  if (confirm('Mark follow-up as complete?')) {
-    markFollowUpCompleteForm.patch(route('interactions.mark-follow-up-complete', props.interaction.id), {
-      preserveState: true,
-    });
+const getRelatedEntityType = () => {
+  return props.interaction.interactable_type?.split('\\').pop() || 'Unknown';
+};
+
+const isFollowUpOverdue = () => {
+  if (!props.interaction.follow_up_date || props.interaction.follow_up_completed_at) {
+    return false;
   }
-};
-
-const deleteInteraction = () => {
-  if (confirm('Are you sure you want to delete this interaction?')) {
-    useForm().delete(route('interactions.destroy', props.interaction.id));
-  }
+  return new Date(props.interaction.follow_up_date) < new Date();
 };
 </script>
 
 <template>
-  <Head :title="interaction.subject" />
-
-  <header class="bg-white dark:bg-gray-800 shadow">
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center space-x-4">
-          <Link
-            :href="route('interactions.index')"
-            class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-          >
-            <IconArrowLeft class="w-5 h-5" />
-          </Link>
-          <div>
-            <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-              {{ interaction.subject }}
-            </h1>
-            <div class="flex items-center space-x-4 mt-2">
-              <span
-                :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(interaction.type)}`"
-              >
-                <component :is="getTypeIcon(interaction.type)" class="w-3 h-3 mr-1" />
-                {{ interaction.type?.replace('_', ' ').toUpperCase() }}
-              </span>
-              <span
-                :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDirectionColor(interaction.direction)}`"
-              >
-                {{ interaction.direction?.toUpperCase() }}
-              </span>
-              <span
-                v-if="interaction.outcome"
-                :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getOutcomeColor(interaction.outcome)}`"
-              >
-                {{ interaction.outcome?.toUpperCase() }}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="flex space-x-3">
-          <Link
-            :href="route('interactions.edit', interaction.id)"
-            class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-          >
-            {{ $t('words.edit') }}
-          </Link>
-          <button @click="deleteInteraction" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-            {{ $t('words.delete') }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
+  <Head :title="`Interaction: ${interaction.subject}`" />
 
   <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- Main Content -->
-        <div class="lg:col-span-3">
-          <!-- Interaction Details -->
-          <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
-            <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-6">
-              <div class="flex items-center space-x-4">
-                <span>{{ $t('words.by') }} {{ interaction.user?.name || 'Unknown' }}</span>
-                <span>{{ formatDateTime(interaction.interaction_date) }}</span>
-                <span v-if="interaction.duration_minutes" class="flex items-center">
-                  <IconClock class="w-4 h-4 mr-1" />
-                  {{ interaction.duration_minutes }} {{ $t('crm.minutes') }}
-                </span>
-              </div>
-            </div>
-
-            <!-- Description -->
-            <div class="prose prose-lg max-w-none dark:prose-invert">
-              <div class="whitespace-pre-wrap">{{ interaction.description }}</div>
-            </div>
-          </div>
-
-          <!-- Contact Details -->
-          <div
-            v-if="interaction.contact_details && Object.keys(interaction.contact_details).length > 0"
-            class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6"
-          >
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              {{ $t('crm.contact_details') }}
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div v-for="(value, key) in interaction.contact_details" :key="key">
-                <div class="text-sm">
-                  <span class="font-medium text-gray-500 dark:text-gray-400">{{ key }}:</span>
-                  <span class="text-gray-900 dark:text-gray-100 ml-2">{{ value }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Attachments -->
-          <div
-            v-if="interaction.attachments && interaction.attachments.length > 0"
-            class="bg-white dark:bg-gray-800 shadow rounded-lg p-6"
-          >
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              {{ $t('crm.attachments') }}
-            </h3>
-            <div class="space-y-2">
-              <div
-                v-for="attachment in interaction.attachments"
-                :key="attachment.name"
-                class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-md"
+      <!-- Header -->
+      <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <Link
+                :href="route('interactions.index')"
+                class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
               >
-                <div class="flex items-center">
-                  <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {{ attachment.name }}
-                  </span>
-                  <span class="ml-2 text-xs text-gray-500 dark:text-gray-400"> ({{ attachment.size }}) </span>
-                </div>
-                <a
-                  :href="attachment.url"
-                  target="_blank"
-                  class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
-                >
-                  {{ $t('words.download') }}
-                </a>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </Link>
+              <div>
+                <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                  {{ interaction.subject }}
+                </h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Interaction #{{ interaction.id }}</p>
               </div>
+            </div>
+            <div class="flex items-center space-x-3">
+              <Link
+                :href="route('interactions.edit', interaction.id)"
+                class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Edit
+              </Link>
+              <SecondaryButton
+                v-if="interaction.follow_up_required && !interaction.follow_up_completed_at"
+                @click="markFollowUpComplete"
+                class="bg-green-500 hover:bg-green-700 text-white"
+              >
+                Complete Follow-up
+              </SecondaryButton>
             </div>
           </div>
         </div>
 
-        <!-- Sidebar -->
-        <div class="space-y-6">
-          <!-- Interaction Info -->
-          <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              {{ $t('crm.interaction_info') }}
-            </h3>
-            <div class="space-y-3 text-sm">
-              <div>
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('words.type') }}:</span>
-                <div class="mt-1">
-                  <span
-                    :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(interaction.type)}`"
+        <!-- Content -->
+        <div class="p-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-6">
+              <!-- Basic Information -->
+              <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Basic Information</h3>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Type</dt>
+                    <dd class="mt-1 flex items-center space-x-2">
+                      <span class="text-lg">{{ typeIcons[interaction.type] || '📄' }}</span>
+                      <span class="text-sm font-medium text-gray-900 dark:text-gray-100 capitalize">
+                        {{ interaction.type.replace('_', ' ') }}
+                      </span>
+                    </dd>
+                  </div>
+
+                  <div>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Direction</dt>
+                    <dd class="mt-1">
+                      <span
+                        :class="[
+                          'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
+                          getDirectionColor(interaction.direction),
+                        ]"
+                      >
+                        {{ interaction.direction }}
+                      </span>
+                    </dd>
+                  </div>
+
+                  <div>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Date & Time</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ formatDateTime(interaction.interaction_date) }}
+                    </dd>
+                  </div>
+
+                  <div v-if="interaction.duration_minutes">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Duration</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ formatDuration(interaction.duration_minutes) }}
+                    </dd>
+                  </div>
+
+                  <div v-if="interaction.outcome">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Outcome</dt>
+                    <dd class="mt-1">
+                      <span
+                        :class="[
+                          'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
+                          getOutcomeColor(interaction.outcome),
+                        ]"
+                      >
+                        {{ interaction.outcome }}
+                      </span>
+                    </dd>
+                  </div>
+
+                  <div>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Created by</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ interaction.user?.name || 'Unknown' }}
+                    </dd>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Description</h3>
+                <div class="prose dark:prose-invert max-w-none">
+                  <p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{{ interaction.description }}</p>
+                </div>
+              </div>
+
+              <!-- Attendees (for meetings) -->
+              <div
+                v-if="interaction.attendees && interaction.attendees.length > 0"
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+              >
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Attendees</h3>
+                <div class="space-y-2">
+                  <div
+                    v-for="(attendee, index) in interaction.attendees"
+                    :key="index"
+                    class="flex items-center space-x-2"
                   >
-                    <component :is="getTypeIcon(interaction.type)" class="w-3 h-3 mr-1" />
-                    {{ interaction.type?.replace('_', ' ').toUpperCase() }}
-                  </span>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                    <span class="text-sm text-gray-900 dark:text-gray-100">{{ attendee }}</span>
+                  </div>
                 </div>
               </div>
-              <div>
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('crm.direction') }}:</span>
-                <div class="mt-1">
-                  <span
-                    :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getDirectionColor(interaction.direction)}`"
+
+              <!-- Attachments -->
+              <div
+                v-if="interaction.attachments && interaction.attachments.length > 0"
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+              >
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Attachments</h3>
+                <div class="space-y-2">
+                  <div
+                    v-for="(attachment, index) in interaction.attachments"
+                    :key="index"
+                    class="flex items-center space-x-2"
                   >
-                    {{ interaction.direction?.toUpperCase() }}
-                  </span>
-                </div>
-              </div>
-              <div>
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('crm.date') }}:</span>
-                <div class="mt-1 text-gray-900 dark:text-gray-100">
-                  {{ formatDateTime(interaction.interaction_date) }}
-                </div>
-              </div>
-              <div v-if="interaction.duration_minutes">
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('crm.duration') }}:</span>
-                <div class="mt-1 text-gray-900 dark:text-gray-100">
-                  {{ interaction.duration_minutes }} {{ $t('crm.minutes') }}
-                </div>
-              </div>
-              <div v-if="interaction.outcome">
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('crm.outcome') }}:</span>
-                <div class="mt-1">
-                  <span
-                    :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getOutcomeColor(interaction.outcome)}`"
-                  >
-                    {{ interaction.outcome?.toUpperCase() }}
-                  </span>
-                </div>
-              </div>
-              <div>
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('words.user') }}:</span>
-                <div class="mt-1 text-gray-900 dark:text-gray-100">
-                  {{ interaction.user?.name || 'Unknown' }}
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                      />
+                    </svg>
+                    <a
+                      href="#"
+                      class="text-sm text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                    >
+                      {{ attachment.name || attachment }}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Related Entity -->
-          <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              {{ $t('crm.related_to') }}
-            </h3>
-            <div class="space-y-3 text-sm">
-              <div>
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('words.type') }}:</span>
-                <div class="mt-1 text-gray-900 dark:text-gray-100">
-                  {{ getInteractableType() }}
+            <!-- Sidebar -->
+            <div class="space-y-6">
+              <!-- Related Entity -->
+              <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Related To</h3>
+                <div class="space-y-3">
+                  <div>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Type</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ getRelatedEntityType() }}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Name</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ getRelatedEntityName() }}
+                    </dd>
+                  </div>
                 </div>
               </div>
-              <div>
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('words.name') }}:</span>
-                <div class="mt-1 text-gray-900 dark:text-gray-100">
-                  {{ getInteractableName() }}
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Follow-up -->
-          <div v-if="interaction.follow_up_required" class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              {{ $t('crm.follow_up') }}
-            </h3>
-            <div class="space-y-3 text-sm">
-              <div>
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('crm.follow_up_date') }}:</span>
-                <div class="mt-1 text-gray-900 dark:text-gray-100">
-                  {{ formatDate(interaction.follow_up_date) }}
-                </div>
-              </div>
-              <div>
-                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $t('words.status') }}:</span>
-                <div class="mt-1">
-                  <span
-                    v-if="interaction.follow_up_completed_at"
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
-                  >
-                    <IconCheck class="w-3 h-3 mr-1" />
-                    {{ $t('crm.completed') }}
-                  </span>
-                  <span
-                    v-else
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
-                  >
-                    <IconClock class="w-3 h-3 mr-1" />
-                    {{ $t('crm.pending') }}
-                  </span>
-                </div>
-              </div>
-              <div v-if="!interaction.follow_up_completed_at" class="pt-2">
-                <button
-                  @click="markFollowUpComplete"
-                  :disabled="markFollowUpCompleteForm.processing"
-                  class="w-full bg-green-500 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded text-sm"
-                >
-                  {{ $t('crm.mark_complete') }}
-                </button>
-              </div>
-            </div>
-          </div>
+              <!-- Follow-up Information -->
+              <div
+                v-if="interaction.follow_up_required"
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+              >
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Follow-up</h3>
 
-          <!-- Quick Actions -->
-          <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              {{ $t('crm.quick_actions') }}
-            </h3>
-            <div class="space-y-2">
-              <Link
-                :href="
-                  route('interactions.create', {
-                    type: getInteractableType().toLowerCase(),
-                    id: interaction.interactable_id,
-                  })
-                "
-                class="block text-sm text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                <div class="space-y-3">
+                  <div>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
+                    <dd class="mt-1">
+                      <span
+                        v-if="interaction.follow_up_completed_at"
+                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                      >
+                        Completed
+                      </span>
+                      <span
+                        v-else-if="isFollowUpOverdue()"
+                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                      >
+                        Overdue
+                      </span>
+                      <span
+                        v-else
+                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                      >
+                        Pending
+                      </span>
+                    </dd>
+                  </div>
+
+                  <div v-if="interaction.follow_up_date">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Scheduled Date</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ formatDateTime(interaction.follow_up_date) }}
+                    </dd>
+                  </div>
+
+                  <div v-if="interaction.follow_up_completed_at">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Completed Date</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ formatDateTime(interaction.follow_up_completed_at) }}
+                    </dd>
+                  </div>
+
+                  <div v-if="interaction.follow_up_notes">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Notes</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ interaction.follow_up_notes }}
+                    </dd>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contact Details -->
+              <div
+                v-if="interaction.contact_details && Object.keys(interaction.contact_details).length > 0"
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6"
               >
-                {{ $t('crm.add_new_interaction') }}
-              </Link>
-              <Link
-                :href="route('interactions.index', { interactable_type: interaction.interactable_type })"
-                class="block text-sm text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-              >
-                {{ $t('crm.view_all_interactions') }}
-              </Link>
-              <Link
-                :href="route('interactions.analytics')"
-                class="block text-sm text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-              >
-                {{ $t('crm.view_analytics') }}
-              </Link>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Contact Details Used</h3>
+                <div class="space-y-3">
+                  <div v-for="(value, key) in interaction.contact_details" :key="key">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 capitalize">
+                      {{ key.replace('_', ' ') }}
+                    </dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ value }}</dd>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Timestamps -->
+              <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Timestamps</h3>
+                <div class="space-y-3">
+                  <div>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Created</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ formatDateTime(interaction.created_at) }}
+                    </dd>
+                  </div>
+                  <div v-if="interaction.updated_at !== interaction.created_at">
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Last Updated</dt>
+                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                      {{ formatDateTime(interaction.updated_at) }}
+                    </dd>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

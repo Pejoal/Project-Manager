@@ -34,7 +34,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Route::get('/broadcast-test', function () {
   event(new MessageSent('Hello from Laravel Reverb!'));
   return 'Message broadcasted!';
-});
+})->name('broadcast.test');
 
 Route::group(
   [

@@ -153,6 +153,48 @@ const navigationItems = computed(() => [
       },
     ],
   },
+  {
+    name: 'Sales (Soon)',
+    icon: 'sales',
+    current: route().current('broadcast.test'),
+    children: [
+      {
+        name: trans('words.leads'),
+        href: route('broadcast.test'),
+        current: route().current('broadcast.test'),
+      },
+      {
+        name: trans('words.contacts'),
+        href: route('broadcast.test'),
+        current: route().current('broadcast.test'),
+      },
+      {
+        name: trans('words.opportunities'),
+        href: route('broadcast.test'),
+        current: route().current('broadcast.test'),
+      },
+      {
+        name: trans('words.campaigns'),
+        href: route('broadcast.test'),
+        current: route().current('broadcast.test'),
+      },
+      {
+        name: trans('words.support_tickets'),
+        href: route('broadcast.test'),
+        current: route().current('broadcast.test'),
+      },
+      {
+        name: trans('words.interactions'),
+        href: route('broadcast.test'),
+        current: route().current('broadcast.test'),
+      },
+      {
+        name: trans('words.knowledge_base'),
+        href: route('broadcast.test'),
+        current: route().current('broadcast.test'),
+      },
+    ],
+  },
   // Settings section (admin only)
   ...(hasRole('admin')
     ? [

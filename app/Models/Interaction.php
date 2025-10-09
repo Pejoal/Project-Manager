@@ -17,8 +17,11 @@ class Interaction extends Model
   protected $casts = [
     'interaction_date' => 'datetime',
     'follow_up_date' => 'datetime',
+    'follow_up_completed_at' => 'datetime',
+    'follow_up_required' => 'boolean',
     'attendees' => 'array',
     'attachments' => 'array',
+    'contact_details' => 'array',
   ];
 
   // Relationships
@@ -63,6 +66,15 @@ class Interaction extends Model
     return $query->whereNotNull('follow_up_date')->where('follow_up_date', '<=', now());
   }
 
+  public function scopePendingFollowUp($query)
+  {
+    return $query
+      ->where('follow_up_required', true)
+      ->whereNotNull('follow_up_date')
+      ->where('follow_up_date', '<=', now())
+      ->whereNull('follow_up_completed_at');
+  }
+
   public function scopeUpcomingFollowUps($query, $days = 7)
   {
     return $query->whereNotNull('follow_up_date')->whereBetween('follow_up_date', [now(), now()->addDays($days)]);
@@ -94,6 +106,15 @@ class Interaction extends Model
     $this->update([
       'follow_up_date' => $date,
       'follow_up_notes' => $notes,
+    ]);
+
+    return $this;
+  }
+
+  public function markFollowUpComplete()
+  {
+    $this->update([
+      'follow_up_completed_at' => now(),
     ]);
 
     return $this;
